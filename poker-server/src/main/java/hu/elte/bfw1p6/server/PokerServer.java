@@ -18,8 +18,7 @@ public class PokerServer implements PokerRemote {
 	public PokerServer() {
 		pokerProperties = PokerProperties.getInstance();
 		try {
-			PokerRemote pokerRemote = (PokerRemote) UnicastRemoteObject.exportObject(this,
-					Integer.valueOf(pokerProperties.getProperty("port")));
+			PokerRemote pokerRemote = (PokerRemote) UnicastRemoteObject.exportObject(this, Integer.valueOf(pokerProperties.getProperty("port")));
 			Registry registry = LocateRegistry.createRegistry(1099);
 			try {
 				registry.bind(pokerProperties.getProperty("name"), pokerRemote);

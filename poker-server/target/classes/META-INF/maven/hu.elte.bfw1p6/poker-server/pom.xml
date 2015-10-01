@@ -12,7 +12,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<mainClass>hu.elte.bfw1p6.controller.main.PokerServer</mainClass>
+		<mainClass>hu.elte.bfw1p6.controller.main.ServerMain</mainClass>
 	</properties>
 
 	<dependencies>

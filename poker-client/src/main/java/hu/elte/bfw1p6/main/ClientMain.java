@@ -1,13 +1,16 @@
 package hu.elte.bfw1p6.main;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 
-public class MainApp extends Application {
+public class ClientMain extends Application {
 
 	private final String TITLE = "Poker";
 	
@@ -20,6 +23,7 @@ public class MainApp extends Application {
         
         stage.setTitle(TITLE);
         stage.setScene(scene);
+        stage.setOnCloseRequest(getFormCloseEvent());
         stage.show();
     }
 
@@ -33,6 +37,19 @@ public class MainApp extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+    
+    private static EventHandler<WindowEvent> getFormCloseEvent() {
+    	EventHandler<WindowEvent> closeEvent = new EventHandler<WindowEvent>() {
+
+			@Override
+			public void handle(WindowEvent event) {
+				Platform.exit();
+				
+			}
+    		
+    	};
+    	return closeEvent;
     }
 
 }
