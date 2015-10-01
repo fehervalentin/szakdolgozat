@@ -29,7 +29,7 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 		
 		try {
 			PokerLoginRemote pokerLoginRemote = (PokerLoginRemote) UnicastRemoteObject.exportObject(this, Integer.valueOf(pokerProperties.getProperty("port")));
-			Registry registry = LocateRegistry.createRegistry(1099);
+			Registry registry = LocateRegistry.createRegistry(Integer.valueOf(pokerProperties.getProperty("rmiport")));
 			try {
 				registry.bind(pokerProperties.getProperty("name"), pokerLoginRemote);
 			} catch (AlreadyBoundException e) {

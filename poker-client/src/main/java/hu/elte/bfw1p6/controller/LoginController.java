@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.model.LoginUser;
 import hu.elte.bfw1p6.model.Model;
+import hu.elte.bfw1p6.model.entity.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -41,11 +42,11 @@ public class LoginController implements Initializable {
 	}
 	
 	@FXML protected void handleLoginButton(ActionEvent event) {
-		LoginUser loginUser = new LoginUser(usernameField.getText(), passwordField.getText());
-		if (model.login(loginUser)) {
-			
-		} else {
-
+		Player loggedPlayer = null;
+		try {
+			loggedPlayer = model.login(usernameField.getText(), passwordField.getText());
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 		System.out.println(usernameField.getText());
 		// TODO szerver publikus interfacet meghívni
