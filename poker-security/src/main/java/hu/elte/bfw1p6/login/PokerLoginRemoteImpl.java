@@ -6,32 +6,35 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Properties;
-
-import javax.security.auth.Subject;
+import java.util.UUID;
 
 import hu.elte.bfw1p6.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.model.PokerProperties;
 import hu.elte.bfw1p6.rmi.PokerRemote;
 import hu.elte.bfw1p6.rmi.security.PokerLoginRemote;
+import hu.elte.bfw1p6.security.service.SessionService;
 
 public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLoginRemote {
 
 	private static final long serialVersionUID = 1L;
-	
-	private PokerRemote pokeRemote;
-	
+
+	private PokerRemote pokerRemote;
+
 	private PokerProperties pokerProperties;
+
+	private SessionService sessionService;
 	
-	protected PokerLoginRemoteImpl(PokerRemote pokerRemote) throws RemoteException {
+	public PokerLoginRemoteImpl(PokerRemote pokerRemote) throws RemoteException {
+
 		this.pokerProperties = PokerProperties.getInstance();
-		this.pokeRemote = pokerRemote;
-		
+		this.pokerRemote = pokerRemote;
+		this.sessionService = new SessionService();
+
 		try {
-			PokerLoginRemote pokerLoginRemote = (PokerLoginRemote) UnicastRemoteObject.exportObject(this, Integer.valueOf(pokerProperties.getProperty("port")));
+			//PokerLoginRemote pokerLoginRemote = (PokerLoginRemote) UnicastRemoteObject.exportObject(this, Integer.valueOf(pokerProperties.getProperty("port")));
 			Registry registry = LocateRegistry.createRegistry(Integer.valueOf(pokerProperties.getProperty("rmiport")));
 			try {
-				registry.bind(pokerProperties.getProperty("name"), pokerLoginRemote);
+				registry.bind(pokerProperties.getProperty("name"), this);
 			} catch (AlreadyBoundException e) {
 				// e.printStackTrace();
 			}
@@ -42,24 +45,13 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 	}
 
 	@Override
-	public PokerRemote login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException {
-		Subject user = new Subject();
-		user.getPrincipals().add(new PokerLoginPrincipal(username));
-		String storedPassword = null;
-		
-		
-		Properties passwords = new Properties();
-		passwords.setProperty("password", "jancsika");
-		storedPassword = passwords.getProperty("password");
-		//TODO db-ből kell lekérni a hasht!
-		
-		
-		if ((storedPassword == null) || (!storedPassword.equals(password))) {
-			throw new PokerInvalidUserException(username);
-		}
-		return pokeRemote;
+	public UUID login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException {
+		UUID uuid = sessionService.authenticate(username, password);
+		return uuid;
 	}
 	
+	
+
 	@Override
 	public boolean shutDown() throws RemoteException {
 		try {
@@ -72,4 +64,16 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 		return false;
 	}
 
+	@Override
+	public PokerRemote getPokerRemote(UUID uuid) throws RemoteException, SecurityException, PokerInvalidUserException {
+		if (sessionService.isAuthenticated(uuid)) {
+			return pokerRemote;
+		}
+		throw new PokerInvalidUserException("cumi");
+	}
+
+	@Override
+	public void logout(UUID uuid) throws RemoteException {
+		sessionService.invalidate(uuid);
+	}
 }

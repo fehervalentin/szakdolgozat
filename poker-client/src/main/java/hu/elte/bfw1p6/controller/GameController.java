@@ -6,18 +6,13 @@ import java.util.ResourceBundle;
 import hu.elte.bfw1p6.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 
-public class LoginController implements Initializable {
-	
-	@FXML
-	private AnchorPane rootPane;
+public class GameController implements Initializable {
 	
 	@FXML
 	private Label pokerLabel;
@@ -46,8 +41,6 @@ public class LoginController implements Initializable {
 	
 	@FXML protected void handleLoginButton(ActionEvent event) {
 		model.login(usernameField.getText(), passwordField.getText());
-		//getClass().getClassLoader().getResource("/fxml/Game.fxml")
-//		rootPane.getChildren().setAll(FXMLLoader.load(getClass().getClassLoader().getResource("anyad")));
 	}
 
 }
