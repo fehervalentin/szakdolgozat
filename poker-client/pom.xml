@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>hu.elte.bfw1p6</groupId>
+	<groupId>hu.elte.bfw1p6.poker</groupId>
 	<artifactId>poker-client</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -12,12 +12,11 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<mainClass>hu.elte.bfw1p6.controller.ClientMain</mainClass>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>hu.elte.bfw1p6</groupId>
+			<groupId>hu.elte.bfw1p6.poker</groupId>
 			<artifactId>poker-shared</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
@@ -25,65 +24,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.6</version>
-				<executions>
-					<execution>
-						<id>unpack-dependencies</id>
-						<phase>package</phase>
-						<goals>
-							<goal>unpack-dependencies</goal>
-						</goals>
-						<configuration>
-							<excludeScope>system</excludeScope>
-							<excludeGroupIds>junit,org.mockito,org.hamcrest</excludeGroupIds>
-							<outputDirectory>${project.build.directory}/classes</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.2.1</version>
-				<executions>
-					<execution>
-						<id>unpack-dependencies</id>
-
-						<phase>package</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>${java.home}/../bin/javafxpackager</executable>
-							<arguments>
-								<argument>-createjar</argument>
-								<argument>-nocss2bin</argument>
-								<argument>-appclass</argument>
-								<argument>${mainClass}</argument>
-								<argument>-srcdir</argument>
-								<argument>${project.build.directory}/classes</argument>
-								<argument>-outdir</argument>
-								<argument>${project.build.directory}</argument>
-								<argument>-outfile</argument>
-								<argument>${project.build.finalName}.jar</argument>
-							</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>default-cli</id>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>${java.home}/bin/java</executable>
-							<commandlineArgs>${runfx.args}</commandlineArgs>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

@@ -10,7 +10,7 @@
 <!-- 		<provider>org.hibernate.ejb.HibernatePersistence</provider> -->
 <!-- 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider> -->
 
-		<class>hu.elte.bfw1p6.model.entity.User</class>
+		<class>hu.elte.bfw1p6.poker.model.entity.User</class>
 
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>

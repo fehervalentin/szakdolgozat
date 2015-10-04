@@ -6,9 +6,11 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.UUID;
 
-import hu.elte.bfw1p6.exception.PokerInvalidUserException;
-import hu.elte.bfw1p6.rmi.PokerRemote;
-import hu.elte.bfw1p6.rmi.security.PokerLoginRemote;
+import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
+import hu.elte.bfw1p6.poker.model.PokerProperties;
+import hu.elte.bfw1p6.poker.rmi.PokerRemote;
+import hu.elte.bfw1p6.poker.rmi.security.PokerLoginRemote;
+
 
 public class Model {
 
