@@ -44,7 +44,7 @@ public class LoginController implements Initializable {
 		model = new Model();
 	}
 	
-	@FXML protected void handleLoginButton(ActionEvent event) {
+	@FXML protected void loginHandler(ActionEvent event) {
 		model.login(usernameField.getText(), passwordField.getText());
 		//getClass().getClassLoader().getResource("/fxml/Game.fxml")
 //		rootPane.getChildren().setAll(FXMLLoader.load(getClass().getClassLoader().getResource("anyad")));

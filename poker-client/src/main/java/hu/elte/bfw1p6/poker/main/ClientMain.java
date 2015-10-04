@@ -37,7 +37,7 @@ public class ClientMain extends Application {
     
     private void loadResources() {
     	try {
-			loginFXML = FXMLLoader.load(getClass().getResource("/fxml/Registration.fxml"));
+			loginFXML = FXMLLoader.load(getClass().getResource("/fxml/Main.fxml"));
 			//gameFXML = FXMLLoader.load(getClass().getResource("/fxml/Game.fxml"));
 		} catch (IOException e) {
 			e.printStackTrace();

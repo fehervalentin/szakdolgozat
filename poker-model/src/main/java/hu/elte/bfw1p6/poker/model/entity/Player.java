@@ -5,18 +5,22 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
 public class Player implements Serializable	{
 
 	private static final long serialVersionUID = 1L;
 	
+	@NotNull
 	@Column(name="username")
 	protected String userName;
 	
+	@NotNull
 	@Column(name="regdate")
 	protected long regDate;
 	
+	@NotNull
 	@Column(name="balance")
 	protected BigDecimal balance;
 

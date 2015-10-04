@@ -22,7 +22,7 @@
 		<Label fx:id="rePasswordLabel" GridPane.columnIndex="0" GridPane.rowIndex="3" text="Repeat password:"/>
 		<PasswordField fx:id="rePasswordField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 		
-		<Button fx:id="loginButton" text="Registration" onAction="#handleRegistrationButton" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+		<Button fx:id="loginButton" text="Registrate" onAction="#handleRegistrationButton" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 	</GridPane>
 </AnchorPane>
 

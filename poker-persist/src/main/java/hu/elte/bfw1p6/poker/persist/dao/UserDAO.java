@@ -1,5 +1,7 @@
 package hu.elte.bfw1p6.poker.persist.dao;
 
+import java.math.BigDecimal;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -25,6 +27,7 @@ public class UserDAO {
 		String salt = generateSalt();
 		u.setSalt(salt);
 		u.setPassword(BCrypt.hashpw(u.getPassword(), salt));
+		u.setAmount(new BigDecimal(0));
 		em.getTransaction().begin();
 		em.persist(u);
 		em.getTransaction().commit();
