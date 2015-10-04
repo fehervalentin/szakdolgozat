@@ -1,4 +1,4 @@
-package hu.elte.bfw1p6.persist.model;
+package hu.elte.bfw1p6.model.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

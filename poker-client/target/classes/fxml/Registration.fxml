@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+
+<AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.elte.bfw1p6.controller.RegistrationController">
+	<GridPane alignment="center" hgap="10" vgap="10">
+		<Label fx:id="registrationLabel" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" text="Registration" alignment="center"/>
+		
+		<Label fx:id="usernameLabel" GridPane.columnIndex="0" GridPane.rowIndex="1" text="User name:"/>
+		<TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+		
+		<Label fx:id="passwordLabel" GridPane.columnIndex="0" GridPane.rowIndex="2" text="Password:"/>
+		<PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+		
+		<Label fx:id="rePasswordLabel" GridPane.columnIndex="0" GridPane.rowIndex="3" text="Repeat password:"/>
+		<PasswordField fx:id="rePasswordField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+		
+		<Button fx:id="loginButton" text="Registration" onAction="#handleRegistrationButton" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+	</GridPane>
+</AnchorPane>
+

@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import hu.elte.bfw1p6.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.model.PokerProperties;
+import hu.elte.bfw1p6.persist.dao.UserDAO;
 import hu.elte.bfw1p6.rmi.PokerRemote;
 import hu.elte.bfw1p6.rmi.security.PokerLoginRemote;
 import hu.elte.bfw1p6.security.service.SessionService;
@@ -24,11 +25,14 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 
 	private SessionService sessionService;
 	
+	private UserDAO userDAO;
+	
 	public PokerLoginRemoteImpl(PokerRemote pokerRemote) throws RemoteException {
 
 		this.pokerProperties = PokerProperties.getInstance();
 		this.pokerRemote = pokerRemote;
 		this.sessionService = new SessionService();
+		this.userDAO = new UserDAO();
 
 		try {
 			//PokerLoginRemote pokerLoginRemote = (PokerLoginRemote) UnicastRemoteObject.exportObject(this, Integer.valueOf(pokerProperties.getProperty("port")));
@@ -46,14 +50,13 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 
 	@Override
 	public UUID login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException {
-		UUID uuid = sessionService.authenticate(username, password);
-		return uuid;
+		return sessionService.authenticate(username, password);
 	}
 	
 	
 
 	@Override
-	public boolean shutDown() throws RemoteException {
+	public boolean shutDown(UUID uuid) throws RemoteException {
 		try {
 			UnicastRemoteObject.unexportObject(this, true);
 			System.out.println("A szerver leállt");
@@ -75,5 +78,17 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 	@Override
 	public void logout(UUID uuid) throws RemoteException {
 		sessionService.invalidate(uuid);
+	}
+
+	@Override
+	public boolean isAdmin(UUID uuid) throws RemoteException {
+		// TODO DAO-tól elkérni servicen keresztül?
+		return false;
+	}
+	
+	@Override
+	public boolean registration(String username, String password) throws RemoteException {
+		userDAO.persistUser(username, password);
+		return true;
 	}
 }

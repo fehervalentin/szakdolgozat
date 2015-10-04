@@ -9,18 +9,15 @@ import hu.elte.bfw1p6.rmi.PokerRemote;
 
 public interface PokerLoginRemote extends Remote {
 	
-	PokerRemote getPokerRemote(UUID uuid) throws RemoteException, SecurityException, PokerInvalidUserException;
+	PokerRemote getPokerRemote(UUID uuid) throws RemoteException, PokerInvalidUserException;
 	
-	/**
-	 * 
-	 * @return UUID id
-	 * @throws RemoteException
-	 * @throws SecurityException
-	 * @throws PokerInvalidUserException
-	 */
-	UUID login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException;
+	UUID login(String username, String password) throws RemoteException, PokerInvalidUserException;
 	
 	void logout(UUID uuid) throws RemoteException;
 	
-	boolean shutDown() throws RemoteException, SecurityException, PokerInvalidUserException;
+	boolean shutDown(UUID uuid) throws RemoteException, PokerInvalidUserException;
+	
+	boolean isAdmin(UUID uuid) throws RemoteException;
+	
+	boolean registration(String username, String password) throws RemoteException;
 }

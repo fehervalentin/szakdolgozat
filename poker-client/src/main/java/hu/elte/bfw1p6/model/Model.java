@@ -40,9 +40,9 @@ public class Model {
 		}
 	}
 
-	public boolean registration(LoginUser loginUser) {
+	public boolean registration(String username, String password) {
 		try {
-			pokerRemote.registration(loginUser);
+			pokerLoginRemote.registration(username, password);
 			return true;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block

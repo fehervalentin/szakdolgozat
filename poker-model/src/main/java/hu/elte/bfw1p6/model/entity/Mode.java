@@ -1,4 +1,4 @@
-package hu.elte.bfw1p6.persist.model;
+package hu.elte.bfw1p6.model.entity;
 
 public class Mode {
 	private int id;
