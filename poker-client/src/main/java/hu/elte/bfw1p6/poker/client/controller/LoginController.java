@@ -14,7 +14,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class LoginController implements Initializable {
+public class LoginController implements Initializable, PokerController {
 	
 	@FXML
 	private AnchorPane rootPane;
@@ -55,7 +55,7 @@ public class LoginController implements Initializable {
 	}
 	
 	public void goToReg() {
-		frameController.goToReg();
+		frameController.setRegistrationFXML();
 	}
 
 }

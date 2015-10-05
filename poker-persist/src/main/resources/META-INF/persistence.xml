@@ -6,28 +6,24 @@
    http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 
 	<persistence-unit name="Poker-PU" transaction-type="RESOURCE_LOCAL">
-<!-- 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider> -->
+		<!-- <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider> -->
+		<!-- <provider>org.hibernate.ejb.HibernatePersistence</provider> -->
 <!-- 		<provider>org.hibernate.ejb.HibernatePersistence</provider> -->
-<!-- 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider> -->
+		<!-- <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider> -->
 
 		<class>hu.elte.bfw1p6.poker.model.entity.User</class>
+		<class>hu.elte.bfw1p6.poker.model.entity.PTable</class>
+		<!-- <class>hu.elte.bfw1p6.poker.model.entity.Type</class> -->
 
 		<properties>
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-			<property name="hibernate.show_sql" value="true"/>
-			<property name="hibernate.use_sql_comments" value="true"/>
-			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-			<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/pokerdb"/>
-			<property name="hibernate.connection.username" value="root"/>
-			<property name="hibernate.connection.password" value="1234"/>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.use_sql_comments" value="true" />
+			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
+			<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/pokerdb" />
+			<property name="hibernate.connection.username" value="root" />
+			<property name="hibernate.connection.password" value="1234" />
 			<property name="hibernate.hbm2ddl.auto" value="create" />
-			
-			
-<!-- 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/pokerdb" /> -->
-<!-- 			<property name="javax.persistence.jdbc.user" value="root" /> -->
-<!-- 			<property name="javax.persistence.jdbc.password" value="1234" /> -->
-<!-- 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" /> -->
-<!-- 			<property name="eclipselink.logging.level" value="FINE" /> -->
 		</properties>
 
 	</persistence-unit>

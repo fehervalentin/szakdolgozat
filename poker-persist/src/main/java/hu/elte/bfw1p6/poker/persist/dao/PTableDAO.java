@@ -1,36 +1,30 @@
 package hu.elte.bfw1p6.poker.persist.dao;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import hu.elte.bfw1p6.poker.model.entity.PTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.repository.PokerEntityManager;
 
 
-public class UserDAO {
-
+public class PTableDAO {
+	
 	private EntityManager em;
 	
-	public UserDAO() {
+	public PTableDAO() {
 		em = PokerEntityManager.getInstance().getEntityManager();
 	}
 	
-	public void persistUser(String username, String password) {
-		User u = new User(username);
-		String salt = generateSalt();
-		u.setSalt(salt);
-		u.setPassword(BCrypt.hashpw(u.getPassword(), salt));
-		u.setAmount(new BigDecimal(0));
-		u.setRegDate((new Date()).getTime());
+	public void persistTable(PTable t) {
 		em.getTransaction().begin();
-		em.persist(u);
+		em.persist(t);
 		em.getTransaction().commit();
 		em.close();
-//		emf.close();
 	}
 	
 	public void modifyPassword(int id, String oldPassword, String newPassword) {
@@ -42,10 +36,15 @@ public class UserDAO {
 		em.persist(u);
 		em.getTransaction().commit();
 		em.close();
-//		emf.close();
 	}
 	
 	private String generateSalt() {
 		return BCrypt.gensalt();
+	}
+
+	public List<PTable> getTables() {
+		em.getTransaction().begin();
+		Query query = em.createQuery("SELECT t FROM PTABLE t");
+		return (List<PTable>)query.getResultList();
 	}
 }

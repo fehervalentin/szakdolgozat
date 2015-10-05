@@ -1,5 +1,8 @@
 package hu.elte.bfw1p6.poker.model.entity;
 
+import javax.persistence.Entity;
+
+@Entity
 public enum Type {
 	
 	HOLDEM(1, "Hold'em", 5, 2),

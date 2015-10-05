@@ -54,8 +54,6 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 		return sessionService.authenticate(username, password);
 	}
 	
-	
-
 	@Override
 	public boolean shutDown(UUID uuid) throws RemoteException {
 		try {

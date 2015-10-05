@@ -1,10 +1,15 @@
 package hu.elte.bfw1p6.poker.client.controller;
 
+import java.math.BigDecimal;
 import java.net.URL;
+import java.rmi.RemoteException;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.model.Model;
+import hu.elte.bfw1p6.poker.model.entity.PTable;
+import hu.elte.bfw1p6.poker.model.entity.Type;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,99 +19,114 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class TableCreatorController implements Initializable {
-	
+public class TableCreatorController implements Initializable, PokerController {
+
 	@FXML
 	private AnchorPane rootPane;
-	
+
 	@FXML
 	private Label tableNameLabel;
-	
+
 	@FXML
 	private Label gameType;
-	
+
 	@FXML
 	private Label maxTimeLable;
-	
+
 	@FXML
 	private Label maxPlayerLabel;
 
 	@FXML
 	private Label limitLabel;
-	
+
 	@FXML
 	private Label smallBlindLabel;
-	
+
 	@FXML
 	private Label bigBlindLabel;
-	
+
 	@FXML
 	private Label typeLabel;
-	
-	
-	
-	
-	
+
+
+
+
+
 	@FXML
 	private TextField tableNameTextField;
-	
+
 	@FXML ComboBox<String> gameTypeComboBox;
-	
+
 	@FXML
 	private TextField maxTimeField;
-	
+
 	@FXML
 	private TextField maxPlayerTextField;
-	
+
 	@FXML
 	private TextField limitTextField;
-	
+
 	@FXML
 	private TextField smallBlindTextField;
-	
+
 	@FXML
 	private TextField bigBlindtTextField;
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	@FXML
 	private Button createTableButton;
-	
+
 	@FXML
 	private Button backButton;
-	
+
 	private Model model;
-	
+
 	private FrameController frameController;
-	
-	
+
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		String s;
-		//model = new Model();
+		model = new Model();
 	}
-	
+
 	@FXML protected void handleCreateTableButton(ActionEvent event) {
-		/*if (model.registration(usernameField.getText(), passwordField.getText())) {
-			System.out.println("A regisztráció sikeres!");
-		}*/
-		//getClass().getClassLoader().getResource("/fxml/Game.fxml")
-//		rootPane.getChildren().setAll(FXMLLoader.load(getClass().getClassLoader().getResource("anyad")));
+		System.out.println("lol");
+//		PTable table = new PTable(tableNameLabel.getText(),
+//				Integer.valueOf(maxTimeField.getText()),
+//				Integer.valueOf(maxPlayerTextField.getText()),
+//				BigDecimal.valueOf(Double.valueOf(limitTextField.getText())),
+//				BigDecimal.valueOf(Double.valueOf(smallBlindTextField.getText())),
+//				BigDecimal.valueOf(Double.valueOf(bigBlindtTextField.getText())));
+		PTable table = new PTable("asd",
+				5,
+				2,
+				new BigDecimal(2),
+				new BigDecimal(2),
+				new BigDecimal(2));
+		table.setType(Type.HOLDEM);
+		try {
+			model.createTable(table);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		List<PTable> tables = model.getTables();
+		System.out.println(tables);
 	}
-	
+
 	@FXML
 	protected void createTableHandler(ActionEvent event) {
-		frameController.goToLogin();
+		frameController.setLoginFXML();
 	}
-	
+
 	@FXML
 	protected void backHandler(ActionEvent event) {
-		
+
 	}
-	
+
 	public void setDelegateController(FrameController fc) {
 		this.frameController = fc;
 	}

@@ -16,10 +16,6 @@
 <AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="hu.elte.bfw1p6.poker.client.controller.TableCreatorController">
 	<children>
-
-
-
-
 		<GridPane alignment="center" hgap="10" vgap="10">
 			<Label GridPane.columnIndex="0" GridPane.rowIndex="0"
 				GridPane.columnSpan="2" text="Asztal létrehozása" alignment="center" />
@@ -35,16 +31,16 @@
 				GridPane.rowIndex="2" prefWidth="200.0" promptText="Type">
 				<items>
 					<FXCollections fx:factory="observableArrayList">
-						<String fx:value="Apple" />
-						<String fx:value="Orange" />
-						<String fx:value="Pear" />
+						<String fx:value="Holdem" />
+						<String fx:value="Omaha" />
+<!-- 						<String fx:value="Pear" /> -->
 					</FXCollections>
 				</items>
 			</ComboBox>
 
 			<Label fx:id="maxTimeLable" GridPane.columnIndex="0"
 				GridPane.rowIndex="3" text="Maximális idő:" />
-			<TextField fx:id="tableNameTextField" GridPane.columnIndex="1"
+			<TextField fx:id="maxTimeField" GridPane.columnIndex="1"
 				GridPane.rowIndex="3" />
 
 			<Label fx:id="maxPlayerLabel" GridPane.columnIndex="0"
@@ -67,7 +63,7 @@
 			<TextField fx:id="bigBlindtTextField" GridPane.columnIndex="1"
 				GridPane.rowIndex="7" />
 
-			<Button fx:id="createTableButton" text="OK" onAction="#createTableHandler"
+			<Button fx:id="createTableButton" text="OK" onAction="#handleCreateTableButton"
 				GridPane.columnIndex="1" GridPane.rowIndex="8" />
 			<Button fx:id="backButton" text="Mégsem" onAction="#backHandler"
 				GridPane.columnIndex="2" GridPane.rowIndex="8" />

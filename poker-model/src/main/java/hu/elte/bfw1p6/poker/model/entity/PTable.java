@@ -1,5 +1,6 @@
 package hu.elte.bfw1p6.poker.model.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.persistence.Column;
@@ -14,8 +15,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-public class Table {
+public class PTable implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
@@ -42,8 +45,8 @@ public class Table {
 	private int maxPlayers;
 	
 	@NotNull
-	@Column(name = "limit")
-	private BigDecimal limit;
+	@Column(name = "max_Bet")
+	private BigDecimal maxBet;
 	
 	@NotNull
 	@Column(name = "small_blind")
@@ -56,14 +59,14 @@ public class Table {
 	@Enumerated(EnumType.STRING)
 	private Type type;
 	
-	public Table(String name, int maxTime, int maxPlayers, BigDecimal limit, BigDecimal smallBlind, BigDecimal bigBlind, Type type) {
+	public PTable(String name, int maxTime, int maxPlayers, BigDecimal maxBet, BigDecimal smallBlind, BigDecimal bigBlind) {
 		this.name = name;
 		this.maxTime = maxTime;
 		this.maxPlayers = maxPlayers;
-		this.limit = limit;
+		this.maxBet = maxBet;
 		this.smallBlind = smallBlind;
 		this.bigBlind = bigBlind;
-		this.type = type;
+		//this.type = type;
 	}
 
 	public int getId() {
@@ -74,6 +77,22 @@ public class Table {
 		this.id = id;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getMaxTime() {
+		return maxTime;
+	}
+
+	public void setMaxTime(int maxTime) {
+		this.maxTime = maxTime;
+	}
+
 	public int getMaxPlayers() {
 		return maxPlayers;
 	}
@@ -82,12 +101,12 @@ public class Table {
 		this.maxPlayers = maxPlayers;
 	}
 
-	public BigDecimal getLimit() {
-		return limit;
+	public BigDecimal getMaxBet() {
+		return maxBet;
 	}
 
-	public void setLimit(BigDecimal limit) {
-		this.limit = limit;
+	public void setMaxBet(BigDecimal maxBet) {
+		this.maxBet = maxBet;
 	}
 
 	public BigDecimal getSmallBlind() {
@@ -112,21 +131,5 @@ public class Table {
 
 	public void setType(Type type) {
 		this.type = type;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public int getMaxTime() {
-		return maxTime;
-	}
-	
-	public void setMaxTime(int maxTime) {
-		this.maxTime = maxTime;
 	}
 }

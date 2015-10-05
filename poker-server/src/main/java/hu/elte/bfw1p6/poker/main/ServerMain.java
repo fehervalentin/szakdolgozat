@@ -11,14 +11,6 @@ import hu.elte.bfw1p6.poker.rmi.security.PokerLoginRemote;
 public class ServerMain {
 
 	public static void main(String[] args) {
-//		System.out.println("a szerver elindult");
-//		User user = new User("Flat");
-//		user.setPassword("1234");
-//		user.setRegDate(new Date().getTime());
-//		user.setSalt("#!%e'");
-//		user.setAmount(new BigDecimal(20));
-//		UserDAO userdao = new UserDAO();
-//		userdao.persistUser(user);
 		
 		PokerRemote pokerRemote = new PokerRemoteImpl();
 //		System.out.println("A szerver elindult");
@@ -28,8 +20,6 @@ public class ServerMain {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//PokerRemoteImpl pokerServer = new PokerRemoteImpl();
-		System.out.println("a szerver leállt");
 	}
 
 }
