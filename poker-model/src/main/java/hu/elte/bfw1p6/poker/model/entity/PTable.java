@@ -14,16 +14,22 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import javafx.beans.property.SimpleStringProperty;
+
 @Entity
 public class PTable implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
+
+	private final SimpleStringProperty id2 = new SimpleStringProperty("");
+	private final SimpleStringProperty name2 = new SimpleStringProperty("");
+	private final SimpleStringProperty active = new SimpleStringProperty("");
 
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
 	private int id;
-	
+
 	@NotNull
 	@Size.List({
 		@Size(min=3, message="A szerver neve legalább {min} karakterből állhat!"),
@@ -31,34 +37,34 @@ public class PTable implements Serializable {
 	})
 	@Column(name = "name")
 	private String name;
-	
+
 	@NotNull
 	@Min(value = 5, message="A körönkénti gondolkodási idő minimum {value} másodperc!")
 	@Max(value = 40, message="A körönkénti gondolkodási idő maximum {value} másodperc!")
 	@Column(name = "max_time")
 	private int maxTime;
-	
+
 	@NotNull
 	@Min(value = 2)
 	@Max(value = 6)
 	@Column(name = "max_players")
 	private int maxPlayers;
-	
+
 	@NotNull
 	@Column(name = "max_Bet")
 	private BigDecimal maxBet;
-	
+
 	@NotNull
 	@Column(name = "small_blind")
 	private BigDecimal smallBlind;
-	
+
 	@NotNull
 	@Column(name = "big_blind")
 	private BigDecimal bigBlind;
 
 	@Enumerated(EnumType.STRING)
 	private Type type;
-	
+
 	public PTable(String name, int maxTime, int maxPlayers, BigDecimal maxBet, BigDecimal smallBlind, BigDecimal bigBlind) {
 		this.name = name;
 		this.maxTime = maxTime;
@@ -131,5 +137,9 @@ public class PTable implements Serializable {
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+	
+	public String getId2() {
+		return id2.get();
 	}
 }

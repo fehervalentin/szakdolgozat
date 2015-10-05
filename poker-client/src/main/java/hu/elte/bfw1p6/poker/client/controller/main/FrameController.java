@@ -12,11 +12,13 @@ public class FrameController {
 	private String LOGIN_FXML = "Login.fxml";
 	private String REGISTRATION_FXML = "Registration.fxml";
 	private String CREATE_TABLE_FXML = "TableCreator.fxml";
+	private String TABLE_LISTER_FXML = "TableLister.fxml";
 	
 	private Scene scene;
 	
 	public FrameController(Scene scene) {
-		setCreateTableFrame();
+//		setCreateTableFrame();
+		setTableListerFXML();
 	}
 
 	public void setRegistrationFXML() {
@@ -25,6 +27,10 @@ public class FrameController {
 	
 	public void setLoginFXML() {
 		setFXML(FXML_PREFIX + LOGIN_FXML);
+	}
+	
+	public void setTableListerFXML() {
+		setFXML(FXML_PREFIX + TABLE_LISTER_FXML);
 	}
 	
 	public void setCreateTableFrame() {

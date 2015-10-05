@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.cell.*?> 
+<?import javafx.collections.*?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Label?>
+<?import hu.elte.bfw1p6.poker.model.entity.PTable?>
+
+
+<GridPane alignment="CENTER" hgap="10.0" vgap="10.0"
+	xmlns:fx="http://javafx.com/fxml" fx:controller="hu.elte.bfw1p6.poker.client.controller.TableListerController">
+	<padding>
+		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+	</padding>
+	<Label style="-fx-font: NORMAL 20 Tahoma;" text="Poker tables"
+		GridPane.columnIndex="0" GridPane.rowIndex="0">
+	</Label>
+	<TableView fx:id="tableView" GridPane.columnIndex="0"
+		GridPane.rowIndex="1">
+		<columns>
+			<TableColumn prefWidth="75.0" text="Table name" fx:id="tableName" />
+			<TableColumn prefWidth="75.0" text="Max time" fx:id="maxTime" />
+			<TableColumn prefWidth="75.0" text="Max players" fx:id="maxPlayers" />
+		</columns>
+		<!-- <items> -->
+		<!-- <FXCollections fx:factory="observableArrayList"> -->
+		<!-- <Person firstName="Jacob" lastName="Smith" email="jacob.smith@example.com" 
+			/> -->
+		<!-- <Person firstName="Isabella" lastName="Johnson" -->
+		<!-- email="isabella.johnson@example.com" /> -->
+		<!-- <Person firstName="Ethan" lastName="Williams" -->
+		<!-- email="ethan.williams@example.com" /> -->
+		<!-- <Person firstName="Emma" lastName="Jones" email="emma.jones@example.com" 
+			/> -->
+		<!-- <Person firstName="Michael" lastName="Brown" -->
+		<!-- email="michael.brown@example.com" /> -->
+		<!-- </FXCollections> -->
+		<!-- </items> -->
+	</TableView>
+</GridPane>
+

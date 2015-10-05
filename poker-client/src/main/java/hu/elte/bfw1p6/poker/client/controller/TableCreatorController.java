@@ -3,6 +3,7 @@ package hu.elte.bfw1p6.poker.client.controller;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -108,13 +109,15 @@ public class TableCreatorController implements Initializable, PokerController {
 				new BigDecimal(2),
 				new BigDecimal(2));
 		table.setType(Type.HOLDEM);
-		try {
+		/*try {
 			model.createTable(table);
 		} catch (RemoteException e) {
 			e.printStackTrace();
-		}
-		List<PTable> tables = model.getTables();
+		}*/
+		List<PTable> tables = new ArrayList<>();//model.getTables();
+		tables.add(table);
 		System.out.println(tables);
+		System.out.println("vege");
 	}
 
 	@FXML

@@ -12,7 +12,7 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private transient PTableDAO tableDAO;
+	private PTableDAO tableDAO;
 
 	public PokerRemoteImpl() {
 		tableDAO = new PTableDAO();
@@ -33,8 +33,8 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 
 	@Override
 	public void createTable(PTable t) throws RemoteException {
-//		 .persistTable(t);
-		(new PTableDAO()).persistTable(t);
+		 tableDAO.persistTable(t);
+//		(new PTableDAO()).persistTable(t);
 	}
 
 	@Override

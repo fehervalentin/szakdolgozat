@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -13,10 +14,12 @@ import hu.elte.bfw1p6.poker.persist.repository.PokerEntityManager;
 
 public class UserDAO {
 
+	private EntityManagerFactory emf;
 	private EntityManager em;
 	
 	public UserDAO() {
-		em = PokerEntityManager.getInstance().getEntityManager();
+		emf = PokerEntityManager.getInstance().getEntityManagerFactory();
+		em = emf.createEntityManager();
 	}
 	
 	public void persistUser(String username, String password) {

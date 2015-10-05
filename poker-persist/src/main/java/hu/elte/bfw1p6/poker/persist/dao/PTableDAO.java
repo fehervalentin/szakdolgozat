@@ -1,8 +1,10 @@
 package hu.elte.bfw1p6.poker.persist.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -12,12 +14,18 @@ import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.repository.PokerEntityManager;
 
 
-public class PTableDAO {
+public class PTableDAO implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private EntityManagerFactory emf;
 	private EntityManager em;
 	
 	public PTableDAO() {
-		em = PokerEntityManager.getInstance().getEntityManager();
+		emf = PokerEntityManager.getInstance().getEntityManagerFactory();
+		em = emf.createEntityManager();
 	}
 	
 	public void persistTable(PTable t) {
