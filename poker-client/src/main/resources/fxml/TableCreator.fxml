@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String ?>
+
+
+
+<AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="hu.elte.bfw1p6.poker.client.controller.TableCreatorController">
+	<children>
+
+
+
+
+		<GridPane alignment="center" hgap="10" vgap="10">
+			<Label GridPane.columnIndex="0" GridPane.rowIndex="0"
+				GridPane.columnSpan="2" text="Asztal létrehozása" alignment="center" />
+
+			<Label fx:id="tableNameLabel" GridPane.columnIndex="0"
+				GridPane.rowIndex="1" text="Asztal neve:" />
+			<TextField fx:id="tableNameTextField" GridPane.columnIndex="1"
+				GridPane.rowIndex="1" />
+
+			<Label fx:id="gameType" GridPane.columnIndex="0"
+				GridPane.rowIndex="2" text="Játék típusa:" />
+			<ComboBox fx:id="gameTypeComboBox" GridPane.columnIndex="1"
+				GridPane.rowIndex="2" prefWidth="200.0" promptText="Type">
+				<items>
+					<FXCollections fx:factory="observableArrayList">
+						<String fx:value="Apple" />
+						<String fx:value="Orange" />
+						<String fx:value="Pear" />
+					</FXCollections>
+				</items>
+			</ComboBox>
+
+			<Label fx:id="maxTimeLable" GridPane.columnIndex="0"
+				GridPane.rowIndex="3" text="Maximális idő:" />
+			<TextField fx:id="tableNameTextField" GridPane.columnIndex="1"
+				GridPane.rowIndex="3" />
+
+			<Label fx:id="maxPlayerLabel" GridPane.columnIndex="0"
+				GridPane.rowIndex="4" text="Maximális játékos:" />
+			<TextField fx:id="maxPlayerTextField" GridPane.columnIndex="1"
+				GridPane.rowIndex="4" />
+
+			<Label fx:id="limitLabel" GridPane.columnIndex="0"
+				GridPane.rowIndex="5" text="Maximális tét:" />
+			<TextField fx:id="limitTextField" GridPane.columnIndex="1"
+				GridPane.rowIndex="5" />
+
+			<Label fx:id="smallBlindLabel" GridPane.columnIndex="0"
+				GridPane.rowIndex="6" text="Kisvak:" />
+			<TextField fx:id="smallBlindTextField"
+				GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+			<Label fx:id="bigBlindLabel" GridPane.columnIndex="0"
+				GridPane.rowIndex="7" text="Nagyvak:" />
+			<TextField fx:id="bigBlindtTextField" GridPane.columnIndex="1"
+				GridPane.rowIndex="7" />
+
+			<Button fx:id="createTableButton" text="OK" onAction="#createTableHandler"
+				GridPane.columnIndex="1" GridPane.rowIndex="8" />
+			<Button fx:id="backButton" text="Mégsem" onAction="#backHandler"
+				GridPane.columnIndex="2" GridPane.rowIndex="8" />
+		</GridPane>
+	</children>
+</AnchorPane>
+

@@ -1,9 +1,10 @@
-package hu.elte.bfw1p6.poker.controller;
+package hu.elte.bfw1p6.poker.client.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import hu.elte.bfw1p6.model.Model;
+import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
+import hu.elte.bfw1p6.poker.client.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,13 +14,16 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class LoginController implements Initializable {
+public class RegistrationController implements Initializable {
 	
 	@FXML
 	private AnchorPane rootPane;
 	
 	@FXML
 	private Label pokerLabel;
+	
+	@FXML
+	private Label registrationLabel;
 
 	@FXML
 	private TextField usernameField;
@@ -28,35 +32,47 @@ public class LoginController implements Initializable {
 	private PasswordField passwordField;
 	
 	@FXML
+	private PasswordField rePasswordField;
+	
+	@FXML
 	private Label usernameLabel;
 	
 	@FXML
 	private Label passwordLabel;
 	
 	@FXML
-	private Button loginButton;
+	private Label rePasswordLabel;
+	
+	@FXML
+	private Button regButton;
+	
+	@FXML
+	private Button backButton;
 	
 	private Model model;
 	
 	private FrameController frameController;
+	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		model = new Model();
 	}
 	
-	@FXML protected void loginHandler(ActionEvent event) {
-		model.login(usernameField.getText(), passwordField.getText());
+	@FXML protected void handleRegistrationButton(ActionEvent event) {
+		if (model.registration(usernameField.getText(), passwordField.getText())) {
+			System.out.println("A regisztráció sikeres!");
+		}
 		//getClass().getClassLoader().getResource("/fxml/Game.fxml")
 //		rootPane.getChildren().setAll(FXMLLoader.load(getClass().getClassLoader().getResource("anyad")));
 	}
 	
-	public void setDelegateController(FrameController fc) {
-		this.frameController = fc;
+	@FXML protected void goToLogin(ActionEvent event) {
+		frameController.goToLogin();
 	}
 	
-	public void goToReg() {
-		frameController.goToReg();
+	public void setDelegateController(FrameController fc) {
+		this.frameController = fc;
 	}
 
 }

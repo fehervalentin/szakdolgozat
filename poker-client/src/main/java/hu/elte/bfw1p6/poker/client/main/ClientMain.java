@@ -1,16 +1,10 @@
-package hu.elte.bfw1p6.poker.main;
+package hu.elte.bfw1p6.poker.client.main;
 
-import java.io.IOException;
-
-import hu.elte.bfw1p6.poker.controller.FrameController;
+import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuBar;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 

@@ -1,4 +1,4 @@
-package hu.elte.bfw1p6.model;
+package hu.elte.bfw1p6.poker.client.model;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;

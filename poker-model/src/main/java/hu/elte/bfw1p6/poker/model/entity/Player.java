@@ -17,7 +17,7 @@ public class Player implements Serializable	{
 	protected String userName;
 	
 	@NotNull
-	@Column(name="regdate")
+	@Column(name="reg_date")
 	protected long regDate;
 	
 	@NotNull

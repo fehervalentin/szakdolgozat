@@ -10,7 +10,7 @@
 <?import javafx.scene.control.Button?>
 
 <AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="hu.elte.bfw1p6.poker.controller.LoginController">
+	fx:controller="hu.elte.bfw1p6.poker.client.controller.LoginController">
 	<GridPane alignment="center" hgap="10" vgap="10">
 		<Label fx:id="pokerLabel" GridPane.columnIndex="0"
 			GridPane.rowIndex="0" GridPane.columnSpan="2" text="Poker" alignment="center" />

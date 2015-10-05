@@ -3,7 +3,6 @@ package hu.elte.bfw1p6.poker.rmi;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 
-import hu.elte.bfw1p6.poker.model.entity.Mode;
 import hu.elte.bfw1p6.poker.model.entity.Player;
 import hu.elte.bfw1p6.poker.model.entity.Table;
 
@@ -40,12 +39,6 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 
 	@Override
 	public boolean addTable(Table t) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean addMode(Mode d) throws RemoteException {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -1,6 +1,7 @@
 package hu.elte.bfw1p6.poker.persist.dao;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -28,11 +29,12 @@ public class UserDAO {
 		u.setSalt(salt);
 		u.setPassword(BCrypt.hashpw(u.getPassword(), salt));
 		u.setAmount(new BigDecimal(0));
+		u.setRegDate((new Date()).getTime());
 		em.getTransaction().begin();
 		em.persist(u);
 		em.getTransaction().commit();
 		em.close();
-		emf.close();
+//		emf.close();
 	}
 	
 	public void modifyPassword(int id, String oldPassword, String newPassword) {
@@ -44,7 +46,7 @@ public class UserDAO {
 		em.persist(u);
 		em.getTransaction().commit();
 		em.close();
-		emf.close();
+//		emf.close();
 	}
 	
 	private String generateSalt() {
