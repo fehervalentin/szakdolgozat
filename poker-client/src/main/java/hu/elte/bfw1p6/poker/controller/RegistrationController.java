@@ -21,6 +21,9 @@ public class RegistrationController implements Initializable {
 	
 	@FXML
 	private Label pokerLabel;
+	
+	@FXML
+	private Label registrationLabel;
 
 	@FXML
 	private TextField usernameField;
@@ -41,9 +44,15 @@ public class RegistrationController implements Initializable {
 	private Label rePasswordLabel;
 	
 	@FXML
-	private Button registrationButton;
+	private Button regButton;
+	
+	@FXML
+	private Button backButton;
 	
 	private Model model;
+	
+	private FrameController frameController;
+	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -56,6 +65,14 @@ public class RegistrationController implements Initializable {
 		}
 		//getClass().getClassLoader().getResource("/fxml/Game.fxml")
 //		rootPane.getChildren().setAll(FXMLLoader.load(getClass().getClassLoader().getResource("anyad")));
+	}
+	
+	@FXML protected void goToLogin(ActionEvent event) {
+		frameController.goToLogin();
+	}
+	
+	public void setDelegateController(FrameController fc) {
+		this.frameController = fc;
 	}
 
 }

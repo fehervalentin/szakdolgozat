@@ -24,6 +24,8 @@
 			GridPane.columnIndex="1" GridPane.rowIndex="2" />
 		<Button fx:id="loginButton" text="Login" onAction="#loginHandler"
 			GridPane.columnIndex="1" GridPane.rowIndex="3" />
+		<Button fx:id="loginButton" text="Registration" onAction="#goToReg"
+			GridPane.columnIndex="2" GridPane.rowIndex="3" />
 	</GridPane>
 </AnchorPane>
 

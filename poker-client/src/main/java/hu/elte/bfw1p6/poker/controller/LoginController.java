@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 import hu.elte.bfw1p6.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -39,6 +38,8 @@ public class LoginController implements Initializable {
 	
 	private Model model;
 	
+	private FrameController frameController;
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		model = new Model();
@@ -48,6 +49,14 @@ public class LoginController implements Initializable {
 		model.login(usernameField.getText(), passwordField.getText());
 		//getClass().getClassLoader().getResource("/fxml/Game.fxml")
 //		rootPane.getChildren().setAll(FXMLLoader.load(getClass().getClassLoader().getResource("anyad")));
+	}
+	
+	public void setDelegateController(FrameController fc) {
+		this.frameController = fc;
+	}
+	
+	public void goToReg() {
+		frameController.goToReg();
 	}
 
 }

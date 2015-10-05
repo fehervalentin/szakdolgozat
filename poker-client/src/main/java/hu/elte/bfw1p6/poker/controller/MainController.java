@@ -31,11 +31,6 @@ public class MainController implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		/*if (model.registration(usernameField.getText(), passwordField.getText())) {
-			System.out.println("A regisztráció sikeres!");
-		}*/
-		//getClass().getClassLoader().getResource("/fxml/Game.fxml")
-//		rootPane.getChildren().setAll(FXMLLoader.load(getClass().getClassLoader().getResource("anyad")));
 	}
 	
 	@FXML protected void goToLoginHandler(ActionEvent event) {

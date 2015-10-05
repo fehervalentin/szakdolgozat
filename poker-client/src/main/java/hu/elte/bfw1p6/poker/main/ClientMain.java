@@ -2,12 +2,15 @@ package hu.elte.bfw1p6.poker.main;
 
 import java.io.IOException;
 
+import hu.elte.bfw1p6.poker.controller.FrameController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.MenuBar;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -15,33 +18,20 @@ public class ClientMain extends Application {
 
 	private final String TITLE = "Poker";
 	private Scene scene;
-	private Parent loginFXML;
-	private Parent gameFXML;
+	private FrameController frameController;
 	
     @Override
     public void start(Stage stage) throws Exception {
-        loadResources();
-        
-        scene = new Scene(loginFXML);
+    	//scene = new Scene(null);
+        frameController = new FrameController(scene);
+        scene = frameController.getScene();
         scene.getStylesheets().add("/styles/Styles.css");
         
         stage.setTitle(TITLE);
         stage.setScene(scene);
+       // addMenu();
         stage.setOnCloseRequest(getFormCloseEvent());
         stage.show();
-    }
-    
-    public void setGameFXML() {
-    	scene.setRoot(gameFXML);
-    }
-    
-    private void loadResources() {
-    	try {
-			loginFXML = FXMLLoader.load(getClass().getResource("/fxml/Main.fxml"));
-			//gameFXML = FXMLLoader.load(getClass().getResource("/fxml/Game.fxml"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
     }
 
     /**

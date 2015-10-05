@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+
+<MenuBar fx:id="menuBar">
+	<Menu fx:id="loginMenu" text="Login" />
+	<Menu fx:id="registrationMenu" text="Registration" />
+	<Menu fx:id="logoutMenu" text="Logout" />
+</MenuBar>
