@@ -18,7 +18,9 @@ public class FrameController {
 	
 	public FrameController(Scene scene) {
 //		setCreateTableFrame();
-		setTableListerFXML();
+//		setTableListerFXML();
+		setLoginFXML();
+//		setRegistrationFXML();
 	}
 
 	public void setRegistrationFXML() {
@@ -40,12 +42,14 @@ public class FrameController {
 	public void setFXML(String resource) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(resource));
 		try {
-			this.scene = new Scene(loader.load());
-//			scene.setRoot(loader3.load());
+			if (scene == null) {
+				this.scene = new Scene(loader.load());
+			} else {
+				scene.setRoot(loader.load());
+			}
 			PokerController controller = loader.<PokerController>getController();
 			controller.setDelegateController(this);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -1,6 +1,7 @@
 package hu.elte.bfw1p6.poker.client.controller;
 
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
@@ -8,13 +9,18 @@ import hu.elte.bfw1p6.poker.client.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
 public class RegistrationController implements Initializable, PokerController {
+	
+	private final String REG_OK_MSG = "Sikeresen regisztráltál!";
 	
 	@FXML
 	private AnchorPane rootPane;
@@ -53,6 +59,17 @@ public class RegistrationController implements Initializable, PokerController {
 	
 	private FrameController frameController;
 	
+	private Alert alert;
+	
+	private Alert alertError;
+	
+	public RegistrationController() {
+		alert = new Alert(AlertType.INFORMATION);
+		alert.setContentText(REG_OK_MSG);
+		
+		alertError = new Alert(AlertType.ERROR);
+	}
+	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -60,11 +77,14 @@ public class RegistrationController implements Initializable, PokerController {
 	}
 	
 	@FXML protected void handleRegistrationButton(ActionEvent event) {
-		if (model.registration(usernameField.getText(), passwordField.getText())) {
-			System.out.println("A regisztráció sikeres!");
+		try {
+			model.registration(usernameField.getText(), passwordField.getText());
+			if (alert.showAndWait().get() == ButtonType.OK) {
+				frameController.setLoginFXML();
+			}
+		} catch (RemoteException e) {
+			alertError.showAndWait();
 		}
-		//getClass().getClassLoader().getResource("/fxml/Game.fxml")
-//		rootPane.getChildren().setAll(FXMLLoader.load(getClass().getClassLoader().getResource("anyad")));
 	}
 	
 	@FXML protected void goToLogin(ActionEvent event) {

@@ -12,6 +12,8 @@ import hu.elte.bfw1p6.poker.model.entity.Type;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -19,24 +21,30 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class TableListerController implements PokerController, Initializable {
 	
+	private final String NO_TABLE_SELECTED_MESSAGE = "Nem választottál ki egy táblát sem!";
+
 	private FrameController framceController;
-	
+
 	@FXML private TableView<PTable> tableView;
 	@FXML private TableColumn<PTable, String> tableName;
 	@FXML private TableColumn<PTable, Type> type;
-    @FXML private TableColumn<PTable, Integer> maxTime;
-    @FXML private TableColumn<PTable, Integer> maxPlayers;
-    @FXML private TableColumn<PTable, BigDecimal> maxBet;
-    @FXML private TableColumn<PTable, BigDecimal> smallBlind;
-    @FXML private TableColumn<PTable, BigDecimal> bigBlind;
-    @FXML private Button connectionButton;
-
+	@FXML private TableColumn<PTable, Integer> maxTime;
+	@FXML private TableColumn<PTable, Integer> maxPlayers;
+	@FXML private TableColumn<PTable, BigDecimal> maxBet;
+	@FXML private TableColumn<PTable, BigDecimal> smallBlind;
+	@FXML private TableColumn<PTable, BigDecimal> bigBlind;
+	@FXML private Button connectionButton;
 	
+	private Alert alert;
+
+
 	public TableListerController() {
-//		addTable();
+		//		addTable();
+		alert = new Alert(AlertType.ERROR);
+		alert.setContentText(NO_TABLE_SELECTED_MESSAGE);
 		//akarmi();
 	}
-	
+
 	protected void addTable() {
 		PTable table = new PTable("asd",
 				5,
@@ -46,9 +54,9 @@ public class TableListerController implements PokerController, Initializable {
 				new BigDecimal(2));
 		table.setType(Type.HOLDEM);
 		ObservableList<PTable> data = tableView.getItems();
-        data.add(table);
+		data.add(table);
 	}
-	
+
 	private List<PTable> parseUserList(){
 		PTable table = new PTable("asd",
 				5,
@@ -57,7 +65,7 @@ public class TableListerController implements PokerController, Initializable {
 				new BigDecimal(4),
 				new BigDecimal(5));
 		table.setType(Type.HOLDEM);
-		
+
 		PTable table2 = new PTable("asd",
 				5,
 				2,
@@ -69,7 +77,7 @@ public class TableListerController implements PokerController, Initializable {
 		anyad.add(table);
 		anyad.add(table2);
 		return anyad;
-    }
+	}
 
 	@Override
 	public void setDelegateController(FrameController frameController) {
@@ -87,10 +95,15 @@ public class TableListerController implements PokerController, Initializable {
 		bigBlind.setCellValueFactory(new PropertyValueFactory<PTable, BigDecimal>("bigBlind"));
 		tableView.getItems().setAll(parseUserList());
 	}
-	
+
 	@FXML
 	protected void handleConnectToTable() {
 		PTable table = tableView.getSelectionModel().getSelectedItem();
-		System.out.println(table.getType());
+		if (table == null) {
+			alert.showAndWait();
+		} else {
+			//TODO JOIN
+			System.out.println(table.getType());
+		}
 	}
 }

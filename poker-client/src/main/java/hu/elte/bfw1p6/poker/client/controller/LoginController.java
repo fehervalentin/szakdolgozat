@@ -1,13 +1,17 @@
 package hu.elte.bfw1p6.poker.client.controller;
 
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.model.Model;
+import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -41,13 +45,21 @@ public class LoginController implements Initializable, PokerController {
 	
 	private FrameController frameController;
 	
+	private Alert alert;
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		alert = new Alert(AlertType.ERROR);
 		model = new Model();
 	}
 	
 	@FXML protected void loginHandler(ActionEvent event) {
-		model.login(usernameField.getText(), passwordField.getText());
+		try {
+			model.login(usernameField.getText(), passwordField.getText());
+			frameController.setTableListerFXML();
+		} catch (RemoteException | PokerInvalidUserException e) {
+			alert.setContentText(e.getMessage());
+		}
 	}
 	
 	public void setDelegateController(FrameController fc) {

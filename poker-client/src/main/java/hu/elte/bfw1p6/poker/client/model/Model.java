@@ -15,37 +15,26 @@ public class Model {
 
 	private PokerLoginRemote pokerLoginRemote;
 	private PokerRemote pokerRemote;
-	
+
 	private UUID sessionId;
 
 	public Model() {
 		pokerLoginRemote = RMIRepository.getInstance().getPokerLoginRemote();
 	}
 
-	public void login(String username, String password) {
-		try {
-			sessionId = pokerLoginRemote.login(username, password);
-			pokerRemote = pokerLoginRemote.getPokerRemote(sessionId);
-//			RMIRepository.getInstance().setPokerRemote(pokerRemote);
-//			pokerRemote = RMIRepository.getInstance().getPokerRemote();
-			System.out.println(pokerRemote.sayHello());
-		} catch (RemoteException | SecurityException | PokerInvalidUserException e) {
-			e.printStackTrace();
-		}
+	public void login(String username, String password) throws RemoteException, PokerInvalidUserException {
+		sessionId = pokerLoginRemote.login(username, password);
+		pokerRemote = pokerLoginRemote.getPokerRemote(sessionId);
+		//			RMIRepository.getInstance().setPokerRemote(pokerRemote);
+		//			pokerRemote = RMIRepository.getInstance().getPokerRemote();
+		System.out.println(pokerRemote.sayHello());
 	}
 
-	public boolean registration(String username, String password) {
-		try {
-			pokerLoginRemote.registration(username, password);
-			return true;
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return false;
+	public void registration(String username, String password) throws RemoteException {
+		pokerLoginRemote.registration(username, password);
 	}
-	
-	public void createTable(PTable t) throws RemoteException {
+
+	public void createTable(PTable t) throws RemoteException, PokerInvalidUserException {
 		login("admin", "admin");
 		pokerRemote.createTable(t);
 	}
