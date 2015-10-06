@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.Label?>
 <?import hu.elte.bfw1p6.poker.model.entity.PTable?>
+<?import javafx.scene.control.Button?>
 
 
 <GridPane alignment="CENTER" hgap="10.0" vgap="10.0"
@@ -22,8 +23,12 @@
 		GridPane.rowIndex="1">
 		<columns>
 			<TableColumn prefWidth="75.0" text="Table name" fx:id="tableName" />
+			<TableColumn prefWidth="75.0" text="Type" fx:id="type" />
 			<TableColumn prefWidth="75.0" text="Max time" fx:id="maxTime" />
 			<TableColumn prefWidth="75.0" text="Max players" fx:id="maxPlayers" />
+			<TableColumn prefWidth="75.0" text="Max bet" fx:id="maxBet" />
+			<TableColumn prefWidth="75.0" text="Small blind" fx:id="smallBlind" />
+			<TableColumn prefWidth="75.0" text="Big blind" fx:id="bigBlind" />
 		</columns>
 		<!-- <items> -->
 		<!-- <FXCollections fx:factory="observableArrayList"> -->
@@ -40,5 +45,6 @@
 		<!-- </FXCollections> -->
 		<!-- </items> -->
 	</TableView>
+	<Button fx:id="connectButton" text="Csatlakozás" onAction="#handleConnectToTable" />
 </GridPane>
 

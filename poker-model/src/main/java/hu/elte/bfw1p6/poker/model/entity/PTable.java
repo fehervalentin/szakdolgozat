@@ -14,16 +14,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import javafx.beans.property.SimpleStringProperty;
-
 @Entity
 public class PTable implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
-	private final SimpleStringProperty id2 = new SimpleStringProperty("");
-	private final SimpleStringProperty name2 = new SimpleStringProperty("");
-	private final SimpleStringProperty active = new SimpleStringProperty("");
 
 	@Id
 	@GeneratedValue
@@ -137,9 +131,5 @@ public class PTable implements Serializable {
 
 	public void setType(Type type) {
 		this.type = type;
-	}
-	
-	public String getId2() {
-		return id2.get();
 	}
 }

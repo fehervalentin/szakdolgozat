@@ -1,32 +1,40 @@
 package hu.elte.bfw1p6.poker.client.controller;
 
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.model.entity.PTable;
 import hu.elte.bfw1p6.poker.model.entity.Type;
-import hu.elte.bfw1p6.poker.model.entity.User;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class TableListerController implements PokerController {
+public class TableListerController implements PokerController, Initializable {
 	
 	private FrameController framceController;
 	
 	@FXML private TableView<PTable> tableView;
 	@FXML private TableColumn<PTable, String> tableName;
-    @FXML private TableColumn<PTable, String> maxTime;
-    @FXML private TableColumn<PTable, String> maxPlayers;
+	@FXML private TableColumn<PTable, Type> type;
+    @FXML private TableColumn<PTable, Integer> maxTime;
+    @FXML private TableColumn<PTable, Integer> maxPlayers;
+    @FXML private TableColumn<PTable, BigDecimal> maxBet;
+    @FXML private TableColumn<PTable, BigDecimal> smallBlind;
+    @FXML private TableColumn<PTable, BigDecimal> bigBlind;
+    @FXML private Button connectionButton;
 
 	
 	public TableListerController() {
 //		addTable();
-		akarmi();
+		//akarmi();
 	}
 	
 	protected void addTable() {
@@ -41,31 +49,48 @@ public class TableListerController implements PokerController {
         data.add(table);
 	}
 	
-	private void akarmi() {
-		tableName.setCellValueFactory(new PropertyValueFactory<PTable, String>("id2"));
-//		maxTime.setCellValueFactory(new PropertyValueFactory<PTable, String>("name2"));
-//		maxPlayers.setCellValueFactory(new PropertyValueFactory<PTable, String>("active"));
-
-//        tableView.getItems().setAll(parseUserList());
-	}
-	
 	private List<PTable> parseUserList(){
 		PTable table = new PTable("asd",
 				5,
 				2,
-				new BigDecimal(2),
-				new BigDecimal(2),
-				new BigDecimal(2));
+				new BigDecimal(3),
+				new BigDecimal(4),
+				new BigDecimal(5));
 		table.setType(Type.HOLDEM);
-        // parse and construct User datamodel list by looping your ResultSet rs
-        // and return the list  
+		
+		PTable table2 = new PTable("asd",
+				5,
+				2,
+				new BigDecimal(3),
+				new BigDecimal(4),
+				new BigDecimal(5));
+		table2.setType(Type.OMAHA);
 		List<PTable> anyad = new ArrayList<>();
 		anyad.add(table);
+		anyad.add(table2);
 		return anyad;
     }
 
 	@Override
 	public void setDelegateController(FrameController frameController) {
 		this.framceController = framceController;
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		tableName.setCellValueFactory(new PropertyValueFactory<PTable, String>("name"));
+		type.setCellValueFactory(new PropertyValueFactory<PTable, Type>("type"));
+		maxTime.setCellValueFactory(new PropertyValueFactory<PTable, Integer>("maxTime"));
+		maxPlayers.setCellValueFactory(new PropertyValueFactory<PTable, Integer>("maxPlayers"));
+		maxBet.setCellValueFactory(new PropertyValueFactory<PTable, BigDecimal>("maxBet"));
+		smallBlind.setCellValueFactory(new PropertyValueFactory<PTable, BigDecimal>("smallBlind"));
+		bigBlind.setCellValueFactory(new PropertyValueFactory<PTable, BigDecimal>("bigBlind"));
+		tableView.getItems().setAll(parseUserList());
+	}
+	
+	@FXML
+	protected void handleConnectToTable() {
+		PTable table = tableView.getSelectionModel().getSelectedItem();
+		System.out.println(table.getType());
 	}
 }
