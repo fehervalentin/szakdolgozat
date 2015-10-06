@@ -20,5 +20,5 @@ public interface PokerLoginRemote extends Remote {
 	
 	boolean isAdmin(UUID uuid) throws RemoteException;
 	
-	boolean registration(String username, String password) throws RemoteException;
+	void registration(String username, String password) throws RemoteException;
 }

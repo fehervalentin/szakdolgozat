@@ -8,8 +8,13 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.UUID;
 
+import javax.persistence.NoResultException;
+
+import org.mindrot.jbcrypt.BCrypt;
+
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.model.PokerProperties;
+import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.UserDAO;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 import hu.elte.bfw1p6.poker.rmi.security.PokerLoginRemote;
@@ -25,9 +30,9 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 	private PokerProperties pokerProperties;
 
 	private SessionService sessionService;
-	
+
 	private UserDAO userDAO;
-	
+
 	public PokerLoginRemoteImpl(PokerRemote pokerRemote) throws RemoteException {
 
 		this.pokerProperties = PokerProperties.getInstance();
@@ -51,9 +56,16 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 
 	@Override
 	public UUID login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException {
-		return sessionService.authenticate(username, password);
+		try {
+			User u = userDAO.findUserByUserName(username);
+			boolean lol = BCrypt.checkpw(password, u.getPassword());
+			System.out.println(lol);
+			return sessionService.authenticate(username, password);
+		} catch (NoResultException ex) {
+			throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
+		}
 	}
-	
+
 	@Override
 	public boolean shutDown(UUID uuid) throws RemoteException {
 		try {
@@ -84,10 +96,9 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 		// TODO DAO-tól elkérni servicen keresztül?
 		return false;
 	}
-	
+
 	@Override
-	public boolean registration(String username, String password) throws RemoteException {
+	public void registration(String username, String password) throws RemoteException {
 		userDAO.persistUser(username, password);
-		return true;
 	}
 }

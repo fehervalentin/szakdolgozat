@@ -59,6 +59,7 @@ public class LoginController implements Initializable, PokerController {
 			frameController.setTableListerFXML();
 		} catch (RemoteException | PokerInvalidUserException e) {
 			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 	

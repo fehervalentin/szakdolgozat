@@ -29,6 +29,7 @@ public class PTableDAO implements Serializable{
 	}
 	
 	public void persistTable(PTable t) {
+		em = emf.createEntityManager();
 		em.getTransaction().begin();
 		em.persist(t);
 		em.getTransaction().commit();
@@ -36,11 +37,12 @@ public class PTableDAO implements Serializable{
 	}
 	
 	public void modifyPassword(int id, String oldPassword, String newPassword) {
+		em = emf.createEntityManager();
+		em.getTransaction().begin();
 		User u = (User)em.find(User.class, id);
 		String salt = generateSalt();
 		u.setSalt(salt);
 		u.setPassword(BCrypt.hashpw(newPassword, salt));
-		em.getTransaction().begin();
 		em.persist(u);
 		em.getTransaction().commit();
 		em.close();
@@ -51,8 +53,10 @@ public class PTableDAO implements Serializable{
 	}
 
 	public List<PTable> getTables() {
+		em = emf.createEntityManager();
 		em.getTransaction().begin();
 		Query query = em.createQuery("SELECT t FROM PTABLE t");
+		em.close();
 		return (List<PTable>)query.getResultList();
 	}
 }

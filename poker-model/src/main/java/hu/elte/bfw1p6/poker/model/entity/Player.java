@@ -12,6 +12,10 @@ public class Player implements Serializable	{
 
 	private static final long serialVersionUID = 1L;
 	
+	public Player() {
+		
+	}
+	
 	@NotNull
 	@Column(name="username")
 	protected String userName;

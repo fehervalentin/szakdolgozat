@@ -30,6 +30,10 @@ public class User extends Player{
 		super(username);
 	}
 	
+	public User() {
+		super();
+	}
+	
 	public long getId() {
 		return id;
 	}

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -16,39 +17,46 @@ public class UserDAO {
 
 	private EntityManagerFactory emf;
 	private EntityManager em;
-	
+
 	public UserDAO() {
 		emf = PokerEntityManager.getInstance().getEntityManagerFactory();
-		em = emf.createEntityManager();
 	}
-	
+
 	public void persistUser(String username, String password) {
+		em = emf.createEntityManager();
+		em.getTransaction().begin();
 		User u = new User(username);
 		String salt = generateSalt();
 		u.setSalt(salt);
 		u.setPassword(BCrypt.hashpw(u.getPassword(), salt));
 		u.setAmount(new BigDecimal(0));
 		u.setRegDate((new Date()).getTime());
-		em.getTransaction().begin();
 		em.persist(u);
 		em.getTransaction().commit();
 		em.close();
-//		emf.close();
 	}
-	
+
 	public void modifyPassword(int id, String oldPassword, String newPassword) {
+		em = emf.createEntityManager();
+		em.getTransaction().begin();
 		User u = (User)em.find(User.class, id);
 		String salt = generateSalt();
 		u.setSalt(salt);
 		u.setPassword(BCrypt.hashpw(newPassword, salt));
-		em.getTransaction().begin();
 		em.persist(u);
 		em.getTransaction().commit();
 		em.close();
-//		emf.close();
 	}
-	
+
 	private String generateSalt() {
 		return BCrypt.gensalt();
+	}
+
+	public User findUserByUserName(String username) throws NoResultException {
+		em = emf.createEntityManager();
+		em.getTransaction().begin();
+		User u = (User)em.createQuery("SELECT u FROM User u where u.userName = :paramUserName").setParameter("paramUserName", username).getSingleResult();
+		em.close();
+		return u;
 	}
 }
