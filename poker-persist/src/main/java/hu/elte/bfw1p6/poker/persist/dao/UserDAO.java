@@ -10,6 +10,7 @@ import javax.persistence.NoResultException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import hu.elte.bfw1p6.poker.model.entity.User;
+import hu.elte.bfw1p6.poker.persist.repository.EntityManagerHelper;
 import hu.elte.bfw1p6.poker.persist.repository.PokerEntityManager;
 
 
@@ -20,6 +21,7 @@ public class UserDAO {
 
 	public UserDAO() {
 		emf = PokerEntityManager.getInstance().getEntityManagerFactory();
+//		em = EntityManagerHelper.getEntityManager();
 	}
 
 	public void persistUser(String username, String password) {

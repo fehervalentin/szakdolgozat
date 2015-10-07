@@ -54,6 +54,12 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 		return null;
 //		return tableDAO.getTables();
 	}
+
+	@Override
+	public void registerObserver() throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }

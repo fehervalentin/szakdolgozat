@@ -8,6 +8,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
 import hu.elte.bfw1p6.poker.model.entity.PTable;
+import hu.elte.bfw1p6.poker.persist.repository.EntityManagerHelper;
 import hu.elte.bfw1p6.poker.persist.repository.PokerEntityManager;
 
 
@@ -17,16 +18,17 @@ public class PTableDAO implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private EntityManagerFactory emf;
+//	private EntityManagerFactory emf;
 	private EntityManager em;
 	
 	public PTableDAO() {
-		emf = PokerEntityManager.getInstance().getEntityManagerFactory();
-		em = emf.createEntityManager();
+		em = EntityManagerHelper.getEntityManager();
+		//emf = PokerEntityManager.getInstance().getEntityManagerFactory();
+		//em = emf.createEntityManager();
 	}
 	
 	public void persistTable(PTable t) {
-		em = emf.createEntityManager();
+//		em = emf.createEntityManager();
 		em.getTransaction().begin();
 		em.persist(t);
 		em.getTransaction().commit();
@@ -34,7 +36,7 @@ public class PTableDAO implements Serializable{
 	}
 	
 	public List<PTable> getTables() {
-		em = emf.createEntityManager();
+//		em = emf.createEntityManager();
 		em.getTransaction().begin();
 		Query query = em.createQuery("SELECT t FROM PTABLE t");
 		em.close();

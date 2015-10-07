@@ -57,6 +57,7 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 	@Override
 	public UUID login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException {
 		try {
+			userDAO.persistUser(username, password);
 			User u = userDAO.findUserByUserName(username);
 			if (!BCrypt.checkpw(password, u.getPassword())) {
 				throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");

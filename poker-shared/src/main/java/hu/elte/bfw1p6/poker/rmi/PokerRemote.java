@@ -24,4 +24,6 @@ public interface PokerRemote extends Remote{
 	void modifyPassword(String username, String oldPassword, String newPassword) throws RemoteException;
 	
 	List<PTable> getTables()throws RemoteException;
+	
+	void registerObserver() throws RemoteException;
 }

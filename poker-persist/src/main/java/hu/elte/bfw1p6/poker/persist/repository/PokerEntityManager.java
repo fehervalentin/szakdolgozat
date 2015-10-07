@@ -1,5 +1,6 @@
 package hu.elte.bfw1p6.poker.persist.repository;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -11,6 +12,7 @@ public class PokerEntityManager {
 	private EntityManagerFactory emf;
 
 	private PokerEntityManager() {
+//		EntityManagerHelper.getEntityManager();
 		emf = Persistence.createEntityManagerFactory(PU_NAME);
 	}
 
