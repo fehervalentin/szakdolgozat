@@ -24,12 +24,7 @@ public class Model {
 
 	public void login(String username, String password) throws RemoteException, PokerInvalidUserException {
 		sessionId = pokerLoginRemote.login(username, password);
-		if (sessionId == null) {
-			System.out.println("null");
-		} else {
-			System.out.println(sessionId);
-		}
-		//pokerRemote = pokerLoginRemote.getPokerRemote(sessionId);
+		pokerRemote = pokerLoginRemote.getPokerRemote(sessionId);
 		//			RMIRepository.getInstance().setPokerRemote(pokerRemote);
 		//			pokerRemote = RMIRepository.getInstance().getPokerRemote();
 		//System.out.println(pokerRemote.sayHello());

@@ -58,8 +58,9 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 	public UUID login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException {
 		try {
 			User u = userDAO.findUserByUserName(username);
-			boolean lol = BCrypt.checkpw(password, u.getPassword());
-			System.out.println(lol);
+			if (!BCrypt.checkpw(password, u.getPassword())) {
+				throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
+			}
 			return sessionService.authenticate(username, password);
 		} catch (NoResultException ex) {
 			throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");

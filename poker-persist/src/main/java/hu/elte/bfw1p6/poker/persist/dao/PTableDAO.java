@@ -7,10 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
-import org.mindrot.jbcrypt.BCrypt;
-
 import hu.elte.bfw1p6.poker.model.entity.PTable;
-import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.repository.PokerEntityManager;
 
 
@@ -36,22 +33,6 @@ public class PTableDAO implements Serializable{
 		em.close();
 	}
 	
-	public void modifyPassword(int id, String oldPassword, String newPassword) {
-		em = emf.createEntityManager();
-		em.getTransaction().begin();
-		User u = (User)em.find(User.class, id);
-		String salt = generateSalt();
-		u.setSalt(salt);
-		u.setPassword(BCrypt.hashpw(newPassword, salt));
-		em.persist(u);
-		em.getTransaction().commit();
-		em.close();
-	}
-	
-	private String generateSalt() {
-		return BCrypt.gensalt();
-	}
-
 	public List<PTable> getTables() {
 		em = emf.createEntityManager();
 		em.getTransaction().begin();

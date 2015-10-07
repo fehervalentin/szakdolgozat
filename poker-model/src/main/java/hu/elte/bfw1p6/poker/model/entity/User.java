@@ -22,10 +22,6 @@ public class User extends Player{
 	@Column(name = "password")
 	private String password;
 	
-	@NotNull
-	@Column(name = "salt")
-	private String salt;
-	
 	public User(String username) {
 		super(username);
 	}
@@ -42,18 +38,10 @@ public class User extends Player{
 		this.password = password;
 	}
 	
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
-	
 	public String getPassword() {
 		return password;
 	}
 	
-	public String getSalt() {
-		return salt;
-	}
-
 	public void setAmount(BigDecimal balance) {
 		this.balance = balance;
 	}

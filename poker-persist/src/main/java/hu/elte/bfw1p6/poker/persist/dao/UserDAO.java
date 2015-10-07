@@ -26,9 +26,9 @@ public class UserDAO {
 		em = emf.createEntityManager();
 		em.getTransaction().begin();
 		User u = new User(username);
-		String salt = generateSalt();
-		u.setSalt(salt);
-		u.setPassword(BCrypt.hashpw(u.getPassword(), salt));
+		//String salt = generateSalt();
+		//u.setSalt(salt);
+		u.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
 		u.setAmount(new BigDecimal(0));
 		u.setRegDate((new Date()).getTime());
 		em.persist(u);
@@ -40,16 +40,10 @@ public class UserDAO {
 		em = emf.createEntityManager();
 		em.getTransaction().begin();
 		User u = (User)em.find(User.class, id);
-		String salt = generateSalt();
-		u.setSalt(salt);
-		u.setPassword(BCrypt.hashpw(newPassword, salt));
+		u.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
 		em.persist(u);
 		em.getTransaction().commit();
 		em.close();
-	}
-
-	private String generateSalt() {
-		return BCrypt.gensalt();
 	}
 
 	public User findUserByUserName(String username) throws NoResultException {
