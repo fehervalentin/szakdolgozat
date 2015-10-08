@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
+import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.model.entity.PTable;
@@ -21,7 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class CreateTableController implements Initializable, PokerController {
+public class CreateTableController implements Initializable, PokerClientController {
 
 	@FXML
 	private AnchorPane rootPane;

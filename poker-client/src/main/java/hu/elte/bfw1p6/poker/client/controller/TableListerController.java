@@ -2,11 +2,15 @@ package hu.elte.bfw1p6.poker.client.controller;
 
 import java.math.BigDecimal;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
+import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
+import hu.elte.bfw1p6.poker.client.model.Model;
+import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverController;
 import hu.elte.bfw1p6.poker.model.entity.PTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.collections.ObservableList;
@@ -19,7 +23,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class TableListerController implements PokerController, Initializable {
+public class TableListerController implements PokerClientController, PokerRemoteObserverController, Initializable {
 	
 	private final String NO_TABLE_SELECTED_MESSAGE = "Nem választottál ki egy táblát sem!";
 
@@ -37,9 +41,12 @@ public class TableListerController implements PokerController, Initializable {
 	@FXML private Button createTableButton;
 	
 	private Alert alert;
+	
+	private Model model;
 
 
 	public TableListerController() {
+		model = Model.getInstance();
 		//		addTable();
 		alert = new Alert(AlertType.ERROR);
 		alert.setContentText(NO_TABLE_SELECTED_MESSAGE);
@@ -87,6 +94,12 @@ public class TableListerController implements PokerController, Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		try {
+			model.registerObserver(this);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		tableName.setCellValueFactory(new PropertyValueFactory<PTable, String>("name"));
 		pokerType.setCellValueFactory(new PropertyValueFactory<PTable, PokerType>("pokerType"));
 		maxTime.setCellValueFactory(new PropertyValueFactory<PTable, Integer>("maxTime"));
@@ -111,5 +124,10 @@ public class TableListerController implements PokerController, Initializable {
 	@FXML
 	protected void handleCreateTable() {
 		frameController.setCreateTableFrame();
+	}
+
+	@Override
+	public void notifyPokerClientController() {
+		System.out.println("szerver behivott");
 	}
 }

@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
+import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import javafx.event.ActionEvent;
@@ -18,7 +19,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class LoginController implements Initializable, PokerController {
+public class LoginController implements Initializable, PokerClientController {
 	
 	@FXML
 	private AnchorPane rootPane;

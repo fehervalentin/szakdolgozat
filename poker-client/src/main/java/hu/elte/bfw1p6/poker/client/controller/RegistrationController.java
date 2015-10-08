@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
+import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +19,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class RegistrationController implements Initializable, PokerController {
+public class RegistrationController implements Initializable, PokerClientController {
 	
 	private final String REG_OK_MSG = "Sikeresen regisztráltál!";
 	

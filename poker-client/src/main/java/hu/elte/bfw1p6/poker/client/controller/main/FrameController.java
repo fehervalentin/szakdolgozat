@@ -2,7 +2,7 @@ package hu.elte.bfw1p6.poker.client.controller.main;
 
 import java.io.IOException;
 
-import hu.elte.bfw1p6.poker.client.controller.PokerController;
+import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 
@@ -18,8 +18,8 @@ public class FrameController {
 	
 	public FrameController(Scene scene) {
 //		setCreateTableFrame();
-		setTableListerFXML();
-//		setLoginFXML();
+//		setTableListerFXML();
+		setLoginFXML();
 //		setRegistrationFXML();
 	}
 
@@ -47,7 +47,7 @@ public class FrameController {
 			} else {
 				scene.setRoot(loader.load());
 			}
-			PokerController controller = loader.<PokerController>getController();
+			PokerClientController controller = loader.<PokerClientController>getController();
 			controller.setDelegateController(this);
 		} catch (IOException e) {
 			e.printStackTrace();

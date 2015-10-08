@@ -3,7 +3,9 @@ package hu.elte.bfw1p6.poker.rmi;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.UUID;
 
+import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverController;
 import hu.elte.bfw1p6.poker.model.entity.PTable;
 import hu.elte.bfw1p6.poker.model.entity.Player;
 
@@ -25,5 +27,7 @@ public interface PokerRemote extends Remote{
 	
 	List<PTable> getTables()throws RemoteException;
 	
-	void registerObserver() throws RemoteException;
+	void registerObserver(UUID uuid, PokerRemoteObserverController proc) throws RemoteException;
+	
+	void unRegisterObserver(UUID uuid, PokerRemoteObserverController proc) throws RemoteException;
 }
