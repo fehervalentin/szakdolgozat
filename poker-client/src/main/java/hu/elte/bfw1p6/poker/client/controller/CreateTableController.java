@@ -133,19 +133,22 @@ public class CreateTableController implements Initializable, PokerController {
 		BigDecimal smallBlind = BigDecimal.valueOf(Double.valueOf(smallBlindTextField.getText()));
 		BigDecimal bigBlind = BigDecimal.valueOf(Double.valueOf(bigBlindtTextField.getText()));
 		String typeString = gameTypeComboBox.getSelectionModel().getSelectedItem();
-		
-		PTable t = new PTable(tableName, maxTime, maxPlayers, maxBet, smallBlind, bigBlind);
+		PokerType pokerType = null;
 		
 		if (typeString.equals("OMAHA")) {
-			t.setType(PokerType.OMAHA);
+			pokerType = PokerType.OMAHA;
 		} else if (typeString.equals("HOLDEM")) {
-			t.setType(PokerType.HOLDEM);
+			pokerType = PokerType.HOLDEM;
 		} else {
 			alert.setContentText("Nem megfelelő játék típus lett kiválasztva!");
 			alert.showAndWait();
 			return;
 //			throw new PokerInvalidGameTypeException("Nem megfelelő játék típus!");
 		}
+		
+		PTable t = new PTable(tableName, maxTime, maxPlayers, maxBet, smallBlind, bigBlind, pokerType);
+		
+		
 		
 		try {
 			model.createTable(t);

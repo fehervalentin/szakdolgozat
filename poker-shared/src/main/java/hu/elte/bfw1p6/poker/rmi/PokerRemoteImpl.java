@@ -32,7 +32,7 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 	@Override
 	public void createTable(PTable t) throws RemoteException {
 		PTableRepository.save(t);
-		System.out.println("létre kéne hozni");
+		System.out.println("létrehozta");
 	}
 
 	@Override

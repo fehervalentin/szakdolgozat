@@ -27,7 +27,7 @@ public class TableListerController implements PokerController, Initializable {
 
 	@FXML private TableView<PTable> tableView;
 	@FXML private TableColumn<PTable, String> tableName;
-	@FXML private TableColumn<PTable, PokerType> type;
+	@FXML private TableColumn<PTable, PokerType> pokerType;
 	@FXML private TableColumn<PTable, Integer> maxTime;
 	@FXML private TableColumn<PTable, Integer> maxPlayers;
 	@FXML private TableColumn<PTable, BigDecimal> maxBet;
@@ -52,8 +52,8 @@ public class TableListerController implements PokerController, Initializable {
 				2,
 				new BigDecimal(2),
 				new BigDecimal(2),
-				new BigDecimal(2));
-		table.setType(PokerType.HOLDEM);
+				new BigDecimal(2),
+				PokerType.HOLDEM);
 		ObservableList<PTable> data = tableView.getItems();
 		data.add(table);
 	}
@@ -64,16 +64,16 @@ public class TableListerController implements PokerController, Initializable {
 				2,
 				new BigDecimal(3),
 				new BigDecimal(4),
-				new BigDecimal(5));
-		table.setType(PokerType.HOLDEM);
+				new BigDecimal(5),
+				PokerType.HOLDEM);
 
 		PTable table2 = new PTable("asd",
 				5,
 				2,
 				new BigDecimal(3),
 				new BigDecimal(4),
-				new BigDecimal(5));
-		table2.setType(PokerType.OMAHA);
+				new BigDecimal(5),
+				PokerType.OMAHA);
 		List<PTable> anyad = new ArrayList<>();
 		anyad.add(table);
 		anyad.add(table2);
@@ -88,7 +88,7 @@ public class TableListerController implements PokerController, Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		tableName.setCellValueFactory(new PropertyValueFactory<PTable, String>("name"));
-		type.setCellValueFactory(new PropertyValueFactory<PTable, PokerType>("type"));
+		pokerType.setCellValueFactory(new PropertyValueFactory<PTable, PokerType>("pokerType"));
 		maxTime.setCellValueFactory(new PropertyValueFactory<PTable, Integer>("maxTime"));
 		maxPlayers.setCellValueFactory(new PropertyValueFactory<PTable, Integer>("maxPlayers"));
 		maxBet.setCellValueFactory(new PropertyValueFactory<PTable, BigDecimal>("maxBet"));

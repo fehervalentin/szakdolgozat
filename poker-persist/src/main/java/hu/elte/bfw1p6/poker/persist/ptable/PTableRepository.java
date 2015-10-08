@@ -15,7 +15,7 @@ public class PTableRepository {
 		int iRet = -1;
 		try {
 			Connection con = DBManager.getInstance().getConnection();
-			String SQL = "INSERT INTO PTable(name, max_time, max_players, max_bet, small_blind, big_blind, type) Values(?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO PTable(name, max_time, max_players, max_bet, small_blind, big_blind, poker_type) Values(?,?,?,?,?,?,?)";
 			PreparedStatement pstmt = con.prepareStatement(SQL);
 			pstmt.setString(1, t.getName());
 			pstmt.setInt(2, t.getMaxTime());

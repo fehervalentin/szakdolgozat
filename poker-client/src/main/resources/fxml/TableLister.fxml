@@ -23,7 +23,7 @@
 		GridPane.rowIndex="1">
 		<columns>
 			<TableColumn prefWidth="75.0" text="Table name" fx:id="tableName" />
-			<TableColumn prefWidth="75.0" text="Type" fx:id="type" />
+			<TableColumn prefWidth="75.0" text="Type" fx:id="pokerType" />
 			<TableColumn prefWidth="75.0" text="Max time" fx:id="maxTime" />
 			<TableColumn prefWidth="75.0" text="Max players" fx:id="maxPlayers" />
 			<TableColumn prefWidth="75.0" text="Max bet" fx:id="maxBet" />
