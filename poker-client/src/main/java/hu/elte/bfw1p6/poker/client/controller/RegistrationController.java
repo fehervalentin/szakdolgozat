@@ -73,7 +73,7 @@ public class RegistrationController implements Initializable, PokerController {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		model = new Model();
+		model = Model.getInstance();
 	}
 	
 	@FXML protected void handleRegistrationButton(ActionEvent event) {

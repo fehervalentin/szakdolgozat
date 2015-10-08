@@ -12,14 +12,23 @@ import hu.elte.bfw1p6.poker.rmi.security.PokerLoginRemote;
 
 
 public class Model {
+	
+	private static Model instance = null;
 
 	private PokerLoginRemote pokerLoginRemote;
 	private PokerRemote pokerRemote;
 
 	private UUID sessionId;
 
-	public Model() {
+	private Model() {
 		pokerLoginRemote = RMIRepository.getInstance().getPokerLoginRemote();
+	}
+	
+	public static Model getInstance() {
+		if(instance == null) {
+			instance = new Model();
+		}
+		return instance;
 	}
 
 	public void login(String username, String password) throws RemoteException, PokerInvalidUserException {

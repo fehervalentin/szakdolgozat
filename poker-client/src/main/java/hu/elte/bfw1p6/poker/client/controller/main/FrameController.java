@@ -3,6 +3,7 @@ package hu.elte.bfw1p6.poker.client.controller.main;
 import java.io.IOException;
 
 import hu.elte.bfw1p6.poker.client.controller.PokerController;
+import hu.elte.bfw1p6.poker.client.model.Model;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 
@@ -11,7 +12,7 @@ public class FrameController {
 	private String FXML_PREFIX = "/fxml/";
 	private String LOGIN_FXML = "Login.fxml";
 	private String REGISTRATION_FXML = "Registration.fxml";
-	private String CREATE_TABLE_FXML = "TableCreator.fxml";
+	private String CREATE_TABLE_FXML = "CreateTable.fxml";
 	private String TABLE_LISTER_FXML = "TableLister.fxml";
 	
 	private Scene scene;

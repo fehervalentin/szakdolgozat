@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.model.Model;
+import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.model.entity.PTable;
 import hu.elte.bfw1p6.poker.model.entity.Type;
 import javafx.event.ActionEvent;
@@ -20,7 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class TableCreatorController implements Initializable, PokerController {
+public class CreateTableController implements Initializable, PokerController {
 
 	@FXML
 	private AnchorPane rootPane;
@@ -65,7 +66,7 @@ public class TableCreatorController implements Initializable, PokerController {
 	private TextField maxPlayerTextField;
 
 	@FXML
-	private TextField limitTextField;
+	private TextField maxBetTextField;
 
 	@FXML
 	private TextField smallBlindTextField;
@@ -91,43 +92,54 @@ public class TableCreatorController implements Initializable, PokerController {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		model = new Model();
+		model = Model.getInstance();
 	}
 
-	@FXML protected void handleCreateTableButton(ActionEvent event) {
-		System.out.println("lol");
+//	@FXML protected void handleCreateTableButton(ActionEvent event) {
+//		System.out.println("lol");
 //		PTable table = new PTable(tableNameLabel.getText(),
 //				Integer.valueOf(maxTimeField.getText()),
 //				Integer.valueOf(maxPlayerTextField.getText()),
 //				BigDecimal.valueOf(Double.valueOf(limitTextField.getText())),
 //				BigDecimal.valueOf(Double.valueOf(smallBlindTextField.getText())),
 //				BigDecimal.valueOf(Double.valueOf(bigBlindtTextField.getText())));
-		PTable table = new PTable("asd",
-				5,
-				2,
-				new BigDecimal(2),
-				new BigDecimal(2),
-				new BigDecimal(2));
-		table.setType(Type.HOLDEM);
-		/*try {
-			model.createTable(table);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}*/
-		List<PTable> tables = new ArrayList<>();//model.getTables();
-		tables.add(table);
-		System.out.println(tables);
-		System.out.println("vege");
-	}
+//		PTable table = new PTable("asd",
+//				5,
+//				2,
+//				new BigDecimal(2),
+//				new BigDecimal(2),
+//				new BigDecimal(2));
+//		table.setType(Type.HOLDEM);
+//		try {
+//			model.createTable(table);
+//		} catch (RemoteException e) {
+//			e.printStackTrace();
+//		}
+//		List<PTable> tables = new ArrayList<>();//model.getTables();
+//		tables.add(table);
+//		System.out.println(tables);
+//		System.out.println("vege");
+//	}
 
 	@FXML
 	protected void createTableHandler(ActionEvent event) {
-		frameController.setLoginFXML();
+		String tableName = tableNameTextField.getText();
+		Integer maxTime = Integer.valueOf(maxTimeField.getText());
+		Integer maxPlayers = Integer.valueOf(maxPlayerTextField.getText());
+		BigDecimal maxBet = BigDecimal.valueOf(Double.valueOf(maxBetTextField.getText()));
+		BigDecimal smallBlind = BigDecimal.valueOf(Double.valueOf(smallBlindTextField.getText()));
+		BigDecimal bigBlind = BigDecimal.valueOf(Double.valueOf(bigBlindtTextField.getText()));
+		PTable t = new PTable(tableName, maxTime, maxPlayers, maxBet, smallBlind, bigBlind);
+		try {
+			model.createTable(t);
+		} catch (RemoteException | PokerInvalidUserException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@FXML
 	protected void backHandler(ActionEvent event) {
-
+		frameController.setTableListerFXML();
 	}
 
 	public void setDelegateController(FrameController fc) {

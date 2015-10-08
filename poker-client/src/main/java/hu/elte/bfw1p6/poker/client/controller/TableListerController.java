@@ -23,7 +23,7 @@ public class TableListerController implements PokerController, Initializable {
 	
 	private final String NO_TABLE_SELECTED_MESSAGE = "Nem választottál ki egy táblát sem!";
 
-	private FrameController framceController;
+	private FrameController frameController;
 
 	@FXML private TableView<PTable> tableView;
 	@FXML private TableColumn<PTable, String> tableName;
@@ -33,7 +33,8 @@ public class TableListerController implements PokerController, Initializable {
 	@FXML private TableColumn<PTable, BigDecimal> maxBet;
 	@FXML private TableColumn<PTable, BigDecimal> smallBlind;
 	@FXML private TableColumn<PTable, BigDecimal> bigBlind;
-	@FXML private Button connectionButton;
+	@FXML private Button connectButton;
+	@FXML private Button createTableButton;
 	
 	private Alert alert;
 
@@ -81,7 +82,7 @@ public class TableListerController implements PokerController, Initializable {
 
 	@Override
 	public void setDelegateController(FrameController frameController) {
-		this.framceController = framceController;
+		this.frameController = frameController;
 	}
 
 	@Override
@@ -105,5 +106,10 @@ public class TableListerController implements PokerController, Initializable {
 			//TODO JOIN
 			System.out.println(table.getType());
 		}
+	}
+	
+	@FXML
+	protected void handleCreateTable() {
+		frameController.setCreateTableFrame();
 	}
 }

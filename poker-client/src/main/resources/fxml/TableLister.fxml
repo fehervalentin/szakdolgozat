@@ -45,6 +45,9 @@
 		<!-- </FXCollections> -->
 		<!-- </items> -->
 	</TableView>
-	<Button fx:id="connectButton" text="Csatlakozás" onAction="#handleConnectToTable" />
+	<Button fx:id="connectButton" text="Csatlakozás" onAction="#handleConnectToTable"
+		GridPane.columnIndex="0" GridPane.rowIndex="3" />
+	<Button fx:id="createTableButton" text="Új tábla létrehozása"
+		onAction="#handleCreateTable"  GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 </GridPane>
 
