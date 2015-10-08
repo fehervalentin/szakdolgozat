@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
-import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverController;
+import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverTableViewController;
 import hu.elte.bfw1p6.poker.model.entity.PTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.collections.ObservableList;
@@ -23,7 +23,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class TableListerController implements PokerClientController, PokerRemoteObserverController, Initializable {
+public class TableListerController implements PokerClientController, PokerRemoteObserverTableViewController, Initializable {
 	
 	private final String NO_TABLE_SELECTED_MESSAGE = "Nem választottál ki egy táblát sem!";
 
@@ -127,7 +127,7 @@ public class TableListerController implements PokerClientController, PokerRemote
 	}
 
 	@Override
-	public void notifyPokerClientController() {
+	public void updateTableView() {
 		System.out.println("szerver behivott");
 	}
 }

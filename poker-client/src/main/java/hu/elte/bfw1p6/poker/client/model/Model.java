@@ -4,7 +4,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.UUID;
 
-import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverController;
+import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverTableViewController;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.model.entity.PTable;
@@ -59,7 +59,7 @@ public class Model {
 		return tables;
 	}
 	
-	public void registerObserver(PokerRemoteObserverController proc) throws RemoteException {
+	public void registerObserver(PokerRemoteObserverTableViewController proc) throws RemoteException {
 		pokerRemote.registerObserver(sessionId, proc);
 	}
 

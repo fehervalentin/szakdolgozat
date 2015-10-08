@@ -2,9 +2,6 @@ package hu.elte.bfw1p6.poker.model.entity;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Entity;
-
-@Entity
 public class User extends Player{
 
 	private static final long serialVersionUID = 1L;

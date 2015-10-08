@@ -8,8 +8,6 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.UUID;
 
-import javax.persistence.NoResultException;
-
 import org.mindrot.jbcrypt.BCrypt;
 
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
@@ -54,16 +52,12 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 
 	@Override
 	public UUID login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException {
-		try {
-			User u = UserRepository.findUserByUserName(username);
-//			User u = userDAO.findUserByUserName(username);
-			if (!BCrypt.checkpw(password, u.getPassword())) {
-				throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
-			}
-			return sessionService.authenticate(username, password);
-		} catch (NoResultException ex) {
+		User u = UserRepository.findUserByUserName(username);
+		//			User u = userDAO.findUserByUserName(username);
+		if (!BCrypt.checkpw(password, u.getPassword())) {
 			throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
 		}
+		return sessionService.authenticate(username, password);
 	}
 
 	@Override
@@ -101,6 +95,6 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 	public void registration(String username, String password) throws RemoteException {
 		User u = UserBuilder.geInstance().buildUser(username, password);
 		UserRepository.save(u);
-//		userDAO.persistUser(username, password);
+		//		userDAO.persistUser(username, password);
 	}
 }
