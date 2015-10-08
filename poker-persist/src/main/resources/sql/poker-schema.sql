@@ -1,2 +1,4 @@
 DROP TABLE IF EXISTS pokerdb.User;
+DROP TABLE IF EXISTS pokerdb.PTable;
 CREATE TABLE pokerdb.User (id integer not null auto_increment, balance decimal(19,2) not null, reg_date bigint not null, username varchar(255) not null, password varchar(255) not null, primary key (id));
+CREATE TABLE pokerdb.PTable (id integer not null AUTO_INCREMENT, big_blind decimal(19,2) not null, max_Bet decimal(19,2) not null, max_players integer not null check (max_players<=6 AND max_players>=2), max_time integer not null check (max_time<=40 AND max_time>=5), name varchar(30) not null, small_blind decimal(19,2) not null, type varchar(255), primary key (id));

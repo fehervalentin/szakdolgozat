@@ -1,13 +1,11 @@
 package hu.elte.bfw1p6.poker.login;
 
-import java.math.BigDecimal;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.NoResultException;

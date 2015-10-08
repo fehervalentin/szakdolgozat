@@ -3,7 +3,7 @@ package hu.elte.bfw1p6.poker.model.entity;
 import javax.persistence.Entity;
 
 @Entity
-public enum Type {
+public enum PokerType {
 	
 	HOLDEM(1, "Hold'em", 5, 2),
 	OMAHA(2, "Omaha", 5, 2);
@@ -13,7 +13,7 @@ public enum Type {
 	private int cardsToHouse;
 	private int cardsToPlayers;
 
-	private Type(long id, String name, int cardsToHouse, int cardsToPlayers) {
+	private PokerType(long id, String name, int cardsToHouse, int cardsToPlayers) {
 		this.name = name;
 		this.cardsToHouse = cardsToHouse;
 		this.cardsToPlayers = cardsToPlayers;

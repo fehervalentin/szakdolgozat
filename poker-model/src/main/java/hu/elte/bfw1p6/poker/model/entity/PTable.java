@@ -57,7 +57,7 @@ public class PTable implements Serializable {
 	private BigDecimal bigBlind;
 
 	@Enumerated(EnumType.STRING)
-	private Type type;
+	private PokerType type;
 
 	public PTable(String name, int maxTime, int maxPlayers, BigDecimal maxBet, BigDecimal smallBlind, BigDecimal bigBlind) {
 		this.name = name;
@@ -125,11 +125,11 @@ public class PTable implements Serializable {
 		this.bigBlind = bigBlind;
 	}
 
-	public Type getType() {
+	public PokerType getType() {
 		return type;
 	}
 
-	public void setType(Type type) {
+	public void setType(PokerType type) {
 		this.type = type;
 	}
 }

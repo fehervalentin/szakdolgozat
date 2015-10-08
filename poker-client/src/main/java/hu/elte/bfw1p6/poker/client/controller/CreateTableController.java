@@ -3,18 +3,18 @@ package hu.elte.bfw1p6.poker.client.controller;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.model.entity.PTable;
-import hu.elte.bfw1p6.poker.model.entity.Type;
+import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -39,7 +39,7 @@ public class CreateTableController implements Initializable, PokerController {
 	private Label maxPlayerLabel;
 
 	@FXML
-	private Label limitLabel;
+	private Label maxBetLabel;
 
 	@FXML
 	private Label smallBlindLabel;
@@ -88,11 +88,14 @@ public class CreateTableController implements Initializable, PokerController {
 	private Model model;
 
 	private FrameController frameController;
+	
+	private Alert alert;
 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		model = Model.getInstance();
+		alert = new Alert(AlertType.ERROR);
 	}
 
 //	@FXML protected void handleCreateTableButton(ActionEvent event) {
@@ -129,7 +132,21 @@ public class CreateTableController implements Initializable, PokerController {
 		BigDecimal maxBet = BigDecimal.valueOf(Double.valueOf(maxBetTextField.getText()));
 		BigDecimal smallBlind = BigDecimal.valueOf(Double.valueOf(smallBlindTextField.getText()));
 		BigDecimal bigBlind = BigDecimal.valueOf(Double.valueOf(bigBlindtTextField.getText()));
+		String typeString = gameTypeComboBox.getSelectionModel().getSelectedItem();
+		
 		PTable t = new PTable(tableName, maxTime, maxPlayers, maxBet, smallBlind, bigBlind);
+		
+		if (typeString.equals("OMAHA")) {
+			t.setType(PokerType.OMAHA);
+		} else if (typeString.equals("HOLDEM")) {
+			t.setType(PokerType.HOLDEM);
+		} else {
+			alert.setContentText("Nem megfelelő játék típus lett kiválasztva!");
+			alert.showAndWait();
+			return;
+//			throw new PokerInvalidGameTypeException("Nem megfelelő játék típus!");
+		}
+		
 		try {
 			model.createTable(t);
 		} catch (RemoteException | PokerInvalidUserException e) {

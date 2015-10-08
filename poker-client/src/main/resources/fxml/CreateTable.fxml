@@ -31,8 +31,8 @@
 				GridPane.rowIndex="2" prefWidth="200.0" promptText="Type">
 				<items>
 					<FXCollections fx:factory="observableArrayList">
-						<String fx:value="Holdem" />
-						<String fx:value="Omaha" />
+						<String fx:value="HOLDEM" />
+						<String fx:value="OMAHA" />
 <!-- 						<String fx:value="Pear" /> -->
 					</FXCollections>
 				</items>

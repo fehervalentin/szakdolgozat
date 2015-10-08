@@ -35,7 +35,7 @@ public class PTableRepository {
 		return iRet;
 	}
 	
-	public static User findUserByUserName(String username) {
+	/*public static User findUserByUserName(String username) {
 		User u = null;
 		try {
 			String QRY = "SELECT * FROM User WHERE username=?";
@@ -117,7 +117,7 @@ public class PTableRepository {
 		}
 	}
 
-	/*public static ArrayList findAll() {
+	public static ArrayList findAll() {
 		ArrayList arr = new ArrayList();
 
 		try {
