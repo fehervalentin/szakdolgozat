@@ -7,15 +7,15 @@ CREATE TABLE pokerdb.User (
 	reg_date BIGINT NOT NULL,
 	username VARCHAR(20) NOT NULL check (CHAR_LENGTH(username) <= 20),
 	password VARCHAR(64) NOT NULL check (CHAR_LENGTH(password) <= 64),
-	primary key (id));
+	PRIMARY KEY (id));
 	
 CREATE TABLE pokerdb.PTable (
 	id INTEGER NOT NULL AUTO_INCREMENT,
+	name VARCHAR(30) NOT NULL check (CHAR_LENGTH(name) <= 30),
+	poker_type VARCHAR(10) check (CHAR_LENGTH(poker_type) <= 10),
+	max_time INTEGER NOT NULL check (5<=max_time AND max_time<=40),
+	max_players INTEGER NOT NULL check (2<=max_players AND max_players<=6),
+	small_blind DECIMAL(19,2) NOT NULL,
 	big_blind DECIMAL(19,2) NOT NULL,
 	max_Bet DECIMAL(19,2) NOT NULL,
-	max_players INTEGER NOT NULL check (2<=max_players AND max_players<=6),
-	max_time INTEGER NOT NULL check (5<=max_time AND max_time<=40),
-	name VARCHAR(30) NOT NULL check (CHAR_LENGTH(name) <= 30),
-	small_blind DECIMAL(19,2) NOT NULL,
-	poker_type VARCHAR(10) check (CHAR_LENGTH(poker_type) <= 10),
 	PRIMARY KEY (id));

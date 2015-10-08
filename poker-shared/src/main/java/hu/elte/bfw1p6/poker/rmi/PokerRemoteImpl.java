@@ -1,7 +1,9 @@
 package hu.elte.bfw1p6.poker.rmi;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -9,6 +11,7 @@ import java.util.UUID;
 import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverTableViewController;
 import hu.elte.bfw1p6.poker.model.entity.PTable;
 import hu.elte.bfw1p6.poker.model.entity.Player;
+import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import hu.elte.bfw1p6.poker.persist.ptable.PTableRepository;
 
 public class PokerRemoteImpl implements PokerRemote, Serializable {
@@ -55,14 +58,17 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 
 	@Override
 	public List<PTable> getTables() throws RemoteException {
-		return null;
-//		return tableDAO.getTables();
+		return PTableRepository.findAll();
+//		List<PTable> tables = new ArrayList<>();
+//		PTable table = new PTable("szerver", 23, 4, new BigDecimal(213), new BigDecimal(100), new BigDecimal(200), PokerType.HOLDEM);
+//		tables.add(table);
+//		return tables;
 	}
 
 	@Override
 	public void registerObserver(UUID uuid, PokerRemoteObserverTableViewController proc) throws RemoteException {
 		observers.put(uuid, proc);
-		proc.updateTableView();
+		proc.updateTableView(getTables());
 	}
 
 	@Override

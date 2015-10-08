@@ -43,48 +43,11 @@ public class TableListerController implements PokerClientController, PokerRemote
 	private Alert alert;
 	
 	private Model model;
-
-
+	
 	public TableListerController() {
 		model = Model.getInstance();
-		//		addTable();
 		alert = new Alert(AlertType.ERROR);
 		alert.setContentText(NO_TABLE_SELECTED_MESSAGE);
-		//akarmi();
-	}
-
-	protected void addTable() {
-		PTable table = new PTable("asd",
-				5,
-				2,
-				new BigDecimal(2),
-				new BigDecimal(2),
-				new BigDecimal(2),
-				PokerType.HOLDEM);
-		ObservableList<PTable> data = tableView.getItems();
-		data.add(table);
-	}
-
-	private List<PTable> parseUserList(){
-		PTable table = new PTable("asd",
-				5,
-				2,
-				new BigDecimal(3),
-				new BigDecimal(4),
-				new BigDecimal(5),
-				PokerType.HOLDEM);
-
-		PTable table2 = new PTable("asd",
-				5,
-				2,
-				new BigDecimal(3),
-				new BigDecimal(4),
-				new BigDecimal(5),
-				PokerType.OMAHA);
-		List<PTable> anyad = new ArrayList<>();
-		anyad.add(table);
-		anyad.add(table2);
-		return anyad;
 	}
 
 	@Override
@@ -107,7 +70,6 @@ public class TableListerController implements PokerClientController, PokerRemote
 		maxBet.setCellValueFactory(new PropertyValueFactory<PTable, BigDecimal>("maxBet"));
 		smallBlind.setCellValueFactory(new PropertyValueFactory<PTable, BigDecimal>("smallBlind"));
 		bigBlind.setCellValueFactory(new PropertyValueFactory<PTable, BigDecimal>("bigBlind"));
-		tableView.getItems().setAll(parseUserList());
 	}
 
 	@FXML
@@ -127,7 +89,9 @@ public class TableListerController implements PokerClientController, PokerRemote
 	}
 
 	@Override
-	public void updateTableView() {
+	public void updateTableView(List<PTable> tables) {
+		//table.setName("megvaltozott");
+		tableView.getItems().setAll(tables);
 		System.out.println("szerver behivott");
 	}
 }

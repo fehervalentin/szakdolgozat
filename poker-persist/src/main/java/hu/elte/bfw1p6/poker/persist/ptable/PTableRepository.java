@@ -4,8 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import hu.elte.bfw1p6.poker.model.entity.PTable;
+import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.DBManager;
 
@@ -33,6 +37,35 @@ public class PTableRepository {
 		}
 
 		return iRet;
+	}
+	
+	public static List<PTable> findAll() {
+		List<PTable> tables = new ArrayList<>();
+
+		try {
+			String QRY = "SELECT * FROM PTable";
+			Connection con = DBManager.getInstance().getConnection();
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(QRY);
+
+			while (rs.next()) {
+				PTable t = new PTable();
+				t.setId(rs.getInt("id"));
+				t.setName(rs.getString("name"));
+				t.setType(PokerType.valueOf(rs.getString("poker_type")));
+				t.setMaxTime(rs.getInt("max_time"));
+				t.setMaxPlayers(rs.getInt("max_players"));
+				t.setSmallBlind(rs.getBigDecimal("small_blind"));
+				t.setBigBlind(rs.getBigDecimal("big_blind"));
+				t.setMaxBet(rs.getBigDecimal("max_bet"));
+				tables.add(t);
+			}
+
+			stmt.close();
+		} catch (SQLException se) {
+			System.out.println(se);
+		}
+		return tables;
 	}
 	
 	/*public static User findUserByUserName(String username) {

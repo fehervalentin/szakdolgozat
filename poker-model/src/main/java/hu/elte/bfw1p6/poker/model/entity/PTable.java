@@ -25,6 +25,10 @@ public class PTable implements Serializable {
 		this.bigBlind = bigBlind;
 		this.pokerType = pokerType;
 	}
+	
+	public PTable() {
+		
+	}
 
 	public int getId() {
 		return id;
