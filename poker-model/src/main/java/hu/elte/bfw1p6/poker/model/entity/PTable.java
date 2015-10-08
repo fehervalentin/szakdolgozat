@@ -9,12 +9,12 @@ public class PTable implements Serializable {
 	
 	private int id;
 	private String name;
+	private PokerType pokerType;
 	private int maxTime;
 	private int maxPlayers;
-	private BigDecimal maxBet;
 	private BigDecimal smallBlind;
 	private BigDecimal bigBlind;
-	private PokerType pokerType;
+	private BigDecimal maxBet;
 
 	public PTable(String name, int maxTime, int maxPlayers, BigDecimal maxBet, BigDecimal smallBlind, BigDecimal bigBlind, PokerType pokerType) {
 		this.name = name;
@@ -86,11 +86,11 @@ public class PTable implements Serializable {
 		this.bigBlind = bigBlind;
 	}
 
-	public PokerType getType() {
+	public PokerType getPokerType() {
 		return pokerType;
 	}
 
-	public void setType(PokerType pokerType) {
+	public void setPokerType(PokerType pokerType) {
 		this.pokerType = pokerType;
 	}
 }

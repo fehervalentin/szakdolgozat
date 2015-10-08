@@ -7,12 +7,7 @@ insert into pokerdb.User (balance, reg_date, username, password)
 	);
 
 insert into pokerdb.PTable (name, poker_type, max_time, max_players, small_blind, big_blind, max_Bet)
-	values(
-		'szerver',
-		'HOLDEM',
-		23,
-		4,
-		21.0,
-		42.0,
-		102
-	);
+	values('szerver', 'HOLDEM', 23, 4, 21.0, 42.0, 102);
+	
+insert into pokerdb.PTable (name, poker_type, max_time, max_players, small_blind, big_blind, max_Bet)
+	values('szerver2', 'OMAHA', 39, 6, 52.453, 104.906, 150.15);

@@ -27,7 +27,7 @@ public class PTableRepository {
 			pstmt.setBigDecimal(4, t.getMaxBet());
 			pstmt.setBigDecimal(5, t.getSmallBlind());
 			pstmt.setBigDecimal(6, t.getBigBlind());
-			pstmt.setString(7, t.getType().getName());
+			pstmt.setString(7, t.getPokerType().getName());
 
 			iRet = pstmt.executeUpdate();
 
@@ -52,7 +52,7 @@ public class PTableRepository {
 				PTable t = new PTable();
 				t.setId(rs.getInt("id"));
 				t.setName(rs.getString("name"));
-				t.setType(PokerType.valueOf(rs.getString("poker_type")));
+				t.setPokerType(PokerType.valueOf(rs.getString("poker_type")));
 				t.setMaxTime(rs.getInt("max_time"));
 				t.setMaxPlayers(rs.getInt("max_players"));
 				t.setSmallBlind(rs.getBigDecimal("small_blind"));

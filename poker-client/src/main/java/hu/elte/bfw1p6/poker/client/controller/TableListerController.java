@@ -3,7 +3,6 @@ package hu.elte.bfw1p6.poker.client.controller;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -13,7 +12,6 @@ import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverTableViewController;
 import hu.elte.bfw1p6.poker.model.entity.PTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -79,7 +77,7 @@ public class TableListerController implements PokerClientController, PokerRemote
 			alert.showAndWait();
 		} else {
 			//TODO JOIN
-			System.out.println(table.getType());
+			System.out.println(table.getPokerType());
 		}
 	}
 	
@@ -90,8 +88,6 @@ public class TableListerController implements PokerClientController, PokerRemote
 
 	@Override
 	public void updateTableView(List<PTable> tables) {
-		//table.setName("megvaltozott");
 		tableView.getItems().setAll(tables);
-		System.out.println("szerver behivott");
 	}
 }
