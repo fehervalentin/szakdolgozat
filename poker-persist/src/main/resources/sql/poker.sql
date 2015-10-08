@@ -1,0 +1,1 @@
+insert into pokerdb.User values(1, 0, 1, "asd", "$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq");

@@ -6,16 +6,13 @@ import java.util.List;
 
 import hu.elte.bfw1p6.poker.model.entity.PTable;
 import hu.elte.bfw1p6.poker.model.entity.Player;
-import hu.elte.bfw1p6.poker.persist.dao.PTableDAO;
 
 public class PokerRemoteImpl implements PokerRemote, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private PTableDAO tableDAO;
 
 	public PokerRemoteImpl() {
-		tableDAO = new PTableDAO();
 	}
 
 	@Override
@@ -33,8 +30,6 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 
 	@Override
 	public void createTable(PTable t) throws RemoteException {
-		 tableDAO.persistTable(t);
-//		(new PTableDAO()).persistTable(t);
 	}
 
 	@Override

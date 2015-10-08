@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS pokerdb.User;
+CREATE TABLE pokerdb.User (id integer not null auto_increment, balance decimal(19,2) not null, reg_date bigint not null, username varchar(255) not null, password varchar(255) not null, primary key (id));

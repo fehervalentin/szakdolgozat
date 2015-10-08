@@ -1,11 +1,13 @@
 package hu.elte.bfw1p6.poker.login;
 
+import java.math.BigDecimal;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.NoResultException;
@@ -15,7 +17,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.model.PokerProperties;
 import hu.elte.bfw1p6.poker.model.entity.User;
-import hu.elte.bfw1p6.poker.persist.dao.UserDAO;
+import hu.elte.bfw1p6.poker.persist.user.UserBuilder;
+import hu.elte.bfw1p6.poker.persist.user.UserRepository;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 import hu.elte.bfw1p6.poker.rmi.security.PokerLoginRemote;
 import hu.elte.bfw1p6.poker.security.service.SessionService;
@@ -31,14 +34,11 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 
 	private SessionService sessionService;
 
-	private UserDAO userDAO;
-
 	public PokerLoginRemoteImpl(PokerRemote pokerRemote) throws RemoteException {
 
 		this.pokerProperties = PokerProperties.getInstance();
 		this.pokerRemote = pokerRemote;
 		this.sessionService = new SessionService();
-		this.userDAO = new UserDAO();
 
 		try {
 			//PokerLoginRemote pokerLoginRemote = (PokerLoginRemote) UnicastRemoteObject.exportObject(this, Integer.valueOf(pokerProperties.getProperty("port")));
@@ -57,8 +57,8 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 	@Override
 	public UUID login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException {
 		try {
-			userDAO.persistUser(username, password);
-			User u = userDAO.findUserByUserName(username);
+			User u = UserRepository.findUserByUserName(username);
+//			User u = userDAO.findUserByUserName(username);
 			if (!BCrypt.checkpw(password, u.getPassword())) {
 				throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
 			}
@@ -101,6 +101,8 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 
 	@Override
 	public void registration(String username, String password) throws RemoteException {
-		userDAO.persistUser(username, password);
+		User u = UserBuilder.geInstance().buildUser(username, password);
+		UserRepository.save(u);
+//		userDAO.persistUser(username, password);
 	}
 }
