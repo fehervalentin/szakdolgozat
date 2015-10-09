@@ -3,9 +3,9 @@ DROP TABLE IF EXISTS pokerdb.PTable;
 
 CREATE TABLE pokerdb.User (
 	id INTEGER NOT NULL AUTO_INCREMENT,
+	username VARCHAR(20) NOT NULL check (CHAR_LENGTH(username) <= 20),
 	balance DECIMAL(19,2) NOT NULL,
 	reg_date BIGINT NOT NULL,
-	username VARCHAR(20) NOT NULL check (CHAR_LENGTH(username) <= 20),
 	password VARCHAR(64) NOT NULL check (CHAR_LENGTH(password) <= 64),
 	PRIMARY KEY (id));
 	
@@ -17,5 +17,5 @@ CREATE TABLE pokerdb.PTable (
 	max_players INTEGER NOT NULL check (2<=max_players AND max_players<=6),
 	small_blind DECIMAL(19,2) NOT NULL,
 	big_blind DECIMAL(19,2) NOT NULL,
-	max_Bet DECIMAL(19,2) NOT NULL,
+	max_bet DECIMAL(19,2) NOT NULL,
 	PRIMARY KEY (id));

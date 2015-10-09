@@ -9,55 +9,80 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hu.elte.bfw1p6.poker.model.entity.PTable;
-import hu.elte.bfw1p6.poker.model.entity.PokerType;
-import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.DBManager;
 
 public class PTableRepository {
+	private final String ENTITY_CLASS_NAME = PTable.class.getSimpleName();
+	
+	private static String[] columns;
+	private static PTableRepository instance = null;
 
-	public static int save(PTable t) {
+	private String FIND_ALL = "SELECT * FROM " + ENTITY_CLASS_NAME;
+	private String INSERT;
+	private PTableRepository() {
+		loadColumns();
+	}
+
+	private void loadColumns() {
+		Connection con = DBManager.getInstance().getConnection();
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(FIND_ALL);
+			int asd = rs.getMetaData().getColumnCount() - 1;
+			columns = new String[asd];
+			for (int i = 0; i < asd; i++) {
+				columns[i] = rs.getMetaData().getColumnLabel(i + 2);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		createQueries();
+	}
+	
+	private void createQueries() {
+		INSERT = "INSERT INTO " + ENTITY_CLASS_NAME + columnsToString() + qrySuffix();
+	}
+
+	public static PTableRepository getInstance() {
+		if (instance == null) {
+			instance = new PTableRepository();
+		}
+		return instance;
+	}
+
+	public int save(PTable t) {
 		int iRet = -1;
 		try {
 			Connection con = DBManager.getInstance().getConnection();
-			String SQL = "INSERT INTO PTable(name, max_time, max_players, max_bet, small_blind, big_blind, poker_type) Values(?,?,?,?,?,?,?)";
-			PreparedStatement pstmt = con.prepareStatement(SQL);
-			pstmt.setString(1, t.getName());
-			pstmt.setInt(2, t.getMaxTime());
-			pstmt.setInt(3, t.getMaxPlayers());
-			pstmt.setBigDecimal(4, t.getMaxBet());
-			pstmt.setBigDecimal(5, t.getSmallBlind());
-			pstmt.setBigDecimal(6, t.getBigBlind());
-			pstmt.setString(7, t.getPokerType().getName());
-
+			PreparedStatement pstmt = con.prepareStatement(INSERT);
+			for (int i = 0; i < columns.length; i++) {
+				pstmt.setObject(i, t.get(i));
+			}
 			iRet = pstmt.executeUpdate();
 
 			pstmt.close();
 		} catch (SQLException se) {
-			System.out.println(se);
+			System.err.println(se);
 		}
 
 		return iRet;
 	}
-	
-	public static List<PTable> findAll() {
+
+	public List<PTable> findAll() {
 		List<PTable> tables = new ArrayList<>();
 
 		try {
-			String QRY = "SELECT * FROM PTable";
+			String QRY = FIND_ALL;
 			Connection con = DBManager.getInstance().getConnection();
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(QRY);
 
 			while (rs.next()) {
 				PTable t = new PTable();
-				t.setId(rs.getInt("id"));
-				t.setName(rs.getString("name"));
-				t.setPokerType(PokerType.valueOf(rs.getString("poker_type")));
-				t.setMaxTime(rs.getInt("max_time"));
-				t.setMaxPlayers(rs.getInt("max_players"));
-				t.setSmallBlind(rs.getBigDecimal("small_blind"));
-				t.setBigBlind(rs.getBigDecimal("big_blind"));
-				t.setMaxBet(rs.getBigDecimal("max_bet"));
+				for (int i = 0; i < columns.length; i++) {
+					t.set(i, rs.getObject(columns[i]));
+				}
 				tables.add(t);
 			}
 
@@ -68,6 +93,34 @@ public class PTableRepository {
 		return tables;
 	}
 	
+//	private PTable createTableFromRS(ResultSet rs) {
+//		PTable t = new PTable();
+//		for (int i = 0; i < columns.length; i++) {
+//			t.set(i, rs.getObject(columns[i]));
+//		}
+//		return t;
+//	}
+	
+	private String columnsToString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("(" + columns[0]);
+		for (int i = 1; i < columns.length; i++) {
+			sb.append("," + columns[i]);
+		}
+		sb.append(") ");
+		return sb.toString();
+	}
+	
+	private String qrySuffix() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(" (?");
+		for (int i = 1; i < columns.length; i++) {
+			sb.append(",?");
+		}
+		sb.append(");");
+		return sb.toString();
+	}
+
 	/*public static User findUserByUserName(String username) {
 		User u = null;
 		try {
@@ -91,7 +144,7 @@ public class PTableRepository {
 		}
 		return u;
 	}
-	
+
 	public static int modifyPassword(User u) {
 		int iRet = -1;
 		try {

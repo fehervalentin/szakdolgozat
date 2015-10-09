@@ -37,7 +37,7 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 
 	@Override
 	public void createTable(PTable t) throws RemoteException {
-		PTableRepository.save(t);
+		PTableRepository.getInstance().save(t);
 	}
 
 	@Override
@@ -54,13 +54,14 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 
 	@Override
 	public List<PTable> getTables() throws RemoteException {
-		return PTableRepository.findAll();
+		return PTableRepository.getInstance().findAll();
 	}
 
 	@Override
 	public void registerObserver(UUID uuid, PokerRemoteObserverTableViewController proc) throws RemoteException {
 		observers.put(uuid, proc);
-		proc.updateTableView(getTables());
+		List<PTable> tables = getTables();
+		proc.updateTableView(tables);
 	}
 
 	@Override

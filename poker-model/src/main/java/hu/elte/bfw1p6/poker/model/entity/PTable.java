@@ -3,20 +3,20 @@ package hu.elte.bfw1p6.poker.model.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class PTable implements Serializable {
+public class PTable implements EntityWithId, Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
-	private int id;
+
+	private Integer id;
 	private String name;
 	private PokerType pokerType;
-	private int maxTime;
-	private int maxPlayers;
+	private Integer maxTime;
+	private Integer maxPlayers;
 	private BigDecimal smallBlind;
 	private BigDecimal bigBlind;
 	private BigDecimal maxBet;
 
-	public PTable(String name, int maxTime, int maxPlayers, BigDecimal maxBet, BigDecimal smallBlind, BigDecimal bigBlind, PokerType pokerType) {
+	public PTable(String name, Integer maxTime, Integer maxPlayers, BigDecimal maxBet, BigDecimal smallBlind, BigDecimal bigBlind, PokerType pokerType) {
 		this.name = name;
 		this.maxTime = maxTime;
 		this.maxPlayers = maxPlayers;
@@ -25,12 +25,13 @@ public class PTable implements Serializable {
 		this.bigBlind = bigBlind;
 		this.pokerType = pokerType;
 	}
-	
+
 	public PTable() {
-		
+
 	}
 
-	public int getId() {
+	@Override
+	public Integer getId() {
 		return id;
 	}
 
@@ -46,7 +47,7 @@ public class PTable implements Serializable {
 		this.name = name;
 	}
 
-	public int getMaxTime() {
+	public Integer getMaxTime() {
 		return maxTime;
 	}
 
@@ -54,7 +55,7 @@ public class PTable implements Serializable {
 		this.maxTime = maxTime;
 	}
 
-	public int getMaxPlayers() {
+	public Integer getMaxPlayers() {
 		return maxPlayers;
 	}
 
@@ -92,5 +93,62 @@ public class PTable implements Serializable {
 
 	public void setPokerType(PokerType pokerType) {
 		this.pokerType = pokerType;
+	}
+
+	@Override
+	public Object get(int columnIndex) {
+		switch (columnIndex) {
+		case 0:
+			return name;
+		case 1:
+			return pokerType;
+		case 2:
+			return maxTime;
+		case 3:
+			return maxPlayers;
+		case 4:
+			return smallBlind;
+		case 5:
+			return bigBlind;
+		case 6:
+			return maxBet;
+		default:
+			return null;
+		}
+	}
+
+	@Override
+	public void set(int columnIndex, Object value) {
+		switch (columnIndex) {
+        case 0: {
+            setName((String) value);
+            break;
+        }
+        case 1: {
+            setPokerType(PokerType.valueOf((String) value));
+            break;
+        }
+        case 2: {
+            setMaxTime((Integer) value);
+            break;
+        }
+        case 3: {
+            setMaxPlayers((Integer) value);
+            break;
+        }
+        case 4: {
+            setSmallBlind((BigDecimal) value);
+            break;
+        }
+        case 5: {
+        	setBigBlind((BigDecimal) value);
+            break;
+        }
+        case 6: {
+            setMaxBet((BigDecimal) value);
+            break;
+        }
+    }
+
 	}
 }
