@@ -17,10 +17,7 @@ public class FrameController {
 	private Scene scene;
 	
 	public FrameController(Scene scene) {
-//		setCreateTableFrame();
-//		setTableListerFXML();
 		setLoginFXML();
-//		setRegistrationFXML();
 	}
 
 	public void setRegistrationFXML() {

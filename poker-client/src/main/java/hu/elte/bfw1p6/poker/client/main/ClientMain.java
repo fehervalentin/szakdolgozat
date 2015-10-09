@@ -19,11 +19,14 @@ public class ClientMain extends Application {
     	//scene = new Scene(null);
         frameController = new FrameController(scene);
         scene = frameController.getScene();
-        scene.getStylesheets().add("/styles/Styles.css");
+        scene.getStylesheets().add("/styles/login.css");
         
         stage.setTitle(TITLE);
         stage.setScene(scene);
         stage.setOnCloseRequest(getFormCloseEvent());
+        stage.setWidth(900);
+        stage.setHeight(500);
+        stage.setResizable(false);
         stage.show();
     }
 

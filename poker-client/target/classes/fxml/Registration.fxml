@@ -12,29 +12,23 @@
 <AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="hu.elte.bfw1p6.poker.client.controller.RegistrationController">
 	<GridPane alignment="center" hgap="10" vgap="10">
-		<Label fx:id="registrationLabel" GridPane.columnIndex="0"
-			GridPane.rowIndex="0" GridPane.columnSpan="2" text="Registration"
-			alignment="center" />
+		<Label fx:id="registrationLabel" GridPane.columnIndex="0" styleClass="valami"
+		GridPane.rowIndex="0" GridPane.columnSpan="3" text="Regisztráció"
+		alignment="center" />
 
-		<Label fx:id="usernameLabel" GridPane.columnIndex="0"
-			GridPane.rowIndex="1" text="User name:" />
-		<TextField fx:id="usernameField" GridPane.columnIndex="1"
-			GridPane.rowIndex="1" />
-
-		<Label fx:id="passwordLabel" GridPane.columnIndex="0"
-			GridPane.rowIndex="2" text="Password:" />
-		<PasswordField fx:id="passwordField"
-			GridPane.columnIndex="1" GridPane.rowIndex="2" />
-
+		<TextField fx:id="usernameField" GridPane.columnIndex="1" promptText="Felhasználónév" GridPane.columnSpan="2"
+			GridPane.rowIndex="9" />
+		<PasswordField fx:id="passwordField" promptText="Jelszó" GridPane.columnSpan="2"
+			GridPane.columnIndex="1" GridPane.rowIndex="10" />
 		<Label fx:id="rePasswordLabel" GridPane.columnIndex="0"
 			GridPane.rowIndex="3" text="Repeat password:" />
-		<PasswordField fx:id="rePasswordField"
-			GridPane.columnIndex="1" GridPane.rowIndex="3" />
+		<PasswordField fx:id="rePasswordField" promptText="Jelszó újra" GridPane.columnSpan="2"
+			GridPane.columnIndex="1" GridPane.rowIndex="11" />
 
-		<Button fx:id="regButton" text="Registrate" onAction="#handleRegistrationButton"
-			GridPane.columnIndex="0" GridPane.rowIndex="4" />
-		<Button fx:id="backButton" text="Back" onAction="#goToLogin"
-			GridPane.columnIndex="1" GridPane.rowIndex="4" />
+		<Button fx:id="regButton" text="Regisztrálok" onAction="#handleRegistrationButton"
+			styleClass="rich-blue" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+		<Button fx:id="backButton" text="Vissza" onAction="#goToLogin"
+			styleClass="rich-blue" GridPane.columnIndex="2" GridPane.rowIndex="12" />
 	</GridPane>
 </AnchorPane>
 

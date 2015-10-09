@@ -1,4 +1,4 @@
-package hu.elte.bfw1p6.poker.persist.ptable;
+package hu.elte.bfw1p6.poker.persist.pokertable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,17 +12,24 @@ import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.persist.dao.DBManager;
 
 public class PokerTableRepository {
-	private final String ENTITY_CLASS_NAME = "poker_tables";
+	private final String TABLE_NAME = "poker_tables";
 	
 	private static String[] columns;
 	private static PokerTableRepository instance = null;
 
-	private String FIND_ALL = "SELECT * FROM " + ENTITY_CLASS_NAME;
+	private String FIND_ALL = "SELECT * FROM " + TABLE_NAME;
 	private String INSERT;
 	private PokerTableRepository() {
 		loadColumns();
 	}
 
+	public static synchronized PokerTableRepository getInstance() {
+		if (instance == null) {
+			instance = new PokerTableRepository();
+		}
+		return instance;
+	}
+	
 	private void loadColumns() {
 		Connection con = DBManager.getInstance().getConnection();
 		Statement stmt;
@@ -41,15 +48,9 @@ public class PokerTableRepository {
 	}
 	
 	private void createQueries() {
-		INSERT = "INSERT INTO " + ENTITY_CLASS_NAME + columnsToString() + qrySuffix();
+		INSERT = "INSERT INTO " + TABLE_NAME + columnsToString() + qrySuffix();
 	}
 
-	public static PokerTableRepository getInstance() {
-		if (instance == null) {
-			instance = new PokerTableRepository();
-		}
-		return instance;
-	}
 
 	public int save(PokerTable t) {
 		int iRet = -1;

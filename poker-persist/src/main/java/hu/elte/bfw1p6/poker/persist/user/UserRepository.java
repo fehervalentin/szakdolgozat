@@ -11,6 +11,7 @@ import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.DBManager;
 
 public class UserRepository {
+	private final String TABLE_NAME = "users";
 
 	public static int save(User u) {
 		int iRet = -1;

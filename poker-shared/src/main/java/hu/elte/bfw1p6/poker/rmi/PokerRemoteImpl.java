@@ -8,8 +8,8 @@ import java.util.UUID;
 
 import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverTableViewController;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
+import hu.elte.bfw1p6.poker.persist.pokertable.PokerTableRepository;
 import hu.elte.bfw1p6.poker.model.entity.Player;
-import hu.elte.bfw1p6.poker.persist.ptable.PokerTableRepository;
 
 public class PokerRemoteImpl implements PokerRemote, Serializable {
 	
