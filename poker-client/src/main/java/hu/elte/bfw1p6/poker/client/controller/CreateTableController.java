@@ -9,7 +9,7 @@ import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
-import hu.elte.bfw1p6.poker.model.entity.PTable;
+import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -147,7 +147,7 @@ public class CreateTableController implements Initializable, PokerClientControll
 //			throw new PokerInvalidGameTypeException("Nem megfelelő játék típus!");
 		}
 		
-		PTable t = new PTable(tableName, maxTime, maxPlayers, maxBet, smallBlind, bigBlind, pokerType);
+		PokerTable t = new PokerTable(tableName, maxTime, maxPlayers, maxBet, smallBlind, bigBlind, pokerType);
 		
 		
 		

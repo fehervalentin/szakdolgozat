@@ -7,7 +7,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.Label?>
-<?import hu.elte.bfw1p6.poker.model.entity.PTable?>
+<?import hu.elte.bfw1p6.poker.model.entity.PokerTable?>
 <?import javafx.scene.control.Button?>
 
 

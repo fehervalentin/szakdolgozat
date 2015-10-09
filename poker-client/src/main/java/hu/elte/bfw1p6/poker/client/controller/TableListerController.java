@@ -10,7 +10,7 @@ import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverTableViewController;
-import hu.elte.bfw1p6.poker.model.entity.PTable;
+import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,14 +27,14 @@ public class TableListerController implements PokerClientController, PokerRemote
 
 	private FrameController frameController;
 
-	@FXML private TableView<PTable> tableView;
-	@FXML private TableColumn<PTable, String> tableName;
-	@FXML private TableColumn<PTable, PokerType> pokerType;
-	@FXML private TableColumn<PTable, Integer> maxTime;
-	@FXML private TableColumn<PTable, Integer> maxPlayers;
-	@FXML private TableColumn<PTable, BigDecimal> maxBet;
-	@FXML private TableColumn<PTable, BigDecimal> smallBlind;
-	@FXML private TableColumn<PTable, BigDecimal> bigBlind;
+	@FXML private TableView<PokerTable> tableView;
+	@FXML private TableColumn<PokerTable, String> tableName;
+	@FXML private TableColumn<PokerTable, PokerType> pokerType;
+	@FXML private TableColumn<PokerTable, Integer> maxTime;
+	@FXML private TableColumn<PokerTable, Integer> maxPlayers;
+	@FXML private TableColumn<PokerTable, BigDecimal> maxBet;
+	@FXML private TableColumn<PokerTable, BigDecimal> smallBlind;
+	@FXML private TableColumn<PokerTable, BigDecimal> bigBlind;
 	@FXML private Button connectButton;
 	@FXML private Button createTableButton;
 	
@@ -61,18 +61,18 @@ public class TableListerController implements PokerClientController, PokerRemote
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		tableName.setCellValueFactory(new PropertyValueFactory<PTable, String>("name"));
-		pokerType.setCellValueFactory(new PropertyValueFactory<PTable, PokerType>("pokerType"));
-		maxTime.setCellValueFactory(new PropertyValueFactory<PTable, Integer>("maxTime"));
-		maxPlayers.setCellValueFactory(new PropertyValueFactory<PTable, Integer>("maxPlayers"));
-		maxBet.setCellValueFactory(new PropertyValueFactory<PTable, BigDecimal>("maxBet"));
-		smallBlind.setCellValueFactory(new PropertyValueFactory<PTable, BigDecimal>("smallBlind"));
-		bigBlind.setCellValueFactory(new PropertyValueFactory<PTable, BigDecimal>("bigBlind"));
+		tableName.setCellValueFactory(new PropertyValueFactory<PokerTable, String>("name"));
+		pokerType.setCellValueFactory(new PropertyValueFactory<PokerTable, PokerType>("pokerType"));
+		maxTime.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>("maxTime"));
+		maxPlayers.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>("maxPlayers"));
+		maxBet.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>("maxBet"));
+		smallBlind.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>("smallBlind"));
+		bigBlind.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>("bigBlind"));
 	}
 
 	@FXML
 	protected void handleConnectToTable() {
-		PTable table = tableView.getSelectionModel().getSelectedItem();
+		PokerTable table = tableView.getSelectionModel().getSelectedItem();
 		if (table == null) {
 			alert.showAndWait();
 		} else {
@@ -87,7 +87,7 @@ public class TableListerController implements PokerClientController, PokerRemote
 	}
 
 	@Override
-	public void updateTableView(List<PTable> tables) {
+	public void updateTableView(List<PokerTable> tables) {
 		tableView.getItems().setAll(tables);
 	}
 }

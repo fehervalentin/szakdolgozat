@@ -3,7 +3,7 @@ package hu.elte.bfw1p6.poker.model.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class PTable implements EntityWithId, Serializable {
+public class PokerTable implements EntityWithId, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -16,7 +16,7 @@ public class PTable implements EntityWithId, Serializable {
 	private BigDecimal bigBlind;
 	private BigDecimal maxBet;
 
-	public PTable(String name, Integer maxTime, Integer maxPlayers, BigDecimal maxBet, BigDecimal smallBlind, BigDecimal bigBlind, PokerType pokerType) {
+	public PokerTable(String name, Integer maxTime, Integer maxPlayers, BigDecimal maxBet, BigDecimal smallBlind, BigDecimal bigBlind, PokerType pokerType) {
 		this.name = name;
 		this.maxTime = maxTime;
 		this.maxPlayers = maxPlayers;
@@ -26,7 +26,7 @@ public class PTable implements EntityWithId, Serializable {
 		this.pokerType = pokerType;
 	}
 
-	public PTable() {
+	public PokerTable() {
 
 	}
 

@@ -16,7 +16,7 @@ public class UserRepository {
 		int iRet = -1;
 		try {
 			Connection con = DBManager.getInstance().getConnection();
-			String SQL = "INSERT INTO User(username, password, balance, reg_date) Values(?,?,?,?)";
+			String SQL = "INSERT INTO users(username, password, balance, reg_date) Values(?,?,?,?)";
 			PreparedStatement pstmt = con.prepareStatement(SQL);
 			pstmt.setString(1, u.getUserName());
 			pstmt.setString(2, u.getPassword());
@@ -36,7 +36,7 @@ public class UserRepository {
 	public static User findUserByUserName(String username) {
 		User u = null;
 		try {
-			String QRY = "SELECT * FROM User WHERE username=?";
+			String QRY = "SELECT * FROM users WHERE username=?";
 			Connection con = DBManager.getInstance().getConnection();
 			PreparedStatement pstmt = con.prepareStatement(QRY);
 			pstmt.setString(1, username);

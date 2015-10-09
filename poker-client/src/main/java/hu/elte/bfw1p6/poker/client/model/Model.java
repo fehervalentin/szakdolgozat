@@ -7,7 +7,7 @@ import java.util.UUID;
 import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverTableViewController;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
-import hu.elte.bfw1p6.poker.model.entity.PTable;
+import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 import hu.elte.bfw1p6.poker.rmi.security.PokerLoginRemote;
 
@@ -44,12 +44,12 @@ public class Model {
 		pokerLoginRemote.registration(username, password);
 	}
 
-	public void createTable(PTable t) throws RemoteException, PokerInvalidUserException {
+	public void createTable(PokerTable t) throws RemoteException, PokerInvalidUserException {
 		pokerRemote.createTable(t);
 	}
 
-	public List<PTable> getTables() {
-		List<PTable> tables = null;
+	public List<PokerTable> getTables() {
+		List<PokerTable> tables = null;
 		try {
 			tables = pokerRemote.getTables();
 		} catch (RemoteException e) {

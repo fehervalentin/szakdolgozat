@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverTableViewController;
-import hu.elte.bfw1p6.poker.model.entity.PTable;
+import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.Player;
-import hu.elte.bfw1p6.poker.persist.ptable.PTableRepository;
+import hu.elte.bfw1p6.poker.persist.ptable.PokerTableRepository;
 
 public class PokerRemoteImpl implements PokerRemote, Serializable {
 	
@@ -36,12 +36,12 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 	}
 
 	@Override
-	public void createTable(PTable t) throws RemoteException {
-		PTableRepository.getInstance().save(t);
+	public void createTable(PokerTable t) throws RemoteException {
+		PokerTableRepository.getInstance().save(t);
 	}
 
 	@Override
-	public void modifyTable(PTable t) throws RemoteException {
+	public void modifyTable(PokerTable t) throws RemoteException {
 	}
 
 	@Override
@@ -53,14 +53,14 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 	}
 
 	@Override
-	public List<PTable> getTables() throws RemoteException {
-		return PTableRepository.getInstance().findAll();
+	public List<PokerTable> getTables() throws RemoteException {
+		return PokerTableRepository.getInstance().findAll();
 	}
 
 	@Override
 	public void registerObserver(UUID uuid, PokerRemoteObserverTableViewController proc) throws RemoteException {
 		observers.put(uuid, proc);
-		List<PTable> tables = getTables();
+		List<PokerTable> tables = getTables();
 		proc.updateTableView(tables);
 	}
 

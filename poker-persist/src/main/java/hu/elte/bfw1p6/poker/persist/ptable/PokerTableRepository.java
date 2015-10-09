@@ -8,18 +8,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import hu.elte.bfw1p6.poker.model.entity.PTable;
+import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.persist.dao.DBManager;
 
-public class PTableRepository {
-	private final String ENTITY_CLASS_NAME = PTable.class.getSimpleName();
+public class PokerTableRepository {
+	private final String ENTITY_CLASS_NAME = "poker_tables";
 	
 	private static String[] columns;
-	private static PTableRepository instance = null;
+	private static PokerTableRepository instance = null;
 
 	private String FIND_ALL = "SELECT * FROM " + ENTITY_CLASS_NAME;
 	private String INSERT;
-	private PTableRepository() {
+	private PokerTableRepository() {
 		loadColumns();
 	}
 
@@ -44,14 +44,14 @@ public class PTableRepository {
 		INSERT = "INSERT INTO " + ENTITY_CLASS_NAME + columnsToString() + qrySuffix();
 	}
 
-	public static PTableRepository getInstance() {
+	public static PokerTableRepository getInstance() {
 		if (instance == null) {
-			instance = new PTableRepository();
+			instance = new PokerTableRepository();
 		}
 		return instance;
 	}
 
-	public int save(PTable t) {
+	public int save(PokerTable t) {
 		int iRet = -1;
 		try {
 			Connection con = DBManager.getInstance().getConnection();
@@ -69,8 +69,8 @@ public class PTableRepository {
 		return iRet;
 	}
 
-	public List<PTable> findAll() {
-		List<PTable> tables = new ArrayList<>();
+	public List<PokerTable> findAll() {
+		List<PokerTable> tables = new ArrayList<>();
 
 		try {
 			String QRY = FIND_ALL;
@@ -79,7 +79,7 @@ public class PTableRepository {
 			ResultSet rs = stmt.executeQuery(QRY);
 
 			while (rs.next()) {
-				PTable t = new PTable();
+				PokerTable t = new PokerTable();
 				for (int i = 0; i < columns.length; i++) {
 					t.set(i, rs.getObject(columns[i]));
 				}
