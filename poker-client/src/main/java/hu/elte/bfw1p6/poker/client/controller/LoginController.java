@@ -53,8 +53,8 @@ public class LoginController implements Initializable, PokerClientController {
 		alert = new Alert(AlertType.ERROR);
 		model = Model.getInstance();
 		
-//		usernameField.setText("asd");
-//		passwordField.setText("asd");
+		usernameField.setText("asd");
+		passwordField.setText("asd");
 	}
 	
 	@FXML protected void loginHandler(ActionEvent event) {

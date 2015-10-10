@@ -2,6 +2,7 @@ package hu.elte.bfw1p6.poker.rmi;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +37,7 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 	}
 
 	@Override
-	public void createTable(PokerTable t) throws RemoteException {
+	public void createTable(PokerTable t) throws RemoteException, SQLException {
 		PokerTableRepository.getInstance().save(t);
 	}
 

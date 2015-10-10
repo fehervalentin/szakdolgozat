@@ -12,17 +12,15 @@ public class PokerTable implements EntityWithId, Serializable {
 	private PokerType pokerType;
 	private Integer maxTime;
 	private Integer maxPlayers;
-	private BigDecimal smallBlind;
-	private BigDecimal bigBlind;
+	private BigDecimal defaultPot;
 	private BigDecimal maxBet;
 
-	public PokerTable(String name, Integer maxTime, Integer maxPlayers, BigDecimal maxBet, BigDecimal smallBlind, BigDecimal bigBlind, PokerType pokerType) {
+	public PokerTable(String name, Integer maxTime, Integer maxPlayers, BigDecimal maxBet, BigDecimal defaultPot, PokerType pokerType) {
 		this.name = name;
 		this.maxTime = maxTime;
 		this.maxPlayers = maxPlayers;
 		this.maxBet = maxBet;
-		this.smallBlind = smallBlind;
-		this.bigBlind = bigBlind;
+		this.defaultPot = defaultPot;
 		this.pokerType = pokerType;
 	}
 
@@ -71,20 +69,12 @@ public class PokerTable implements EntityWithId, Serializable {
 		this.maxBet = maxBet;
 	}
 
-	public BigDecimal getSmallBlind() {
-		return smallBlind;
+	public BigDecimal getDefaultPot() {
+		return defaultPot;
 	}
 
-	public void setSmallBlind(BigDecimal smallBlind) {
-		this.smallBlind = smallBlind;
-	}
-
-	public BigDecimal getBigBlind() {
-		return bigBlind;
-	}
-
-	public void setBigBlind(BigDecimal bigBlind) {
-		this.bigBlind = bigBlind;
+	public void setDefaultPot(BigDecimal defaultPot) {
+		this.defaultPot = defaultPot;
 	}
 
 	public PokerType getPokerType() {
@@ -101,16 +91,14 @@ public class PokerTable implements EntityWithId, Serializable {
 		case 0:
 			return name;
 		case 1:
-			return pokerType;
+			return pokerType.getName();
 		case 2:
 			return maxTime;
 		case 3:
 			return maxPlayers;
 		case 4:
-			return smallBlind;
+			return defaultPot;
 		case 5:
-			return bigBlind;
-		case 6:
 			return maxBet;
 		default:
 			return null;
@@ -137,14 +125,10 @@ public class PokerTable implements EntityWithId, Serializable {
             break;
         }
         case 4: {
-            setSmallBlind((BigDecimal) value);
+            setDefaultPot((BigDecimal) value);
             break;
         }
         case 5: {
-        	setBigBlind((BigDecimal) value);
-            break;
-        }
-        case 6: {
             setMaxBet((BigDecimal) value);
             break;
         }

@@ -23,12 +23,11 @@
 		GridPane.rowIndex="1">
 		<columns>
 			<TableColumn prefWidth="75.0" text="Table name" fx:id="tableName" />
-			<TableColumn prefWidth="75.0" text="Type" fx:id="pokerType" />
-			<TableColumn prefWidth="75.0" text="Max time" fx:id="maxTime" />
-			<TableColumn prefWidth="75.0" text="Max players" fx:id="maxPlayers" />
-			<TableColumn prefWidth="75.0" text="Max bet" fx:id="maxBet" />
-			<TableColumn prefWidth="75.0" text="Small blind" fx:id="smallBlind" />
-			<TableColumn prefWidth="75.0" text="Big blind" fx:id="bigBlind" />
+			<TableColumn prefWidth="75.0" text="Játék stílusa" fx:id="pokerType" />
+			<TableColumn prefWidth="75.0" text="Maximum gondolkodás idő" fx:id="maxTime" />
+			<TableColumn prefWidth="75.0" text="Játékosok maximum száma" fx:id="maxPlayers" />
+			<TableColumn prefWidth="75.0" text="Alaptét" fx:id="defaultPot" />
+			<TableColumn prefWidth="75.0" text="Limit" fx:id="maxBet" />
 		</columns>
 		<!-- <items> -->
 		<!-- <FXCollections fx:factory="observableArrayList"> -->

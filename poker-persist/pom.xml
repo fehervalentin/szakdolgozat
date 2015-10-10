@@ -13,6 +13,10 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdbc.server.connection.url>jdbc:mysql://localhost:3306</jdbc.server.connection.url>
+		<sql.file.path.prefix>src/main/resources/sql</sql.file.path.prefix>
+		<create.db.schema.file.path>${sql.file.path.prefix}/poker-schema.sql</create.db.schema.file.path>
+		<create.triggers.file.path>${sql.file.path.prefix}/poker-triggers.sql</create.triggers.file.path>
+		<fill.db.file.path>${sql.file.path.prefix}/poker.sql</fill.db.file.path>
 	</properties>
 
 	<dependencies>
@@ -48,6 +52,20 @@
 	<build>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>1.4.0</version>
+					<configuration>
+						<executable>mvn</executable>
+						<arguments>
+							<argument>sql:execute@create-db</argument>
+							<argument>sql:execute@create-triggers</argument>
+							<argument>sql:execute@fill-db</argument>
+						</arguments>
+					</configuration>
+				</plugin>
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
@@ -89,20 +107,50 @@
 					<!-- common configuration shared by all executions -->
 					<configuration>
 						<driver>com.mysql.jdbc.Driver</driver>
-						<url>${jdbc.server.connection.url}/pokerdb</url>
+						<url>${jdbc.server.connection.url}</url>
 						<username>root</username>
 						<password>1234</password>
 						<!-- You can comment out username/password configurations and have 
 							maven to look them up in your settings.xml using ${settingsKey} -->
 						<settingsKey>sensibleKey</settingsKey>
-						<!--all executions are ignored if -Dmaven.test.skip=true -->
-						<skip>${maven.test.skip}</skip>
 					</configuration>
 
 					<executions>
 						<execution>
 							<id>create-db</id>
-							<phase>install</phase>
+							<phase>compile</phase>
+							<goals>
+								<goal>execute</goal>
+							</goals>
+							<configuration>
+								<!-- need another database to drop the targeted one -->
+								<autocommit>true</autocommit>
+								<srcFiles>
+									<srcFile>${create.db.schema.file.path}</srcFile>
+								</srcFiles>
+								<!-- ignore error when database is not avaiable -->
+								<onError>continue</onError>
+							</configuration>
+						</execution>
+						<execution>
+							<id>create-triggers</id>
+							<phase>compile</phase>
+							<goals>
+								<goal>execute</goal>
+							</goals>
+							<configuration>
+								<autocommit>true</autocommit>
+								<delimiter>/</delimiter>
+								<srcFiles>
+									<srcFile>${create.triggers.file.path}</srcFile>
+								</srcFiles>
+								<!-- ignore error when database is not avaiable -->
+								<onError>continue</onError>
+							</configuration>
+						</execution>
+						<execution>
+							<id>fill-db</id>
+							<phase>compile</phase>
 							<goals>
 								<goal>execute</goal>
 							</goals>
@@ -110,11 +158,8 @@
 								<!-- need another database to drop the targeted one -->
 								<url>${jdbc.server.connection.url}</url>
 								<autocommit>true</autocommit>
-<!-- 								<sqlCommand>DROP database IF EXISTS pokerdb</sqlCommand> -->
-<!-- 								<sqlCommand>create database pokerdb</sqlCommand> -->
 								<srcFiles>
-									<srcFile>src/main/resources/sql/poker-schema.sql</srcFile>
-									<srcFile>src/main/resources/sql/poker.sql</srcFile>
+									<srcFile>${fill.db.file.path}</srcFile>
 								</srcFiles>
 								<!-- ignore error when database is not avaiable -->
 								<onError>continue</onError>

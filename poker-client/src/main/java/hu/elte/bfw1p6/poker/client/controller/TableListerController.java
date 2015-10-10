@@ -32,9 +32,8 @@ public class TableListerController implements PokerClientController, PokerRemote
 	@FXML private TableColumn<PokerTable, PokerType> pokerType;
 	@FXML private TableColumn<PokerTable, Integer> maxTime;
 	@FXML private TableColumn<PokerTable, Integer> maxPlayers;
+	@FXML private TableColumn<PokerTable, BigDecimal> defaultPot;
 	@FXML private TableColumn<PokerTable, BigDecimal> maxBet;
-	@FXML private TableColumn<PokerTable, BigDecimal> smallBlind;
-	@FXML private TableColumn<PokerTable, BigDecimal> bigBlind;
 	@FXML private Button connectButton;
 	@FXML private Button createTableButton;
 	
@@ -65,9 +64,8 @@ public class TableListerController implements PokerClientController, PokerRemote
 		pokerType.setCellValueFactory(new PropertyValueFactory<PokerTable, PokerType>("pokerType"));
 		maxTime.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>("maxTime"));
 		maxPlayers.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>("maxPlayers"));
+		defaultPot.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>("defaultPot"));
 		maxBet.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>("maxBet"));
-		smallBlind.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>("smallBlind"));
-		bigBlind.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>("bigBlind"));
 	}
 
 	@FXML

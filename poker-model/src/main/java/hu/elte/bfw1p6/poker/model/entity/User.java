@@ -34,10 +34,6 @@ public class User extends Player{
 		this.balance = balance;
 	}
 	
-	public void setRegDate(long regDate) {
-		this.regDate = regDate;
-	}
-	
 	public void setId(int id) {
 		this.id = id;
 	}

@@ -2,6 +2,7 @@ package hu.elte.bfw1p6.poker.rmi;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,7 +20,7 @@ public interface PokerRemote extends Remote{
 	
 	void deleteTable(int id) throws RemoteException;
 	
-	void createTable(PokerTable t) throws RemoteException;
+	void createTable(PokerTable t) throws RemoteException, SQLException;
 	
 	void modifyTable(PokerTable t) throws RemoteException;
 	

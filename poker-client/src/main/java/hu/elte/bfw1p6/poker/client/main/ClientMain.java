@@ -16,7 +16,6 @@ public class ClientMain extends Application {
 	
     @Override
     public void start(Stage stage) throws Exception {
-    	//scene = new Scene(null);
         frameController = new FrameController(scene);
         scene = frameController.getScene();
         scene.getStylesheets().add("/styles/login.css");

@@ -20,53 +20,33 @@
 			<Label GridPane.columnIndex="0" GridPane.rowIndex="0"
 				GridPane.columnSpan="2" text="Asztal létrehozása" alignment="center" />
 
-			<Label fx:id="tableNameLabel" GridPane.columnIndex="0"
-				GridPane.rowIndex="1" text="Asztal neve:" />
-			<TextField fx:id="tableNameTextField" GridPane.columnIndex="1"
-				GridPane.rowIndex="1" />
+			<TextField fx:id="tableNameTextField" promptText="Tábla neve"
+				GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.columnSpan="2" />
 
-			<Label fx:id="gameType" GridPane.columnIndex="0"
-				GridPane.rowIndex="2" text="Játék típusa:" />
 			<ComboBox fx:id="gameTypeComboBox" GridPane.columnIndex="1"
-				GridPane.rowIndex="2" prefWidth="200.0" promptText="Type">
+				GridPane.rowIndex="2" GridPane.columnSpan="2" prefWidth="225.0"
+				promptText="Stílus">
 				<items>
 					<FXCollections fx:factory="observableArrayList">
 						<String fx:value="HOLDEM" />
 						<String fx:value="OMAHA" />
-<!-- 						<String fx:value="Pear" /> -->
 					</FXCollections>
 				</items>
 			</ComboBox>
 
-			<Label fx:id="maxTimeLable" GridPane.columnIndex="0"
-				GridPane.rowIndex="3" text="Maximális idő:" />
-			<TextField fx:id="maxTimeField" GridPane.columnIndex="1"
-				GridPane.rowIndex="3" />
-
-			<Label fx:id="maxPlayerLabel" GridPane.columnIndex="0"
-				GridPane.rowIndex="4" text="Maximális játékos:" />
-			<TextField fx:id="maxPlayerTextField" GridPane.columnIndex="1"
-				GridPane.rowIndex="4" />
-
-			<Label fx:id="maxBetLabel" GridPane.columnIndex="0"
-				GridPane.rowIndex="5" text="Maximális tét:" />
-			<TextField fx:id="maxBetTextField" GridPane.columnIndex="1"
-				GridPane.rowIndex="5" />
-
-			<Label fx:id="smallBlindLabel" GridPane.columnIndex="0"
-				GridPane.rowIndex="6" text="Kisvak:" />
-			<TextField fx:id="smallBlindTextField"
-				GridPane.columnIndex="1" GridPane.rowIndex="6" />
-
-			<Label fx:id="bigBlindLabel" GridPane.columnIndex="0"
-				GridPane.rowIndex="7" text="Nagyvak:" />
-			<TextField fx:id="bigBlindtTextField" GridPane.columnIndex="1"
-				GridPane.rowIndex="7" />
+			<TextField fx:id="maxTimeField" promptText="Maximum gondolkodás idő"
+				GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="2" />
+			<TextField fx:id="maxPlayerTextField" promptText="Játékosok maximum száma"
+				GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.columnSpan="2" />
+			<TextField fx:id="maxBetTextField" promptText="Maximum tét"
+				GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.columnSpan="2" />
+			<TextField fx:id="defaultPotField" promptText="Alaptét"
+				GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.columnSpan="2" />
 
 			<Button fx:id="createTableButton" text="OK" onAction="#createTableHandler"
-				GridPane.columnIndex="1" GridPane.rowIndex="8" />
+				styleClass="rich-blue" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 			<Button fx:id="backButton" text="Mégsem" onAction="#backHandler"
-				GridPane.columnIndex="2" GridPane.rowIndex="8" />
+				styleClass="rich-blue" GridPane.columnIndex="2" GridPane.rowIndex="8" />
 		</GridPane>
 	</children>
 </AnchorPane>

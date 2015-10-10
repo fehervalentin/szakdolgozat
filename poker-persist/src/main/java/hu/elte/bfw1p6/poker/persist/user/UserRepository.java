@@ -47,7 +47,6 @@ public class UserRepository {
 				u.setId(rs.getInt("id"));
 				u.setPassword(rs.getString("password"));
 				u.setAmount(rs.getBigDecimal("balance"));
-				u.setRegDate(rs.getLong("reg_date"));
 			}
 
 			pstmt.close();

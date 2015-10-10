@@ -14,9 +14,9 @@
 	fx:controller="hu.elte.bfw1p6.poker.client.controller.LoginController">
 	<children>
 		<GridPane alignment="center" hgap="10" vgap="10">
-			<!-- <Label fx:id="pokerLabel" GridPane.columnIndex="0" -->
-			<!-- GridPane.rowIndex="0" GridPane.columnSpan="2" text="Poker" -->
-			<!-- alignment="center" /> -->
+			<Label fx:id="pokerLabel" GridPane.columnIndex="0"
+			GridPane.rowIndex="0" GridPane.columnSpan="20" text="Bejelentkezés" styleClass="header-text"
+			alignment="center" />
 			<TextField fx:id="usernameField" GridPane.columnIndex="8"
 				promptText="Felhasználónév" GridPane.columnSpan="2"
 				GridPane.rowIndex="10" />

@@ -2,8 +2,8 @@ package hu.elte.bfw1p6.poker.model.entity;
 
 public enum PokerType {
 	
-	HOLDEM("Holdem", 5, 2),
-	OMAHA("Omaha", 5, 2);
+	HOLDEM("HOLDEM", 5, 2),
+	OMAHA("OMAHA", 5, 2);
 	
 	private String name;
 	private int cardsToHouse;

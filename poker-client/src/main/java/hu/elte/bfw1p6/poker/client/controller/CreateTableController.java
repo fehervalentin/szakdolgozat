@@ -3,6 +3,7 @@ package hu.elte.bfw1p6.poker.client.controller;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
@@ -18,42 +19,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
 public class CreateTableController implements Initializable, PokerClientController {
 
+	private final String SUCC_CREATE_TABLE_MSG = "A táblát sikeresen létrehoztad!";
+	
 	@FXML
 	private AnchorPane rootPane;
-
-	@FXML
-	private Label tableNameLabel;
-
-	@FXML
-	private Label gameType;
-
-	@FXML
-	private Label maxTimeLable;
-
-	@FXML
-	private Label maxPlayerLabel;
-
-	@FXML
-	private Label maxBetLabel;
-
-	@FXML
-	private Label smallBlindLabel;
-
-	@FXML
-	private Label bigBlindLabel;
-
-	@FXML
-	private Label typeLabel;
-
-
-
-
 
 	@FXML
 	private TextField tableNameTextField;
@@ -70,15 +44,7 @@ public class CreateTableController implements Initializable, PokerClientControll
 	private TextField maxBetTextField;
 
 	@FXML
-	private TextField smallBlindTextField;
-
-	@FXML
-	private TextField bigBlindtTextField;
-
-
-
-
-
+	private TextField defaultPotField;
 
 	@FXML
 	private Button createTableButton;
@@ -90,53 +56,37 @@ public class CreateTableController implements Initializable, PokerClientControll
 
 	private FrameController frameController;
 	
-	private Alert alert;
+	private Alert errorAlert;
+	
+	private Alert successAlert;
 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		model = Model.getInstance();
-		alert = new Alert(AlertType.ERROR);
+		errorAlert = new Alert(AlertType.ERROR);
+		successAlert = new Alert(AlertType.INFORMATION);
+		successAlert.setContentText(SUCC_CREATE_TABLE_MSG);
+		tableNameTextField.setText("próba szerver 1");
+		gameTypeComboBox.getSelectionModel().select(0);
+		maxTimeField.setText("39");
+		maxPlayerTextField.setText("5");
+		defaultPotField.setText("12");
+		maxBetTextField.setText("100");
 	}
-
-//	@FXML protected void handleCreateTableButton(ActionEvent event) {
-//		System.out.println("lol");
-//		PTable table = new PTable(tableNameLabel.getText(),
-//				Integer.valueOf(maxTimeField.getText()),
-//				Integer.valueOf(maxPlayerTextField.getText()),
-//				BigDecimal.valueOf(Double.valueOf(limitTextField.getText())),
-//				BigDecimal.valueOf(Double.valueOf(smallBlindTextField.getText())),
-//				BigDecimal.valueOf(Double.valueOf(bigBlindtTextField.getText())));
-//		PTable table = new PTable("asd",
-//				5,
-//				2,
-//				new BigDecimal(2),
-//				new BigDecimal(2),
-//				new BigDecimal(2));
-//		table.setType(Type.HOLDEM);
-//		try {
-//			model.createTable(table);
-//		} catch (RemoteException e) {
-//			e.printStackTrace();
-//		}
-//		List<PTable> tables = new ArrayList<>();//model.getTables();
-//		tables.add(table);
-//		System.out.println(tables);
-//		System.out.println("vege");
-//	}
 
 	@FXML
 	protected void createTableHandler(ActionEvent event) {
+		//TODO: erősen le kell vizsgálni minden paraméter helyességét!
 		String tableName = tableNameTextField.getText();
 		Integer maxTime = Integer.valueOf(maxTimeField.getText());
 		Integer maxPlayers = Integer.valueOf(maxPlayerTextField.getText());
 		BigDecimal maxBet = BigDecimal.valueOf(Double.valueOf(maxBetTextField.getText()));
-		BigDecimal smallBlind = BigDecimal.valueOf(Double.valueOf(smallBlindTextField.getText()));
-		BigDecimal bigBlind = BigDecimal.valueOf(Double.valueOf(bigBlindtTextField.getText()));
-		String typeString = gameTypeComboBox.getSelectionModel().getSelectedItem();
-		PokerType pokerType = null;
+		BigDecimal defaultPot = BigDecimal.valueOf(Double.valueOf(defaultPotField.getText()));
+//		String typeString = gameTypeComboBox.getSelectionModel().getSelectedItem();
+		PokerType pokerType = PokerType.valueOf(gameTypeComboBox.getSelectionModel().getSelectedItem());
 		
-		if (typeString.equals("OMAHA")) {
+		/*if (typeString.equals("OMAHA")) {
 			pokerType = PokerType.OMAHA;
 		} else if (typeString.equals("HOLDEM")) {
 			pokerType = PokerType.HOLDEM;
@@ -145,16 +95,19 @@ public class CreateTableController implements Initializable, PokerClientControll
 			alert.showAndWait();
 			return;
 //			throw new PokerInvalidGameTypeException("Nem megfelelő játék típus!");
-		}
+		}*/
 		
-		PokerTable t = new PokerTable(tableName, maxTime, maxPlayers, maxBet, smallBlind, bigBlind, pokerType);
+		PokerTable t = new PokerTable(tableName, maxTime, maxPlayers, maxBet, defaultPot, pokerType);
 		
 		
 		
 		try {
 			model.createTable(t);
-		} catch (RemoteException | PokerInvalidUserException e) {
-			e.printStackTrace();
+			successAlert.showAndWait();
+			frameController.setTableListerFXML();
+		} catch (RemoteException | PokerInvalidUserException | SQLException e) {
+			errorAlert.setContentText(e.getMessage());
+			errorAlert.showAndWait();
 		}
 	}
 

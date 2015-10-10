@@ -18,6 +18,7 @@
     -fx-font-size: 12px;
 }
 
-.valami {
-	
+.header-text {
+	-fx-text-fill: #FFFFA3;
+	-fx-font-size: 52px;
 }

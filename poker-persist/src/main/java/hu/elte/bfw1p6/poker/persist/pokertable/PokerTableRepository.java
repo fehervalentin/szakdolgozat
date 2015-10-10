@@ -13,11 +13,11 @@ import hu.elte.bfw1p6.poker.persist.dao.DBManager;
 
 public class PokerTableRepository {
 	private final String TABLE_NAME = "poker_tables";
-	
+
 	private static String[] columns;
 	private static PokerTableRepository instance = null;
 
-	private String FIND_ALL = "SELECT * FROM " + TABLE_NAME;
+	private String FIND_ALL = "SELECT * FROM " + TABLE_NAME + ";";
 	private String INSERT;
 	private PokerTableRepository() {
 		loadColumns();
@@ -29,7 +29,7 @@ public class PokerTableRepository {
 		}
 		return instance;
 	}
-	
+
 	private void loadColumns() {
 		Connection con = DBManager.getInstance().getConnection();
 		Statement stmt;
@@ -46,26 +46,23 @@ public class PokerTableRepository {
 		}
 		createQueries();
 	}
-	
+
 	private void createQueries() {
-		INSERT = "INSERT INTO " + TABLE_NAME + columnsToString() + qrySuffix();
+		INSERT = "INSERT INTO " + TABLE_NAME + columnsToString() + "VALUES "+ qrySuffix();
 	}
 
 
-	public int save(PokerTable t) {
+	public int save(PokerTable t) throws SQLException {
 		int iRet = -1;
-		try {
-			Connection con = DBManager.getInstance().getConnection();
-			PreparedStatement pstmt = con.prepareStatement(INSERT);
-			for (int i = 0; i < columns.length; i++) {
-				pstmt.setObject(i, t.get(i));
-			}
-			iRet = pstmt.executeUpdate();
-
-			pstmt.close();
-		} catch (SQLException se) {
-			System.err.println(se);
+		Connection con = DBManager.getInstance().getConnection();
+		PreparedStatement pstmt = con.prepareStatement(INSERT);
+		for (int i = 0; i < columns.length; i++) {
+			Object valami = t.get(i);
+			pstmt.setObject(i+1, valami);
 		}
+		iRet = pstmt.executeUpdate();
+
+		pstmt.close();
 
 		return iRet;
 	}
@@ -93,15 +90,15 @@ public class PokerTableRepository {
 		}
 		return tables;
 	}
-	
-//	private PTable createTableFromRS(ResultSet rs) {
-//		PTable t = new PTable();
-//		for (int i = 0; i < columns.length; i++) {
-//			t.set(i, rs.getObject(columns[i]));
-//		}
-//		return t;
-//	}
-	
+
+	//	private PTable createTableFromRS(ResultSet rs) {
+	//		PTable t = new PTable();
+	//		for (int i = 0; i < columns.length; i++) {
+	//			t.set(i, rs.getObject(columns[i]));
+	//		}
+	//		return t;
+	//	}
+
 	private String columnsToString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("(" + columns[0]);
@@ -111,7 +108,7 @@ public class PokerTableRepository {
 		sb.append(") ");
 		return sb.toString();
 	}
-	
+
 	private String qrySuffix() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(" (?");

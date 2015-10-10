@@ -1,6 +1,7 @@
 package hu.elte.bfw1p6.poker.client.model;
 
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,7 +45,7 @@ public class Model {
 		pokerLoginRemote.registration(username, password);
 	}
 
-	public void createTable(PokerTable t) throws RemoteException, PokerInvalidUserException {
+	public void createTable(PokerTable t) throws RemoteException, PokerInvalidUserException, SQLException {
 		pokerRemote.createTable(t);
 	}
 
