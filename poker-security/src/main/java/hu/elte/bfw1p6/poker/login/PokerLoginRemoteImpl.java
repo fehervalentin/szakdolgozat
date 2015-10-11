@@ -1,7 +1,9 @@
 package hu.elte.bfw1p6.poker.login;
 
+import java.net.URL;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NoSuchObjectException;
+import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -32,6 +34,12 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 	private SessionService sessionService;
 
 	public PokerLoginRemoteImpl(PokerRemote pokerRemote) throws RemoteException {
+		
+		//URL url = getClass().getClassLoader().getResource("client.policy");
+		//System.setProperty("java.security.policy", url.toString()); 
+		/*if (System.getSecurityManager() == null) {
+		      System.setSecurityManager(new RMISecurityManager());
+		}*/	
 
 		this.pokerProperties = PokerProperties.getInstance();
 		this.pokerRemote = pokerRemote;
