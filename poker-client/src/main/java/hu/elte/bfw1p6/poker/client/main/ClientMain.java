@@ -30,6 +30,8 @@ public class ClientMain extends Application {
     }
 
     public static void main(String[] args) {
+//    	System.setProperty("java.rmi.server.codebase", "file:///" + System.getProperty("user.dir") + "src/main/java/hu/elte/bfw1p6/poker/server/");
+//    	System.setProperty("java.rmi.server.useCodebaseOnly", "false");
         launch(args);
     }
     

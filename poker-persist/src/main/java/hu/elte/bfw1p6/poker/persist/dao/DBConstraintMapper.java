@@ -3,6 +3,8 @@ package hu.elte.bfw1p6.poker.persist.dao;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+//import hu.elte.bfw1p6.poker.exception.database.PokerDataBaseException;
+
 public class DBConstraintMapper {
 	private static DBConstraintMapper instance = null;
 	
@@ -23,7 +25,7 @@ public class DBConstraintMapper {
 		mappings.put("UQ_users_username", "Ilyen felhasználónévvel már regisztráltak!");
 	}
 	
-	public PokerDataBaseException interceptException(SQLException ex) {
-		
-	}
+	/*public PokerDataBaseException interceptException(SQLException ex) {
+		return null;
+	}*/
 }
