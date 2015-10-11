@@ -16,7 +16,7 @@ public class ServerMain {
 //		System.out.println(valami);
 //		System.setProperty("java.rmi.server.codebase", valami);
 		
-		PokerRemote pokerRemote = new PokerRemoteImpl();
+		PokerRemote pokerRemote = PokerRemoteImpl.getInstance();
 //		System.out.println("A szerver elindult");
 		try {
 			PokerLoginRemote pokerLogin = new PokerLoginRemoteImpl(pokerRemote);

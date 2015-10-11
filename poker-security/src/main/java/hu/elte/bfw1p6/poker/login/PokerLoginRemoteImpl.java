@@ -31,8 +31,6 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 
 	private SessionService sessionService;
 	
-	private int counter = 0;
-
 	public PokerLoginRemoteImpl(PokerRemote pokerRemote) throws RemoteException {
 		
 		//URL url = getClass().getClassLoader().getResource("client.policy");
@@ -61,13 +59,11 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 
 	@Override
 	public UUID login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException {
-		counter++;
 		User u = UserRepository.findUserByUserName(username);
 		//			User u = userDAO.findUserByUserName(username);
 		if (!BCrypt.checkpw(password, u.getPassword())) {
 			throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
 		}
-		System.out.println("Login: " + counter);
 		return sessionService.authenticate(username, password);
 	}
 
@@ -88,7 +84,7 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 		if (sessionService.isAuthenticated(uuid)) {
 			return pokerRemote;
 		}
-		throw new PokerInvalidUserException("cumi");
+		throw new PokerInvalidUserException("Invalid UUID");
 	}
 
 	@Override

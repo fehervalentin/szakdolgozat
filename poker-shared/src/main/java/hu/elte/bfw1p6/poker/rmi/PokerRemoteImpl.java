@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverGameController;
 import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverTableViewController;
@@ -21,19 +20,21 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
+	private static PokerRemoteImpl instance = null;
+	
 	//private HashTable<UUID, PokerRemoteObserverTableViewController> observers;
 	
 	private Hashtable<UUID, PokerRemoteObserverTableViewController> observers;
 	
-	private int myCounter = 0;
-	
-	private AtomicInteger asd;
-
-	public PokerRemoteImpl() {
-		asd = new AtomicInteger(0);
+	private PokerRemoteImpl() {
 		observers = new Hashtable<>();
-		
-		
+	}
+	
+	public static synchronized PokerRemoteImpl getInstance() {
+		if(instance == null) {
+			instance = new PokerRemoteImpl();
+		}
+		return instance;
 	}
 
 	@Override
@@ -74,11 +75,10 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 
 	@Override
 	public synchronized void registerObserver(UUID uuid, PokerRemoteObserverTableViewController proc) throws RemoteException {
-		System.out.println(uuid.toString());
-		myCounter++;
-		System.out.println("Atomic :" + asd.incrementAndGet());
-		System.out.println("regisztrálom az observert");
+//		System.out.println(uuid.toString());
 		observers.put(uuid, proc);
+		System.out.println(observers);
+		System.out.println("Observerek: " + observers.size());
 		List<PokerTable> tables = getTables();
 		proc.updateTableView(tables);
 	}
@@ -104,9 +104,8 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 	}
 	
 	private void notifyAllObserver() throws RemoteException {
-		System.out.println("My counter: " + myCounter);
 		Iterator it = observers.entrySet().iterator();
-		System.out.println("meret: " + observers.size());
+//		System.out.println("meret: " + observers.size());
 	    while (it.hasNext()) {
 	        Map.Entry pair = (Map.Entry)it.next();
 	        ((PokerRemoteObserverTableViewController)pair.getValue()).updateTableView(getTables());
