@@ -4,28 +4,40 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverGameController;
 import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverTableViewController;
+import hu.elte.bfw1p6.poker.model.entity.Player;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.persist.pokertable.PokerTableRepository;
-import hu.elte.bfw1p6.poker.model.entity.Player;
 
 public class PokerRemoteImpl implements PokerRemote, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private HashMap<UUID, PokerRemoteObserverTableViewController> observers;
+	//private HashTable<UUID, PokerRemoteObserverTableViewController> observers;
+	
+	private Hashtable<UUID, PokerRemoteObserverTableViewController> observers;
+	
+	private int myCounter = 0;
+	
+	private AtomicInteger asd;
 
 	public PokerRemoteImpl() {
-		observers = new HashMap<>();
+		asd = new AtomicInteger(0);
+		observers = new Hashtable<>();
+		
 		
 	}
 
 	@Override
-	public void deleteUser(int id) {
+	public synchronized void deleteUser(int id) {
 	}
 
 	@Override
@@ -34,24 +46,25 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 	}
 
 	@Override
-	public void deleteTable(int id) throws RemoteException {
+	public synchronized void deleteTable(int id) throws RemoteException {
 	}
 
 	@Override
-	public void createTable(PokerTable t) throws RemoteException, SQLException {
+	public synchronized void createTable(PokerTable t) throws RemoteException, SQLException {
 		PokerTableRepository.getInstance().save(t);
+		notifyAllObserver();
 	}
 
 	@Override
-	public void modifyTable(PokerTable t) throws RemoteException {
+	public synchronized void modifyTable(PokerTable t) throws RemoteException {
 	}
 
 	@Override
-	public void modifyUser(Player player) throws RemoteException {
+	public synchronized void modifyUser(Player player) throws RemoteException {
 	}
 
 	@Override
-	public void modifyPassword(String username, String oldPassword, String newPassword) throws RemoteException {
+	public synchronized void modifyPassword(String username, String oldPassword, String newPassword) throws RemoteException {
 	}
 
 	@Override
@@ -60,7 +73,11 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 	}
 
 	@Override
-	public void registerObserver(UUID uuid, PokerRemoteObserverTableViewController proc) throws RemoteException {
+	public synchronized void registerObserver(UUID uuid, PokerRemoteObserverTableViewController proc) throws RemoteException {
+		System.out.println(uuid.toString());
+		myCounter++;
+		System.out.println("Atomic :" + asd.incrementAndGet());
+		System.out.println("regisztrálom az observert");
 		observers.put(uuid, proc);
 		List<PokerTable> tables = getTables();
 		proc.updateTableView(tables);
@@ -86,5 +103,15 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 		
 	}
 	
+	private void notifyAllObserver() throws RemoteException {
+		System.out.println("My counter: " + myCounter);
+		Iterator it = observers.entrySet().iterator();
+		System.out.println("meret: " + observers.size());
+	    while (it.hasNext()) {
+	        Map.Entry pair = (Map.Entry)it.next();
+	        ((PokerRemoteObserverTableViewController)pair.getValue()).updateTableView(getTables());
+	        //it.remove(); // avoids a ConcurrentModificationException
+	    }
+	}
 	
 }

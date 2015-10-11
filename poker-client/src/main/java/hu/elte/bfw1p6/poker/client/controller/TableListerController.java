@@ -89,5 +89,9 @@ public class TableListerController implements PokerClientController, PokerRemote
 	@Override
 	public void updateTableView(List<PokerTable> tables) {
 		tableView.getItems().setAll(tables);
+//		tableView.getColumns().get(0).setVisible(false);
+//		tableView.getColumns().get(0).setVisible(true);
+//		tableView.setVisible(false);
+//		tableView.setVisible(true);
 	}
 }

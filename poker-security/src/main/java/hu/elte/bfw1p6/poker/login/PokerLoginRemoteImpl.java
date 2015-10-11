@@ -1,9 +1,7 @@
 package hu.elte.bfw1p6.poker.login;
 
-import java.net.URL;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NoSuchObjectException;
-import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -32,6 +30,8 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 	private PokerProperties pokerProperties;
 
 	private SessionService sessionService;
+	
+	private int counter = 0;
 
 	public PokerLoginRemoteImpl(PokerRemote pokerRemote) throws RemoteException {
 		
@@ -61,11 +61,13 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 
 	@Override
 	public UUID login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException {
+		counter++;
 		User u = UserRepository.findUserByUserName(username);
 		//			User u = userDAO.findUserByUserName(username);
 		if (!BCrypt.checkpw(password, u.getPassword())) {
 			throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
 		}
+		System.out.println("Login: " + counter);
 		return sessionService.authenticate(username, password);
 	}
 
