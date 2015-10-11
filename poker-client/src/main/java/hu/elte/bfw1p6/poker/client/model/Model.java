@@ -36,9 +36,9 @@ public class Model {
 	public void login(String username, String password) throws RemoteException, PokerInvalidUserException {
 		sessionId = pokerLoginRemote.login(username, password);
 		pokerRemote = pokerLoginRemote.getPokerRemote(sessionId);
-		//			RMIRepository.getInstance().setPokerRemote(pokerRemote);
-		//			pokerRemote = RMIRepository.getInstance().getPokerRemote();
-		//System.out.println(pokerRemote.sayHello());
+		RMIRepository.getInstance().setPokerRemote(pokerRemote);
+		RMIRepository.getInstance().setSessionId(sessionId);
+		System.out.println(pokerRemote.sayHello());
 	}
 
 	public void registration(String username, String password) throws RemoteException, SQLException {
@@ -62,6 +62,10 @@ public class Model {
 	
 	public void registerObserver(PokerRemoteObserverTableViewController proc) throws RemoteException {
 		pokerRemote.registerObserver(sessionId, proc);
+	}
+	
+	public void connectToTable() {
+		
 	}
 
 	/*public List<Table> getTables() {

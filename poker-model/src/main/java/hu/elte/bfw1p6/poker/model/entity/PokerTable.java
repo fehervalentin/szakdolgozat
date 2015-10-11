@@ -2,11 +2,17 @@ package hu.elte.bfw1p6.poker.model.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class PokerTable implements EntityWithId, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Persistence fields
+	 */
 	private Integer id;
 	private String name;
 	private PokerType pokerType;
@@ -14,6 +20,8 @@ public class PokerTable implements EntityWithId, Serializable {
 	private Integer maxPlayers;
 	private BigDecimal defaultPot;
 	private BigDecimal maxBet;
+	
+	private List<UUID> clients;
 
 	public PokerTable(String name, Integer maxTime, Integer maxPlayers, BigDecimal maxBet, BigDecimal defaultPot, PokerType pokerType) {
 		this.name = name;
@@ -25,7 +33,11 @@ public class PokerTable implements EntityWithId, Serializable {
 	}
 
 	public PokerTable() {
-
+		clients = new ArrayList<>();
+	}
+	
+	public void connect(UUID uuid) {
+		
 	}
 
 	@Override
@@ -108,31 +120,31 @@ public class PokerTable implements EntityWithId, Serializable {
 	@Override
 	public void set(int columnIndex, Object value) {
 		switch (columnIndex) {
-        case 0: {
-            setName((String) value);
-            break;
-        }
-        case 1: {
-            setPokerType(PokerType.valueOf((String) value));
-            break;
-        }
-        case 2: {
-            setMaxTime((Integer) value);
-            break;
-        }
-        case 3: {
-            setMaxPlayers((Integer) value);
-            break;
-        }
-        case 4: {
-            setDefaultPot((BigDecimal) value);
-            break;
-        }
-        case 5: {
-            setMaxBet((BigDecimal) value);
-            break;
-        }
-    }
+		case 0: {
+			setName((String) value);
+			break;
+		}
+		case 1: {
+			setPokerType(PokerType.valueOf((String) value));
+			break;
+		}
+		case 2: {
+			setMaxTime((Integer) value);
+			break;
+		}
+		case 3: {
+			setMaxPlayers((Integer) value);
+			break;
+		}
+		case 4: {
+			setDefaultPot((BigDecimal) value);
+			break;
+		}
+		case 5: {
+			setMaxBet((BigDecimal) value);
+			break;
+		}
+		}
 
 	}
 }

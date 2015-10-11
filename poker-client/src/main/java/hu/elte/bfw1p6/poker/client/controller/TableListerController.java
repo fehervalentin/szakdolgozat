@@ -5,10 +5,12 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
+import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
 import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverTableViewController;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
@@ -74,14 +76,14 @@ public class TableListerController implements PokerClientController, PokerRemote
 		if (table == null) {
 			alert.showAndWait();
 		} else {
-			//TODO JOIN
-			System.out.println(table.getPokerType());
+			ConnectTableHelper.getInstance().setPokerTable(table);
+			frameController.setMainGameFXML();
 		}
 	}
 	
 	@FXML
 	protected void handleCreateTable() {
-		frameController.setCreateTableFrame();
+		frameController.setCreateTableFXML();
 	}
 
 	@Override

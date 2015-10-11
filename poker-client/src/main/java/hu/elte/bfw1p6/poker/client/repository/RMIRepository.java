@@ -4,6 +4,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.UUID;
 
 import hu.elte.bfw1p6.poker.properties.PokerProperties;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
@@ -15,6 +16,7 @@ public class RMIRepository {
 	private Registry registry;
 	private PokerLoginRemote pokerLoginRemote;
 	private PokerRemote pokerRemote;
+	private UUID sessionId;
 
 	private PokerProperties pokerProperties;
 
@@ -47,5 +49,13 @@ public class RMIRepository {
 	
 	public void setPokerRemote(PokerRemote pokerRemote) {
 		this.pokerRemote = pokerRemote;
+	}
+
+	public void setSessionId(UUID sessionId) {
+		this.sessionId = sessionId;
+	}
+	
+	public UUID getSessionId() {
+		return sessionId;
 	}
 }

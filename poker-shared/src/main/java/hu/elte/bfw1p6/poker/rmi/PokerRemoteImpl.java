@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverGameController;
 import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverTableViewController;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.persist.pokertable.PokerTableRepository;
@@ -17,10 +18,10 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private HashMap<UUID, PokerRemoteObserverTableViewController> observers;
-	
 
 	public PokerRemoteImpl() {
 		observers = new HashMap<>();
+		
 	}
 
 	@Override
@@ -68,6 +69,20 @@ public class PokerRemoteImpl implements PokerRemote, Serializable {
 	@Override
 	public void unRegisterObserver(UUID uuid, PokerRemoteObserverTableViewController pcc) throws RemoteException {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void disConnectFromTable(PokerTable pokerTable, UUID uuid, PokerRemoteObserverGameController pmgc) throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void connectToTable(PokerTable pokerTable, PokerRemoteObserverGameController progc, UUID uuid)
+			throws RemoteException {
+		progc.sayHello();
+		// TODO KURVAFONTOS
 		
 	}
 	

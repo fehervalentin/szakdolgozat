@@ -8,11 +8,12 @@ import javafx.scene.Scene;
 
 public class FrameController {
 	
-	private String FXML_PREFIX = "/fxml/";
-	private String LOGIN_FXML = "Login.fxml";
-	private String REGISTRATION_FXML = "Registration.fxml";
-	private String CREATE_TABLE_FXML = "CreateTable.fxml";
-	private String TABLE_LISTER_FXML = "TableLister.fxml";
+	private final String FXML_PREFIX = "/fxml/";
+	private final String LOGIN_FXML = "Login.fxml";
+	private final String REGISTRATION_FXML = "Registration.fxml";
+	private final String CREATE_TABLE_FXML = "CreateTable.fxml";
+	private final String TABLE_LISTER_FXML = "TableLister.fxml";
+	private final String MAIN_GAME_FXML = "MainGame.fxml";
 	
 	private Scene scene;
 	
@@ -33,8 +34,12 @@ public class FrameController {
 		setFXML(FXML_PREFIX + TABLE_LISTER_FXML);
 	}
 	
-	public void setCreateTableFrame() {
+	public void setCreateTableFXML() {
 		setFXML(FXML_PREFIX + CREATE_TABLE_FXML);
+	}
+	
+	public void setMainGameFXML() {
+		setFXML(FXML_PREFIX + MAIN_GAME_FXML);
 	}
 	
 	public void setFXML(String resource) {
