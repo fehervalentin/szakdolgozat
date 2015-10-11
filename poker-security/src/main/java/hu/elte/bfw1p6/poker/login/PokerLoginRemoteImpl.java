@@ -6,15 +6,16 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
 import java.util.UUID;
 
 import org.mindrot.jbcrypt.BCrypt;
 
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
-import hu.elte.bfw1p6.poker.model.PokerProperties;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.user.UserBuilder;
 import hu.elte.bfw1p6.poker.persist.user.UserRepository;
+import hu.elte.bfw1p6.poker.properties.PokerProperties;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 import hu.elte.bfw1p6.poker.rmi.security.PokerLoginRemote;
 import hu.elte.bfw1p6.poker.security.service.SessionService;
@@ -92,9 +93,8 @@ public class PokerLoginRemoteImpl extends UnicastRemoteObject implements PokerLo
 	}
 
 	@Override
-	public void registration(String username, String password) throws RemoteException {
+	public void registration(String username, String password) throws RemoteException, SQLException {
 		User u = UserBuilder.geInstance().buildUser(username, password);
 		UserRepository.save(u);
-		//		userDAO.persistUser(username, password);
 	}
 }

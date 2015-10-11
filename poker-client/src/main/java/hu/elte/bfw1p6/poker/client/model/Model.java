@@ -41,7 +41,7 @@ public class Model {
 		//System.out.println(pokerRemote.sayHello());
 	}
 
-	public void registration(String username, String password) throws RemoteException {
+	public void registration(String username, String password) throws RemoteException, SQLException {
 		pokerLoginRemote.registration(username, password);
 	}
 

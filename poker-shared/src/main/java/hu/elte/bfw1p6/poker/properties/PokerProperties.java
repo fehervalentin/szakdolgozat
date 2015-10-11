@@ -1,4 +1,4 @@
-package hu.elte.bfw1p6.poker.model;
+package hu.elte.bfw1p6.poker.properties;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

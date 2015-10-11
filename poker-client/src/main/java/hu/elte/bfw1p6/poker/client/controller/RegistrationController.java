@@ -2,7 +2,10 @@ package hu.elte.bfw1p6.poker.client.controller;
 
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+
+import com.sun.javafx.iio.ios.IosImageLoaderFactory;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
@@ -83,7 +86,8 @@ public class RegistrationController implements Initializable, PokerClientControl
 			if (alert.showAndWait().get() == ButtonType.OK) {
 				frameController.setLoginFXML();
 			}
-		} catch (RemoteException e) {
+		} catch (RemoteException | SQLException e) {
+			alertError.setContentText(e.getMessage());
 			alertError.showAndWait();
 		}
 	}

@@ -7,33 +7,30 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.DBManager;
 
 public class UserRepository {
 	private final String TABLE_NAME = "users";
 
-	public static int save(User u) {
+	public static int save(User u) throws SQLException {
 		int iRet = -1;
-		try {
-			Connection con = DBManager.getInstance().getConnection();
-			String SQL = "INSERT INTO users(username, password, balance, reg_date) Values(?,?,?,?)";
-			PreparedStatement pstmt = con.prepareStatement(SQL);
-			pstmt.setString(1, u.getUserName());
-			pstmt.setString(2, u.getPassword());
-			pstmt.setBigDecimal(3, u.getBalance());
-			pstmt.setLong(4, u.getRegDate());
+		Connection con = DBManager.getInstance().getConnection();
+		String SQL = "INSERT INTO users(username, password, balance, reg_date) Values(?,?,?,?)";
+		PreparedStatement pstmt = con.prepareStatement(SQL);
+		pstmt.setString(1, u.getUserName());
+		pstmt.setString(2, u.getPassword());
+		pstmt.setBigDecimal(3, u.getBalance());
+		pstmt.setLong(4, u.getRegDate());
 
-			iRet = pstmt.executeUpdate();
+		iRet = pstmt.executeUpdate();
 
-			pstmt.close();
-		} catch (SQLException se) {
-			System.out.println(se);
-		}
-
+		pstmt.close();
 		return iRet;
 	}
-	
+
 	public static User findUserByUserName(String username) {
 		User u = null;
 		try {
@@ -56,7 +53,7 @@ public class UserRepository {
 		}
 		return u;
 	}
-	
+
 	public static int modifyPassword(User u) {
 		int iRet = -1;
 		try {

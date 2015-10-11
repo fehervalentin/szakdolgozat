@@ -11,7 +11,7 @@ CREATE TABLE pokerdb.users (
 	reg_date BIGINT,
 	password VARCHAR(64) NOT NULL check (CHAR_LENGTH(password) <= 64),
 	PRIMARY KEY (id),
-	UNIQUE(username)
+	CONSTRAINT UQ_users_username UNIQUE (username)
 );
 	
 CREATE TABLE pokerdb.poker_tables (

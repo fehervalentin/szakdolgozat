@@ -2,6 +2,7 @@ package hu.elte.bfw1p6.poker.rmi.security;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.UUID;
 
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
@@ -20,5 +21,5 @@ public interface PokerLoginRemote extends Remote {
 	
 	boolean isAdmin(UUID uuid) throws RemoteException;
 	
-	void registration(String username, String password) throws RemoteException;
+	void registration(String username, String password) throws RemoteException, SQLException;
 }

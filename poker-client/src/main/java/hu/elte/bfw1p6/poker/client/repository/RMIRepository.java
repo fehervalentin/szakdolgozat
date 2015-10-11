@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import hu.elte.bfw1p6.poker.model.PokerProperties;
+import hu.elte.bfw1p6.poker.properties.PokerProperties;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 import hu.elte.bfw1p6.poker.rmi.security.PokerLoginRemote;
 
