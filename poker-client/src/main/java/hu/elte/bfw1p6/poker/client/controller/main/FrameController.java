@@ -1,12 +1,21 @@
 package hu.elte.bfw1p6.poker.client.controller.main;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
+import hu.elte.bfw1p6.poker.client.observer.nemtudom.RemoteObserver;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 
-public class FrameController {
+public class FrameController extends UnicastRemoteObject implements RemoteObserver {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	
 	private final String FXML_PREFIX = "/fxml/";
 	private final String LOGIN_FXML = "Login.fxml";
@@ -17,7 +26,8 @@ public class FrameController {
 	
 	private Scene scene;
 	
-	public FrameController(Scene scene) {
+	public FrameController(Scene scene) throws RemoteException {
+		super();
 //		setCreateTableFrame();
 		setLoginFXML();
 	}
@@ -59,5 +69,11 @@ public class FrameController {
 
 	public Scene getScene() {
 		return scene;
+	}
+
+	@Override
+	public void update(Object observable, Object updateMsg) throws RemoteException {
+		System.out.println((String) updateMsg);
+		System.out.println("KIIRTA");
 	}
 }

@@ -7,13 +7,15 @@ import java.util.List;
 import java.util.UUID;
 
 import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverGameController;
-import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverTableViewController;
+import hu.elte.bfw1p6.poker.client.observer.controller.TableViewObserver;
+import hu.elte.bfw1p6.poker.client.observer.nemtudom.RemoteObserver;
+import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.Player;
 
 public interface PokerRemote extends Remote{
 	
-	String sayHello();
+	//String sayHello();
 	
 	void deleteUser(int id) throws RemoteException;
 	
@@ -33,7 +35,25 @@ public interface PokerRemote extends Remote{
 	
 	void disConnectFromTable(PokerTable pokerTable, UUID uuid, PokerRemoteObserverGameController pmgc) throws RemoteException;
 	
-	void registerObserver(UUID uuid, PokerRemoteObserverTableViewController proc) throws RemoteException;
+	void registerObserver(UUID uuid, RemoteObserver proc) throws RemoteException;
 	
-	void unRegisterObserver(UUID uuid, PokerRemoteObserverTableViewController proc) throws RemoteException;
+	void unRegisterObserver(UUID uuid, TableViewObserver proc) throws RemoteException;
+	
+	
+	
+	
+	
+	
+	
+	UUID login(String username, String password) throws RemoteException, PokerInvalidUserException;
+	
+	void logout(UUID uuid) throws RemoteException;
+	
+	boolean shutDown(UUID uuid) throws RemoteException, PokerInvalidUserException;
+	
+	boolean isAdmin(UUID uuid) throws RemoteException;
+	
+	void registration(String username, String password) throws RemoteException, SQLException;
+	
+	void addObserver(RemoteObserver observer) throws RemoteException;
 }

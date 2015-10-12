@@ -5,27 +5,27 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverTableViewController;
+import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
+import hu.elte.bfw1p6.poker.client.observer.controller.TableViewObserver;
+import hu.elte.bfw1p6.poker.client.observer.nemtudom.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
-import hu.elte.bfw1p6.poker.rmi.security.PokerLoginRemote;
 
 
 public class Model {
-	
+
 	private static Model instance = null;
 
-	private PokerLoginRemote pokerLoginRemote;
 	private PokerRemote pokerRemote;
 
 	private UUID sessionId;
 
 	private Model() {
-		pokerLoginRemote = RMIRepository.getInstance().getPokerLoginRemote();
+		pokerRemote = RMIRepository.getInstance().getPokerRemote();
 	}
-	
+
 	public static Model getInstance() {
 		if(instance == null) {
 			instance = new Model();
@@ -34,15 +34,13 @@ public class Model {
 	}
 
 	public void login(String username, String password) throws RemoteException, PokerInvalidUserException {
-		sessionId = pokerLoginRemote.login(username, password);
-		pokerRemote = pokerLoginRemote.getPokerRemote(sessionId);
-		RMIRepository.getInstance().setPokerRemote(pokerRemote);
+		sessionId = pokerRemote.login(username, password);
 		RMIRepository.getInstance().setSessionId(sessionId);
-		System.out.println(pokerRemote.sayHello());
+		//System.out.println(pokerRemote.sayHello());
 	}
 
 	public void registration(String username, String password) throws RemoteException, SQLException {
-		pokerLoginRemote.registration(username, password);
+		pokerRemote.registration(username, password);
 	}
 
 	public void createTable(PokerTable t) throws RemoteException, PokerInvalidUserException, SQLException {
@@ -59,13 +57,17 @@ public class Model {
 		}
 		return tables;
 	}
-	
-	public void registerObserver(PokerRemoteObserverTableViewController proc) throws RemoteException {
-		pokerRemote.registerObserver(sessionId, proc);
+
+	public void registerObserver(RemoteObserver observer) throws RemoteException {
+		pokerRemote.registerObserver(sessionId, observer);
 	}
-	
+
 	public void connectToTable() {
-		
+
+	}
+
+	public void addObserver(RemoteObserver observer) throws RemoteException {
+		pokerRemote.addObserver(observer);
 	}
 
 	/*public List<Table> getTables() {
