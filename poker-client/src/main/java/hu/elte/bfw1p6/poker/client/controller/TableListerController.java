@@ -60,7 +60,9 @@ public class TableListerController implements PokerClientController, Initializab
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
 		try {
-			model.registerObserver(frameController);
+			List<PokerTable> tables = model.registerTableViewObserver(frameController);
+			tableView.getItems().setAll(tables);
+//			model.registerObserver(frameController);
 //			model.addObserver(this);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
@@ -88,13 +90,24 @@ public class TableListerController implements PokerClientController, Initializab
 			alert.showAndWait();
 		} else {
 			ConnectTableHelper.getInstance().setPokerTable(table);
+			removeObserver();
 			frameController.setMainGameFXML();
 		}
 	}
 	
 	@FXML
 	protected void handleCreateTable() {
+		removeObserver();
 		frameController.setCreateTableFXML();
+	}
+	
+	private void removeObserver() {
+		try {
+			model.removeTableViewObserver(frameController);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void updateTableView(List<PokerTable> tables) {
@@ -110,8 +123,12 @@ public class TableListerController implements PokerClientController, Initializab
 //		tableView.setVisible(true);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void valamivan(String asd) {
+	public void valamivan(Object updateMsg) {
+		List<PokerTable> tables = (List<PokerTable>)updateMsg;
+		tableView.getItems().setAll(tables);
 		System.out.println("TableListerController");
+		System.out.println("MEGKAPTAM A TÁBLÁKAT");
 	}
 }

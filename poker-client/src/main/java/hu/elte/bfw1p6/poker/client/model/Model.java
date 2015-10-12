@@ -70,6 +70,14 @@ public class Model {
 		pokerRemote.addObserver(observer);
 	}
 
+	public List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException {
+		return pokerRemote.registerTableViewObserver(observer);
+	}
+
+	public void removeTableViewObserver(RemoteObserver observer) throws RemoteException {
+		pokerRemote.removeTableViewObserver(observer);
+	}
+
 	/*public List<Table> getTables() {
 		return pokerRemote.getTables();
 	}*/

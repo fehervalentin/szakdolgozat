@@ -100,7 +100,7 @@ public class RegistrationController implements Initializable, PokerClientControl
 
 
 	@Override
-	public void valamivan(String asd) {
+	public void valamivan(Object asd) {
 		// TODO Auto-generated method stub
 		
 	}

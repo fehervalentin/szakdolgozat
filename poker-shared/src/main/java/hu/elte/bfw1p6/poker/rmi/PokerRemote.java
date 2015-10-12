@@ -51,4 +51,8 @@ public interface PokerRemote extends Remote{
 	void registration(String username, String password) throws RemoteException, SQLException;
 	
 	void addObserver(RemoteObserver observer) throws RemoteException;
+	
+	List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException;
+
+	void removeTableViewObserver(RemoteObserver observer) throws RemoteException;
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import hu.elte.bfw1p6.poker.client.controller.TableListerController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.observer.nemtudom.RemoteObserver;
 import javafx.fxml.FXMLLoader;
@@ -78,6 +79,6 @@ public class FrameController extends UnicastRemoteObject implements RemoteObserv
 	public void update(Object observable, Object updateMsg) throws RemoteException {
 //		System.out.println((String) updateMsg);
 //		System.out.println("KIIRTA");
-		actualCont.valamivan((String) updateMsg);
+		actualCont.valamivan(updateMsg);
 	}
 }

@@ -29,7 +29,7 @@ public class MainGameController implements Initializable, PokerClientController 
 	}
 
 	@Override
-	public void valamivan(String asd) {
+	public void valamivan(Object asd) {
 		// TODO Auto-generated method stub
 		
 	}

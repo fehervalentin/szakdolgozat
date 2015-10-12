@@ -121,7 +121,7 @@ public class CreateTableController implements Initializable, PokerClientControll
 	}
 
 	@Override
-	public void valamivan(String asd) {
+	public void valamivan(Object asd) {
 		System.out.println("CreateTableController");
 		
 	}

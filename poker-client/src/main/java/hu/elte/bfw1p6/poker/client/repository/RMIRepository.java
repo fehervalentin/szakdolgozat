@@ -25,18 +25,16 @@ public class RMIRepository {
 
 	private RMIRepository() {
 		pokerProperties = PokerProperties.getInstance();
+		System.out.println("Kliens: " + this.toString());
 		SVNAME =  pokerProperties.getProperty("name");
 		PORT = pokerProperties.getProperty("rmiport");
 		try {
-			System.out.println(pokerProperties.getProperty("rmiport"));
-			System.out.println(pokerProperties.getProperty("name"));
 			//			registry = LocateRegistry.getRegistry(Integer.valueOf(pokerProperties.getProperty("rmiport")));
 			//			pokerRemote = (PokerRemote) registry.lookup(pokerProperties.getProperty("name"));
 
 			pokerRemote = (PokerRemote) Naming.lookup("//localhost:" + PORT + "/" + SVNAME);
 
 		} catch (RemoteException e) {
-			System.out.println("lol");
 			e.printStackTrace();
 		} catch (NotBoundException e) {
 			e.printStackTrace();
