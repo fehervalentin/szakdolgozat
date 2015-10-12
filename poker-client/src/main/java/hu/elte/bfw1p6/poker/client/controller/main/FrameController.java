@@ -24,6 +24,8 @@ public class FrameController extends UnicastRemoteObject implements RemoteObserv
 	private final String TABLE_LISTER_FXML = "TableLister.fxml";
 	private final String MAIN_GAME_FXML = "MainGame.fxml";
 	
+	private PokerClientController actualCont = null;
+	
 	private Scene scene;
 	
 	public FrameController(Scene scene) throws RemoteException {
@@ -62,6 +64,7 @@ public class FrameController extends UnicastRemoteObject implements RemoteObserv
 			}
 			PokerClientController controller = loader.<PokerClientController>getController();
 			controller.setDelegateController(this);
+			actualCont = controller;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -73,7 +76,8 @@ public class FrameController extends UnicastRemoteObject implements RemoteObserv
 
 	@Override
 	public void update(Object observable, Object updateMsg) throws RemoteException {
-		System.out.println((String) updateMsg);
-		System.out.println("KIIRTA");
+//		System.out.println((String) updateMsg);
+//		System.out.println("KIIRTA");
+		actualCont.valamivan((String) updateMsg);
 	}
 }

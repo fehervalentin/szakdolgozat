@@ -4,7 +4,6 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.UUID;
 
-import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverGameController;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.persist.pokertable.PokerTableRepository;
@@ -23,16 +22,6 @@ public class MainGameModel {
 	}
 	
 	public void registerObserver() {
-		
-	}
-
-	public void connect(PokerTable pokerTable, PokerRemoteObserverGameController progc) {
-		try {
-			pokerRemote.connectToTable(pokerTable, progc, sessionId);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 	}
 }

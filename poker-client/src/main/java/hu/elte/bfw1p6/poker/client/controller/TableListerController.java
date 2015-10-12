@@ -4,18 +4,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.UUID;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
-import hu.elte.bfw1p6.poker.client.observer.controller.Kutyafasz;
-import hu.elte.bfw1p6.poker.client.observer.controller.TableViewObserver;
-import hu.elte.bfw1p6.poker.client.observer.controller.TableViewObserverImpl;
+import hu.elte.bfw1p6.poker.client.observer.nemtudom.RemoteObserver;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.fxml.FXML;
@@ -27,7 +23,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class TableListerController implements PokerClientController, Initializable, Kutyafasz, Serializable {
+public class TableListerController implements PokerClientController, Initializable, Serializable {
 	
 	/**
 	 * 
@@ -48,7 +44,7 @@ public class TableListerController implements PokerClientController, Initializab
 	@FXML private Button connectButton;
 	@FXML private Button createTableButton;
 	
-	private Alert alert;
+	private transient Alert alert;
 	
 //	private TableViewObserverImpl observer;
 	
@@ -64,8 +60,8 @@ public class TableListerController implements PokerClientController, Initializab
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
 		try {
-//			model.registerObserver(frameController);
-			model.addObserver(frameController);
+			model.registerObserver(frameController);
+//			model.addObserver(this);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -115,9 +111,7 @@ public class TableListerController implements PokerClientController, Initializab
 	}
 
 	@Override
-	public void updateKURVAANYAD() {
-		System.out.println("MOCSKOS GECI");
-		// TODO Auto-generated method stub
-		
+	public void valamivan(String asd) {
+		System.out.println("TableListerController");
 	}
 }

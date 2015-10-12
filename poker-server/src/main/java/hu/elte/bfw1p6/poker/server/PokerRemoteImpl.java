@@ -14,7 +14,6 @@ import java.util.UUID;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import hu.elte.bfw1p6.poker.client.observer.controller.PokerRemoteObserverGameController;
 import hu.elte.bfw1p6.poker.client.observer.controller.TableViewObserver;
 import hu.elte.bfw1p6.poker.client.observer.nemtudom.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.observer.nemtudom.WrappedObserver;
@@ -65,11 +64,6 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	public synchronized void deleteUser(int id) {
 	}
 
-	/*@Override
-	public String sayHello() {
-		return "hello";
-	}*/
-
 	@Override
 	public synchronized void deleteTable(int id) throws RemoteException {
 	}
@@ -117,20 +111,6 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	@Override
 	public void unRegisterObserver(UUID uuid, TableViewObserver pcc) throws RemoteException {
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void disConnectFromTable(PokerTable pokerTable, UUID uuid, PokerRemoteObserverGameController pmgc) throws RemoteException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void connectToTable(PokerTable pokerTable, PokerRemoteObserverGameController progc, UUID uuid)
-			throws RemoteException {
-		progc.sayHello();
-		// TODO FONTOS
 
 	}
 
