@@ -22,5 +22,6 @@ CREATE TABLE pokerdb.poker_tables (
     max_players INTEGER NOT NULL,
     default_pot DECIMAL(19 , 2 ) NOT NULL,
     max_bet DECIMAL(19 , 2 ) NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    CONSTRAINT UQ_poker_table_name UNIQUE (name)
 );
