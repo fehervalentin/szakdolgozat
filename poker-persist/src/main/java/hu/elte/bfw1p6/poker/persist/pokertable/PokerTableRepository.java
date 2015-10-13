@@ -62,7 +62,6 @@ public class PokerTableRepository {
 		return sb.toString();
 	}
 
-
 	public int save(PokerTable t) throws SQLException {
 		int iRet = -1;
 		Connection con = DBManager.getInstance().getConnection();

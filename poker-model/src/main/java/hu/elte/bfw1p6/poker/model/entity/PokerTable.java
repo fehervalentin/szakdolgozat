@@ -103,7 +103,7 @@ public class PokerTable implements EntityWithId, Serializable {
 		case 0:
 			return name;
 		case 1:
-			return pokerType.getName();
+			return pokerType.ordinal() + 1;
 		case 2:
 			return maxTime;
 		case 3:
@@ -125,7 +125,7 @@ public class PokerTable implements EntityWithId, Serializable {
 			break;
 		}
 		case 1: {
-			setPokerType(PokerType.valueOf((String) value));
+			setPokerType(PokerType.values()[((Integer) value) - 1]);
 			break;
 		}
 		case 2: {
