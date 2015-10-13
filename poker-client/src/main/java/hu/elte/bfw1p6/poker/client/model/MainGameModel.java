@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
-import hu.elte.bfw1p6.poker.persist.pokertable.PokerTableRepository;
+//import hu.elte.bfw1p6.poker.persist.pokertable.PokerTableRepository;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 
 public class MainGameModel {
@@ -18,7 +18,7 @@ public class MainGameModel {
 	public MainGameModel(UUID uuid, PokerRemote pokerRemote) {
 		this.pokerRemote = RMIRepository.getInstance().getPokerRemote();
 		this.sessionId = RMIRepository.getInstance().getSessionId();
-		pokerTables = PokerTableRepository.getInstance().findAll();
+//		pokerTables = PokerTableRepository.getInstance().findAll();
 	}
 	
 	public void registerObserver() {

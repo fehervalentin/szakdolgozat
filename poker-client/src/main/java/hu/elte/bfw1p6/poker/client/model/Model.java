@@ -11,6 +11,7 @@ import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidSession;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
+import hu.elte.bfw1p6.poker.exception.database.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 
@@ -41,7 +42,7 @@ public class Model {
 		RMIRepository.getInstance().setSessionId(sessionId);
 	}
 
-	public void registration(String username, String password) throws RemoteException, SQLException {
+	public void registration(String username, String password) throws RemoteException, PokerDataBaseException {
 		pokerRemote.registration(username, password);
 	}
 

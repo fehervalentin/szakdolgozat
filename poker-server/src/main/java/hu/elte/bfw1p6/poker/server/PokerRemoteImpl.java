@@ -19,9 +19,11 @@ import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableListerObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
+import hu.elte.bfw1p6.poker.exception.database.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.Player;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
+import hu.elte.bfw1p6.poker.persist.dao.SQLExceptionInterceptor;
 import hu.elte.bfw1p6.poker.persist.pokertable.PokerTableRepository;
 import hu.elte.bfw1p6.poker.persist.user.UserBuilder;
 import hu.elte.bfw1p6.poker.persist.user.UserRepository;
@@ -148,9 +150,13 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public void registration(String username, String password) throws RemoteException, SQLException {
+	public void registration(String username, String password) throws RemoteException, PokerDataBaseException {
 		User u = UserBuilder.geInstance().buildUser(username, password);
+		try {
 		UserRepository.save(u);
+		} catch(SQLException ex) {
+			throw SQLExceptionInterceptor.getInstance().interceptException(ex);
+		}
 	}
 
 	@Override

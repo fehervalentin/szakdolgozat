@@ -9,6 +9,7 @@ import java.util.UUID;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
+import hu.elte.bfw1p6.poker.exception.database.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.Player;
 
@@ -48,7 +49,7 @@ public interface PokerRemote extends Remote{
 	
 	boolean isAdmin(UUID uuid) throws RemoteException;
 	
-	void registration(String username, String password) throws RemoteException, SQLException;
+	void registration(String username, String password) throws RemoteException, PokerDataBaseException;
 	
 	void addObserver(RemoteObserver observer) throws RemoteException;
 	
