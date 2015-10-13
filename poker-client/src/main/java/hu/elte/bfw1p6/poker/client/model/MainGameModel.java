@@ -1,6 +1,5 @@
 package hu.elte.bfw1p6.poker.client.model;
 
-import java.rmi.RemoteException;
 import java.util.List;
 import java.util.UUID;
 

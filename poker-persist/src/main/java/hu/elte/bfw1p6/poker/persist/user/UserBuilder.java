@@ -1,7 +1,6 @@
 package hu.elte.bfw1p6.poker.persist.user;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import org.mindrot.jbcrypt.BCrypt;
 

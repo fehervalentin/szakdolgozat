@@ -4,9 +4,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.UUID;
 
-import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
-import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidSession;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;

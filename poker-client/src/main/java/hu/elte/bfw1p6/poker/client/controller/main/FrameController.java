@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-import hu.elte.bfw1p6.poker.client.controller.TableListerController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import javafx.fxml.FXMLLoader;

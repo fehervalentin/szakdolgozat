@@ -2,7 +2,6 @@ package hu.elte.bfw1p6.poker.client.controller;
 
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
