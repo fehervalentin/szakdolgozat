@@ -46,7 +46,7 @@ public class Model {
 		pokerRemote.registration(username, password);
 	}
 
-	public void createTable(PokerTable t) throws RemoteException, PokerInvalidUserException, SQLException {
+	public void createTable(PokerTable t) throws RemoteException, PokerDataBaseException {
 		pokerRemote.createTable(t);
 	}
 

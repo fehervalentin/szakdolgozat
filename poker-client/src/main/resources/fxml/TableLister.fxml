@@ -51,8 +51,9 @@
 	<Button fx:id="createTableButton" text="Új tábla létrehozása"
 		onAction="#handleCreateTable" GridPane.columnIndex="1"
 		GridPane.rowIndex="3" />
-	<Button fx:id="createTableButton" text="Kijelentkezés"
-		onAction="#handleLogout" GridPane.columnIndex="2"
-		GridPane.rowIndex="3" />
+	<Button fx:id="modifyTableButton" text="Tábla módosítása" onAction="#handleModifyTable"
+		GridPane.columnIndex="2" GridPane.rowIndex="3" />
+	<Button fx:id="createTableButton" text="Kijelentkezés" onAction="#handleLogout"
+		GridPane.columnIndex="2" GridPane.rowIndex="4" />
 </GridPane>
 

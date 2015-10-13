@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Observable;
 import java.util.UUID;
 
-import org.mindrot.jbcrypt.BCrypt;
-
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableListerObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
@@ -38,7 +36,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	private PokerProperties pokerProperties;
 
 	private SessionService sessionService;
-	
+
 	private List<TableListerObserver> tlos;
 
 	public PokerRemoteImpl() throws RemoteException {
@@ -76,8 +74,12 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public synchronized void createTable(PokerTable t) throws RemoteException, SQLException {
-		PokerTableRepository.getInstance().save(t);
+	public synchronized void createTable(PokerTable t) throws RemoteException, PokerDataBaseException {
+		try {
+			PokerTableRepository.getInstance().save(t);
+		} catch (SQLException ex) {
+			throw SQLExceptionInterceptor.getInstance().interceptException(ex);
+		}
 		this.notifyObservers();
 	}
 
@@ -153,7 +155,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	public void registration(String username, String password) throws RemoteException, PokerDataBaseException {
 		User u = UserBuilder.geInstance().buildUser(username, password);
 		try {
-		UserRepository.save(u);
+			UserRepository.save(u);
 		} catch(SQLException ex) {
 			throw SQLExceptionInterceptor.getInstance().interceptException(ex);
 		}
@@ -177,7 +179,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 		this.notifyObservers(getTables());
 		return getTables();
 	}
-	
+
 	private TableListerObserver removeTVO(RemoteObserver observer) {
 		for (TableListerObserver tableListerObserver : tlos) {
 			if (tableListerObserver.getRo().equals(observer)) {

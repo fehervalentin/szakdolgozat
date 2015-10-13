@@ -44,6 +44,7 @@ public class TableListerController implements PokerClientController, Initializab
 	@FXML private Button connectButton;
 	@FXML private Button createTableButton;
 	@FXML private Button logoutButton;
+	@FXML private Button modifyTableButton;
 
 	private transient Alert alert;
 
@@ -100,6 +101,12 @@ public class TableListerController implements PokerClientController, Initializab
 	protected void handleCreateTable() {
 		removeObserver();
 		frameController.setCreateTableFXML();
+	}
+	
+	@FXML
+	protected void handleModifyTable() {
+		frameController.setCreateTableFXML();
+		System.out.println("modify table");
 	}
 
 	@FXML

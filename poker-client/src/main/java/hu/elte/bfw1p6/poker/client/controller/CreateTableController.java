@@ -10,6 +10,7 @@ import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
+import hu.elte.bfw1p6.poker.exception.database.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.event.ActionEvent;
@@ -105,7 +106,7 @@ public class CreateTableController implements Initializable, PokerClientControll
 			model.createTable(t);
 			successAlert.showAndWait();
 			frameController.setTableListerFXML();
-		} catch (RemoteException | PokerInvalidUserException | SQLException e) {
+		} catch (RemoteException | PokerDataBaseException e) {
 			errorAlert.setContentText(e.getMessage());
 			errorAlert.showAndWait();
 		}

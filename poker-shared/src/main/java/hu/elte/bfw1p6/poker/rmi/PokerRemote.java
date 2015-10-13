@@ -23,7 +23,7 @@ public interface PokerRemote extends Remote{
 	
 	void deleteTable(int id) throws RemoteException;
 	
-	void createTable(PokerTable t) throws RemoteException, SQLException;
+	void createTable(PokerTable t) throws RemoteException, PokerDataBaseException;
 	
 	void modifyTable(PokerTable t) throws RemoteException;
 	
