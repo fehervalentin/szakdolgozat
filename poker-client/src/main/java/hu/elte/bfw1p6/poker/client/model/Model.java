@@ -6,15 +6,18 @@ import java.util.List;
 import java.util.UUID;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
-import hu.elte.bfw1p6.poker.client.observer.controller.TableViewObserver;
-import hu.elte.bfw1p6.poker.client.observer.nemtudom.RemoteObserver;
+import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
+import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
+import hu.elte.bfw1p6.poker.exception.PokerInvalidSession;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 
 
 public class Model {
+	
+	private final String SESSION_ERR = "Hibás session!";
 
 	private static Model instance = null;
 
@@ -36,7 +39,6 @@ public class Model {
 	public void login(String username, String password) throws RemoteException, PokerInvalidUserException {
 		sessionId = pokerRemote.login(username, password);
 		RMIRepository.getInstance().setSessionId(sessionId);
-		//System.out.println(pokerRemote.sayHello());
 	}
 
 	public void registration(String username, String password) throws RemoteException, SQLException {
@@ -76,6 +78,14 @@ public class Model {
 
 	public void removeTableViewObserver(RemoteObserver observer) throws RemoteException {
 		pokerRemote.removeTableViewObserver(observer);
+	}
+
+	public void logout() throws RemoteException, PokerInvalidSession {
+		if (sessionId == null) {
+			throw new PokerInvalidSession(SESSION_ERR);
+		}
+		pokerRemote.logout(sessionId);
+		sessionId = null;
 	}
 
 	/*public List<Table> getTables() {

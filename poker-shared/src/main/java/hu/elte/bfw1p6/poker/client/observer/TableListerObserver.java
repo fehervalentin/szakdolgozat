@@ -1,4 +1,4 @@
-package hu.elte.bfw1p6.poker.client.observer.nemtudom;
+package hu.elte.bfw1p6.poker.client.observer;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;

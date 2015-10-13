@@ -1,4 +1,4 @@
-package hu.elte.bfw1p6.poker.client.observer.controller;
+package hu.elte.bfw1p6.poker.client.observer;
 
 import java.rmi.Remote;
 import java.util.List;

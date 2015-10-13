@@ -15,9 +15,9 @@ import java.util.UUID;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import hu.elte.bfw1p6.poker.client.observer.controller.TableViewObserver;
-import hu.elte.bfw1p6.poker.client.observer.nemtudom.RemoteObserver;
-import hu.elte.bfw1p6.poker.client.observer.nemtudom.TableListerObserver;
+import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
+import hu.elte.bfw1p6.poker.client.observer.TableListerObserver;
+import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.model.entity.Player;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
@@ -121,11 +121,6 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 
 	@Override
 	public UUID login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException {
-		User u = UserRepository.findUserByUserName(username);
-		//			User u = userDAO.findUserByUserName(username);
-		if (!BCrypt.checkpw(password, u.getPassword())) {
-			throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
-		}
 		return sessionService.authenticate(username, password);
 	}
 
@@ -164,7 +159,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 		tlos.add(wp);
 		this.addObserver(wp);
 		this.setChanged();
-		String asd = "muha csaba!";
+		String asd = "muha!";
 		this.notifyObservers(asd);
 	}
 

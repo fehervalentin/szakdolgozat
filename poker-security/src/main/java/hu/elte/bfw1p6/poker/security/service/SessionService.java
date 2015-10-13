@@ -4,6 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.mindrot.jbcrypt.BCrypt;
+
+import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
+import hu.elte.bfw1p6.poker.model.entity.User;
+import hu.elte.bfw1p6.poker.persist.user.UserRepository;
+
 public class SessionService {
 	
 	private Map<UUID, String> authenticatedUsers;
@@ -16,8 +22,11 @@ public class SessionService {
 		return authenticatedUsers.containsKey(uuid);
 	}
 	
-	public UUID authenticate(String username, String password) {
-		//TODO: a service nyúlkálhat a DAO-hoz: password ellenőrzés!
+	public UUID authenticate(String username, String password) throws PokerInvalidUserException {
+		User u = UserRepository.findUserByUserName(username);
+		if (!BCrypt.checkpw(password, u.getPassword())) {
+			throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
+		}
 		invalidate(username);
 		UUID uuid = UUID.randomUUID();
 		authenticatedUsers.put(uuid, username);

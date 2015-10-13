@@ -11,7 +11,7 @@ import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
-import hu.elte.bfw1p6.poker.client.observer.nemtudom.RemoteObserver;
+import hu.elte.bfw1p6.poker.exception.PokerInvalidSession;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.fxml.FXML;
@@ -24,7 +24,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class TableListerController implements PokerClientController, Initializable, Serializable {
-	
+
 	/**
 	 * 
 	 */
@@ -43,17 +43,17 @@ public class TableListerController implements PokerClientController, Initializab
 	@FXML private TableColumn<PokerTable, BigDecimal> maxBet;
 	@FXML private Button connectButton;
 	@FXML private Button createTableButton;
-	
+	@FXML private Button logoutButton;
+
 	private transient Alert alert;
-	
-//	private TableViewObserverImpl observer;
-	
+
+	//	private TableViewObserverImpl observer;
+
 	private Model model;
-	
+
 	public TableListerController() {
 		model = Model.getInstance();
 		alert = new Alert(AlertType.ERROR);
-		alert.setContentText(NO_TABLE_SELECTED_MESSAGE);
 	}
 
 	@Override
@@ -62,8 +62,8 @@ public class TableListerController implements PokerClientController, Initializab
 		try {
 			List<PokerTable> tables = model.registerTableViewObserver(frameController);
 			tableView.getItems().setAll(tables);
-//			model.registerObserver(frameController);
-//			model.addObserver(this);
+			//			model.registerObserver(frameController);
+			//			model.addObserver(this);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -72,21 +72,22 @@ public class TableListerController implements PokerClientController, Initializab
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 		tableName.setCellValueFactory(new PropertyValueFactory<PokerTable, String>("name"));
 		pokerType.setCellValueFactory(new PropertyValueFactory<PokerTable, PokerType>("pokerType"));
 		maxTime.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>("maxTime"));
 		maxPlayers.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>("maxPlayers"));
 		defaultPot.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>("defaultPot"));
 		maxBet.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>("maxBet"));
-		
-//		observer = new TableViewObserverImpl(this);
+
+		//		observer = new TableViewObserverImpl(this);
 	}
 
 	@FXML
 	protected void handleConnectToTable() {
 		PokerTable table = tableView.getSelectionModel().getSelectedItem();
 		if (table == null) {
+			alert.setContentText(NO_TABLE_SELECTED_MESSAGE);
 			alert.showAndWait();
 		} else {
 			ConnectTableHelper.getInstance().setPokerTable(table);
@@ -94,13 +95,27 @@ public class TableListerController implements PokerClientController, Initializab
 			frameController.setMainGameFXML();
 		}
 	}
-	
+
 	@FXML
 	protected void handleCreateTable() {
 		removeObserver();
 		frameController.setCreateTableFXML();
 	}
-	
+
+	@FXML
+	protected void handleLogout() {
+		try {
+			model.logout();
+			frameController.setLoginFXML();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (PokerInvalidSession e) {
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+	}
+
 	private void removeObserver() {
 		try {
 			model.removeTableViewObserver(frameController);
@@ -119,8 +134,8 @@ public class TableListerController implements PokerClientController, Initializab
 		System.out.println(tables.size());
 		tableView.getColumns().get(0).setVisible(false);
 		tableView.getColumns().get(0).setVisible(true);
-//		tableView.setVisible(false);
-//		tableView.setVisible(true);
+		//		tableView.setVisible(false);
+		//		tableView.setVisible(true);
 	}
 
 	@SuppressWarnings("unchecked")
