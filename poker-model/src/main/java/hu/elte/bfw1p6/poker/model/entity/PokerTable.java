@@ -20,7 +20,7 @@ public class PokerTable implements EntityWithId, Serializable {
 	private Integer maxPlayers;
 	private BigDecimal defaultPot;
 	private BigDecimal maxBet;
-	
+
 	private List<UUID> clients;
 
 	public PokerTable(String name, Integer maxTime, Integer maxPlayers, BigDecimal maxBet, BigDecimal defaultPot, PokerType pokerType) {
@@ -35,9 +35,9 @@ public class PokerTable implements EntityWithId, Serializable {
 	public PokerTable() {
 		clients = new ArrayList<>();
 	}
-	
+
 	public void connect(UUID uuid) {
-		
+
 	}
 
 	@Override
@@ -145,6 +145,5 @@ public class PokerTable implements EntityWithId, Serializable {
 			break;
 		}
 		}
-
 	}
 }

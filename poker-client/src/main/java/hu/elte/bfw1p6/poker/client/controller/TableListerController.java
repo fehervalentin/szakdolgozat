@@ -86,7 +86,7 @@ public class TableListerController implements PokerClientController, Initializab
 
 	@FXML
 	protected void handleConnectToTable() {
-		PokerTable table = tableView.getSelectionModel().getSelectedItem();
+		PokerTable table = getSelectedPokerTable();
 		if (table == null) {
 			alert.setContentText(NO_TABLE_SELECTED_MESSAGE);
 			alert.showAndWait();
@@ -97,16 +97,26 @@ public class TableListerController implements PokerClientController, Initializab
 		}
 	}
 
+	private PokerTable getSelectedPokerTable() {
+		return tableView.getSelectionModel().getSelectedItem();
+	}
+
 	@FXML
 	protected void handleCreateTable() {
 		removeObserver();
 		frameController.setCreateTableFXML();
 	}
-	
+
 	@FXML
 	protected void handleModifyTable() {
-		frameController.setCreateTableFXML();
-		System.out.println("modify table");
+		PokerTable selectedPokerTable = getSelectedPokerTable();
+		if (selectedPokerTable != null) {
+			model.setParameterPokerTable(selectedPokerTable);
+			frameController.setCreateTableFXML();
+		} else {
+			alert.setContentText(NO_TABLE_SELECTED_MESSAGE);
+			alert.showAndWait();
+		}
 	}
 
 	@FXML

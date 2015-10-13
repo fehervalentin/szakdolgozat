@@ -84,7 +84,13 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public synchronized void modifyTable(PokerTable t) throws RemoteException {
+	public synchronized void modifyTable(PokerTable t) throws RemoteException, PokerDataBaseException {
+		try {
+			PokerTableRepository.getInstance().modify(t);
+		} catch (SQLException ex) {
+			throw SQLExceptionInterceptor.getInstance().interceptException(ex);
+		}
+		this.notifyObservers();
 	}
 
 	@Override

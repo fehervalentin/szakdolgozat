@@ -19,6 +19,7 @@ public class PokerTableRepository {
 
 	private String FIND_ALL = "SELECT * FROM " + TABLE_NAME + ";";
 	private String INSERT;
+	private String UPDATE;
 	private PokerTableRepository() {
 		loadColumns();
 	}
@@ -49,6 +50,16 @@ public class PokerTableRepository {
 
 	private void createQueries() {
 		INSERT = "INSERT INTO " + TABLE_NAME + columnsToString() + "VALUES "+ qrySuffix();
+		UPDATE = createQueryForUpdate();
+	}
+	
+	private String createQueryForUpdate() {
+		StringBuilder sb = new StringBuilder("UPDATE " + TABLE_NAME + " SET " + columns[0] + "=?");
+		for (int i = 1; i < columns.length; i++) {
+			sb.append("," + columns[i] + "=?");
+		}
+		sb.append(" WHERE id=?;");
+		return sb.toString();
 	}
 
 
@@ -81,6 +92,7 @@ public class PokerTableRepository {
 				for (int i = 0; i < columns.length; i++) {
 					t.set(i, rs.getObject(columns[i]));
 				}
+				t.setId(rs.getInt("id"));
 				tables.add(t);
 			}
 
@@ -90,14 +102,6 @@ public class PokerTableRepository {
 		}
 		return tables;
 	}
-
-	//	private PTable createTableFromRS(ResultSet rs) {
-	//		PTable t = new PTable();
-	//		for (int i = 0; i < columns.length; i++) {
-	//			t.set(i, rs.getObject(columns[i]));
-	//		}
-	//		return t;
-	//	}
 
 	private String columnsToString() {
 		StringBuilder sb = new StringBuilder();
@@ -117,6 +121,23 @@ public class PokerTableRepository {
 		}
 		sb.append(");");
 		return sb.toString();
+	}
+
+	public int modify(PokerTable t) throws SQLException {
+		int iRet = -1;
+		Connection con = DBManager.getInstance().getConnection();
+		PreparedStatement pstmt = con.prepareStatement(UPDATE);
+		for (int i = 0; i < columns.length; i++) {
+			Object valami = t.get(i);
+			pstmt.setObject(i+1, valami);
+		}
+		pstmt.setObject(columns.length + 1, t.getId());
+		iRet = pstmt.executeUpdate();
+
+		pstmt.close();
+
+		return iRet;
+		
 	}
 
 	/*public static User findUserByUserName(String username) {

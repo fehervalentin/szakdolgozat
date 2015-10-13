@@ -11,8 +11,6 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String ?>
 
-
-
 <AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="hu.elte.bfw1p6.poker.client.controller.CreateTableController">
 	<children>
@@ -38,9 +36,9 @@
 				GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="2" />
 			<TextField fx:id="maxPlayerTextField" promptText="Játékosok maximum száma"
 				GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.columnSpan="2" />
-			<TextField fx:id="maxBetTextField" promptText="Maximum tét"
-				GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.columnSpan="2" />
 			<TextField fx:id="defaultPotField" promptText="Alaptét"
+				GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.columnSpan="2" />
+			<TextField fx:id="maxBetTextField" promptText="Maximum tét"
 				GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.columnSpan="2" />
 
 			<Button fx:id="createTableButton" text="OK" onAction="#createTableHandler"

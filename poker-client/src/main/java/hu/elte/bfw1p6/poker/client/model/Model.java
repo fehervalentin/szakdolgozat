@@ -1,7 +1,6 @@
 package hu.elte.bfw1p6.poker.client.model;
 
 import java.rmi.RemoteException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +20,8 @@ public class Model {
 	private final String SESSION_ERR = "Hibás session!";
 
 	private static Model instance = null;
+	
+	private PokerTable paramPokerTable;
 
 	private PokerRemote pokerRemote;
 
@@ -87,6 +88,18 @@ public class Model {
 		}
 		pokerRemote.logout(sessionId);
 		sessionId = null;
+	}
+	
+	public void setParameterPokerTable(PokerTable paramPokerTable) {
+		this.paramPokerTable = paramPokerTable;
+	}
+	
+	public PokerTable getParamPokerTable() {
+		return paramPokerTable;
+	}
+
+	public void modifyTable(PokerTable t) throws RemoteException, PokerDataBaseException {
+		pokerRemote.modifyTable(t);
 	}
 
 	/*public List<Table> getTables() {
