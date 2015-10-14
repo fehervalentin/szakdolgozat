@@ -14,7 +14,6 @@ import hu.elte.bfw1p6.poker.exception.database.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -66,25 +65,31 @@ public class CreateTableController implements Initializable, PokerClientControll
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		model = Model.getInstance();
+		errorAlert = new Alert(AlertType.ERROR);
+		successAlert = new Alert(AlertType.INFORMATION);
 
+		model = Model.getInstance();
+		fillPokerTypes();
+		dummyData();
+		setParamPokerTable();
+	}
+
+	private void fillPokerTypes() {
 		List<String> pokerTypes = new ArrayList<>();
 		for (int i = 0; i < PokerType.values().length; i++) {
 			pokerTypes.add(PokerType.values()[i].toString());
 		}
 		gameTypeComboBox.setItems(FXCollections.observableArrayList(pokerTypes));
+	}
 
-
-
-		errorAlert = new Alert(AlertType.ERROR);
-		successAlert = new Alert(AlertType.INFORMATION);
+	@Deprecated
+	private void dummyData() {
 		tableNameTextField.setText("próba szerver 1");
 		gameTypeComboBox.getSelectionModel().select(0);
 		maxTimeField.setText("39");
 		maxPlayerTextField.setText("5");
 		defaultPotField.setText("12");
 		maxBetTextField.setText("100");
-		setParamPokerTable();
 	}
 
 	private void setParamPokerTable() {
@@ -101,26 +106,53 @@ public class CreateTableController implements Initializable, PokerClientControll
 
 	@FXML
 	protected void createTableHandler(ActionEvent event) {
+		maxTimeField.getStyleClass().remove("hiba");
+		maxPlayerTextField.getStyleClass().remove("hiba");
+		maxBetTextField.getStyleClass().remove("hiba");
+		defaultPotField.getStyleClass().remove("hiba");
 
-		//TODO: erősen le kell vizsgálni minden paraméter helyességét!
 		String tableName = tableNameTextField.getText();
-		Integer maxTime = Integer.valueOf(maxTimeField.getText());
-		Integer maxPlayers = Integer.valueOf(maxPlayerTextField.getText());
-		BigDecimal maxBet = BigDecimal.valueOf(Double.valueOf(maxBetTextField.getText()));
-		BigDecimal defaultPot = BigDecimal.valueOf(Double.valueOf(defaultPotField.getText()));
-		//		String typeString = gameTypeComboBox.getSelectionModel().getSelectedItem();
-		PokerType pokerType = PokerType.valueOf(gameTypeComboBox.getSelectionModel().getSelectedItem());
 
-		/*if (typeString.equals("OMAHA")) {
-			pokerType = PokerType.OMAHA;
-		} else if (typeString.equals("HOLDEM")) {
-			pokerType = PokerType.HOLDEM;
-		} else {
-			alert.setContentText("Nem megfelelő játék típus lett kiválasztva!");
-			alert.showAndWait();
+		PokerType pokerType = null;
+		Integer maxTime = null;
+		Integer maxPlayers = null;
+		BigDecimal maxBet = null;
+		BigDecimal defaultPot = null;
+		try {
+			pokerType = PokerType.valueOf(gameTypeComboBox.getSelectionModel().getSelectedItem());
+		} catch (IllegalArgumentException ex) {
+			errorAlert.setContentText("Hibás játék mód!");
+			errorAlert.showAndWait();
+		}
+		try {
+			maxTime = new Integer(maxTimeField.getText());
+		} catch (NumberFormatException ex) {
+			errorAlert.setContentText("Hibás szám formátum a gondolkodási idő mezőben!");
+			maxTimeField.getStyleClass().add("hiba");
+			errorAlert.showAndWait();
+		}
+		try {
+			maxPlayers = Integer.valueOf(maxPlayerTextField.getText());
+		} catch (NumberFormatException ex) {
+			errorAlert.setContentText("Hibás szám formátum a maximum játékos mezőben!");
+			maxPlayerTextField.getStyleClass().add("hiba");
+			errorAlert.showAndWait();
+		}
+		try {
+			defaultPot = BigDecimal.valueOf(Double.valueOf(defaultPotField.getText()));
+		} catch (NumberFormatException ex) {
+			errorAlert.setContentText("Hibás szám formátum a alaptét mezőben!");
+			defaultPotField.getStyleClass().add("hiba");
+			errorAlert.showAndWait();
+		}
+		try {
+			maxBet = BigDecimal.valueOf(Double.valueOf(maxBetTextField.getText()));
+		} catch (NumberFormatException ex) {
+			errorAlert.setContentText("Hibás szám formátum a maximum tét mezőben!");
+			maxBetTextField.getStyleClass().add("hiba");
+			errorAlert.showAndWait();
 			return;
-//			throw new PokerInvalidGameTypeException("Nem megfelelő játék típus!");
-		}*/
+		}
 
 		// nincs/nem volt átadandó paraméter, tehát új táblát kell létrehoznom
 		if (model.getParamPokerTable() == null) {
@@ -170,7 +202,6 @@ public class CreateTableController implements Initializable, PokerClientControll
 	@Override
 	public void valamivan(Object asd) {
 		System.out.println("CreateTableController");
-
 	}
 
 }

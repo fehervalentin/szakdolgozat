@@ -22,3 +22,7 @@
 	-fx-text-fill: #FFFFA3;
 	-fx-font-size: 52px;
 }
+
+.hiba {
+	-fx-background-color: red;
+}

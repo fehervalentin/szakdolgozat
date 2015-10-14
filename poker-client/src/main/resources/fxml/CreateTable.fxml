@@ -27,7 +27,7 @@
 				promptText="Stílus">
 			</ComboBox>
 
-			<TextField fx:id="maxTimeField" promptText="Maximum gondolkodás idő"
+			<TextField fx:id="maxTimeField" promptText="Maximum gondolkodási idő"
 				GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="2" />
 			<TextField fx:id="maxPlayerTextField" promptText="Játékosok maximum száma"
 				GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.columnSpan="2" />
