@@ -71,19 +71,23 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public synchronized void deleteTable(PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
+	public synchronized void deleteTable(UUID uuid, PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
 		PokerTableRepository.getInstance().deleteTable(pokerTable);
 		this.notifyObservers();
 	}
 
 	@Override
-	public synchronized void createTable(PokerTable t) throws RemoteException, PokerDataBaseException {
-		PokerTableRepository.getInstance().save(t);
-		this.notifyObservers();
+	public synchronized void createTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException {
+		if (sessionService.isAuthenticated(uuid)) {
+			PokerTableRepository.getInstance().save(t);
+			this.notifyObservers();
+		} else {
+			throw new PokerDataBaseException("Nem vagy autentikálva!");
+		}
 	}
 
 	@Override
-	public synchronized void modifyTable(PokerTable t) throws RemoteException, PokerDataBaseException {
+	public synchronized void modifyTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException {
 		PokerTableRepository.getInstance().modify(t);
 		this.notifyObservers();
 	}
@@ -97,7 +101,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public List<PokerTable> getTables() throws RemoteException, PokerDataBaseException {
+	public List<PokerTable> getTables(UUID uuid) throws RemoteException, PokerDataBaseException {
 		return PokerTableRepository.getInstance().findAll();
 	}
 
@@ -108,7 +112,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 		//		System.out.println(observers.hashCode());
 		//		System.out.println(this);
 		//		System.out.println("Observerek: " + observers.size());
-		List<PokerTable> tables = getTables();
+		List<PokerTable> tables = getTables(uuid);
 		TableListerObserver tlo = new TableListerObserver(observer);
 		this.addObserver(tlo);
 		String asd = "muha csaba222222!";
@@ -163,7 +167,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public void addObserver(RemoteObserver o) throws RemoteException {
+	public void addObserver(UUID uuid, RemoteObserver o) throws RemoteException {
 		TableListerObserver wp = new TableListerObserver(o);
 		tlos.add(wp);
 		this.addObserver(wp);
@@ -173,12 +177,12 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException {
+	public List<PokerTable> registerTableViewObserver(UUID uuid, RemoteObserver observer) throws RemoteException, PokerDataBaseException {
 		TableListerObserver tvo = new TableListerObserver(observer);
 		this.addObserver(tvo);
 		this.setChanged();
-		this.notifyObservers(getTables());
-		return getTables();
+		this.notifyObservers(getTables(uuid));
+		return getTables(uuid);
 	}
 
 	private TableListerObserver removeTVO(RemoteObserver observer) {

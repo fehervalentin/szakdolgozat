@@ -46,13 +46,13 @@ public class Model {
 	}
 
 	public void createTable(PokerTable t) throws RemoteException, PokerDataBaseException {
-		pokerRemote.createTable(t);
+		pokerRemote.createTable(sessionId, t);
 	}
 
 	public List<PokerTable> getTables() throws PokerDataBaseException {
 		List<PokerTable> tables = null;
 		try {
-			tables = pokerRemote.getTables();
+			tables = pokerRemote.getTables(sessionId);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,11 +69,11 @@ public class Model {
 	}
 
 	public void addObserver(RemoteObserver observer) throws RemoteException {
-		pokerRemote.addObserver(observer);
+		pokerRemote.addObserver(sessionId, observer);
 	}
 
 	public List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException {
-		return pokerRemote.registerTableViewObserver(observer);
+		return pokerRemote.registerTableViewObserver(sessionId, observer);
 	}
 
 	public void removeTableViewObserver(RemoteObserver observer) throws RemoteException {
@@ -97,11 +97,11 @@ public class Model {
 	}
 
 	public void modifyTable(PokerTable t) throws RemoteException, PokerDataBaseException {
-		pokerRemote.modifyTable(t);
+		pokerRemote.modifyTable(sessionId, t);
 	}
 
 	public void deleteTable(PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
-		pokerRemote.deleteTable(pokerTable);
+		pokerRemote.deleteTable(sessionId, pokerTable);
 	}
 
 	/*public List<Table> getTables() {
