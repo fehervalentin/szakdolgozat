@@ -21,7 +21,7 @@ public interface PokerRemote extends Remote{
 	
 	void modifyUser(Player player) throws RemoteException;
 	
-	void deleteTable(int id) throws RemoteException;
+	void deleteTable(PokerTable pokerTable) throws RemoteException, PokerDataBaseException;
 	
 	void createTable(PokerTable t) throws RemoteException, PokerDataBaseException;
 	

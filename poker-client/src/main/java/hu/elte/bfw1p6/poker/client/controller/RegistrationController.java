@@ -89,6 +89,7 @@ public class RegistrationController implements Initializable, PokerClientControl
 		} catch (RemoteException | PokerDataBaseException e) {
 //			usernameField.getStyleClass().add("hiba");
 			//TODO: és ha más hiba jön...? Rendben külön veszem PDBE-t, és ha más hiba jön...? Nem feltétlen ez a field okozta...
+			// itt is nézzem meg, hogy mi van a hiba üzenetben...?
 			alertError.setContentText(e.getMessage());
 			alertError.showAndWait();
 		}

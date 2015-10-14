@@ -100,6 +100,10 @@ public class Model {
 		pokerRemote.modifyTable(t);
 	}
 
+	public void deleteTable(PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
+		pokerRemote.deleteTable(pokerTable);
+	}
+
 	/*public List<Table> getTables() {
 		return pokerRemote.getTables();
 	}*/

@@ -20,6 +20,7 @@ public class PokerTableRepository {
 	private String FIND_ALL = "SELECT * FROM " + TABLE_NAME + ";";
 	private String INSERT;
 	private String UPDATE;
+	private String DELETE = "DELETE FROM " + TABLE_NAME + " WHERE id=?";
 	private PokerTableRepository() {
 		loadColumns();
 	}
@@ -136,6 +137,19 @@ public class PokerTableRepository {
 		pstmt.close();
 
 		return iRet;
+		
+	}
+
+	public void deleteTable(PokerTable pokerTable) throws SQLException {
+		int iRet = -1;
+		Connection con = DBManager.getInstance().getConnection();
+		PreparedStatement pstmt = con.prepareStatement(DELETE);
+		pstmt.setInt(1, pokerTable.getId());
+		iRet = pstmt.executeUpdate();
+
+		pstmt.close();
+
+		//return iRet;
 		
 	}
 

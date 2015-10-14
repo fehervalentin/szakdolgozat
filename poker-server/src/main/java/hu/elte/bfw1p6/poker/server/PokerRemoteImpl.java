@@ -68,10 +68,17 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 
 	@Override
 	public synchronized void deleteUser(int id) {
+		
 	}
 
 	@Override
-	public synchronized void deleteTable(int id) throws RemoteException {
+	public synchronized void deleteTable(PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
+		try {
+			PokerTableRepository.getInstance().deleteTable(pokerTable);
+		} catch (SQLException ex) {
+			throw SQLExceptionInterceptor.getInstance().interceptException(ex);
+		}
+		this.notifyObservers();
 	}
 
 	@Override

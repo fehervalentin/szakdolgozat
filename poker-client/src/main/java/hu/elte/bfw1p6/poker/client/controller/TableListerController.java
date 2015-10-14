@@ -12,6 +12,7 @@ import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidSession;
+import hu.elte.bfw1p6.poker.exception.database.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.fxml.FXML;
@@ -45,6 +46,7 @@ public class TableListerController implements PokerClientController, Initializab
 	@FXML private Button createTableButton;
 	@FXML private Button logoutButton;
 	@FXML private Button modifyTableButton;
+	@FXML private Button deleteTableButton;
 
 	private transient Alert alert;
 
@@ -113,6 +115,22 @@ public class TableListerController implements PokerClientController, Initializab
 		if (selectedPokerTable != null) {
 			model.setParameterPokerTable(selectedPokerTable);
 			frameController.setCreateTableFXML();
+		} else {
+			alert.setContentText(NO_TABLE_SELECTED_MESSAGE);
+			alert.showAndWait();
+		}
+	}
+
+	@FXML
+	protected void handleDeleteTable() {
+		PokerTable selectedPokerTable = getSelectedPokerTable();
+		if (selectedPokerTable != null) {
+			try {
+				model.deleteTable(selectedPokerTable);
+			} catch (RemoteException | PokerDataBaseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
 			alert.setContentText(NO_TABLE_SELECTED_MESSAGE);
 			alert.showAndWait();
