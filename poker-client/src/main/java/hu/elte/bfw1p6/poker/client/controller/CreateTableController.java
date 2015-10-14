@@ -3,6 +3,8 @@ package hu.elte.bfw1p6.poker.client.controller;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
@@ -11,6 +13,8 @@ import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.database.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -42,7 +46,7 @@ public class CreateTableController implements Initializable, PokerClientControll
 
 	@FXML
 	private TextField defaultPotField;
-	
+
 	@FXML
 	private TextField maxBetTextField;
 
@@ -63,12 +67,15 @@ public class CreateTableController implements Initializable, PokerClientControll
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		model = Model.getInstance();
-		
-		PokerType[] pokerTypes = PokerType.values();
-		for (int i = 0; i < pokerTypes.length; i++) {
-			gameTypeComboBox.getItems().set(i, pokerTypes[i].toString());
+
+		List<String> pokerTypes = new ArrayList<>();
+		for (int i = 0; i < PokerType.values().length; i++) {
+			pokerTypes.add(PokerType.values()[i].toString());
 		}
-		
+		gameTypeComboBox.setItems(FXCollections.observableArrayList(pokerTypes));
+
+
+
 		errorAlert = new Alert(AlertType.ERROR);
 		successAlert = new Alert(AlertType.INFORMATION);
 		tableNameTextField.setText("próba szerver 1");

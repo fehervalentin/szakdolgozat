@@ -25,12 +25,6 @@
 			<ComboBox fx:id="gameTypeComboBox" GridPane.columnIndex="1"
 				GridPane.rowIndex="2" GridPane.columnSpan="2" prefWidth="225.0"
 				promptText="Stílus">
-				<items>
-					<FXCollections fx:factory="observableArrayList">
-						<String fx:value="PokerType.HOLDEM.name" />
-						<String fx:value="PokerType.CLASSIC" />
-					</FXCollections>
-				</items>
 			</ComboBox>
 
 			<TextField fx:id="maxTimeField" promptText="Maximum gondolkodás idő"
