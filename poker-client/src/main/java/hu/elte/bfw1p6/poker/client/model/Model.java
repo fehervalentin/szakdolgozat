@@ -49,7 +49,7 @@ public class Model {
 		pokerRemote.createTable(t);
 	}
 
-	public List<PokerTable> getTables() {
+	public List<PokerTable> getTables() throws PokerDataBaseException {
 		List<PokerTable> tables = null;
 		try {
 			tables = pokerRemote.getTables();
@@ -60,7 +60,7 @@ public class Model {
 		return tables;
 	}
 
-	public void registerObserver(RemoteObserver observer) throws RemoteException {
+	public void registerObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException {
 		pokerRemote.registerObserver(sessionId, observer);
 	}
 
@@ -72,7 +72,7 @@ public class Model {
 		pokerRemote.addObserver(observer);
 	}
 
-	public List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException {
+	public List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException {
 		return pokerRemote.registerTableViewObserver(observer);
 	}
 

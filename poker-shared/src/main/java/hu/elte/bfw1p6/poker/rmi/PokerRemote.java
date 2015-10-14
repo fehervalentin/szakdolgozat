@@ -29,11 +29,9 @@ public interface PokerRemote extends Remote{
 	
 	void modifyPassword(String username, String oldPassword, String newPassword) throws RemoteException;
 	
-	List<PokerType> getPokerTypes() throws RemoteException, PokerDataBaseException;
+	List<PokerTable> getTables()throws RemoteException, PokerDataBaseException;
 	
-	List<PokerTable> getTables()throws RemoteException;
-	
-	void registerObserver(UUID uuid, RemoteObserver proc) throws RemoteException;
+	void registerObserver(UUID uuid, RemoteObserver proc) throws RemoteException, PokerDataBaseException;
 	
 	void unRegisterObserver(UUID uuid, TableViewObserver proc) throws RemoteException;
 	
@@ -56,7 +54,7 @@ public interface PokerRemote extends Remote{
 	
 	void addObserver(RemoteObserver observer) throws RemoteException;
 	
-	List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException;
+	List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException;
 
 	void removeTableViewObserver(RemoteObserver observer) throws RemoteException;
 }

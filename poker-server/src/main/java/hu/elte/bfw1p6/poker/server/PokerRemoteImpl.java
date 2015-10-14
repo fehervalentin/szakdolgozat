@@ -20,7 +20,6 @@ import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.database.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.Player;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
-import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.SQLExceptionInterceptor;
 import hu.elte.bfw1p6.poker.persist.repository.PokerTableRepository;
@@ -68,36 +67,24 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 
 	@Override
 	public synchronized void deleteUser(int id) {
-		
+
 	}
 
 	@Override
 	public synchronized void deleteTable(PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
-		try {
-			PokerTableRepository.getInstance().deleteTable(pokerTable);
-		} catch (SQLException ex) {
-			throw SQLExceptionInterceptor.getInstance().interceptException(ex);
-		}
+		PokerTableRepository.getInstance().deleteTable(pokerTable);
 		this.notifyObservers();
 	}
 
 	@Override
 	public synchronized void createTable(PokerTable t) throws RemoteException, PokerDataBaseException {
-		try {
-			PokerTableRepository.getInstance().save(t);
-		} catch (SQLException ex) {
-			throw SQLExceptionInterceptor.getInstance().interceptException(ex);
-		}
+		PokerTableRepository.getInstance().save(t);
 		this.notifyObservers();
 	}
 
 	@Override
 	public synchronized void modifyTable(PokerTable t) throws RemoteException, PokerDataBaseException {
-		try {
-			PokerTableRepository.getInstance().modify(t);
-		} catch (SQLException ex) {
-			throw SQLExceptionInterceptor.getInstance().interceptException(ex);
-		}
+		PokerTableRepository.getInstance().modify(t);
 		this.notifyObservers();
 	}
 
@@ -110,12 +97,12 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public List<PokerTable> getTables() throws RemoteException {
+	public List<PokerTable> getTables() throws RemoteException, PokerDataBaseException {
 		return PokerTableRepository.getInstance().findAll();
 	}
 
 	@Override
-	public synchronized void registerObserver(UUID uuid, RemoteObserver observer) throws RemoteException {
+	public synchronized void registerObserver(UUID uuid, RemoteObserver observer) throws RemoteException, PokerDataBaseException {
 		//		System.out.println(uuid.toString());
 		//		observers.put(uuid, proc);
 		//		System.out.println(observers.hashCode());
@@ -186,7 +173,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException {
+	public List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException {
 		TableListerObserver tvo = new TableListerObserver(observer);
 		this.addObserver(tvo);
 		this.setChanged();
@@ -210,11 +197,4 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 		tlos.remove(tlo);
 		this.deleteObserver(tlo); //TODO NEM BIZTOS...
 	}
-
-	@Override
-	public List<PokerType> getPokerTypes() throws RemoteException, PokerDataBaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
