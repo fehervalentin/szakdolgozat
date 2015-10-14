@@ -23,6 +23,7 @@ import javafx.scene.layout.AnchorPane;
 public class RegistrationController implements Initializable, PokerClientController {
 	
 	private final String REG_OK_MSG = "Sikeresen regisztráltál!";
+	private final String REG_DIFF_PW = "A két jelszó nem egyezik!";
 	
 	@FXML
 	private AnchorPane rootPane;
@@ -43,15 +44,6 @@ public class RegistrationController implements Initializable, PokerClientControl
 	private PasswordField rePasswordField;
 	
 	@FXML
-	private Label usernameLabel;
-	
-	@FXML
-	private Label passwordLabel;
-	
-	@FXML
-	private Label rePasswordLabel;
-	
-	@FXML
 	private Button regButton;
 	
 	@FXML
@@ -68,7 +60,6 @@ public class RegistrationController implements Initializable, PokerClientControl
 	public RegistrationController() {
 		alert = new Alert(AlertType.INFORMATION);
 		alert.setContentText(REG_OK_MSG);
-		
 		alertError = new Alert(AlertType.ERROR);
 	}
 	
@@ -79,12 +70,25 @@ public class RegistrationController implements Initializable, PokerClientControl
 	}
 	
 	@FXML protected void handleRegistrationButton(ActionEvent event) {
+//		usernameField.getStyleClass().remove("hiba");
+		passwordField.getStyleClass().remove("hiba");
+		rePasswordField.getStyleClass().remove("hiba");
+		
+		if (!passwordField.getText().equals(rePasswordField.getText())) {
+			passwordField.getStyleClass().add("hiba");
+			rePasswordField.getStyleClass().add("hiba");
+			alertError.setContentText(REG_DIFF_PW);
+			alertError.showAndWait();
+			return;
+		}
 		try {
 			model.registration(usernameField.getText(), passwordField.getText());
 			if (alert.showAndWait().get() == ButtonType.OK) {
 				frameController.setLoginFXML();
 			}
 		} catch (RemoteException | PokerDataBaseException e) {
+//			usernameField.getStyleClass().add("hiba");
+			//TODO: és ha más hiba jön...? Rendben külön veszem PDBE-t, és ha más hiba jön...? Nem feltétlen ez a field okozta...
 			alertError.setContentText(e.getMessage());
 			alertError.showAndWait();
 		}
