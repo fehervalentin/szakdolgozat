@@ -115,7 +115,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 		List<PokerTable> tables = getTables(uuid);
 		TableListerObserver tlo = new TableListerObserver(observer);
 		this.addObserver(tlo);
-		String asd = "muha csaba222222!";
+		String asd = "muha222!";
 		this.setChanged();
 		this.notifyObservers(asd);
 		//		proc.updateTableView(tables);

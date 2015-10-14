@@ -74,12 +74,4 @@ public class LoginController implements Initializable, PokerClientController {
 	public void goToReg() {
 		frameController.setRegistrationFXML();
 	}
-
-	@Override
-	public void valamivan(Object asd) {
-		System.out.println("LoginController");
-		//System.out.println(asd);
-		
-	}
-
 }

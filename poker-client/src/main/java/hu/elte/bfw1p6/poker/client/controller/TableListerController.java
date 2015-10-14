@@ -1,14 +1,15 @@
 package hu.elte.bfw1p6.poker.client.controller;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
+import hu.elte.bfw1p6.poker.client.controller.main.PokerObserverController;
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidSession;
@@ -24,16 +25,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class TableListerController implements PokerClientController, Initializable, Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class TableListerController implements PokerClientController, Initializable, PokerObserverController {
 
 	private final String NO_TABLE_SELECTED_MESSAGE = "Nem választottál ki egy táblát sem!";
 
-	private FrameController frameController;
+	private transient FrameController frameController;
 
 	@FXML private TableView<PokerTable> tableView;
 	@FXML private TableColumn<PokerTable, String> tableName;
@@ -47,14 +43,22 @@ public class TableListerController implements PokerClientController, Initializab
 	@FXML private Button logoutButton;
 	@FXML private Button modifyTableButton;
 	@FXML private Button deleteTableButton;
+	
+	private CommunicatorController commCont;
 
-	private transient Alert alert;
+	private Alert alert;
 
 	//	private TableViewObserverImpl observer;
 
 	private Model model;
 
 	public TableListerController() {
+		try {
+			commCont = new CommunicatorController(this);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		model = Model.getInstance();
 		alert = new Alert(AlertType.ERROR);
 	}
@@ -63,7 +67,7 @@ public class TableListerController implements PokerClientController, Initializab
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
 		try {
-			List<PokerTable> tables = model.registerTableViewObserver(frameController);
+			List<PokerTable> tables = model.registerTableViewObserver(commCont);
 			tableView.getItems().setAll(tables);
 			//			model.registerObserver(frameController);
 			//			model.addObserver(this);
@@ -153,16 +157,16 @@ public class TableListerController implements PokerClientController, Initializab
 
 	private void removeObserver() {
 		try {
-			model.removeTableViewObserver(frameController);
+			model.removeTableViewObserver(commCont);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void valamivan(Object updateMsg) {
+	@SuppressWarnings("unchecked")
+	public void updateMe(Object updateMsg) {
 		List<PokerTable> tables = (List<PokerTable>)updateMsg;
 		tableView.getItems().setAll(tables);
 		System.out.println("TableListerController");

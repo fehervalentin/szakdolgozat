@@ -102,12 +102,4 @@ public class RegistrationController implements Initializable, PokerClientControl
 	public void setDelegateController(FrameController fc) {
 		this.frameController = fc;
 	}
-
-
-	@Override
-	public void valamivan(Object asd) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

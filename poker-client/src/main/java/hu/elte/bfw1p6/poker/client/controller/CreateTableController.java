@@ -207,10 +207,4 @@ public class CreateTableController implements Initializable, PokerClientControll
 	public void setDelegateController(FrameController fc) {
 		this.frameController = fc;
 	}
-
-	@Override
-	public void valamivan(Object asd) {
-		System.out.println("CreateTableController");
-	}
-
 }

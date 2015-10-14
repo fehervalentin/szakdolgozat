@@ -5,13 +5,14 @@ import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
+import hu.elte.bfw1p6.poker.client.controller.main.PokerObserverController;
 import hu.elte.bfw1p6.poker.client.model.MainGameModel;
 import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import javafx.fxml.Initializable;
 
-public class MainGameController implements Initializable, PokerClientController {
+public class MainGameController implements Initializable, PokerClientController, PokerObserverController {
 	
 	private MainGameModel model;
 
@@ -29,7 +30,7 @@ public class MainGameController implements Initializable, PokerClientController 
 	}
 
 	@Override
-	public void valamivan(Object asd) {
+	public void updateMe(Object updateMsg) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -5,11 +5,10 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
-import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 
-public class FrameController extends UnicastRemoteObject implements RemoteObserver {
+public class FrameController extends UnicastRemoteObject {
 	
 	/**
 	 * 
@@ -23,8 +22,6 @@ public class FrameController extends UnicastRemoteObject implements RemoteObserv
 	private final String CREATE_TABLE_FXML = "CreateTable.fxml";
 	private final String TABLE_LISTER_FXML = "TableLister.fxml";
 	private final String MAIN_GAME_FXML = "MainGame.fxml";
-	
-	private PokerClientController actualCont = null;
 	
 	private Scene scene;
 	
@@ -64,7 +61,6 @@ public class FrameController extends UnicastRemoteObject implements RemoteObserv
 			}
 			PokerClientController controller = loader.<PokerClientController>getController();
 			controller.setDelegateController(this);
-			actualCont = controller;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -72,12 +68,5 @@ public class FrameController extends UnicastRemoteObject implements RemoteObserv
 
 	public Scene getScene() {
 		return scene;
-	}
-
-	@Override
-	public void update(Object observable, Object updateMsg) throws RemoteException {
-//		System.out.println((String) updateMsg);
-//		System.out.println("KIIRTA");
-		actualCont.valamivan(updateMsg);
 	}
 }
