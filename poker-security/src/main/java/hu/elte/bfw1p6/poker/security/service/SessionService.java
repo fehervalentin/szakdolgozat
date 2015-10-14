@@ -8,7 +8,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.model.entity.User;
-import hu.elte.bfw1p6.poker.persist.user.UserRepository;
+import hu.elte.bfw1p6.poker.persist.repository.UserRepository;
 
 public class SessionService {
 	

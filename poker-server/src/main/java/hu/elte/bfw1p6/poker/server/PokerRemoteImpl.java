@@ -20,11 +20,12 @@ import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.database.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.Player;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
+import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.SQLExceptionInterceptor;
-import hu.elte.bfw1p6.poker.persist.pokertable.PokerTableRepository;
+import hu.elte.bfw1p6.poker.persist.repository.PokerTableRepository;
+import hu.elte.bfw1p6.poker.persist.repository.UserRepository;
 import hu.elte.bfw1p6.poker.persist.user.UserBuilder;
-import hu.elte.bfw1p6.poker.persist.user.UserRepository;
 import hu.elte.bfw1p6.poker.properties.PokerProperties;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 import hu.elte.bfw1p6.poker.security.service.SessionService;
@@ -201,6 +202,12 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 		TableListerObserver tlo = removeTVO(observer);
 		tlos.remove(tlo);
 		this.deleteObserver(tlo); //TODO NEM BIZTOS...
+	}
+
+	@Override
+	public List<PokerType> getPokerTypes() throws RemoteException, PokerDataBaseException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

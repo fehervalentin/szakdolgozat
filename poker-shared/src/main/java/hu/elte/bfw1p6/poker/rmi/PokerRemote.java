@@ -10,6 +10,7 @@ import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.database.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
+import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import hu.elte.bfw1p6.poker.model.entity.Player;
 
 public interface PokerRemote extends Remote{
@@ -28,11 +29,14 @@ public interface PokerRemote extends Remote{
 	
 	void modifyPassword(String username, String oldPassword, String newPassword) throws RemoteException;
 	
+	List<PokerType> getPokerTypes() throws RemoteException, PokerDataBaseException;
+	
 	List<PokerTable> getTables()throws RemoteException;
 	
 	void registerObserver(UUID uuid, RemoteObserver proc) throws RemoteException;
 	
 	void unRegisterObserver(UUID uuid, TableViewObserver proc) throws RemoteException;
+	
 	
 	
 	

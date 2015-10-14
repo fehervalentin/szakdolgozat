@@ -1,4 +1,4 @@
-package hu.elte.bfw1p6.poker.persist.user;
+package hu.elte.bfw1p6.poker.persist.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

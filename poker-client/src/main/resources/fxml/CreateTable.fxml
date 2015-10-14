@@ -10,6 +10,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String ?>
+<?import hu.elte.bfw1p6.poker.model.entity.PokerType ?>
 
 <AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="hu.elte.bfw1p6.poker.client.controller.CreateTableController">
@@ -26,8 +27,8 @@
 				promptText="Stílus">
 				<items>
 					<FXCollections fx:factory="observableArrayList">
-						<String fx:value="HOLDEM" />
-						<String fx:value="OMAHA" />
+						<String fx:value="PokerType.HOLDEM.name" />
+						<String fx:value="PokerType.CLASSIC" />
 					</FXCollections>
 				</items>
 			</ComboBox>

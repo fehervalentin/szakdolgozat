@@ -3,7 +3,7 @@ package hu.elte.bfw1p6.poker.model.entity;
 public enum PokerType {
 	
 	HOLDEM(1, "HOLDEM", 5, 2),
-	OMAHA(2, "OMAHA", 5, 2);
+	CLASSIC(2, "CLASSIC", 0, 5);
 	
 	private int id;
 	private String name;
@@ -40,13 +40,4 @@ public enum PokerType {
 	public void setId(int id) {
 		this.id = id;
 	}
-	/*public PokerType getPokerTypeById(int id) {
-		if (HOLDEM.getId() == id) {
-			return HOLDEM;
-		} else if (OMAHA.getId() == id) {
-			return OMAHA;
-		} else {
-			throw new IllegalArgumentException();
-		}
-	}*/
 }

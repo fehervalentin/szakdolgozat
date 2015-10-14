@@ -63,6 +63,12 @@ public class CreateTableController implements Initializable, PokerClientControll
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		model = Model.getInstance();
+		
+		PokerType[] pokerTypes = PokerType.values();
+		for (int i = 0; i < pokerTypes.length; i++) {
+			gameTypeComboBox.getItems().set(i, pokerTypes[i].toString());
+		}
+		
 		errorAlert = new Alert(AlertType.ERROR);
 		successAlert = new Alert(AlertType.INFORMATION);
 		tableNameTextField.setText("próba szerver 1");
