@@ -108,8 +108,8 @@ public class CreateTableController implements Initializable, PokerClientControll
 	protected void createTableHandler(ActionEvent event) {
 		maxTimeField.getStyleClass().remove("hiba");
 		maxPlayerTextField.getStyleClass().remove("hiba");
-		maxBetTextField.getStyleClass().remove("hiba");
 		defaultPotField.getStyleClass().remove("hiba");
+		maxBetTextField.getStyleClass().remove("hiba");
 
 		String tableName = tableNameTextField.getText();
 
@@ -118,15 +118,18 @@ public class CreateTableController implements Initializable, PokerClientControll
 		Integer maxPlayers = null;
 		BigDecimal maxBet = null;
 		BigDecimal defaultPot = null;
+		boolean valid = true;
 		try {
 			pokerType = PokerType.valueOf(gameTypeComboBox.getSelectionModel().getSelectedItem());
 		} catch (IllegalArgumentException ex) {
+			valid = false;
 			errorAlert.setContentText("Hibás játék mód!");
 			errorAlert.showAndWait();
 		}
 		try {
 			maxTime = new Integer(maxTimeField.getText());
 		} catch (NumberFormatException ex) {
+			valid = false;
 			errorAlert.setContentText("Hibás szám formátum a gondolkodási idő mezőben!");
 			maxTimeField.getStyleClass().add("hiba");
 			errorAlert.showAndWait();
@@ -134,6 +137,7 @@ public class CreateTableController implements Initializable, PokerClientControll
 		try {
 			maxPlayers = Integer.valueOf(maxPlayerTextField.getText());
 		} catch (NumberFormatException ex) {
+			valid = false;
 			errorAlert.setContentText("Hibás szám formátum a maximum játékos mezőben!");
 			maxPlayerTextField.getStyleClass().add("hiba");
 			errorAlert.showAndWait();
@@ -141,6 +145,7 @@ public class CreateTableController implements Initializable, PokerClientControll
 		try {
 			defaultPot = BigDecimal.valueOf(Double.valueOf(defaultPotField.getText()));
 		} catch (NumberFormatException ex) {
+			valid = false;
 			errorAlert.setContentText("Hibás szám formátum a alaptét mezőben!");
 			defaultPotField.getStyleClass().add("hiba");
 			errorAlert.showAndWait();
@@ -148,9 +153,13 @@ public class CreateTableController implements Initializable, PokerClientControll
 		try {
 			maxBet = BigDecimal.valueOf(Double.valueOf(maxBetTextField.getText()));
 		} catch (NumberFormatException ex) {
+			valid = false;
 			errorAlert.setContentText("Hibás szám formátum a maximum tét mezőben!");
 			maxBetTextField.getStyleClass().add("hiba");
 			errorAlert.showAndWait();
+		}
+		
+		if (!valid) {
 			return;
 		}
 
