@@ -1,5 +1,7 @@
 package hu.elte.bfw1p6.poker.command.classic;
 
-public class PlayerClassicCommand {
+import hu.elte.bfw1p6.poker.command.PlayerCommand;
+
+public class PlayerClassicCommand implements PlayerCommand {
 
 }

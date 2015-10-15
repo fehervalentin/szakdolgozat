@@ -15,11 +15,12 @@ import javafx.fxml.Initializable;
 public class MainGameController implements Initializable, PokerClientController, PokerObserverController {
 	
 	private MainGameModel model;
+	
+	private FrameController frameController;
 
 	@Override
 	public void setDelegateController(FrameController frameController) {
-		// TODO Auto-generated method stub
-		
+		this.frameController = frameController;
 	}
 
 	@Override

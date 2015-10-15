@@ -9,16 +9,19 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Observable;
 import java.util.UUID;
 
+import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableListerObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
+import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.model.entity.Player;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
@@ -39,11 +42,14 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	private SessionService sessionService;
 
 	private List<TableListerObserver> tlos;
+	
+	private Hashtable<String, HoldemPokerTableServer> pokerTableservers;
 
 	public PokerRemoteImpl() throws RemoteException {
 		this.pokerProperties = PokerProperties.getInstance();
 		this.sessionService = new SessionService();
 		tlos = new ArrayList<>();
+		pokerTableservers = new Hashtable<>();
 
 		try {
 			System.out.println("***POKER SZERVER***");
@@ -204,8 +210,17 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public void sendPlayerCommand(PlayerCommand playerCommand) throws RemoteException {
-		// TODO delegálni a hívást az asztalokhoz...
+	public void sendPlayerCommand(UUID uuid, PokerTable t, PokerTableServerObserver client, PlayerCommand playerCommand) throws RemoteException {
+		if (sessionService.isAuthenticated(uuid)) {
+			pokerTableservers.get(t.getName()).sendPlayerCommand(client, playerCommand);
+		}
 		
+	}
+
+	@Override
+	public void connectToTable(UUID uuid, PokerTable t, PokerTableServerObserver client) throws RemoteException, PokerTooMuchPlayerException {
+		if (sessionService.isAuthenticated(uuid)) {
+			pokerTableservers.get(t.getName()).join(client);
+		}
 	}
 }

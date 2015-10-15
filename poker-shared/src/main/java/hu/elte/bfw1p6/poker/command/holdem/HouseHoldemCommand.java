@@ -1,7 +1,7 @@
 package hu.elte.bfw1p6.poker.command.holdem;
 
 import hu.elte.bfw1p6.poker.command.PokerCommand;
-import hu.elte.bfw1p6.poker.command.type.HouseCommandType;
+import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.model.Card;
 
 
@@ -11,7 +11,7 @@ import hu.elte.bfw1p6.poker.model.Card;
  *
  */
 public class HouseHoldemCommand implements PokerCommand {
-	private HouseCommandType houseCommandType;
+	private HoldemHouseCommandType houseCommandType;
 	private Card card1, card2, card3;
 
 	/**
@@ -19,7 +19,7 @@ public class HouseHoldemCommand implements PokerCommand {
 	 * @param houseCommandType TURN vagy RIVER
 	 * @param card1 a háznak osztott, körbeküldendő kártyalap
 	 */
-	public HouseHoldemCommand(HouseCommandType houseCommandType, Card card1) {
+	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1) {
 		this.houseCommandType = houseCommandType;
 	}
 	
@@ -29,7 +29,7 @@ public class HouseHoldemCommand implements PokerCommand {
 	 * @param card1 a playernek küldött első kártya
 	 * @param card2 a playernek küldött második kártya
 	 */
-	public HouseHoldemCommand(HouseCommandType houseCommandType, Card card1, Card card2) {
+	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, Card card2) {
 		this(houseCommandType, card1);
 		this.card2 = card2;
 	}
@@ -41,13 +41,13 @@ public class HouseHoldemCommand implements PokerCommand {
 	 * @param card2 a ház második lapja, amit körbe kell küldeni
 	 * @param card3 a ház harmadik lapja, amit körbe kell küldeni
 	 */
-	public HouseHoldemCommand(HouseCommandType houseCommandType, Card card1, Card card2, Card card3) {
+	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, Card card2, Card card3) {
 		this(houseCommandType, card1);
 		this.card2 = card2;
 		this.card3 = card3;
 	}
 	
-	public HouseCommandType getHouseCommandType() {
+	public HoldemHouseCommandType getHouseCommandType() {
 		return houseCommandType;
 	}
 	

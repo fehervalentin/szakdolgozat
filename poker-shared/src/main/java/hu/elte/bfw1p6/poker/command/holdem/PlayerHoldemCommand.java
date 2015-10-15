@@ -2,16 +2,17 @@ package hu.elte.bfw1p6.poker.command.holdem;
 
 import java.math.BigDecimal;
 
+import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
-import hu.elte.bfw1p6.poker.command.type.PlayerCommandType;
+import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
 
 /**
  * Az osztály valósítja meg a játékosok által küldendő utasításokat
  * @author feher
  *
  */
-public class PlayerHoldemCommand implements PokerCommand {
-	private PlayerCommandType playerCommandType;
+public class PlayerHoldemCommand implements PokerCommand, PlayerCommand {
+	private HoldemPlayerCommandType playerCommandType;
 	private BigDecimal amount;
 	
 	/**
@@ -19,7 +20,7 @@ public class PlayerHoldemCommand implements PokerCommand {
 	 * @param playerCommandType A Command típusa
 	 * @param amount RAISE esetén az emelendő összeg
 	 */
-	public PlayerHoldemCommand(PlayerCommandType playerCommandType, BigDecimal amount) {
+	public PlayerHoldemCommand(HoldemPlayerCommandType playerCommandType, BigDecimal amount) {
 		this.playerCommandType = playerCommandType;
 		this.amount = amount;
 	}
@@ -36,7 +37,7 @@ public class PlayerHoldemCommand implements PokerCommand {
 	 * 
 	 * @return A játékos által választott utasítás
 	 */
-	public PlayerCommandType getPlayerCommandType() {
+	public HoldemPlayerCommandType getPlayerCommandType() {
 		return playerCommandType;
 	}
 }
