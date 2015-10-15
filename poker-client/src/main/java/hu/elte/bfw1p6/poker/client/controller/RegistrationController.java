@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
-import hu.elte.bfw1p6.poker.exception.database.PokerDataBaseException;
+import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

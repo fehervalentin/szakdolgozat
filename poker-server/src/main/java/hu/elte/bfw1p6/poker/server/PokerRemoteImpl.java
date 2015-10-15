@@ -16,8 +16,9 @@ import java.util.UUID;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableListerObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
+import hu.elte.bfw1p6.poker.command.PlayerCommand;
+import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
-import hu.elte.bfw1p6.poker.exception.database.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.Player;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
@@ -200,5 +201,11 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 		TableListerObserver tlo = removeTVO(observer);
 		tlos.remove(tlo);
 		this.deleteObserver(tlo); //TODO NEM BIZTOS...
+	}
+
+	@Override
+	public void sendPlayerCommand(PlayerCommand playerCommand) throws RemoteException {
+		// TODO delegálni a hívást az asztalokhoz...
+		
 	}
 }

@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import hu.elte.bfw1p6.poker.exception.database.PokerDataBaseException;
+import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 
 public class SQLExceptionInterceptor {
 	private static SQLExceptionInterceptor instance = null;

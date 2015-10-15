@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import hu.elte.bfw1p6.poker.exception.database.PokerDataBaseException;
+import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.persist.dao.DBManager;
 import hu.elte.bfw1p6.poker.persist.dao.SQLExceptionInterceptor;

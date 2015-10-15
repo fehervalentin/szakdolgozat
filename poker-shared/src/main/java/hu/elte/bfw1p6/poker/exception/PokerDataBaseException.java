@@ -1,4 +1,4 @@
-package hu.elte.bfw1p6.poker.exception.database;
+package hu.elte.bfw1p6.poker.exception;
 
 public class PokerDataBaseException extends Exception {
 	
