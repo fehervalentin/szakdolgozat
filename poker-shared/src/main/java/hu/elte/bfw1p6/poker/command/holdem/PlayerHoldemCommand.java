@@ -1,8 +1,8 @@
 package hu.elte.bfw1p6.poker.command.holdem;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
 
@@ -11,7 +11,12 @@ import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
  * @author feher
  *
  */
-public class PlayerHoldemCommand implements PokerCommand, PlayerCommand {
+public class PlayerHoldemCommand implements PokerCommand, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private HoldemPlayerCommandType playerCommandType;
 	private BigDecimal amount;
 	

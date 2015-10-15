@@ -8,10 +8,11 @@ import java.util.List;
 
 import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
-import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
+import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
+import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.server.logic.Deck;
@@ -52,6 +53,10 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	
 	private House house;
 	
+	private int playersInRound;
+	
+	private int thinkerPlayer;
+	
 	/**
 	 * valahogy kéne Decket nyilvan tartani inteket küldök át, és simán filename alapján visszakeresik maguknak a kliensek...
 	 * @param pokerTable
@@ -66,51 +71,70 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		this.actualHoldemHouseCommandType = HoldemHouseCommandType.PLAYER;
 	}
 	
-	public void join(RemoteObserver client) throws PokerTooMuchPlayerException {
+	public synchronized int join(RemoteObserver client) throws PokerTooMuchPlayerException {
 		if (!clients.contains(client)) {
 			if (clients.size() >= pokerTable.getMaxPlayers()) {
 				throw new PokerTooMuchPlayerException("Az asztal betelt, nem tudsz csatlakozni!");
 			} else {
 				clients.add(client);
 				if (clients.size() > 1) {
+					playersInRound = clients.size();
+					thinkerPlayer = 0;
 					dealCardsToPlayers();
-					// megkezdődik az első kör (flop előtt) kivak nagyvak etc...
+					// megkezdődik az első kör (flop előtt) kisvak nagyvak etc...
 					// nézni kell, hogy hol tart a kör, ha körbeértünk, akkor mehet a flop, vagy adott esetben újabb körök!!!
 					// pl valaki emel...
 				}
 			}
 		}
+		return clients.size();
 		//dealCardsToPlayers();
 	}
 	
+	private void notifyActualPlayer() {
+		try {
+			clients.get(thinkerPlayer).update(this, "te gyüssz");
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	private void dealCardsToPlayers() {
-		for (RemoteObserver pokerTableServerObserver : clients) {
-			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard());
-//			pokerTableServerObserver.updateClient(pokerCommand);
+		for (int i = 0; i < clients.size(); i++) {
+//			System.out.println(i);
+			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), i);
 			try {
-				pokerTableServerObserver.update(this, pokerCommand);
+				clients.get(i).update(this, pokerCommand);
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		actualHoldemHouseCommandType = HoldemHouseCommandType.values()[actualHoldemHouseCommandType.ordinal() + 1];
 	}
 	
 	private void flop() {
-		
+		PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), deck.popCard());
+		nextStep();
 	}
 	
 	private void turn() {
-		
+		nextStep();
 	}
 	
 	private void river() {
-		
+		nextStep();
+	}
+	
+	private void nextStep() {
+		actualHoldemHouseCommandType = HoldemHouseCommandType.values()[(actualHoldemHouseCommandType.ordinal() + 1) % HoldemHouseCommandType.values().length];
 	}
 	
 	private void notifyClients(PokerCommand pokerCommand) {
 		for (RemoteObserver pokerTableServerObserver : clients) {
 			try {
+				System.out.println("hanyszor");
 				pokerTableServerObserver.update(this, pokerCommand);
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
@@ -119,12 +143,18 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		}
 	}
 	
-	public void leave(PokerTableServerObserver client) {
+	public synchronized void leave(PokerTableServerObserver client) {
 		clients.remove(client);
 	}
 
-	public void sendPlayerCommand(PokerTableServerObserver client, PlayerCommand playerCommand) {
+	public synchronized void receivePlayerCommand(RemoteObserver client, PlayerHoldemCommand playerCommand) {
+		System.out.println("MEGKAPTAM");
 		if (clients.contains(client)) {
+			System.out.println("MEGKAPTAM BENT");
+			/*if (playerCommand.getPlayerCommandType() == HoldemPlayerCommandType.CHECK) {
+				notifyClients(playerCommand);
+			}*/
+			notifyClients(playerCommand);
 			// feldolgozzuk a kérését
 			// majd minden observert értesítünk
 			// jöhet a következő játékos

@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Observable;
 import java.util.UUID;
 
-import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableListerObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
-import hu.elte.bfw1p6.poker.command.PlayerCommand;
+import hu.elte.bfw1p6.poker.command.PokerCommand;
+import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
@@ -218,9 +218,9 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public void sendPlayerCommand(UUID uuid, PokerTable t, PokerTableServerObserver client, PlayerCommand playerCommand) throws RemoteException {
+	public void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerHoldemCommand playerCommand) throws RemoteException {
 		if (sessionService.isAuthenticated(uuid)) {
-			pokerTableservers.get(t.getName()).sendPlayerCommand(client, playerCommand);
+			pokerTableservers.get(t.getName()).receivePlayerCommand(client, playerCommand);
 		}
 		
 	}

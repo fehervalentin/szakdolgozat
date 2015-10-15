@@ -18,6 +18,8 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private int nthPlayer;
+	
 	private HoldemHouseCommandType houseCommandType;
 	private Card card1, card2, card3;
 
@@ -37,9 +39,10 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * @param card1 a playernek küldött első kártya
 	 * @param card2 a playernek küldött második kártya
 	 */
-	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, Card card2) {
+	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, Card card2, int nthPlayer) {
 		this(houseCommandType, card1);
 		this.card2 = card2;
+		this.nthPlayer = nthPlayer;
 	}
 	
 	/**
@@ -69,5 +72,9 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	
 	public Card getCard3() {
 		return card3;
+	}
+	
+	public int getNthPlayer() {
+		return nthPlayer;
 	}
 }
