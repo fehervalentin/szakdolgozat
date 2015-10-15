@@ -1,9 +1,13 @@
 package hu.elte.bfw1p6.poker.server;
 
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.List;
 
 import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
+import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
@@ -18,7 +22,12 @@ import hu.elte.bfw1p6.poker.server.logic.House;
  * @author feher
  *
  */
-public class HoldemPokerTableServer {
+public class HoldemPokerTableServer extends UnicastRemoteObject {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Maga az asztal entitás, le lehet kérni mindent...
 	 */
@@ -37,7 +46,7 @@ public class HoldemPokerTableServer {
 	/**
 	 * Kliensek (observerek)
 	 */
-	private List<PokerTableServerObserver> clients;
+	private List<RemoteObserver> clients;
 	
 	private Deck deck;
 	
@@ -48,15 +57,16 @@ public class HoldemPokerTableServer {
 	 * @param pokerTable
 	 */
 	
-	public HoldemPokerTableServer(PokerTable pokerTable) {
+	public HoldemPokerTableServer(PokerTable pokerTable) throws RemoteException {
 		this.pokerTable = pokerTable;
 		deck = new Deck();
 		house = new House();
+		clients = new ArrayList<>();
 		// a játékosoknak osztok először lapokat
 		this.actualHoldemHouseCommandType = HoldemHouseCommandType.PLAYER;
 	}
 	
-	public void join(PokerTableServerObserver client) throws PokerTooMuchPlayerException {
+	public void join(RemoteObserver client) throws PokerTooMuchPlayerException {
 		if (!clients.contains(client)) {
 			if (clients.size() >= pokerTable.getMaxPlayers()) {
 				throw new PokerTooMuchPlayerException("Az asztal betelt, nem tudsz csatlakozni!");
@@ -70,12 +80,19 @@ public class HoldemPokerTableServer {
 				}
 			}
 		}
+		//dealCardsToPlayers();
 	}
 	
 	private void dealCardsToPlayers() {
-		for (PokerTableServerObserver pokerTableServerObserver : clients) {
+		for (RemoteObserver pokerTableServerObserver : clients) {
 			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard());
-			pokerTableServerObserver.updateClient(pokerCommand);
+//			pokerTableServerObserver.updateClient(pokerCommand);
+			try {
+				pokerTableServerObserver.update(this, pokerCommand);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -92,8 +109,13 @@ public class HoldemPokerTableServer {
 	}
 	
 	private void notifyClients(PokerCommand pokerCommand) {
-		for (PokerTableServerObserver pokerTableServerObserver : clients) {
-			pokerTableServerObserver.updateClient(pokerCommand);
+		for (RemoteObserver pokerTableServerObserver : clients) {
+			try {
+				pokerTableServerObserver.update(this, pokerCommand);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

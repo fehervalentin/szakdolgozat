@@ -29,7 +29,8 @@ public class TableListerController implements PokerClientController, Initializab
 
 	private final String NO_TABLE_SELECTED_MESSAGE = "Nem választottál ki egy táblát sem!";
 
-	private transient FrameController frameController;
+	private FrameController frameController;
+	private CommunicatorController commCont;
 
 	@FXML private TableView<PokerTable> tableView;
 	@FXML private TableColumn<PokerTable, String> tableName;
@@ -44,7 +45,6 @@ public class TableListerController implements PokerClientController, Initializab
 	@FXML private Button modifyTableButton;
 	@FXML private Button deleteTableButton;
 	
-	private CommunicatorController commCont;
 
 	private Alert alert;
 

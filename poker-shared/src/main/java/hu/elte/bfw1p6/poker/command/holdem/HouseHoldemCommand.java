@@ -1,5 +1,7 @@
 package hu.elte.bfw1p6.poker.command.holdem;
 
+import java.io.Serializable;
+
 import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.model.Card;
@@ -10,7 +12,12 @@ import hu.elte.bfw1p6.poker.model.Card;
  * @author feher
  *
  */
-public class HouseHoldemCommand implements PokerCommand {
+public class HouseHoldemCommand implements PokerCommand, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private HoldemHouseCommandType houseCommandType;
 	private Card card1, card2, card3;
 
@@ -21,6 +28,7 @@ public class HouseHoldemCommand implements PokerCommand {
 	 */
 	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1) {
 		this.houseCommandType = houseCommandType;
+		this.card1 = card1;
 	}
 	
 	/**

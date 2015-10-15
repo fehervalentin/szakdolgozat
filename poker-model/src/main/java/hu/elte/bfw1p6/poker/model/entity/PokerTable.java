@@ -36,10 +36,6 @@ public class PokerTable implements EntityWithId, Serializable {
 		clients = new ArrayList<>();
 	}
 
-	public void connect(UUID uuid) {
-
-	}
-
 	@Override
 	public Integer getId() {
 		return id;

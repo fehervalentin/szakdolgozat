@@ -63,5 +63,5 @@ public interface PokerRemote extends Remote{
 	
 	void sendPlayerCommand(UUID uuid, PokerTable t, PokerTableServerObserver client, PlayerCommand playerCommand) throws RemoteException;
 	
-	void connectToTable(UUID uuid, PokerTable t, PokerTableServerObserver observer) throws RemoteException, PokerTooMuchPlayerException;
+	void connectToTable(UUID uuid, PokerTable t, RemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException;
 }

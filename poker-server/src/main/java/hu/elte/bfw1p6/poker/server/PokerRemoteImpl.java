@@ -50,6 +50,14 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 		this.sessionService = new SessionService();
 		tlos = new ArrayList<>();
 		pokerTableservers = new Hashtable<>();
+		List<PokerTable> tables = null;
+		try {
+			tables = PokerTableRepository.getInstance().findAll();
+		} catch (PokerDataBaseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		pokerTableservers.put(tables.get(0).getName(), new HoldemPokerTableServer(tables.get(0)));
 
 		try {
 			System.out.println("***POKER SZERVER***");
@@ -218,9 +226,11 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public void connectToTable(UUID uuid, PokerTable t, PokerTableServerObserver client) throws RemoteException, PokerTooMuchPlayerException {
+	public void connectToTable(UUID uuid, PokerTable t, RemoteObserver client) throws RemoteException, PokerTooMuchPlayerException {
 		if (sessionService.isAuthenticated(uuid)) {
-			pokerTableservers.get(t.getName()).join(client);
+			HoldemPokerTableServer pts = pokerTableservers.get(t.getName());
+			pts.join(client);
+//			pokerTableservers.get(t.getName()).join(client);
 		}
 	}
 }
