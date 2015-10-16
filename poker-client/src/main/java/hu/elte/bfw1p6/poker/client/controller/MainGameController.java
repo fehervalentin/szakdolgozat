@@ -16,11 +16,21 @@ import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
 import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
+import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 
 public class MainGameController implements Initializable, PokerClientController, PokerObserverController {
+
+
+	@FXML private Button checkButton;
+	@FXML private Button raiseButton;
+	@FXML private Button foldButton;
+	@FXML private Button quitButton;
 
 	private MainGameModel model;
 
@@ -31,8 +41,10 @@ public class MainGameController implements Initializable, PokerClientController,
 	private CommunicatorController commController;
 
 	private int whosOn = 0;
-	
+
 	private int youAreNth;
+
+	private int players;
 
 	@Override
 	public void setDelegateController(FrameController frameController) {
@@ -62,16 +74,29 @@ public class MainGameController implements Initializable, PokerClientController,
 		if (updateMsg instanceof HouseHoldemCommand) {
 			HouseHoldemCommand houseHoldemCommand = (HouseHoldemCommand)updateMsg;
 			if (houseHoldemCommand.getHouseCommandType() == HoldemHouseCommandType.PLAYER) {
+				System.out.println("----------------");
 				System.out.println(houseHoldemCommand.getHouseCommandType());
 				System.out.println(houseHoldemCommand.getCard1());
 				System.out.println(houseHoldemCommand.getCard2());
 				System.out.println(houseHoldemCommand.getNthPlayer());
 				youAreNth = houseHoldemCommand.getNthPlayer();
+				players = houseHoldemCommand.getPlayers();
 				if (youAreNth == whosOn) {
-					youAreNext();
+					//					youAreNext();
+					System.out.println("Te jössz!");
 				}
+			} else if (houseHoldemCommand.getHouseCommandType() == HoldemHouseCommandType.FLOP) {
+				System.out.println("----------------");
+				System.out.println(houseHoldemCommand.getHouseCommandType());
+				System.out.println(houseHoldemCommand.getCard1());
+				System.out.println(houseHoldemCommand.getCard2());
+				System.out.println(houseHoldemCommand.getCard3());
+				if (youAreNth == whosOn) {
+					//					youAreNext();
+					System.out.println("Te jössz!");
+				}
+				//youAreNext();
 			}
-			whosOn++;
 		} else if (updateMsg instanceof PlayerHoldemCommand) {
 			PlayerHoldemCommand playerHoldemCommand = (PlayerHoldemCommand)updateMsg;
 			HoldemPlayerCommandType commandType = playerHoldemCommand.getPlayerCommandType();
@@ -83,9 +108,10 @@ public class MainGameController implements Initializable, PokerClientController,
 				youAreNext();
 			}
 			if (playerHoldemCommand.getPlayerCommandType() != HoldemPlayerCommandType.QUIT) {
-				++whosOn;
 			}
 		}
+		whosOn++;
+		whosOn %= players;
 	}
 
 	public void youAreNext() {
@@ -101,7 +127,6 @@ public class MainGameController implements Initializable, PokerClientController,
 		in.close();
 		PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(HoldemPlayerCommandType.valueOf(command), BigDecimal.valueOf(Double.valueOf(amount)));
 
-		System.out.println("itttttttt");
 		new Thread() {
 
 			@Override
@@ -114,5 +139,29 @@ public class MainGameController implements Initializable, PokerClientController,
 				}
 			}}.start();
 
+	}
+
+	@FXML protected void handleCheck(ActionEvent event) {
+		PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(HoldemPlayerCommandType.CHECK, null);
+		new Thread() {
+
+			@Override
+			public void run() {
+				try {
+					model.sendCommandToTable(pokerTable, commController, playerHoldemCommand);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}}.start();
+	}
+
+	@FXML protected void handleRaise(ActionEvent event) {
+	}
+
+	@FXML protected void handleFold(ActionEvent event) {
+	}
+
+	@FXML protected void handleQuit(ActionEvent event) {
 	}
 }

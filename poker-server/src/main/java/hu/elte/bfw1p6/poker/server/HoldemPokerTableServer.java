@@ -91,20 +91,11 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		//dealCardsToPlayers();
 	}
 
-	private void notifyActualPlayer() {
-		try {
-			clients.get(thinkerPlayer).update(this, "te gyüssz");
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	private void dealCardsToPlayers() {
 		for (int i = 0; i < clients.size(); i++) {
 			int j = i;
 			//			System.out.println(i);
-			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), i);
+			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), i, clients.size());
 			new Thread() {
 
 				@Override
@@ -122,6 +113,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 
 	private void flop() {
 		PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), deck.popCard());
+		notifyClients(pokerCommand);
 		nextStep();
 	}
 
@@ -160,14 +152,31 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 
 	public synchronized void receivePlayerCommand(RemoteObserver client, PlayerHoldemCommand playerCommand) {
 		if (clients.contains(client)) {
-			/*if (playerCommand.getPlayerCommandType() == HoldemPlayerCommandType.CHECK) {
-				notifyClients(playerCommand);
-			}*/
+			switch(playerCommand.getPlayerCommandType()) {
+			case CHECK: {
+				break;
+			}
+			case FOLD: {
+				break;
+			}
+			case RAISE: {
+				stack.add(playerCommand.getAmount());
+				break;
+			}
+			case QUIT: {
+				clients.remove(client);
+				break;
+			}
+			}
+			++thinkerPlayer;
+			if (thinkerPlayer >= playersInRound) {
+				System.out.println("jön a flop");
+				thinkerPlayer %= playersInRound;
+				flop();
+			}
+			// ha mindenki küldött már commandot, akkor jöhet a turn
+			//de mi van ha valaki raiselt...??? újabb kör
 			notifyClients(playerCommand);
-			// feldolgozzuk a kérését
-			// majd minden observert értesítünk
-			// jöhet a következő játékos
-			// valahogyan időt is kéne mérni...
 		}
 	}
 }

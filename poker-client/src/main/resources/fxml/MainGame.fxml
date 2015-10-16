@@ -15,13 +15,16 @@
 	<children>
 		<GridPane alignment="center" hgap="10" vgap="10">
 			<Label fx:id="pokerLabel" GridPane.columnIndex="0"
-			GridPane.rowIndex="0" GridPane.columnSpan="20" text="Bejelentkezés" styleClass="header-text"
-			alignment="center" />
-			<TextField fx:id="usernameField" GridPane.columnIndex="8"
-				promptText="Felhasználónév" GridPane.columnSpan="2"
-				GridPane.rowIndex="10" />
-			<PasswordField fx:id="passwordField" promptText="Jelszó2"
-				GridPane.columnSpan="2" GridPane.columnIndex="8" GridPane.rowIndex="11" />
+				GridPane.rowIndex="0" GridPane.columnSpan="20" text="Bejelentkezés"
+				styleClass="header-text" alignment="center" />
+			<Button fx:id="checkButton" text="Check" onAction="#handleCheck"
+				styleClass="rich-blue" GridPane.columnIndex="8" GridPane.rowIndex="12" />
+			<Button fx:id="raiseButton" text="Raise" onAction="#handleRaise"
+				styleClass="rich-blue" GridPane.columnIndex="9" GridPane.rowIndex="12" />
+			<Button fx:id="foldButton" text="Fold" onAction="#handleFold"
+				styleClass="rich-blue" GridPane.columnIndex="10" GridPane.rowIndex="12" />
+				<Button fx:id="quitButton" text="Quit" onAction="#handleQuit"
+				styleClass="rich-blue" GridPane.columnIndex="11" GridPane.rowIndex="12" />
 		</GridPane>
 	</children>
 </AnchorPane>
