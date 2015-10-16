@@ -12,7 +12,6 @@ import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
 import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
-import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.server.logic.Deck;
@@ -118,10 +117,14 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	}
 
 	private void turn() {
+		PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard());
+		notifyClients(pokerCommand);
 		nextStep();
 	}
 
 	private void river() {
+		PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard());
+		notifyClients(pokerCommand);
 		nextStep();
 	}
 
@@ -170,9 +173,14 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			}
 			++thinkerPlayer;
 			if (thinkerPlayer >= playersInRound) {
-				System.out.println("jön a flop");
+				if (actualHoldemHouseCommandType == HoldemHouseCommandType.FLOP) {
+					flop();
+				} else if (actualHoldemHouseCommandType == HoldemHouseCommandType.TURN) {
+					turn();
+				} else if (actualHoldemHouseCommandType == HoldemHouseCommandType.RIVER) {
+					river();
+				}
 				thinkerPlayer %= playersInRound;
-				flop();
 			}
 			// ha mindenki küldött már commandot, akkor jöhet a turn
 			//de mi van ha valaki raiselt...??? újabb kör

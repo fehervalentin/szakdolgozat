@@ -96,6 +96,22 @@ public class MainGameController implements Initializable, PokerClientController,
 					System.out.println("Te jössz!");
 				}
 				//youAreNext();
+			} else if (houseHoldemCommand.getHouseCommandType() == HoldemHouseCommandType.TURN) {
+				System.out.println("----------------");
+				System.out.println(houseHoldemCommand.getHouseCommandType());
+				System.out.println(houseHoldemCommand.getCard1());
+				if (youAreNth == whosOn) {
+					//					youAreNext();
+					System.out.println("Te jössz!");
+				}
+			} else if (houseHoldemCommand.getHouseCommandType() == HoldemHouseCommandType.RIVER) {
+				System.out.println("----------------");
+				System.out.println(houseHoldemCommand.getHouseCommandType());
+				System.out.println(houseHoldemCommand.getCard1());
+				if (youAreNth == whosOn) {
+					//					youAreNext();
+					System.out.println("Te jössz!");
+				}
 			}
 		} else if (updateMsg instanceof PlayerHoldemCommand) {
 			PlayerHoldemCommand playerHoldemCommand = (PlayerHoldemCommand)updateMsg;
