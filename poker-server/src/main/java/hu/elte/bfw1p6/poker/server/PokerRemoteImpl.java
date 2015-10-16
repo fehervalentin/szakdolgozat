@@ -230,7 +230,6 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 		if (sessionService.isAuthenticated(uuid)) {
 			HoldemPokerTableServer pts = pokerTableservers.get(t.getName());
 			pts.join(client);
-//			pokerTableservers.get(t.getName()).join(client);
 		}
 	}
 }

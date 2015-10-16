@@ -21,17 +21,19 @@ import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import javafx.fxml.Initializable;
 
 public class MainGameController implements Initializable, PokerClientController, PokerObserverController {
-	
+
 	private MainGameModel model;
-	
+
 	private FrameController frameController;
-	
+
 	private PokerTable pokerTable;
-	
+
 	private CommunicatorController commController;
-	
+
 	private int whosOn = 0;
 	
+	private int youAreNth;
+
 	@Override
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
@@ -64,10 +66,12 @@ public class MainGameController implements Initializable, PokerClientController,
 				System.out.println(houseHoldemCommand.getCard1());
 				System.out.println(houseHoldemCommand.getCard2());
 				System.out.println(houseHoldemCommand.getNthPlayer());
-				if (houseHoldemCommand.getNthPlayer() == whosOn) {
+				youAreNth = houseHoldemCommand.getNthPlayer();
+				if (youAreNth == whosOn) {
 					youAreNext();
 				}
 			}
+			whosOn++;
 		} else if (updateMsg instanceof PlayerHoldemCommand) {
 			PlayerHoldemCommand playerHoldemCommand = (PlayerHoldemCommand)updateMsg;
 			HoldemPlayerCommandType commandType = playerHoldemCommand.getPlayerCommandType();
@@ -75,14 +79,18 @@ public class MainGameController implements Initializable, PokerClientController,
 			if (commandType == HoldemPlayerCommandType.RAISE) {
 				System.out.println(playerHoldemCommand.getAmount());
 			}
-			youAreNext();
-			
+			if (youAreNth == whosOn) {
+				youAreNext();
+			}
+			if (playerHoldemCommand.getPlayerCommandType() != HoldemPlayerCommandType.QUIT) {
+				++whosOn;
+			}
 		}
 	}
-	
+
 	public void youAreNext() {
 		System.out.println("Te jössz: ");
-//		String command = "CHECK";//System.console().readLine();
+		//		String command = "CHECK";//System.console().readLine();
 		Scanner in = new Scanner(System.in);
 		String command = in.next();
 		String amount = "0";
@@ -91,13 +99,20 @@ public class MainGameController implements Initializable, PokerClientController,
 			amount = in.next();
 		}
 		in.close();
-		/*PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(HoldemPlayerCommandType.valueOf(command), BigDecimal.valueOf(Double.valueOf(amount)));
-		try {
-			System.out.println("itttttttt");
-			model.sendCommandToTable(pokerTable, commController, playerHoldemCommand);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(HoldemPlayerCommandType.valueOf(command), BigDecimal.valueOf(Double.valueOf(amount)));
+
+		System.out.println("itttttttt");
+		new Thread() {
+
+			@Override
+			public void run() {
+				try {
+					model.sendCommandToTable(pokerTable, commController, playerHoldemCommand);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}}.start();
+
 	}
 }

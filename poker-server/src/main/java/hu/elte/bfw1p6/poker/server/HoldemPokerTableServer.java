@@ -33,35 +33,35 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	 * Maga az asztal entitás, le lehet kérni mindent...
 	 */
 	private PokerTable pokerTable;
-	
+
 	/**
 	 * Épp milyen utasítást fog kiadni a szerver (hol tartunk a körben)
 	 */
 	private HoldemHouseCommandType actualHoldemHouseCommandType;
-	
+
 	/**
 	 * Maga a pénz stack
 	 */
 	private BigDecimal stack;
-	
+
 	/**
 	 * Kliensek (observerek)
 	 */
 	private List<RemoteObserver> clients;
-	
+
 	private Deck deck;
-	
+
 	private House house;
-	
+
 	private int playersInRound;
-	
+
 	private int thinkerPlayer;
-	
+
 	/**
 	 * valahogy kéne Decket nyilvan tartani inteket küldök át, és simán filename alapján visszakeresik maguknak a kliensek...
 	 * @param pokerTable
 	 */
-	
+
 	public HoldemPokerTableServer(PokerTable pokerTable) throws RemoteException {
 		this.pokerTable = pokerTable;
 		deck = new Deck();
@@ -70,7 +70,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		// a játékosoknak osztok először lapokat
 		this.actualHoldemHouseCommandType = HoldemHouseCommandType.PLAYER;
 	}
-	
+
 	public synchronized int join(RemoteObserver client) throws PokerTooMuchPlayerException {
 		if (!clients.contains(client)) {
 			if (clients.size() >= pokerTable.getMaxPlayers()) {
@@ -90,7 +90,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		return clients.size();
 		//dealCardsToPlayers();
 	}
-	
+
 	private void notifyActualPlayer() {
 		try {
 			clients.get(thinkerPlayer).update(this, "te gyüssz");
@@ -99,58 +99,67 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void dealCardsToPlayers() {
 		for (int i = 0; i < clients.size(); i++) {
-//			System.out.println(i);
+			int j = i;
+			//			System.out.println(i);
 			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), i);
-			try {
-				clients.get(i).update(this, pokerCommand);
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			new Thread() {
+
+				@Override
+				public void run() {
+					try {
+						clients.get(j).update(null, pokerCommand);
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}}.start();
 		}
 		actualHoldemHouseCommandType = HoldemHouseCommandType.values()[actualHoldemHouseCommandType.ordinal() + 1];
 	}
-	
+
 	private void flop() {
 		PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), deck.popCard());
 		nextStep();
 	}
-	
+
 	private void turn() {
 		nextStep();
 	}
-	
+
 	private void river() {
 		nextStep();
 	}
-	
+
 	private void nextStep() {
 		actualHoldemHouseCommandType = HoldemHouseCommandType.values()[(actualHoldemHouseCommandType.ordinal() + 1) % HoldemHouseCommandType.values().length];
 	}
-	
+
 	private void notifyClients(PokerCommand pokerCommand) {
 		for (RemoteObserver pokerTableServerObserver : clients) {
-			try {
-				System.out.println("hanyszor");
-				pokerTableServerObserver.update(this, pokerCommand);
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			System.out.println("ertesitem a " + pokerTableServerObserver.toString() + " klienst!");
+			new Thread() {
+
+				@Override
+				public void run() {
+					try {
+						pokerTableServerObserver.update(null, pokerCommand);
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}}.start();
 		}
 	}
-	
+
 	public synchronized void leave(PokerTableServerObserver client) {
 		clients.remove(client);
 	}
 
 	public synchronized void receivePlayerCommand(RemoteObserver client, PlayerHoldemCommand playerCommand) {
-		System.out.println("MEGKAPTAM");
 		if (clients.contains(client)) {
-			System.out.println("MEGKAPTAM BENT");
 			/*if (playerCommand.getPlayerCommandType() == HoldemPlayerCommandType.CHECK) {
 				notifyClients(playerCommand);
 			}*/
