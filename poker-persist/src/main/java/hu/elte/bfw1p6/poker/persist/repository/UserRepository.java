@@ -4,33 +4,58 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
+import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.DBManager;
+import hu.elte.bfw1p6.poker.persist.dao.SQLExceptionInterceptor;
 
 public class UserRepository {
-	private final String TABLE_NAME = "users";
+	private static final String TABLE_NAME = "users";
 
-	public static int save(User u) throws SQLException {
-		int iRet = -1;
-		Connection con = DBManager.getInstance().getConnection();
-		String SQL = "INSERT INTO users(username, password, balance, reg_date) Values(?,?,?,?)";
-		PreparedStatement pstmt = con.prepareStatement(SQL);
-		pstmt.setString(1, u.getUserName());
-		pstmt.setString(2, u.getPassword());
-		pstmt.setBigDecimal(3, u.getBalance());
-		pstmt.setLong(4, u.getRegDate());
+	private static String[] columns;
 
-		iRet = pstmt.executeUpdate();
+	private String FIND_ALL = "SELECT * FROM " + TABLE_NAME + ";";
+	private String INSERT;
+	private String UPDATE;
+	private String DELETE = "DELETE FROM " + TABLE_NAME + " WHERE id=?;";
 
-		pstmt.close();
-		return iRet;
+	private static UserRepository instance = null;
+
+	private SQLExceptionInterceptor interceptor = SQLExceptionInterceptor.getInstance();
+
+	private UserRepository() throws PokerDataBaseException {
+		loadColumns();
 	}
 
-	public static User findUserByUserName(String username) {
-		User u = null;
+	public static synchronized UserRepository getInstance() throws PokerDataBaseException {
+		if (instance == null) {
+			instance = new UserRepository();
+		}
+		return instance;
+	}
+
+	public void save(User u) throws PokerDataBaseException {
 		try {
-			String QRY = "SELECT * FROM users WHERE username=?";
+			Connection con = DBManager.getInstance().getConnection();
+			String SQL = "INSERT INTO users(username, password, balance, reg_date) Values(?,?,?,?)";
+			PreparedStatement pstmt = con.prepareStatement(SQL);
+			pstmt.setString(1, u.getUserName());
+			pstmt.setString(2, u.getPassword());
+			pstmt.setBigDecimal(3, u.getBalance());
+			pstmt.setLong(4, u.getRegDate());
+			pstmt.executeUpdate();
+			pstmt.close();
+		} catch (SQLException e) {
+			throw interceptor.interceptException(e);
+		}
+	}
+
+	public User findUserByUserName(String username) throws PokerDataBaseException {
+		try {
+			User u = null;
+			String QRY = "SELECT * FROM " + TABLE_NAME + " WHERE username=?";
 			Connection con = DBManager.getInstance().getConnection();
 			PreparedStatement pstmt = con.prepareStatement(QRY);
 			pstmt.setString(1, username);
@@ -44,116 +69,86 @@ public class UserRepository {
 
 			pstmt.close();
 			return u;
-		} catch (SQLException se) {
-			System.out.println(se);
+		} catch (SQLException e) {
+			throw interceptor.interceptException(e);
 		}
-		return u;
 	}
 
-	public static int modifyPassword(User u) {
-		int iRet = -1;
+	public void modifyPassword(User u) throws PokerDataBaseException {
 		try {
 			Connection con = DBManager.getInstance().getConnection();
 			String SQL = "UPDATE User SET password=? WHERE Id=?";
 			PreparedStatement pstmt = con.prepareStatement(SQL);
 			pstmt.setString(1, u.getPassword());
 			pstmt.setLong(2, u.getId());
-
-			iRet = pstmt.executeUpdate();
-
+			pstmt.executeUpdate();
 			pstmt.close();
-		} catch (SQLException se) {
-			System.out.println(se);
+		} catch (SQLException e) {
+			throw interceptor.interceptException(e);
 		}
-
-		return iRet;
 	}
 
-	public static int delete(User u) {
-		int iRet = -1;
+	public void delete(User u) throws PokerDataBaseException {
 		try {
 			Connection con = DBManager.getInstance().getConnection();
-			String SQL = "DELETE FROM Province WHERE Id=?";
+			String SQL = DELETE;
 			PreparedStatement pstmt = con.prepareStatement(SQL);
 			pstmt.setLong(1, u.getId());
-
-			iRet = pstmt.executeUpdate();
-
-			pstmt.close();
-		} catch (SQLException se) {
-			System.out.println(se);
-		}
-		return iRet;
-	}
-
-	public static void deleteAll() {
-		Connection con = DBManager.getInstance().getConnection();
-		try {
-			con.setAutoCommit(false);
-			String SQL = "DELETE FROM User";
-			PreparedStatement pstmt = con.prepareStatement(SQL);
-
 			pstmt.executeUpdate();
-			con.commit();
-		} catch (SQLException se) {
-			try {
-				con.rollback();
-			} catch (SQLException ise) {
-			}
-		} finally {
-			try {
-				con.setAutoCommit(true);
-			} catch (SQLException fse) {
-			}
+			pstmt.close();
+		} catch (SQLException e) {
+			throw interceptor.interceptException(e);
 		}
 	}
 
-	/*public static ArrayList findAll() {
-		ArrayList arr = new ArrayList();
-
+	private void loadColumns() throws PokerDataBaseException {
+		Connection con = DBManager.getInstance().getConnection();
+		Statement stmt;
 		try {
-			String QRY = "SELECT * FROM Province ORDER BY Id";
-			Connection con = DBManager.getInstance().getConnection();
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(QRY);
-
-			while (rs.next()) {
-				Province p = new Province();
-				p.setId(rs.getInt("Id"));
-				p.setShortName(rs.getString("ShortName"));
-				p.setName(rs.getString("Name"));
-				arr.add(p);
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(FIND_ALL);
+			int asd = rs.getMetaData().getColumnCount() - 1;
+			columns = new String[asd];
+			for (int i = 0; i < asd; i++) {
+				columns[i] = rs.getMetaData().getColumnLabel(i + 2);
 			}
-
-			stmt.close();
-		} catch (SQLException se) {
-			System.out.println(se);
+		} catch (SQLException e) {
+			throw interceptor.interceptException(e);
 		}
-		return arr;
-	}*/
+		createQueries();
+	}
 
-	/*public static ArrayList findByName(String name) {
-		ArrayList arr = new ArrayList();
+	private void createQueries() throws PokerDataBaseException {
+		INSERT = "INSERT INTO " + TABLE_NAME + columnsToString() + "VALUES "+ qrySuffix();
+		UPDATE = createQueryForUpdate();
+	}
 
-		try {
-			String QRY = "SELECT * FROM Province WHERE name LIKE(?) ORDER BY id";
-			Connection con = DBManager.getInstance().getConnection();
-			PreparedStatement pstmt = con.prepareStatement(QRY);
-			pstmt.setString(1, "%" + name + "%");
-			ResultSet rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-				User p = new User();
-				p.setId(rs.getInt("Id"));
-				p.setShortName(rs.getString("ShortName"));
-				p.setName(rs.getString("Name"));
-				arr.add(p);
-			}
-
-			pstmt.close();
-		} catch (SQLException se) {
-			System.out.println(se);
+	private String createQueryForUpdate() {
+		StringBuilder sb = new StringBuilder("UPDATE " + TABLE_NAME + " SET " + columns[0] + "=?");
+		for (int i = 1; i < columns.length; i++) {
+			sb.append("," + columns[i] + "=?");
 		}
-		return arr;
-	}*/
+		sb.append(" WHERE id=?;");
+		return sb.toString();
+	}
+
+	private String columnsToString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("(" + columns[0]);
+		for (int i = 1; i < columns.length; i++) {
+			sb.append("," + columns[i]);
+		}
+		sb.append(") ");
+		return sb.toString();
+	}
+
+	private String qrySuffix() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(" (?");
+		for (int i = 1; i < columns.length; i++) {
+			sb.append(",?");
+		}
+		sb.append(");");
+		return sb.toString();
+	}
 }	

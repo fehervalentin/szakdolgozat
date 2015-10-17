@@ -14,7 +14,7 @@ import hu.elte.bfw1p6.poker.persist.dao.DBManager;
 import hu.elte.bfw1p6.poker.persist.dao.SQLExceptionInterceptor;
 
 public class PokerTableRepository {
-	private final String TABLE_NAME = "poker_tables";
+	private static final String TABLE_NAME = "poker_tables";
 
 	private static String[] columns;
 	private static PokerTableRepository instance = null;
@@ -37,8 +37,7 @@ public class PokerTableRepository {
 		return instance;
 	}
 
-	public synchronized int save(PokerTable t) throws PokerDataBaseException {
-		int iRet = -1;
+	public synchronized void save(PokerTable t) throws PokerDataBaseException {
 		try {
 			Connection con = DBManager.getInstance().getConnection();
 			PreparedStatement pstmt = con.prepareStatement(INSERT);
@@ -46,14 +45,11 @@ public class PokerTableRepository {
 				Object valami = t.get(i);
 				pstmt.setObject(i+1, valami);
 			}
-			iRet = pstmt.executeUpdate();
-
+			pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
 			throw interceptor.interceptException(e);
 		}
-
-		return iRet;
 	}
 
 	public synchronized List<PokerTable> findAll() throws PokerDataBaseException {
@@ -82,24 +78,18 @@ public class PokerTableRepository {
 	}
 	
 	public synchronized void deleteTable(PokerTable pokerTable) throws PokerDataBaseException {
-		int iRet = -1;
 		try {
 			Connection con = DBManager.getInstance().getConnection();
 			PreparedStatement pstmt = con.prepareStatement(DELETE);
 			pstmt.setInt(1, pokerTable.getId());
-			iRet = pstmt.executeUpdate();
-
+			pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
 			throw interceptor.interceptException(e);
 		}
-
-		//return iRet;
-
 	}
 
-	public synchronized int modify(PokerTable t) throws PokerDataBaseException {
-		int iRet = -1;
+	public synchronized void modify(PokerTable t) throws PokerDataBaseException {
 		try {
 			Connection con = DBManager.getInstance().getConnection();
 			PreparedStatement pstmt = con.prepareStatement(UPDATE);
@@ -108,13 +98,12 @@ public class PokerTableRepository {
 				pstmt.setObject(i+1, valami);
 			}
 			pstmt.setObject(columns.length + 1, t.getId());
-			iRet = pstmt.executeUpdate();
+			pstmt.executeUpdate();
 
 			pstmt.close();
 		} catch (SQLException e) {
 			throw interceptor.interceptException(e);
 		}
-		return iRet;
 
 	}
 	

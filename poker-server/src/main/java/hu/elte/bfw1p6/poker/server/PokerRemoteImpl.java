@@ -7,7 +7,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.UUID;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableListerObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
-import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
@@ -25,7 +23,6 @@ import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.model.entity.Player;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
-import hu.elte.bfw1p6.poker.persist.dao.SQLExceptionInterceptor;
 import hu.elte.bfw1p6.poker.persist.repository.PokerTableRepository;
 import hu.elte.bfw1p6.poker.persist.repository.UserRepository;
 import hu.elte.bfw1p6.poker.persist.user.UserBuilder;
@@ -42,7 +39,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	private SessionService sessionService;
 
 	private List<TableListerObserver> tlos;
-	
+
 	private Hashtable<String, HoldemPokerTableServer> pokerTableservers;
 
 	public PokerRemoteImpl() throws RemoteException {
@@ -81,8 +78,8 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public synchronized void deleteUser(int id) {
-
+	public synchronized void deleteUser(UUID uudi, User u) throws RemoteException, PokerDataBaseException {
+		UserRepository.getInstance().delete(u);
 	}
 
 	@Override
@@ -108,11 +105,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public synchronized void modifyUser(Player player) throws RemoteException {
-	}
-
-	@Override
-	public synchronized void modifyPassword(String username, String oldPassword, String newPassword) throws RemoteException {
+	public synchronized void modifyPassword(UUID uuid, String username, String oldPassword, String newPassword) throws RemoteException {
 	}
 
 	@Override
@@ -174,11 +167,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	@Override
 	public void registration(String username, String password) throws RemoteException, PokerDataBaseException {
 		User u = UserBuilder.geInstance().buildUser(username, password);
-		try {
-			UserRepository.save(u);
-		} catch(SQLException ex) {
-			throw SQLExceptionInterceptor.getInstance().interceptException(ex);
-		}
+		UserRepository.getInstance().save(u);
 	}
 
 	@Override
@@ -222,7 +211,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 		if (sessionService.isAuthenticated(uuid)) {
 			pokerTableservers.get(t.getName()).receivePlayerCommand(client, playerCommand);
 		}
-		
+
 	}
 
 	@Override

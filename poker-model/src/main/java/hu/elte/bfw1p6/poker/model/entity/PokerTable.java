@@ -2,17 +2,11 @@ package hu.elte.bfw1p6.poker.model.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class PokerTable implements EntityWithId, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Persistence fields
-	 */
 	private Integer id;
 	private String name;
 	private PokerType pokerType;
@@ -20,8 +14,6 @@ public class PokerTable implements EntityWithId, Serializable {
 	private Integer maxPlayers;
 	private BigDecimal defaultPot;
 	private BigDecimal maxBet;
-
-	private List<UUID> clients;
 
 	public PokerTable(String name, Integer maxTime, Integer maxPlayers, BigDecimal maxBet, BigDecimal defaultPot, PokerType pokerType) {
 		this.name = name;
@@ -33,7 +25,6 @@ public class PokerTable implements EntityWithId, Serializable {
 	}
 
 	public PokerTable() {
-		clients = new ArrayList<>();
 	}
 
 	@Override

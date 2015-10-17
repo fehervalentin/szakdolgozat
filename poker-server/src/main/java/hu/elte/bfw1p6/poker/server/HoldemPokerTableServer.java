@@ -156,6 +156,9 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	public synchronized void receivePlayerCommand(RemoteObserver client, PlayerHoldemCommand playerCommand) {
 		if (clients.contains(client)) {
 			switch(playerCommand.getPlayerCommandType()) {
+			case CALL: {
+				break;
+			}
 			case CHECK: {
 				break;
 			}
@@ -170,6 +173,8 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				clients.remove(client);
 				break;
 			}
+			default:
+				break;
 			}
 			++thinkerPlayer;
 			if (thinkerPlayer >= playersInRound) {
