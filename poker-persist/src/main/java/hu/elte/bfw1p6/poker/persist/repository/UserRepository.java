@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
+import hu.elte.bfw1p6.poker.model.entity.Player;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.DBManager;
 import hu.elte.bfw1p6.poker.persist.dao.SQLExceptionInterceptor;
@@ -39,12 +40,15 @@ public class UserRepository {
 	public void save(User u) throws PokerDataBaseException {
 		try {
 			Connection con = DBManager.getInstance().getConnection();
-			String SQL = "INSERT INTO users(username, password, balance, reg_date) Values(?,?,?,?)";
+			String SQL = "INSERT INTO users(username, balacen, reg_date, password) Values(?,?,?,?)";
 			PreparedStatement pstmt = con.prepareStatement(SQL);
-			pstmt.setString(1, u.getUserName());
+			for (int i = 0; i < columns.length; i++) {
+				pstmt.setObject(i+1, u.get(i));
+			}
+			/*pstmt.setString(1, u.getUserName());
 			pstmt.setString(2, u.getPassword());
 			pstmt.setBigDecimal(3, u.getBalance());
-			pstmt.setLong(4, u.getRegDate());
+			pstmt.setLong(4, u.getRegDate());*/
 			pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
@@ -74,13 +78,13 @@ public class UserRepository {
 		}
 	}
 
-	public void modifyPassword(User u) throws PokerDataBaseException {
+	public void modifyPassword(String username, String newPassword) throws PokerDataBaseException {
 		try {
 			Connection con = DBManager.getInstance().getConnection();
-			String SQL = "UPDATE User SET password=? WHERE Id=?";
+			String SQL = "UPDATE User SET password=? WHERE username=?";
 			PreparedStatement pstmt = con.prepareStatement(SQL);
-			pstmt.setString(1, u.getPassword());
-			pstmt.setLong(2, u.getId());
+			pstmt.setString(1, newPassword);
+			pstmt.setString(2, username);
 			pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
@@ -88,8 +92,9 @@ public class UserRepository {
 		}
 	}
 
-	public void delete(User u) throws PokerDataBaseException {
+	public void deletePlayer(Player player) throws PokerDataBaseException {
 		try {
+			User u = findUserByUserName(player.getUserName());
 			Connection con = DBManager.getInstance().getConnection();
 			String SQL = DELETE;
 			PreparedStatement pstmt = con.prepareStatement(SQL);
@@ -150,5 +155,11 @@ public class UserRepository {
 		}
 		sb.append(");");
 		return sb.toString();
+	}
+
+	public Player getPlayerByName(String username) throws PokerDataBaseException {
+		User user = findUserByUserName(username);
+		Player player = new Player(user.getUserName(), user.getBalance(), user.getRegDate());
+		return player;
 	}
 }	

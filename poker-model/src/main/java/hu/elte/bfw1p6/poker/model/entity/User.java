@@ -13,9 +13,9 @@ public class User extends Player implements EntityWithId {
 	public User(String username) {
 		super(username);
 	}
-
+	
 	public User() {
-		super();
+		
 	}
 
 	public void setPassword(String password) {
@@ -41,11 +41,18 @@ public class User extends Player implements EntityWithId {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	public Player getPlayer() {
+		Player p = new Player();
+		p.userName = this.userName;
+		p.balance = this.balance;
+		p.regDate = this.regDate;
+		return p;
+	}
 
 	@Override
 	public Integer getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 	@Override

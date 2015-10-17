@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
+import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -61,7 +62,7 @@ public class LoginController implements Initializable, PokerClientController {
 		try {
 			model.login(usernameField.getText(), passwordField.getText());
 			frameController.setTableListerFXML();
-		} catch (RemoteException | PokerInvalidUserException e) {
+		} catch (RemoteException | PokerInvalidUserException | PokerDataBaseException e) {
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
 		}

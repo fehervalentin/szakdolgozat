@@ -11,6 +11,7 @@ import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
+import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.collections.FXCollections;
@@ -172,7 +173,7 @@ public class CreateTableController implements Initializable, PokerClientControll
 				successAlert.setContentText(SUCC_CREATE_TABLE_MSG);
 				successAlert.showAndWait();
 				frameController.setTableListerFXML();
-			} catch (RemoteException | PokerDataBaseException e) {
+			} catch (RemoteException | PokerDataBaseException | PokerUnauthenticatedException e) {
 				errorAlert.setContentText(e.getMessage());
 				errorAlert.showAndWait();
 			}

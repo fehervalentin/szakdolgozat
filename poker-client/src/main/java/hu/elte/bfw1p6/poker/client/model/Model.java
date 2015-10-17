@@ -2,13 +2,15 @@ package hu.elte.bfw1p6.poker.client.model;
 
 import java.rmi.RemoteException;
 import java.util.List;
-import java.util.UUID;
 
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
+import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidSession;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
+import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
+import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 
@@ -23,7 +25,7 @@ public class Model {
 
 	private PokerRemote pokerRemote;
 
-	private UUID sessionId;
+	private PokerSession pokerSession;
 
 	private Model() {
 		pokerRemote = RMIRepository.getInstance().getPokerRemote();
@@ -36,23 +38,22 @@ public class Model {
 		return instance;
 	}
 
-	public void login(String username, String password) throws RemoteException, PokerInvalidUserException {
-		sessionId = pokerRemote.login(username, password);
-		RMIRepository.getInstance().setSessionId(sessionId);
+	public void login(String username, String password) throws RemoteException, PokerInvalidUserException, PokerDataBaseException {
+		pokerSession = pokerRemote.login(username, password);
 	}
 
 	public void registration(String username, String password) throws RemoteException, PokerDataBaseException {
 		pokerRemote.registration(username, password);
 	}
 
-	public void createTable(PokerTable t) throws RemoteException, PokerDataBaseException {
-		pokerRemote.createTable(sessionId, t);
+	public void createTable(PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+		pokerRemote.createTable(pokerSession, t);
 	}
 
 	public List<PokerTable> getTables() throws PokerDataBaseException {
 		List<PokerTable> tables = null;
 		try {
-			tables = pokerRemote.getTables(sessionId);
+			tables = pokerRemote.getTables(pokerSession);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,7 +62,7 @@ public class Model {
 	}
 
 	public void registerObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException {
-		pokerRemote.registerObserver(sessionId, observer);
+		pokerRemote.registerObserver(pokerSession, observer);
 	}
 
 	public void connectToTable() {
@@ -69,11 +70,11 @@ public class Model {
 	}
 
 	public void addObserver(RemoteObserver observer) throws RemoteException {
-		pokerRemote.addObserver(sessionId, observer);
+		pokerRemote.addObserver(pokerSession, observer);
 	}
 
 	public List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException {
-		return pokerRemote.registerTableViewObserver(sessionId, observer);
+		return pokerRemote.registerTableViewObserver(pokerSession, observer);
 	}
 
 	public void removeTableViewObserver(RemoteObserver observer) throws RemoteException {
@@ -81,11 +82,11 @@ public class Model {
 	}
 
 	public void logout() throws RemoteException, PokerInvalidSession {
-		if (sessionId == null) {
+		if (pokerSession == null) {
 			throw new PokerInvalidSession(SESSION_ERR);
 		}
-		pokerRemote.logout(sessionId);
-		sessionId = null;
+		pokerRemote.logout(pokerSession);
+		pokerSession = null;
 	}
 	
 	public void setParameterPokerTable(PokerTable paramPokerTable) {
@@ -97,11 +98,15 @@ public class Model {
 	}
 
 	public void modifyTable(PokerTable t) throws RemoteException, PokerDataBaseException {
-		pokerRemote.modifyTable(sessionId, t);
+		pokerRemote.modifyTable(pokerSession, t);
 	}
 
 	public void deleteTable(PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
-		pokerRemote.deleteTable(sessionId, pokerTable);
+		pokerRemote.deleteTable(pokerSession, pokerTable);
+	}
+
+	public void modifyPassword(String oldPassword, String newPassword) throws RemoteException, PokerDataBaseException, PokerInvalidPassword, PokerUnauthenticatedException {
+		pokerRemote.modifyPassword(pokerSession, oldPassword, newPassword);
 	}
 
 	/*public List<Table> getTables() {

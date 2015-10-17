@@ -16,9 +16,9 @@ import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
 import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
-import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

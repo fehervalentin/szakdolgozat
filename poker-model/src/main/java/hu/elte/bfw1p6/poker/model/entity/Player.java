@@ -8,15 +8,21 @@ public class Player implements Serializable	{
 
 	private static final long serialVersionUID = 1L;
 	
+	protected String userName;
+	
+	protected long regDate;
+	
+	protected BigDecimal balance;
+	
 	public Player() {
 		
 	}
-
-	protected String userName;
-
-	protected long regDate;
-
-	protected BigDecimal balance;
+	
+	public Player(String userName, BigDecimal balance, long regDate) {
+		this.userName = userName;
+		this.balance = balance;
+		this.regDate = regDate;
+	}
 
 	public Player(String username) {
 		this.userName = username;

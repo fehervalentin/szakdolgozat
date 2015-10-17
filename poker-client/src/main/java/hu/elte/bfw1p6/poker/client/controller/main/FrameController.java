@@ -10,9 +10,6 @@ import javafx.scene.Scene;
 
 public class FrameController extends UnicastRemoteObject {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	
@@ -22,12 +19,11 @@ public class FrameController extends UnicastRemoteObject {
 	private final String CREATE_TABLE_FXML = "CreateTable.fxml";
 	private final String TABLE_LISTER_FXML = "TableLister.fxml";
 	private final String MAIN_GAME_FXML = "MainGame.fxml";
+	private final String PROFILE_MANAGER_FXML = "ProfileManager.fxml";
 	
 	private Scene scene;
 	
 	public FrameController(Scene scene) throws RemoteException {
-		super();
-//		setCreateTableFrame();
 		setLoginFXML();
 	}
 
@@ -51,7 +47,11 @@ public class FrameController extends UnicastRemoteObject {
 		setFXML(FXML_PREFIX + MAIN_GAME_FXML);
 	}
 	
-	public void setFXML(String resource) {
+	public void setProfileManagerFXML() {
+		setFXML(FXML_PREFIX + PROFILE_MANAGER_FXML);
+	}
+	
+	private void setFXML(String resource) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(resource));
 		try {
 			if (scene == null) {

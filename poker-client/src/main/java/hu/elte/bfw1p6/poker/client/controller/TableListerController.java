@@ -154,6 +154,11 @@ public class TableListerController implements PokerClientController, Initializab
 			alert.showAndWait();
 		}
 	}
+	
+	@FXML
+	protected void handleProfileManager() {
+		frameController.setProfileManagerFXML();
+	}
 
 	private void removeObserver() {
 		try {

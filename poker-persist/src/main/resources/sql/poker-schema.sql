@@ -14,6 +14,7 @@ CREATE TABLE pokerdb.users (
 	balance DECIMAL(19,2) NOT NULL,
 	reg_date BIGINT,
 	password VARCHAR(64) NOT NULL,
+	admin BOOLEAN NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (id),
 	CONSTRAINT UQ_users_username UNIQUE (username)
 );

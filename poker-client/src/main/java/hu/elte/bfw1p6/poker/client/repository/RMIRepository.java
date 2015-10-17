@@ -4,8 +4,8 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.UUID;
 
+import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.properties.PokerProperties;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 
@@ -14,7 +14,7 @@ public class RMIRepository {
 
 	//	private Registry registry;
 	private PokerRemote pokerRemote;
-	private UUID sessionId;
+	private PokerSession pokerSession;
 
 	private final String SVNAME;
 	private final String PORT;
@@ -54,11 +54,16 @@ public class RMIRepository {
 		return pokerRemote;
 	}
 
-	public void setSessionId(UUID sessionId) {
-		this.sessionId = sessionId;
+	public void setPokerSession(PokerSession pokerSession) {
+		this.pokerSession = pokerSession;
 	}
 
-	public UUID getSessionId() {
-		return sessionId;
+	public PokerSession getPokerSession() {
+		return pokerSession;
+	}
+
+	public PokerSession getSession() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
