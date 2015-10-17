@@ -3,6 +3,7 @@ package hu.elte.bfw1p6.poker.rmi;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.UUID;
 
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
@@ -29,69 +30,69 @@ public interface PokerRemote extends Remote {
 	
 	/**
 	 * Felhasználói hozzáférés törlése
-	 * @param pokerSession a kliens sessionje
+	 * @param a kliens egyedi session azonosítója
 	 * @param u a User, akit ki szeretnénk törölni
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
 	 */
-	void deletePlayer(PokerSession pokerSession, Player player) throws RemoteException, PokerDataBaseException;
+	void deletePlayer(UUID uuid, Player player) throws RemoteException, PokerDataBaseException;
 
 	/**
 	 * Adott felhasználói fiókhoz tartozó jelszó cseréje
-	 * @param pokerSession a kliens sessionje
+	 * @param a kliens egyedi session azonosítója
 	 * @param username a felhasználói név
 	 * @param oldPassword a régi jelszó
 	 * @param newPassword az új jelszó
 	 * @throws RemoteException
 	 */
-	void modifyPassword(PokerSession pokerSession, String oldPassword, String newPassword) throws RemoteException, PokerDataBaseException, PokerInvalidPassword, PokerUnauthenticatedException;
+	void modifyPassword(UUID uuid, String oldPassword, String newPassword) throws RemoteException, PokerDataBaseException, PokerInvalidPassword, PokerUnauthenticatedException;
 	
 	
 	
 	
 	/**
 	 * Új játéktáblát hoz létre
-	 * @param pokerSession a kliens sessionje
+	 * @param a kliens egyedi session azonosítója
 	 * @param t a létrehozandó tábla entitás
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
 	 */
-	void createTable(PokerSession pokerSession, PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
+	void createTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
 	
 	/**
 	 * Már meglévő játéktáblát töröl
-	 * @param pokerSession a kliens sessionje
+	 * @param a kliens egyedi session azonosítója
 	 * @param pokerTable a törlendő játéktábla
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
 	 */
-	void deleteTable(PokerSession pokerSession, PokerTable pokerTable) throws RemoteException, PokerDataBaseException;
+	void deleteTable(UUID uuid, PokerTable pokerTable) throws RemoteException, PokerDataBaseException;
 
 	/**
 	 * Már meglévő játéktábla módosítása
-	 * @param pokerSession a kliens sessionje
+	 * @param a kliens egyedi session azonosítója
 	 * @param t a módosítandó játéktábla
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
 	 */
-	void modifyTable(PokerSession pokerSession, PokerTable t) throws RemoteException, PokerDataBaseException;
+	void modifyTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException;
 
 	/**
 	 * Az összes játéktábla lekérése
-	 * @param pokerSession a kliens sessionje
+	 * @param a kliens egyedi session azonosítója
 	 * @return az összes játéktábla
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
 	 */
-	List<PokerTable> getTables(PokerSession pokerSession)throws RemoteException, PokerDataBaseException;
+	List<PokerTable> getTables(UUID uuid)throws RemoteException, PokerDataBaseException;
 	
 	
 	
 	
 
-	void registerObserver(PokerSession pokerSession, RemoteObserver proc) throws RemoteException, PokerDataBaseException;
+	void registerObserver(UUID uuid, RemoteObserver proc) throws RemoteException, PokerDataBaseException;
 
-	void unRegisterObserver(PokerSession pokerSession, TableViewObserver proc) throws RemoteException;
+	void unRegisterObserver(UUID uuid, TableViewObserver proc) throws RemoteException;
 
 
 
@@ -115,26 +116,26 @@ public interface PokerRemote extends Remote {
 
 	/**
 	 * Kijelentkezés a póker játékból
-	 * @param pokerSession a kliens sessionje
+	 * @param a kliens egyedi session azonosítója
 	 * @throws RemoteException
 	 */
-	void logout(PokerSession pokerSession) throws RemoteException;
+	void logout(UUID uuid) throws RemoteException;
 
-	boolean shutDown(PokerSession pokerSession) throws RemoteException, PokerInvalidUserException;
+	boolean shutDown(UUID uuid) throws RemoteException, PokerInvalidUserException;
 
-	boolean isAdmin(PokerSession pokerSession) throws RemoteException;
+	boolean isAdmin(UUID uuid) throws RemoteException;
 
 
-	void addObserver(PokerSession pokerSession, RemoteObserver observer) throws RemoteException;
+	void addObserver(UUID uuid, RemoteObserver observer) throws RemoteException;
 
-	List<PokerTable> registerTableViewObserver(PokerSession pokerSession, RemoteObserver observer) throws RemoteException, PokerDataBaseException;
+	List<PokerTable> registerTableViewObserver(UUID uuid, RemoteObserver observer) throws RemoteException, PokerDataBaseException;
 
 	void removeTableViewObserver(RemoteObserver observer) throws RemoteException;
 	
 	
 	
 	
-	void sendPlayerCommand(PokerSession pokerSession, PokerTable t, RemoteObserver client, PlayerHoldemCommand playerCommand) throws RemoteException;
+	void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerHoldemCommand playerCommand) throws RemoteException;
 	
-	void connectToTable(PokerSession pokerSession, PokerTable t, RemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException;
+	void connectToTable(UUID uuid, PokerTable t, RemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException;
 }

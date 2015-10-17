@@ -57,5 +57,7 @@
 		GridPane.columnIndex="2" GridPane.rowIndex="4" />
 	<Button fx:id="createTableButton" text="Kijelentkezés" onAction="#handleLogout"
 		GridPane.columnIndex="2" GridPane.rowIndex="5" />
+	<Button fx:id="profileManagerButton" text="Profil megtekintése" onAction="#handleProfile"
+		GridPane.columnIndex="2" GridPane.rowIndex="6" />
 </GridPane>
 

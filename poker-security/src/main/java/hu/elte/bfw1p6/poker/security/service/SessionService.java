@@ -1,7 +1,7 @@
 package hu.elte.bfw1p6.poker.security.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -9,44 +9,42 @@ import org.mindrot.jbcrypt.BCrypt;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
-import hu.elte.bfw1p6.poker.model.entity.Player;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.repository.UserRepository;
 
 public class SessionService {
 	
-	private List<PokerSession> sessions;
+	private Map<UUID, String> authenticatedUsers;
 	
 	public SessionService() {
-		sessions = new ArrayList<>();
+		this.authenticatedUsers = new HashMap<>();
 	}
 	
-	public boolean isAuthenticated(PokerSession pokerSession) {
-		return sessions.contains(pokerSession);
+	public boolean isAuthenticated(UUID uuid) {
+		return authenticatedUsers.containsKey(uuid);
 	}
 	
 	public PokerSession authenticate(String username, String password) throws PokerInvalidUserException, PokerDataBaseException {
-		User u = UserRepository.getInstance().findUserByUserName(username);
-		Player p = u.getPlayer();
+		User u = UserRepository.getInstance().findByUserName(username);
 		if (!BCrypt.checkpw(password, u.getPassword())) {
 			throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
 		}
 		invalidate(username);
-		PokerSession pokerSession = new PokerSession(UUID.randomUUID(), p);
-		sessions.add(pokerSession);
+		UUID uuid = UUID.randomUUID();
+		authenticatedUsers.put(uuid, username);
+		PokerSession pokerSession = new PokerSession(uuid, u.getPlayer());
 		return pokerSession;
 	}
 	
-	private void invalidate(String username) {
-		for (int i = 0; i < sessions.size(); i++) {
-			if (sessions.get(i).getPlayer().getUserName().equals(username)) {
-				sessions.remove(i);
-				return;
-			}
-		}
+	public void invalidate(UUID uuid) {
+		authenticatedUsers.remove(uuid);
 	}
 	
-	public void invalidate(PokerSession pokerSession) {
-		sessions.remove(pokerSession);
+	private void invalidate(String username) {
+		authenticatedUsers.values().remove(username);
+	}
+	
+	public String lookUpUsername(UUID uuid) {
+		return authenticatedUsers.get(uuid);
 	}
 }

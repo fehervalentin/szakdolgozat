@@ -40,7 +40,7 @@ public class UserRepository {
 	public void save(User u) throws PokerDataBaseException {
 		try {
 			Connection con = DBManager.getInstance().getConnection();
-			String SQL = "INSERT INTO users(username, balacen, reg_date, password) Values(?,?,?,?)";
+			String SQL = "INSERT INTO users(username, balance, reg_date, password, admin) Values(?,?,?,?,?)";
 			PreparedStatement pstmt = con.prepareStatement(SQL);
 			for (int i = 0; i < columns.length; i++) {
 				pstmt.setObject(i+1, u.get(i));
@@ -56,7 +56,7 @@ public class UserRepository {
 		}
 	}
 
-	public User findUserByUserName(String username) throws PokerDataBaseException {
+	public User findByUserName(String username) throws PokerDataBaseException {
 		try {
 			User u = null;
 			String QRY = "SELECT * FROM " + TABLE_NAME + " WHERE username=?";
@@ -66,9 +66,9 @@ public class UserRepository {
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 				u = new User();
-				u.setId(rs.getInt("id"));
-				u.setPassword(rs.getString("password"));
-				u.setAmount(rs.getBigDecimal("balance"));
+				for (int i = 0; i < columns.length; i++) {
+					u.set(i, rs.getObject(columns[i]));
+				}
 			}
 
 			pstmt.close();
@@ -81,7 +81,7 @@ public class UserRepository {
 	public void modifyPassword(String username, String newPassword) throws PokerDataBaseException {
 		try {
 			Connection con = DBManager.getInstance().getConnection();
-			String SQL = "UPDATE User SET password=? WHERE username=?";
+			String SQL = "UPDATE " + TABLE_NAME + " SET password=? WHERE username=?";
 			PreparedStatement pstmt = con.prepareStatement(SQL);
 			pstmt.setString(1, newPassword);
 			pstmt.setString(2, username);
@@ -94,7 +94,7 @@ public class UserRepository {
 
 	public void deletePlayer(Player player) throws PokerDataBaseException {
 		try {
-			User u = findUserByUserName(player.getUserName());
+			User u = findByUserName(player.getUserName());
 			Connection con = DBManager.getInstance().getConnection();
 			String SQL = DELETE;
 			PreparedStatement pstmt = con.prepareStatement(SQL);
@@ -158,7 +158,7 @@ public class UserRepository {
 	}
 
 	public Player getPlayerByName(String username) throws PokerDataBaseException {
-		User user = findUserByUserName(username);
+		User user = findByUserName(username);
 		Player player = new Player(user.getUserName(), user.getBalance(), user.getRegDate());
 		return player;
 	}

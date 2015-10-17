@@ -11,6 +11,7 @@ import hu.elte.bfw1p6.poker.exception.PokerInvalidSession;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
+import hu.elte.bfw1p6.poker.model.entity.Player;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 
@@ -40,6 +41,7 @@ public class Model {
 
 	public void login(String username, String password) throws RemoteException, PokerInvalidUserException, PokerDataBaseException {
 		pokerSession = pokerRemote.login(username, password);
+		RMIRepository.getInstance().setPokerSession(pokerSession);
 	}
 
 	public void registration(String username, String password) throws RemoteException, PokerDataBaseException {
@@ -47,13 +49,13 @@ public class Model {
 	}
 
 	public void createTable(PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
-		pokerRemote.createTable(pokerSession, t);
+		pokerRemote.createTable(pokerSession.getId(), t);
 	}
 
 	public List<PokerTable> getTables() throws PokerDataBaseException {
 		List<PokerTable> tables = null;
 		try {
-			tables = pokerRemote.getTables(pokerSession);
+			tables = pokerRemote.getTables(pokerSession.getId());
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,19 +64,15 @@ public class Model {
 	}
 
 	public void registerObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException {
-		pokerRemote.registerObserver(pokerSession, observer);
-	}
-
-	public void connectToTable() {
-
+		pokerRemote.registerObserver(pokerSession.getId(), observer);
 	}
 
 	public void addObserver(RemoteObserver observer) throws RemoteException {
-		pokerRemote.addObserver(pokerSession, observer);
+		pokerRemote.addObserver(pokerSession.getId(), observer);
 	}
 
 	public List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException {
-		return pokerRemote.registerTableViewObserver(pokerSession, observer);
+		return pokerRemote.registerTableViewObserver(pokerSession.getId(), observer);
 	}
 
 	public void removeTableViewObserver(RemoteObserver observer) throws RemoteException {
@@ -85,7 +83,7 @@ public class Model {
 		if (pokerSession == null) {
 			throw new PokerInvalidSession(SESSION_ERR);
 		}
-		pokerRemote.logout(pokerSession);
+		pokerRemote.logout(pokerSession.getId());
 		pokerSession = null;
 	}
 	
@@ -98,15 +96,19 @@ public class Model {
 	}
 
 	public void modifyTable(PokerTable t) throws RemoteException, PokerDataBaseException {
-		pokerRemote.modifyTable(pokerSession, t);
+		pokerRemote.modifyTable(pokerSession.getId(), t);
 	}
 
 	public void deleteTable(PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
-		pokerRemote.deleteTable(pokerSession, pokerTable);
+		pokerRemote.deleteTable(pokerSession.getId(), pokerTable);
 	}
 
 	public void modifyPassword(String oldPassword, String newPassword) throws RemoteException, PokerDataBaseException, PokerInvalidPassword, PokerUnauthenticatedException {
-		pokerRemote.modifyPassword(pokerSession, oldPassword, newPassword);
+		pokerRemote.modifyPassword(pokerSession.getId(), oldPassword, newPassword);
+	}
+	
+	public Player getPlayer() {
+		return pokerSession.getPlayer();
 	}
 
 	/*public List<Table> getTables() {

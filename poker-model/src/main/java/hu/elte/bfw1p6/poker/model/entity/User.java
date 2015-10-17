@@ -9,6 +9,7 @@ public class User extends Player implements EntityWithId {
 	private Integer id;
 
 	private String password;
+	private Boolean admin;
 
 	public User(String username) {
 		super(username);
@@ -42,6 +43,14 @@ public class User extends Player implements EntityWithId {
 		this.id = id;
 	}
 	
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+	
+	public Boolean getAdmin() {
+		return admin;
+	}
+	
 	public Player getPlayer() {
 		Player p = new Player();
 		p.userName = this.userName;
@@ -66,6 +75,8 @@ public class User extends Player implements EntityWithId {
 			return regDate;
 		case 3:
 			return password;
+		case 4:
+			return admin;
 		default:
 			return null;
 		}
@@ -88,6 +99,10 @@ public class User extends Player implements EntityWithId {
 		}
 		case 3: {
 			setPassword((String) value);
+			break;
+		}
+		case 4: {
+			setAdmin((Boolean) value);
 			break;
 		}
 		}

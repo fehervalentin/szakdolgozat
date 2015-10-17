@@ -21,7 +21,7 @@ public class MainGameModel {
 	}
 	
 	public void connectToTable(PokerTable t, RemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException {
-		pokerRemote.connectToTable(pokerSession, t, observer);
+		pokerRemote.connectToTable(pokerSession.getId(), t, observer);
 	}
 	
 	public void registerObserver() {
@@ -29,6 +29,6 @@ public class MainGameModel {
 	}
 
 	public void sendCommandToTable(PokerTable pokerTable, RemoteObserver observer, PlayerHoldemCommand playerHoldemCommand) throws RemoteException {
-		pokerRemote.sendPlayerCommand(pokerSession, pokerTable, observer, playerHoldemCommand);
+		pokerRemote.sendPlayerCommand(pokerSession.getId(), pokerTable, observer, playerHoldemCommand);
 	}
 }

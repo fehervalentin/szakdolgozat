@@ -44,7 +44,8 @@ public class TableListerController implements PokerClientController, Initializab
 	@FXML private Button logoutButton;
 	@FXML private Button modifyTableButton;
 	@FXML private Button deleteTableButton;
-	
+	@FXML private Button profileManagerButton;
+
 
 	private Alert alert;
 
@@ -154,7 +155,12 @@ public class TableListerController implements PokerClientController, Initializab
 			alert.showAndWait();
 		}
 	}
-	
+
+	@FXML
+	protected void handleProfile() {
+		frameController.setProfileManagerFXML();
+	}
+
 	@FXML
 	protected void handleProfileManager() {
 		frameController.setProfileManagerFXML();
