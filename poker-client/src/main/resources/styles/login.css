@@ -23,6 +23,11 @@
 	-fx-font-size: 52px;
 }
 
+.header-text2 {
+	-fx-text-fill: #FFFFA3;
+	-fx-font-size: 16px;
+}
+
 .hiba {
 	-fx-background-color: red;
 }

@@ -26,7 +26,7 @@ public class SessionService {
 	
 	public PokerSession authenticate(String username, String password) throws PokerInvalidUserException, PokerDataBaseException {
 		User u = UserRepository.getInstance().findByUserName(username);
-		if (!BCrypt.checkpw(password, u.getPassword())) {
+		if (u == null || !BCrypt.checkpw(password, u.getPassword())) {
 			throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
 		}
 		invalidate(username);
@@ -44,7 +44,7 @@ public class SessionService {
 		authenticatedUsers.values().remove(username);
 	}
 	
-	public String lookUpUsername(UUID uuid) {
+	public String lookUpUserName(UUID uuid) {
 		return authenticatedUsers.get(uuid);
 	}
 }

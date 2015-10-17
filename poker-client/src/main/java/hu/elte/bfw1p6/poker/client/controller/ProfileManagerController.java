@@ -2,6 +2,9 @@ package hu.elte.bfw1p6.poker.client.controller;
 
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
@@ -45,8 +48,12 @@ public class ProfileManagerController implements Initializable, PokerClientContr
 	public void initialize(URL location, ResourceBundle resources) {
 		this.model = Model.getInstance();
 		alert = new Alert(null);
-		usernameLabel.setText(model.getPlayer().getUserName());
-		regDateLabel.setText(model.getPlayer().getRegDate() + "");
+		usernameLabel.setText(model.getPlayer().getUserName() + " profilja");
+		Date date = new Date(model.getPlayer().getRegDate() * 1000);
+	    Format format = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+		regDateLabel.setText(format.format(date).toString());
+		System.out.println(format.format(date).toString());
+		System.out.println(model.getPlayer().getRegDate() + "");
 	}
 
 	@Override

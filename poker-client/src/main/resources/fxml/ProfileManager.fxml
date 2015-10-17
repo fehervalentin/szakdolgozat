@@ -15,12 +15,24 @@
 		<Label fx:id="usernameLabel" GridPane.columnIndex="0"
 			styleClass="header-text" GridPane.rowIndex="1" GridPane.columnSpan="3"
 			alignment="center" />
-		<Label fx:id="regDateLabel" GridPane.columnIndex="0" styleClass="header-text"
-			GridPane.rowIndex="2" GridPane.columnSpan="3" text="registration date"
+		<Label fx:id="regDateLabel2" GridPane.columnIndex="0" styleClass="header-text2"
+			GridPane.rowIndex="2" GridPane.columnSpan="1" text="Registráció dátuma: "
+			alignment="center" />
+		<Label fx:id="regDateLabel" GridPane.columnIndex="1" styleClass="header-text2"
+			GridPane.rowIndex="2" GridPane.columnSpan="3"
 			alignment="center" />
 		<Label fx:id="changePasswordLabel" GridPane.columnIndex="0"
 			styleClass="header-text" GridPane.rowIndex="3" GridPane.columnSpan="3"
-			alignment="center" />
+			alignment="center" text="Jelszó cseréje" />
+		<Label fx:id="oldPasswordLabel" GridPane.columnIndex="0"
+			styleClass="header-text2" GridPane.rowIndex="4" GridPane.columnSpan="1"
+			alignment="center" text="Jelszó: " />
+		<Label fx:id="newPasswordLabel" GridPane.columnIndex="0"
+			styleClass="header-text2" GridPane.rowIndex="5" GridPane.columnSpan="1"
+			alignment="center" text="Új jelszó: " />
+		<Label fx:id="reNewPasswordLabel" GridPane.columnIndex="0"
+			styleClass="header-text2" GridPane.rowIndex="6" GridPane.columnSpan="1"
+			alignment="center" text="Új jelszó újra: " />
 		<PasswordField fx:id="oldPasswordField" promptText="Régi jelszó"
 			GridPane.columnSpan="2" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 		<PasswordField fx:id="newPasswordField" promptText="Új jelszó"

@@ -109,7 +109,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	@Override
 	public synchronized void modifyPassword(UUID uuid, String oldPassword, String newPassword) throws RemoteException, PokerDataBaseException, PokerInvalidPassword, PokerUnauthenticatedException {
 		if (sessionService.isAuthenticated(uuid)) {
-			String userName = sessionService.lookUpUsername(uuid);
+			String userName = sessionService.lookUpUserName(uuid);
 			User u = UserRepository.getInstance().findByUserName(userName);
 			if (BCrypt.checkpw(oldPassword, u.getPassword())) {
 				newPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
