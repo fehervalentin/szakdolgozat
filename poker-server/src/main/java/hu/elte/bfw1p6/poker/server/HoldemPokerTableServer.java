@@ -62,6 +62,8 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	private int round = 0;
 	
 	private BigDecimal actualRaise;
+	
+	private int minPlayer = 2;
 
 	/**
 	 * valahogy kéne Decket nyilvan tartani inteket küldök át, és simán filename alapján visszakeresik maguknak a kliensek...
@@ -83,7 +85,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				throw new PokerTooMuchPlayerException("Az asztal betelt, nem tudsz csatlakozni!");
 			} else {
 				clients.add(client);
-				if (clients.size() > 1) {
+				if (clients.size() >= minPlayer) {
 					playersInRound = clients.size();
 					thinkerPlayer = 0;
 					
@@ -182,15 +184,15 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		clients.remove(client);
 	}
 
-	public synchronized void receivePlayerCommand(String username, RemoteObserver client, PlayerHoldemCommand playerCommand) throws PokerDataBaseException {
+	public synchronized void receivePlayerCommand(RemoteObserver client, PlayerHoldemCommand playerCommand) throws PokerDataBaseException {
 		if (clients.contains(client)) {
 			switch(playerCommand.getPlayerCommandType()) {
 			case BLIND: {
-				blind(username, playerCommand);
+				blind(playerCommand);
 				break;
 			}
 			case CALL: {
-				call(username, playerCommand);
+				call(playerCommand);
 				++thinkerPlayer;
 				break;
 			}
@@ -204,6 +206,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			}
 			case RAISE: {
 				stack.add(playerCommand.getAmount());
+				raise(playerCommand);
 				thinkerPlayer = 0;
 				break;
 			}
@@ -240,8 +243,20 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		}
 	}
 
-	private void blind(String username, PlayerHoldemCommand playerCommand) throws PokerDataBaseException {
-		User u = UserRepository.getInstance().findByUserName(username);
+	private void raise(PlayerHoldemCommand playerCommand) throws PokerDataBaseException {
+		User u = UserRepository.getInstance().findByUserName(playerCommand.getSender());
+		BigDecimal newBalance = u.getBalance().subtract(playerCommand.getAmount());
+		if (newBalance.compareTo(new BigDecimal(0)) < 0) {
+			System.out.println("nagy para van");
+			//throw new Poker
+		} else {
+			u.setBalance(u.getBalance().subtract(playerCommand.getAmount()));
+			UserRepository.getInstance().modify(u);
+		}
+	}
+
+	private void blind(PlayerHoldemCommand playerCommand) throws PokerDataBaseException {
+		User u = UserRepository.getInstance().findByUserName(playerCommand.getSender());
 		BigDecimal newBalance = u.getBalance().subtract(playerCommand.getAmount());
 		if (newBalance.compareTo(new BigDecimal(0)) < 0) {
 			System.out.println("nagy para van");
@@ -252,8 +267,8 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		}
 	}
 	
-	private void call(String username, PlayerHoldemCommand playerCommand) throws PokerDataBaseException {
-		User u = UserRepository.getInstance().findByUserName(username);
+	private void call(PlayerHoldemCommand playerCommand) throws PokerDataBaseException {
+		User u = UserRepository.getInstance().findByUserName(playerCommand.getSender());
 		BigDecimal newBalance = playerCommand.getAmount();
 		if (newBalance.compareTo(new BigDecimal(0)) < 0) {
 			System.out.println("nagy para van");

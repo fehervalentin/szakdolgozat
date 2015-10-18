@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
@@ -38,7 +40,7 @@ public class MainGameController implements Initializable, PokerClientController,
 	@FXML private Button quitButton;
 
 	private MainGameModel model;
-
+	
 	private FrameController frameController;
 
 	private PokerTable pokerTable;
@@ -67,9 +69,11 @@ public class MainGameController implements Initializable, PokerClientController,
 
 	private Alert errorAlert;
 
-	private BigDecimal moneyITookIn;
+	private BigDecimal myMoneyInPot = new BigDecimal(0);
 
-	private BigDecimal moneyIShouldTookIn;
+//	private BigDecimal myDebt;
+	
+	private BigDecimal myDebt;
 
 	@Override
 	public void setDelegateController(FrameController frameController) {
@@ -84,6 +88,7 @@ public class MainGameController implements Initializable, PokerClientController,
 		pokerLabel.setText(model.getUserName());
 
 		pokerTable = ConnectTableHelper.getInstance().getPokerTable();
+		myDebt = pokerTable.getDefaultPot();
 		try {
 			commController = new CommunicatorController(this);
 		} catch (RemoteException e) {
@@ -119,6 +124,7 @@ public class MainGameController implements Initializable, PokerClientController,
 			case FLOP: {
 				if (youAreNth == whosOn) {
 					enableButtons();
+					// ha nincs tartozázom disable call...
 				} else {
 					disableButtons();
 				}
@@ -149,6 +155,7 @@ public class MainGameController implements Initializable, PokerClientController,
 			HoldemPlayerCommandType commandType = playerHoldemCommand.getPlayerCommandType();
 			switch (commandType) {
 			case BLIND: {
+				//				moneyIShouldTookIn = playerHoldemCommand.getAmount();
 				break;
 			}
 			case CALL: {
@@ -157,6 +164,7 @@ public class MainGameController implements Initializable, PokerClientController,
 				System.out.println("Yrnth: " + youAreNth + " Whoson: " + whosOn);
 				if (youAreNth == whosOn) {
 					enableButtons();
+					System.out.println("Adósságom: " + myDebt);
 				} else {
 					disableButtons();
 				}
@@ -172,9 +180,21 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case FOLD: {
+				incrementWhosOn();
 				break;
 			}
 			case RAISE: {
+				incrementWhosOn();
+				// és mi van ha én magam emeltem...
+				if (!playerHoldemCommand.getSender().equals(model.getUserName())) {
+					myDebt.add(playerHoldemCommand.getAmount());
+				}
+				if (youAreNth == whosOn) {
+					enableButtons();
+					checkButton.setDisable(true);
+				} else {
+					disableButtons();
+				}
 				break;
 			}
 			case QUIT: {
@@ -187,9 +207,15 @@ public class MainGameController implements Initializable, PokerClientController,
 		} else {
 			throw new IllegalArgumentException();
 		}
+		// ha van adósságom
+		if (myDebt.compareTo(BigDecimal.ZERO) > 0) {
+			checkButton.setDisable(true);
+		} else {
+			callButton.setDisable(true);
+		}
 		whosOn %= players;
 	}
-	
+
 	private void incrementWhosOn() {
 		++whosOn;
 		whosOn %= players;
@@ -197,14 +223,14 @@ public class MainGameController implements Initializable, PokerClientController,
 
 	private void smallBlind() {
 		BigDecimal amount = pokerTable.getDefaultPot().divide(new BigDecimal(2));
-		moneyITookIn = amount;
+		myDebt = myDebt.subtract(amount);
 		PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(HoldemPlayerCommandType.BLIND, amount);
 		sendPlayerCommand(playerHoldemCommand);
 	}
 
 	private void bigBlind() {
 		PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(HoldemPlayerCommandType.BLIND, pokerTable.getDefaultPot());
-		moneyITookIn = pokerTable.getDefaultPot();
+		myDebt = myDebt.subtract(pokerTable.getDefaultPot());
 		sendPlayerCommand(playerHoldemCommand);
 	}
 
@@ -237,6 +263,7 @@ public class MainGameController implements Initializable, PokerClientController,
 	}
 
 	private void enableButtons() {
+		callButton.setDisable(false);
 		checkButton.setDisable(false);
 		foldButton.setDisable(false);
 		raiseButton.setDisable(false);
@@ -253,7 +280,6 @@ public class MainGameController implements Initializable, PokerClientController,
 		// első körben az a dealer, aki elsőként csatlakozott, roundonként +1
 		dealer = houseHoldemCommand.getDealer();
 		System.out.println("Dealer: " + dealer);
-		moneyIShouldTookIn = pokerTable.getDefaultPot();
 		// dealer mellett eggyel balra ülök, akkor én vagyok a kisvak
 		if (youAreNth == ((dealer + 1) % players)) {
 			System.out.println("kisvak");
@@ -271,20 +297,19 @@ public class MainGameController implements Initializable, PokerClientController,
 	private void player() {
 		System.out.println(youAreNth + " " + whosOn);
 		if (youAreNth == whosOn) {
-			if (moneyITookIn.compareTo(moneyIShouldTookIn) < 0) {
+			if (myDebt.compareTo(BigDecimal.ZERO) > 0) {
 				enableButtons();
-				System.out.println("Beraktam: " + moneyITookIn);
-				System.out.println("be kell raknom még ennyit: " + moneyIShouldTookIn.subtract(moneyITookIn));
+				System.out.println("Adósságom: " + myDebt);
 				checkButton.setDisable(true);
 			}
 		} else {
 			disableButtons();
 		}
 	}
-	
+
 	@FXML protected void handleCall(ActionEvent event) {
-		moneyIShouldTookIn.subtract(moneyITookIn);
-		PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(HoldemPlayerCommandType.CALL, moneyIShouldTookIn.subtract(moneyITookIn));
+		PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(HoldemPlayerCommandType.CALL, new BigDecimal(0).add(myDebt));
+		myDebt = myDebt.subtract(myDebt);
 		sendPlayerCommand(playerHoldemCommand);
 	}
 
@@ -294,11 +319,16 @@ public class MainGameController implements Initializable, PokerClientController,
 	}
 
 	@FXML protected void handleRaise(ActionEvent event) {
+		PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(HoldemPlayerCommandType.RAISE, new BigDecimal(6).add(myDebt));
+		sendPlayerCommand(playerHoldemCommand);
 	}
 
 	@FXML protected void handleFold(ActionEvent event) {
 	}
 
 	@FXML protected void handleQuit(ActionEvent event) {
+		//		PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(HoldemPlayerCommandType.QUIT, null);
+		//		sendPlayerCommand(playerHoldemCommand);
+		//		frameController.setTableListerFXML();
 	}
 }
