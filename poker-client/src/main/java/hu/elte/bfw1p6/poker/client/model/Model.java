@@ -52,7 +52,7 @@ public class Model {
 		pokerRemote.createTable(pokerSession.getId(), t);
 	}
 
-	public List<PokerTable> getTables() throws PokerDataBaseException {
+	public List<PokerTable> getTables() throws PokerDataBaseException, PokerUnauthenticatedException {
 		List<PokerTable> tables = null;
 		try {
 			tables = pokerRemote.getTables(pokerSession.getId());
@@ -63,7 +63,7 @@ public class Model {
 		return tables;
 	}
 
-	public void registerObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException {
+	public void registerObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		pokerRemote.registerObserver(pokerSession.getId(), observer);
 	}
 
@@ -71,7 +71,7 @@ public class Model {
 		pokerRemote.addObserver(pokerSession.getId(), observer);
 	}
 
-	public List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException {
+	public List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		return pokerRemote.registerTableViewObserver(pokerSession.getId(), observer);
 	}
 
@@ -95,11 +95,11 @@ public class Model {
 		return paramPokerTable;
 	}
 
-	public void modifyTable(PokerTable t) throws RemoteException, PokerDataBaseException {
+	public void modifyTable(PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		pokerRemote.modifyTable(pokerSession.getId(), t);
 	}
 
-	public void deleteTable(PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
+	public void deleteTable(PokerTable pokerTable) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		pokerRemote.deleteTable(pokerSession.getId(), pokerTable);
 	}
 

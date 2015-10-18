@@ -38,8 +38,9 @@ import hu.elte.bfw1p6.poker.security.service.SessionService;
 public class PokerRemoteImpl extends Observable implements PokerRemote, Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private final String UNAUTH_ERR_MSG = "Nem vagy autentikálva!";
+	private final String ERR_BAD_PW = "Hibás jelszó!";
 
 	private PokerProperties pokerProperties;
 
@@ -85,9 +86,11 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public synchronized void deleteTable(UUID uuid, PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
-		PokerTableRepository.getInstance().deleteTable(pokerTable);
-		this.notifyObservers();
+	public synchronized void deleteTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+		if (sessionService.isAuthenticated(uuid)) {
+			PokerTableRepository.getInstance().deleteTable(t);
+			this.notifyObservers();
+		}
 	}
 
 	@Override
@@ -95,15 +98,15 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 		if (sessionService.isAuthenticated(uuid)) {
 			PokerTableRepository.getInstance().save(t);
 			this.notifyObservers();
-		} else {
-			throw new PokerUnauthenticatedException(UNAUTH_ERR_MSG);
 		}
 	}
 
 	@Override
-	public synchronized void modifyTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException {
-		PokerTableRepository.getInstance().modify(t);
-		this.notifyObservers();
+	public synchronized void modifyTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+		if (sessionService.isAuthenticated(uuid)) {
+			PokerTableRepository.getInstance().modify(t);
+			this.notifyObservers();
+		}
 	}
 
 	@Override
@@ -115,20 +118,21 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 				newPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
 				UserRepository.getInstance().modifyPassword(userName, newPassword);
 			} else {
-				throw new PokerInvalidPassword("Hibás jelszó!");
+				throw new PokerInvalidPassword(ERR_BAD_PW);
 			}
-		} else {
-			throw new PokerUnauthenticatedException(UNAUTH_ERR_MSG);
 		}
 	}
 
 	@Override
-	public List<PokerTable> getTables(UUID uuid) throws RemoteException, PokerDataBaseException {
-		return PokerTableRepository.getInstance().findAll();
+	public List<PokerTable> getTables(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+		if (sessionService.isAuthenticated(uuid)) {
+			return PokerTableRepository.getInstance().findAll();
+		}
+		return null;
 	}
 
 	@Override
-	public synchronized void registerObserver(UUID uuid, RemoteObserver observer) throws RemoteException, PokerDataBaseException {
+	public synchronized void registerObserver(UUID uuid, RemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		//		System.out.println(uuid.toString());
 		//		observers.put(uuid, proc);
 		//		System.out.println(observers.hashCode());
@@ -174,8 +178,12 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public boolean isAdmin(UUID uuid) throws RemoteException {
-		// TODO DAO-tól elkérni servicen keresztül?
+	public boolean isAdmin(UUID uuid) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException {
+		if (sessionService.isAuthenticated(uuid)) {
+			String username = sessionService.lookUpUserName(uuid);
+			User u = UserRepository.getInstance().findByUserName(username);
+			return u.getAdmin();
+		}
 		return false;
 	}
 
@@ -196,7 +204,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public List<PokerTable> registerTableViewObserver(UUID uuid, RemoteObserver observer) throws RemoteException, PokerDataBaseException {
+	public List<PokerTable> registerTableViewObserver(UUID uuid, RemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		TableListerObserver tvo = new TableListerObserver(observer);
 		this.addObserver(tvo);
 		this.setChanged();
@@ -222,7 +230,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerHoldemCommand playerCommand) throws RemoteException {
+	public void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerHoldemCommand playerCommand) throws RemoteException, PokerUnauthenticatedException {
 		if (sessionService.isAuthenticated(uuid)) {
 			pokerTableservers.get(t.getName()).receivePlayerCommand(client, playerCommand);
 		}
@@ -230,7 +238,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public void connectToTable(UUID uuid, PokerTable t, RemoteObserver client) throws RemoteException, PokerTooMuchPlayerException {
+	public void connectToTable(UUID uuid, PokerTable t, RemoteObserver client) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException {
 		if (sessionService.isAuthenticated(uuid)) {
 			HoldemPokerTableServer pts = pokerTableservers.get(t.getName());
 			pts.join(client);

@@ -17,11 +17,13 @@ import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
+import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 
 public class MainGameController implements Initializable, PokerClientController, PokerObserverController {
@@ -45,6 +47,8 @@ public class MainGameController implements Initializable, PokerClientController,
 	private int youAreNth;
 
 	private int players;
+	
+	private Alert errorAlert;
 
 	@Override
 	public void setDelegateController(FrameController frameController) {
@@ -53,6 +57,8 @@ public class MainGameController implements Initializable, PokerClientController,
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		errorAlert = new Alert(AlertType.ERROR);
+		
 		pokerTable = ConnectTableHelper.getInstance().getPokerTable();
 		try {
 			commController = new CommunicatorController(this);
@@ -66,6 +72,9 @@ public class MainGameController implements Initializable, PokerClientController,
 		} catch (RemoteException | PokerTooMuchPlayerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (PokerUnauthenticatedException e) {
+			errorAlert.setContentText(e.getMessage());
+			errorAlert.showAndWait();
 		}
 	}
 
@@ -150,8 +159,10 @@ public class MainGameController implements Initializable, PokerClientController,
 				try {
 					model.sendCommandToTable(pokerTable, commController, playerHoldemCommand);
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (PokerUnauthenticatedException e) {
+					errorAlert.setContentText(e.getMessage());
+					errorAlert.showAndWait();
 				}
 			}}.start();
 
@@ -166,8 +177,10 @@ public class MainGameController implements Initializable, PokerClientController,
 				try {
 					model.sendCommandToTable(pokerTable, commController, playerHoldemCommand);
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (PokerUnauthenticatedException e) {
+					errorAlert.setContentText(e.getMessage());
+					errorAlert.showAndWait();
 				}
 			}}.start();
 	}

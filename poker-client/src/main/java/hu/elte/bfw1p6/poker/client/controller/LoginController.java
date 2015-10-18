@@ -9,6 +9,7 @@ import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,26 +23,13 @@ import javafx.scene.layout.AnchorPane;
 
 public class LoginController implements Initializable, PokerClientController {
 	
-	@FXML
-	private AnchorPane rootPane;
-	
-	@FXML
-	private Label pokerLabel;
-
-	@FXML
-	private TextField usernameField;
-	
-	@FXML
-	private PasswordField passwordField;
-	
-	@FXML
-	private Label usernameLabel;
-	
-	@FXML
-	private Label passwordLabel;
-	
-	@FXML
-	private Button loginButton;
+	@FXML private AnchorPane rootPane;
+	@FXML private Label pokerLabel;
+	@FXML private Label usernameLabel;
+	@FXML private Label passwordLabel;
+	@FXML private TextField usernameField;
+	@FXML private PasswordField passwordField;
+	@FXML private Button loginButton;
 	
 	private Model model;
 	

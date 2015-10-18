@@ -173,9 +173,13 @@ public class CreateTableController implements Initializable, PokerClientControll
 				successAlert.setContentText(SUCC_CREATE_TABLE_MSG);
 				successAlert.showAndWait();
 				frameController.setTableListerFXML();
-			} catch (RemoteException | PokerDataBaseException | PokerUnauthenticatedException e) {
+			} catch (RemoteException | PokerDataBaseException e) {
 				errorAlert.setContentText(e.getMessage());
 				errorAlert.showAndWait();
+			} catch (PokerUnauthenticatedException e) {
+				errorAlert.setContentText(e.getMessage());
+				errorAlert.showAndWait();
+				frameController.setLoginFXML();
 			}
 		} else {
 			// különben pedig volt paraméter => módosítunk
@@ -193,6 +197,9 @@ public class CreateTableController implements Initializable, PokerClientControll
 				successAlert.showAndWait();
 				frameController.setTableListerFXML();
 			} catch (RemoteException | PokerDataBaseException e) {
+				errorAlert.setContentText(e.getMessage());
+				errorAlert.showAndWait();
+			} catch (PokerUnauthenticatedException e) {
 				errorAlert.setContentText(e.getMessage());
 				errorAlert.showAndWait();
 			}

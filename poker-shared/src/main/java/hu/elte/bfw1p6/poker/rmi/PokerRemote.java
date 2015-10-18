@@ -65,8 +65,9 @@ public interface PokerRemote extends Remote {
 	 * @param pokerTable a törlendő játéktábla
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
+	 * @throws PokerUnauthenticatedException 
 	 */
-	void deleteTable(UUID uuid, PokerTable pokerTable) throws RemoteException, PokerDataBaseException;
+	void deleteTable(UUID uuid, PokerTable pokerTable) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
 
 	/**
 	 * Már meglévő játéktábla módosítása
@@ -74,8 +75,9 @@ public interface PokerRemote extends Remote {
 	 * @param t a módosítandó játéktábla
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
+	 * @throws PokerUnauthenticatedException 
 	 */
-	void modifyTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException;
+	void modifyTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
 
 	/**
 	 * Az összes játéktábla lekérése
@@ -83,14 +85,15 @@ public interface PokerRemote extends Remote {
 	 * @return az összes játéktábla
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
+	 * @throws PokerUnauthenticatedException 
 	 */
-	List<PokerTable> getTables(UUID uuid)throws RemoteException, PokerDataBaseException;
+	List<PokerTable> getTables(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
 	
 	
 	
 	
 
-	void registerObserver(UUID uuid, RemoteObserver proc) throws RemoteException, PokerDataBaseException;
+	void registerObserver(UUID uuid, RemoteObserver proc) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
 
 	void unRegisterObserver(UUID uuid, TableViewObserver proc) throws RemoteException;
 
@@ -123,19 +126,19 @@ public interface PokerRemote extends Remote {
 
 	boolean shutDown(UUID uuid) throws RemoteException, PokerInvalidUserException;
 
-	boolean isAdmin(UUID uuid) throws RemoteException;
+	boolean isAdmin(UUID uuid) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException;
 
 
 	void addObserver(UUID uuid, RemoteObserver observer) throws RemoteException;
 
-	List<PokerTable> registerTableViewObserver(UUID uuid, RemoteObserver observer) throws RemoteException, PokerDataBaseException;
+	List<PokerTable> registerTableViewObserver(UUID uuid, RemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
 
 	void removeTableViewObserver(RemoteObserver observer) throws RemoteException;
 	
 	
 	
 	
-	void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerHoldemCommand playerCommand) throws RemoteException;
+	void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerHoldemCommand playerCommand) throws RemoteException, PokerUnauthenticatedException;
 	
-	void connectToTable(UUID uuid, PokerTable t, RemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException;
+	void connectToTable(UUID uuid, PokerTable t, RemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException;
 }
