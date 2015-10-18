@@ -57,9 +57,11 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 
 	private int playersInRound;
 
-	private int thinkerPlayer;
-	
+	private int thinkerPlayer; // úgy kell megcsinálni, hogy call, checknél ++, raisenél = 0!!!;
+
 	private int round = 0;
+	
+	private BigDecimal actualRaise;
 
 	/**
 	 * valahogy kéne Decket nyilvan tartani inteket küldök át, és simán filename alapján visszakeresik maguknak a kliensek...
@@ -84,11 +86,12 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				if (clients.size() > 1) {
 					playersInRound = clients.size();
 					thinkerPlayer = 0;
+					
 					// be kell kérni a vakokat
 					collectBlinds();
-					System.out.println("tudjaafasz");
 					// két lap kézbe
 					dealCardsToPlayers();
+					
 					// megkezdődik az első kör (flop előtt) kisvak nagyvak etc...
 					// nézni kell, hogy hol tart a kör, ha körbeértünk, akkor mehet a flop, vagy adott esetben újabb körök!!!
 					// pl valaki emel...
@@ -96,24 +99,23 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			}
 		}
 		return clients.size();
-		//dealCardsToPlayers();
 	}
-	
+
 	private void collectBlinds() {
+		actualRaise = pokerTable.getDefaultPot();
 		for (int i = 0; i < clients.size(); i++) {
-			int j = i;
 			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, i, clients.size(), round);
 			try {
-				clients.get(j).update(null, pokerCommand);
+				clients.get(i).update(null, pokerCommand);
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			//sendPokerCommand(j, pokerCommand);
 		}
-		actualHoldemHouseCommandType = HoldemHouseCommandType.values()[actualHoldemHouseCommandType.ordinal() + 1];
+		nextStep();
 	}
-	
+
 	private void sendPokerCommand(int j, PokerCommand pokerCommand) {
 		new Thread() {
 
@@ -134,7 +136,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard());
 			sendPokerCommand(j, pokerCommand);
 		}
-		actualHoldemHouseCommandType = HoldemHouseCommandType.values()[actualHoldemHouseCommandType.ordinal() + 1];
+		nextStep();
 	}
 
 	private void flop() {
@@ -184,45 +186,51 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		if (clients.contains(client)) {
 			switch(playerCommand.getPlayerCommandType()) {
 			case BLIND: {
-				User u = UserRepository.getInstance().findByUserName(username);
-				BigDecimal newBalance = u.getBalance().subtract(playerCommand.getAmount());
-				if (newBalance.compareTo(new BigDecimal(0)) < 0) {
-					System.out.println("nagy para van");
-					//throw new Poker
-				} else {
-					u.setBalance(u.getBalance().subtract(playerCommand.getAmount()));
-					UserRepository.getInstance().modify(u);
-				}
+				blind(username, playerCommand);
 				break;
 			}
 			case CALL: {
+				call(username, playerCommand);
+				++thinkerPlayer;
 				break;
 			}
 			case CHECK: {
+				++thinkerPlayer;
 				break;
 			}
 			case FOLD: {
+				++thinkerPlayer;
 				break;
 			}
 			case RAISE: {
 				stack.add(playerCommand.getAmount());
+				thinkerPlayer = 0;
 				break;
 			}
 			case QUIT: {
 				clients.remove(client);
+				++thinkerPlayer;
 				break;
 			}
 			default:
 				break;
 			}
-			++thinkerPlayer;
 			if (thinkerPlayer >= playersInRound) {
-				if (actualHoldemHouseCommandType == HoldemHouseCommandType.FLOP) {
+				switch (actualHoldemHouseCommandType) {
+				case FLOP: {
 					flop();
-				} else if (actualHoldemHouseCommandType == HoldemHouseCommandType.TURN) {
+					break;
+				}
+				case TURN: {
 					turn();
-				} else if (actualHoldemHouseCommandType == HoldemHouseCommandType.RIVER) {
+					break;
+				}
+				case RIVER: {
 					river();
+					break;
+				}
+				default:
+					break;
 				}
 				thinkerPlayer %= playersInRound;
 			}
@@ -231,4 +239,29 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			notifyClients(playerCommand);
 		}
 	}
+
+	private void blind(String username, PlayerHoldemCommand playerCommand) throws PokerDataBaseException {
+		User u = UserRepository.getInstance().findByUserName(username);
+		BigDecimal newBalance = u.getBalance().subtract(playerCommand.getAmount());
+		if (newBalance.compareTo(new BigDecimal(0)) < 0) {
+			System.out.println("nagy para van");
+			//throw new Poker
+		} else {
+			u.setBalance(u.getBalance().subtract(playerCommand.getAmount()));
+			UserRepository.getInstance().modify(u);
+		}
+	}
+	
+	private void call(String username, PlayerHoldemCommand playerCommand) throws PokerDataBaseException {
+		User u = UserRepository.getInstance().findByUserName(username);
+		BigDecimal newBalance = playerCommand.getAmount();
+		if (newBalance.compareTo(new BigDecimal(0)) < 0) {
+			System.out.println("nagy para van");
+			//throw new Poker
+		} else {
+			u.setBalance(u.getBalance().subtract(playerCommand.getAmount()));
+			UserRepository.getInstance().modify(u);
+		}
+	}
+	
 }

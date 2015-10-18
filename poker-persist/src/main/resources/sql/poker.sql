@@ -1,13 +1,13 @@
 insert into pokerdb.users (balance, username, password)
 	values(
-		100.00,
+		10000.00,
 		'asd',
 		'$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq'
 	);
 	
 insert into pokerdb.users (balance, username, password, admin)
 	values(
-		100.00,
+		10000.00,
 		'Flat',
 		'$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq',
 		TRUE

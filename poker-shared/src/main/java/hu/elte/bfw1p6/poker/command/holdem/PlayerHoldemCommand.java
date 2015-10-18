@@ -20,10 +20,12 @@ public class PlayerHoldemCommand implements PokerCommand, Serializable {
 	private HoldemPlayerCommandType playerCommandType;
 	private BigDecimal amount;
 	
+	private String sender;
+	
 	/**
 	 * Konstruktor
 	 * @param playerCommandType A Command típusa
-	 * @param amount RAISE esetén az emelendő összeg
+	 * @param amount RAISE esetén az emelendő összeg, CALL esetén a maradék összeg (ami még hiányzik az egyenlítéshez)
 	 */
 	public PlayerHoldemCommand(HoldemPlayerCommandType playerCommandType, BigDecimal amount) {
 		this.playerCommandType = playerCommandType;
@@ -44,5 +46,17 @@ public class PlayerHoldemCommand implements PokerCommand, Serializable {
 	 */
 	public HoldemPlayerCommandType getPlayerCommandType() {
 		return playerCommandType;
+	}
+	
+	/**
+	 * 
+	 * @return Az utasítást küldő felhasználó neve
+	 */
+	public String getSender() {
+		return sender;
+	}
+	
+	public void setSender(String sender) {
+		this.sender = sender;
 	}
 }

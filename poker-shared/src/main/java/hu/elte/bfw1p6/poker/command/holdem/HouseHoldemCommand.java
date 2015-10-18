@@ -1,6 +1,8 @@
 package hu.elte.bfw1p6.poker.command.holdem;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
@@ -28,8 +30,9 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	/**
 	 * Ha a szerver bekéri a vakokat, akkor ezt a konstruktort kell használni
 	 * @param houseCommandType BLIND
-	 * @param nthPlayer hanyadik játékos a körben
+	 * @param nthPlayer hanyadik játékos vagy a körben
 	 * @param players hány játékos van összesen a körben
+	 * @param dealer ki az aktuális osztó
 	 */
 	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, int nthPlayer, int players, int dealer) {
 		this.houseCommandType = houseCommandType;

@@ -23,7 +23,6 @@ public class RMIRepository {
 
 	private RMIRepository() {
 		pokerProperties = PokerProperties.getInstance();
-		System.out.println("Kliens: " + this.toString());
 		SVNAME =  pokerProperties.getProperty("name");
 		PORT = pokerProperties.getProperty("rmiport");
 		try {

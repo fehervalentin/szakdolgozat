@@ -32,6 +32,7 @@ public class MainGameModel {
 	}
 
 	public void sendCommandToTable(PokerTable pokerTable, RemoteObserver observer, PlayerHoldemCommand playerHoldemCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException {
+		playerHoldemCommand.setSender(pokerSession.getPlayer().getUserName());
 		pokerRemote.sendPlayerCommand(pokerSession.getId(), pokerTable, observer, playerHoldemCommand);
 		pokerSession.setPlayer(pokerRemote.refreshPlayer(pokerSession.getId()));
 		System.out.println("uj balance: " + pokerSession.getPlayer().getBalance());
@@ -41,4 +42,8 @@ public class MainGameModel {
 //		pokerRemote.sendPlayerCommand(pokerSession.getId(), pok, client, playerCommand);
 //		pokerSession.setPlayer(player);
 //	}
+	
+	public String getUserName() {
+		return pokerSession.getPlayer().getUserName();
+	}
 }

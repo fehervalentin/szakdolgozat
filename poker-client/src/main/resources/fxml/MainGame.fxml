@@ -17,14 +17,16 @@
 			<Label fx:id="pokerLabel" GridPane.columnIndex="0"
 				GridPane.rowIndex="0" GridPane.columnSpan="20" text="Bejelentkezés"
 				styleClass="header-text" alignment="center" />
-			<Button fx:id="checkButton" text="Check" onAction="#handleCheck"
+			<Button fx:id="callButton" text="Call" onAction="#handleCall"
 				styleClass="rich-blue" GridPane.columnIndex="8" GridPane.rowIndex="12" />
-			<Button fx:id="raiseButton" text="Raise" onAction="#handleRaise"
+			<Button fx:id="checkButton" text="Check" onAction="#handleCheck"
 				styleClass="rich-blue" GridPane.columnIndex="9" GridPane.rowIndex="12" />
-			<Button fx:id="foldButton" text="Fold" onAction="#handleFold"
+			<Button fx:id="raiseButton" text="Raise" onAction="#handleRaise"
 				styleClass="rich-blue" GridPane.columnIndex="10" GridPane.rowIndex="12" />
-				<Button fx:id="quitButton" text="Quit" onAction="#handleQuit"
+			<Button fx:id="foldButton" text="Fold" onAction="#handleFold"
 				styleClass="rich-blue" GridPane.columnIndex="11" GridPane.rowIndex="12" />
+				<Button fx:id="quitButton" text="Quit" onAction="#handleQuit"
+				styleClass="rich-blue" GridPane.columnIndex="12" GridPane.rowIndex="12" />
 		</GridPane>
 	</children>
 </AnchorPane>
