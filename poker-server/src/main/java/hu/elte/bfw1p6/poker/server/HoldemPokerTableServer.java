@@ -14,6 +14,7 @@ import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
+import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.repository.UserRepository;
@@ -30,6 +31,8 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final String ERR_BALANCE_MSG = "Nincs elég zsetonod!";
 
 	/**
 	 * Maga az asztal entitás, le lehet kérni mindent...
@@ -60,9 +63,9 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	private int thinkerPlayer; // úgy kell megcsinálni, hogy call, checknél ++, raisenél = 0!!!;
 
 	private int round = 0;
-	
+
 	private BigDecimal actualRaise;
-	
+
 	private int minPlayer = 2;
 
 	/**
@@ -88,12 +91,12 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				if (clients.size() >= minPlayer) {
 					playersInRound = clients.size();
 					thinkerPlayer = 0;
-					
+
 					// be kell kérni a vakokat
 					collectBlinds();
 					// két lap kézbe
 					dealCardsToPlayers();
-					
+
 					// megkezdődik az első kör (flop előtt) kisvak nagyvak etc...
 					// nézni kell, hogy hol tart a kör, ha körbeértünk, akkor mehet a flop, vagy adott esetben újabb körök!!!
 					// pl valaki emel...
@@ -184,7 +187,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		clients.remove(client);
 	}
 
-	public synchronized void receivePlayerCommand(RemoteObserver client, PlayerHoldemCommand playerCommand) throws PokerDataBaseException {
+	public synchronized void receivePlayerCommand(RemoteObserver client, PlayerHoldemCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException {
 		if (clients.contains(client)) {
 			switch(playerCommand.getPlayerCommandType()) {
 			case BLIND: {
@@ -205,9 +208,8 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				break;
 			}
 			case RAISE: {
-				stack.add(playerCommand.getAmount());
 				raise(playerCommand);
-				thinkerPlayer = 0;
+				thinkerPlayer = 1;
 				break;
 			}
 			case QUIT: {
@@ -237,46 +239,43 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				}
 				thinkerPlayer %= playersInRound;
 			}
-			// ha mindenki küldött már commandot, akkor jöhet a turn
-			//de mi van ha valaki raiselt...??? újabb kör
 			notifyClients(playerCommand);
 		}
 	}
 
 	private void raise(PlayerHoldemCommand playerCommand) throws PokerDataBaseException {
 		User u = UserRepository.getInstance().findByUserName(playerCommand.getSender());
-		BigDecimal newBalance = u.getBalance().subtract(playerCommand.getAmount());
+		BigDecimal newBalance = u.getBalance().subtract(playerCommand.getCallAmount().subtract(playerCommand.getRaiseAmount()));
 		if (newBalance.compareTo(new BigDecimal(0)) < 0) {
 			System.out.println("nagy para van");
 			//throw new Poker
 		} else {
-			u.setBalance(u.getBalance().subtract(playerCommand.getAmount()));
+			u.setBalance(u.getBalance().subtract(playerCommand.getCallAmount()));
 			UserRepository.getInstance().modify(u);
 		}
 	}
 
-	private void blind(PlayerHoldemCommand playerCommand) throws PokerDataBaseException {
+	private void blind(PlayerHoldemCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException {
 		User u = UserRepository.getInstance().findByUserName(playerCommand.getSender());
-		BigDecimal newBalance = u.getBalance().subtract(playerCommand.getAmount());
-		if (newBalance.compareTo(new BigDecimal(0)) < 0) {
-			System.out.println("nagy para van");
-			//throw new Poker
-		} else {
-			u.setBalance(u.getBalance().subtract(playerCommand.getAmount()));
+		if (isThereEnoughMoney(u, playerCommand)) {
+			u.setBalance(u.getBalance().subtract(playerCommand.getCallAmount()));
 			UserRepository.getInstance().modify(u);
 		}
 	}
-	
-	private void call(PlayerHoldemCommand playerCommand) throws PokerDataBaseException {
+
+	private void call(PlayerHoldemCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException {
 		User u = UserRepository.getInstance().findByUserName(playerCommand.getSender());
-		BigDecimal newBalance = playerCommand.getAmount();
-		if (newBalance.compareTo(new BigDecimal(0)) < 0) {
-			System.out.println("nagy para van");
-			//throw new Poker
-		} else {
-			u.setBalance(u.getBalance().subtract(playerCommand.getAmount()));
+		if (isThereEnoughMoney(u, playerCommand)) {
+			u.setBalance(u.getBalance().subtract(playerCommand.getCallAmount()));
 			UserRepository.getInstance().modify(u);
 		}
 	}
-	
+
+	private boolean isThereEnoughMoney(User u, PlayerHoldemCommand playerCommand) throws PokerUserBalanceException {
+		if (playerCommand.getCallAmount().compareTo(BigDecimal.ZERO) < 0) {
+			throw new PokerUserBalanceException(ERR_BALANCE_MSG);
+		}
+		return true;
+	}
+
 }

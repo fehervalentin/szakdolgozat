@@ -18,7 +18,8 @@ public class PlayerHoldemCommand implements PokerCommand, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private HoldemPlayerCommandType playerCommandType;
-	private BigDecimal amount;
+	private BigDecimal callAmount;
+	private BigDecimal raiseAmount;
 	
 	private String sender;
 	
@@ -27,17 +28,26 @@ public class PlayerHoldemCommand implements PokerCommand, Serializable {
 	 * @param playerCommandType A Command típusa
 	 * @param amount RAISE esetén az emelendő összeg, CALL esetén a maradék összeg (ami még hiányzik az egyenlítéshez)
 	 */
-	public PlayerHoldemCommand(HoldemPlayerCommandType playerCommandType, BigDecimal amount) {
+	public PlayerHoldemCommand(HoldemPlayerCommandType playerCommandType, BigDecimal callAmount, BigDecimal raiseAmount) {
 		this.playerCommandType = playerCommandType;
-		this.amount = amount;
+		this.callAmount = callAmount;
+		this.raiseAmount = raiseAmount;
 	}
 	
 	/**
 	 * Csak RAISE esetén lehessen elkérni, vagy nullt adjon vissza...?
 	 * @return
 	 */
-	public BigDecimal getAmount() {
-		return amount;
+	public BigDecimal getCallAmount() {
+		return callAmount;
+	}
+	
+	/**
+	 * Emelés esetén az emelendő összeg.
+	 * @return az emelendő összeg
+	 */
+	public BigDecimal getRaiseAmount() {
+		return raiseAmount;
 	}
 	
 	/**
