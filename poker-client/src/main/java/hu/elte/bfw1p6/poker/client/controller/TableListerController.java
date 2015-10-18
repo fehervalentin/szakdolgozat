@@ -192,7 +192,7 @@ public class TableListerController implements PokerClientController, Initializab
 	public void updateMe(Object updateMsg) {
 		List<PokerTable> tables = (List<PokerTable>)updateMsg;
 		tableView.getItems().setAll(tables);
-		System.out.println("TableListerController");
+//		System.out.println("TableListerController");
 		System.out.println("MEGKAPTAM A TÁBLÁKAT");
 	}
 }

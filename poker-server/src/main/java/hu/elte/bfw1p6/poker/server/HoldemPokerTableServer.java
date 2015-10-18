@@ -12,8 +12,11 @@ import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
 import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
+import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
+import hu.elte.bfw1p6.poker.model.entity.User;
+import hu.elte.bfw1p6.poker.persist.repository.UserRepository;
 import hu.elte.bfw1p6.poker.server.logic.Deck;
 import hu.elte.bfw1p6.poker.server.logic.House;
 
@@ -55,6 +58,8 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	private int playersInRound;
 
 	private int thinkerPlayer;
+	
+	private int round = 0;
 
 	/**
 	 * valahogy kéne Decket nyilvan tartani inteket küldök át, és simán filename alapján visszakeresik maguknak a kliensek...
@@ -67,7 +72,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		house = new House();
 		clients = new ArrayList<>();
 		// a játékosoknak osztok először lapokat
-		this.actualHoldemHouseCommandType = HoldemHouseCommandType.PLAYER;
+		this.actualHoldemHouseCommandType = HoldemHouseCommandType.values()[0];
 	}
 
 	public synchronized int join(RemoteObserver client) throws PokerTooMuchPlayerException {
@@ -79,6 +84,10 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				if (clients.size() > 1) {
 					playersInRound = clients.size();
 					thinkerPlayer = 0;
+					// be kell kérni a vakokat
+					collectBlinds();
+					System.out.println("tudjaafasz");
+					// két lap kézbe
 					dealCardsToPlayers();
 					// megkezdődik az első kör (flop előtt) kisvak nagyvak etc...
 					// nézni kell, hogy hol tart a kör, ha körbeértünk, akkor mehet a flop, vagy adott esetben újabb körök!!!
@@ -89,23 +98,41 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		return clients.size();
 		//dealCardsToPlayers();
 	}
+	
+	private void collectBlinds() {
+		for (int i = 0; i < clients.size(); i++) {
+			int j = i;
+			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, i, clients.size(), round);
+			try {
+				clients.get(j).update(null, pokerCommand);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//sendPokerCommand(j, pokerCommand);
+		}
+		actualHoldemHouseCommandType = HoldemHouseCommandType.values()[actualHoldemHouseCommandType.ordinal() + 1];
+	}
+	
+	private void sendPokerCommand(int j, PokerCommand pokerCommand) {
+		new Thread() {
+
+			@Override
+			public void run() {
+				try {
+					clients.get(j).update(null, pokerCommand);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}}.start();
+	}
 
 	private void dealCardsToPlayers() {
 		for (int i = 0; i < clients.size(); i++) {
 			int j = i;
-			//			System.out.println(i);
-			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), i, clients.size());
-			new Thread() {
-
-				@Override
-				public void run() {
-					try {
-						clients.get(j).update(null, pokerCommand);
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}}.start();
+			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard());
+			sendPokerCommand(j, pokerCommand);
 		}
 		actualHoldemHouseCommandType = HoldemHouseCommandType.values()[actualHoldemHouseCommandType.ordinal() + 1];
 	}
@@ -153,9 +180,21 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		clients.remove(client);
 	}
 
-	public synchronized void receivePlayerCommand(RemoteObserver client, PlayerHoldemCommand playerCommand) {
+	public synchronized void receivePlayerCommand(String username, RemoteObserver client, PlayerHoldemCommand playerCommand) throws PokerDataBaseException {
 		if (clients.contains(client)) {
 			switch(playerCommand.getPlayerCommandType()) {
+			case BLIND: {
+				User u = UserRepository.getInstance().findByUserName(username);
+				BigDecimal newBalance = u.getBalance().subtract(playerCommand.getAmount());
+				if (newBalance.compareTo(new BigDecimal(0)) < 0) {
+					System.out.println("nagy para van");
+					//throw new Poker
+				} else {
+					u.setBalance(u.getBalance().subtract(playerCommand.getAmount()));
+					UserRepository.getInstance().modify(u);
+				}
+				break;
+			}
 			case CALL: {
 				break;
 			}

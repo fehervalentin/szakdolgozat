@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
+import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
@@ -17,7 +18,8 @@ public class MainGameModel {
 	private PokerRemote pokerRemote;
 	
 	public MainGameModel() {
-		this.pokerSession = RMIRepository.getInstance().getSession();
+		this.pokerSession = Model.getInstance().getPokerSession();
+		
 		this.pokerRemote = RMIRepository.getInstance().getPokerRemote();
 	}
 	
@@ -29,7 +31,14 @@ public class MainGameModel {
 		
 	}
 
-	public void sendCommandToTable(PokerTable pokerTable, RemoteObserver observer, PlayerHoldemCommand playerHoldemCommand) throws RemoteException, PokerUnauthenticatedException {
+	public void sendCommandToTable(PokerTable pokerTable, RemoteObserver observer, PlayerHoldemCommand playerHoldemCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException {
 		pokerRemote.sendPlayerCommand(pokerSession.getId(), pokerTable, observer, playerHoldemCommand);
+		pokerSession.setPlayer(pokerRemote.refreshPlayer(pokerSession.getId()));
+		System.out.println("uj balance: " + pokerSession.getPlayer().getBalance());
 	}
+
+//	public void decreaseBalance(PokerTable pokerTable, Remote observer BigDecimal amount) {
+//		pokerRemote.sendPlayerCommand(pokerSession.getId(), pok, client, playerCommand);
+//		pokerSession.setPlayer(player);
+//	}
 }

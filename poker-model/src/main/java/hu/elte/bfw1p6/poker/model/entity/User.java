@@ -35,7 +35,7 @@ public class User extends Player implements EntityWithId {
 		return password;
 	}
 
-	public void setAmount(BigDecimal balance) {
+	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
 	}
 
@@ -90,7 +90,7 @@ public class User extends Player implements EntityWithId {
 			break;
 		}
 		case 1: {
-			setAmount((BigDecimal) value);
+			setBalance((BigDecimal) value);
 			break;
 		}
 		case 2: {

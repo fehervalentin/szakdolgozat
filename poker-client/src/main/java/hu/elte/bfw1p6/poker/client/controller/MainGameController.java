@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
@@ -14,11 +13,12 @@ import hu.elte.bfw1p6.poker.client.model.MainGameModel;
 import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
 import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
 import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
-import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
+import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -42,12 +42,26 @@ public class MainGameController implements Initializable, PokerClientController,
 
 	private CommunicatorController commController;
 
+	/**
+	 * Jelenleg ki következik
+	 */
 	private int whosOn = 0;
 
+	/**
+	 * Hanyadik vagyok a körben
+	 */
 	private int youAreNth;
 
+	/**
+	 * Hány játékos van velem együtt
+	 */
 	private int players;
 	
+	/**
+	 * Az aktuális osztó sorszáma
+	 */
+	private int dealer;
+
 	private Alert errorAlert;
 
 	@Override
@@ -58,7 +72,7 @@ public class MainGameController implements Initializable, PokerClientController,
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		errorAlert = new Alert(AlertType.ERROR);
-		
+
 		pokerTable = ConnectTableHelper.getInstance().getPokerTable();
 		try {
 			commController = new CommunicatorController(this);
@@ -80,47 +94,59 @@ public class MainGameController implements Initializable, PokerClientController,
 
 	@Override
 	public void updateMe(Object updateMsg) {
+		// ha a ház küld utasítást
 		if (updateMsg instanceof HouseHoldemCommand) {
 			HouseHoldemCommand houseHoldemCommand = (HouseHoldemCommand)updateMsg;
-			if (houseHoldemCommand.getHouseCommandType() == HoldemHouseCommandType.PLAYER) {
-				System.out.println("----------------");
-				System.out.println(houseHoldemCommand.getHouseCommandType());
-				System.out.println(houseHoldemCommand.getCard1());
-				System.out.println(houseHoldemCommand.getCard2());
-				System.out.println(houseHoldemCommand.getNthPlayer());
+			printHouseCommand(houseHoldemCommand);
+			switch (houseHoldemCommand.getHouseCommandType()) {
+			case BLIND: {
 				youAreNth = houseHoldemCommand.getNthPlayer();
 				players = houseHoldemCommand.getPlayers();
-				if (youAreNth == whosOn) {
-					//					youAreNext();
-					System.out.println("Te jössz!");
+				dealer = houseHoldemCommand.getDealer();
+				if (youAreNth == ((dealer + 1) % players)) {
+					System.out.println("kivak");
+					smallBlind();
+				} else if (youAreNth == ((dealer + 2) % players)) {
+					bigBlind();
+					System.out.println("nagyvak");
 				}
-			} else if (houseHoldemCommand.getHouseCommandType() == HoldemHouseCommandType.FLOP) {
-				System.out.println("----------------");
-				System.out.println(houseHoldemCommand.getHouseCommandType());
-				System.out.println(houseHoldemCommand.getCard1());
-				System.out.println(houseHoldemCommand.getCard2());
-				System.out.println(houseHoldemCommand.getCard3());
+				break;
+			}
+			case PLAYER: {
 				if (youAreNth == whosOn) {
-					//					youAreNext();
-					System.out.println("Te jössz!");
+					enableButtons();
+				} else {
+					disableButtons();
 				}
-				//youAreNext();
-			} else if (houseHoldemCommand.getHouseCommandType() == HoldemHouseCommandType.TURN) {
-				System.out.println("----------------");
-				System.out.println(houseHoldemCommand.getHouseCommandType());
-				System.out.println(houseHoldemCommand.getCard1());
+				break;
+			}
+			case FLOP: {
 				if (youAreNth == whosOn) {
-					//					youAreNext();
-					System.out.println("Te jössz!");
+					enableButtons();
+				} else {
+					disableButtons();
 				}
-			} else if (houseHoldemCommand.getHouseCommandType() == HoldemHouseCommandType.RIVER) {
-				System.out.println("----------------");
-				System.out.println(houseHoldemCommand.getHouseCommandType());
-				System.out.println(houseHoldemCommand.getCard1());
+				break;
+			}
+			case TURN: {
 				if (youAreNth == whosOn) {
-					//					youAreNext();
-					System.out.println("Te jössz!");
+					enableButtons();
+				} else {
+					disableButtons();
 				}
+				break;
+			}
+			case RIVER: {
+				if (youAreNth == whosOn) {
+					enableButtons();
+				} else {
+					disableButtons();
+				}
+				break;
+			}
+			default: {
+				break;
+			}
 			}
 		} else if (updateMsg instanceof PlayerHoldemCommand) {
 			PlayerHoldemCommand playerHoldemCommand = (PlayerHoldemCommand)updateMsg;
@@ -130,28 +156,36 @@ public class MainGameController implements Initializable, PokerClientController,
 				System.out.println(playerHoldemCommand.getAmount());
 			}
 			if (youAreNth == whosOn) {
-				youAreNext();
+				enableButtons();
+			} else {
+				disableButtons();
 			}
 			if (playerHoldemCommand.getPlayerCommandType() != HoldemPlayerCommandType.QUIT) {
 			}
+		} else {
+			throw new IllegalArgumentException();
 		}
 		whosOn++;
 		whosOn %= players;
 	}
+	
+	private void smallBlind() {
+		BigDecimal amount = pokerTable.getDefaultPot().divide(new BigDecimal(2));
+		PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(HoldemPlayerCommandType.BLIND, amount);
+		sendPlayerCommand(playerHoldemCommand);
+	}
+	
+	private void bigBlind() {
+		PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(HoldemPlayerCommandType.BLIND, pokerTable.getDefaultPot());
+		sendPlayerCommand(playerHoldemCommand);
+	}
 
-	public void youAreNext() {
-		System.out.println("Te jössz: ");
-		//		String command = "CHECK";//System.console().readLine();
-		Scanner in = new Scanner(System.in);
-		String command = in.next();
-		String amount = "0";
-		if (HoldemPlayerCommandType.valueOf(command) == HoldemPlayerCommandType.RAISE) {
-			System.out.println("Mennyit: ");
-			amount = in.next();
-		}
-		in.close();
-		PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(HoldemPlayerCommandType.valueOf(command), BigDecimal.valueOf(Double.valueOf(amount)));
-
+	private void printHouseCommand(HouseHoldemCommand command) {
+		System.out.println("----------------");
+		System.out.println(command);
+	}
+	
+	private void sendPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
 		new Thread() {
 
 			@Override
@@ -160,29 +194,28 @@ public class MainGameController implements Initializable, PokerClientController,
 					model.sendCommandToTable(pokerTable, commController, playerHoldemCommand);
 				} catch (RemoteException e) {
 					e.printStackTrace();
-				} catch (PokerUnauthenticatedException e) {
+				} catch (PokerUnauthenticatedException | PokerDataBaseException e) {
 					errorAlert.setContentText(e.getMessage());
 					errorAlert.showAndWait();
 				}
 			}}.start();
+	}
 
+	private void disableButtons() {
+		checkButton.setDisable(true);
+		foldButton.setDisable(true);
+		raiseButton.setDisable(true);
+	}
+
+	private void enableButtons() {
+		checkButton.setDisable(false);
+		foldButton.setDisable(false);
+		raiseButton.setDisable(false);
 	}
 
 	@FXML protected void handleCheck(ActionEvent event) {
 		PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(HoldemPlayerCommandType.CHECK, null);
-		new Thread() {
-
-			@Override
-			public void run() {
-				try {
-					model.sendCommandToTable(pokerTable, commController, playerHoldemCommand);
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				} catch (PokerUnauthenticatedException e) {
-					errorAlert.setContentText(e.getMessage());
-					errorAlert.showAndWait();
-				}
-			}}.start();
+		sendPlayerCommand(playerHoldemCommand);
 	}
 
 	@FXML protected void handleRaise(ActionEvent event) {

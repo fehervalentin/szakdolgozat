@@ -11,7 +11,7 @@ CREATE TABLE pokerdb.poker_types (
 CREATE TABLE pokerdb.users (
 	id INTEGER NOT NULL AUTO_INCREMENT,
 	username VARCHAR(20) NOT NULL,
-	balance DECIMAL(19,2) NOT NULL,
+	balance DECIMAL(65,18) NOT NULL,
 	reg_date BIGINT,
 	password VARCHAR(64) NOT NULL,
 	admin BOOLEAN DEFAULT FALSE,

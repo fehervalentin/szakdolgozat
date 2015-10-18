@@ -110,6 +110,10 @@ public class Model {
 	public Player getPlayer() {
 		return pokerSession.getPlayer();
 	}
+	
+	public PokerSession getPokerSession() {
+		return pokerSession;
+	}
 
 	/*public List<Table> getTables() {
 		return pokerRemote.getTables();

@@ -24,7 +24,7 @@ public class UserBuilder {
 	public User buildUser(String username, String password) {
 		User u = new User(username);
 		u.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-		u.setAmount(new BigDecimal(0));
+		u.setBalance(new BigDecimal(0));
 		return u;
 	}
 }

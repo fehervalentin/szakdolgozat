@@ -230,9 +230,10 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerHoldemCommand playerCommand) throws RemoteException, PokerUnauthenticatedException {
+	public void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerHoldemCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException {
 		if (sessionService.isAuthenticated(uuid)) {
-			pokerTableservers.get(t.getName()).receivePlayerCommand(client, playerCommand);
+			String username = sessionService.lookUpUserName(uuid);
+			pokerTableservers.get(t.getName()).receivePlayerCommand(username, client, playerCommand);
 		}
 
 	}
@@ -248,5 +249,10 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	@Override
 	public void deletePlayer(UUID uuid, Player player) throws RemoteException, PokerDataBaseException {
 		UserRepository.getInstance().deletePlayer(player);
+	}
+
+	@Override
+	public Player refreshPlayer(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+		return UserRepository.getInstance().findByUserName(sessionService.lookUpUserName(uuid)).getPlayer();
 	}
 }

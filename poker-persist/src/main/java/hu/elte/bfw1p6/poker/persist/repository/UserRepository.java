@@ -8,6 +8,7 @@ import java.sql.Statement;
 
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.Player;
+import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.DBManager;
 import hu.elte.bfw1p6.poker.persist.dao.SQLExceptionInterceptor;
@@ -28,6 +29,7 @@ public class UserRepository {
 
 	private UserRepository() throws PokerDataBaseException {
 		loadColumns();
+		UPDATE = createQueryForUpdate();
 	}
 
 	public static synchronized UserRepository getInstance() throws PokerDataBaseException {
@@ -69,6 +71,7 @@ public class UserRepository {
 				for (int i = 0; i < columns.length; i++) {
 					u.set(i, rs.getObject(columns[i]));
 				}
+				u.setId(rs.getInt("id"));
 			}
 
 			pstmt.close();
@@ -161,5 +164,24 @@ public class UserRepository {
 		User user = findByUserName(username);
 		Player player = new Player(user.getUserName(), user.getBalance(), user.getRegDate());
 		return player;
+	}
+
+	public synchronized void modify(User u) throws PokerDataBaseException {
+		try {
+			System.out.println(u.getBalance());
+			Connection con = DBManager.getInstance().getConnection();
+			PreparedStatement pstmt = con.prepareStatement(UPDATE);
+			for (int i = 0; i < columns.length; i++) {
+				Object valami = u.get(i);
+				pstmt.setObject(i+1, valami);
+			}
+			pstmt.setObject(columns.length + 1, u.getId());
+			pstmt.executeUpdate();
+
+			pstmt.close();
+		} catch (SQLException e) {
+			throw interceptor.interceptException(e);
+		}
+
 	}
 }	

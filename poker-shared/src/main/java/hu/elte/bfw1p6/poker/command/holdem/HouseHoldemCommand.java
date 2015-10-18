@@ -20,9 +20,23 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	
 	private int nthPlayer;
 	private int players;
+	private int dealer;
 	
 	private HoldemHouseCommandType houseCommandType;
 	private Card card1, card2, card3;
+	
+	/**
+	 * Ha a szerver bekéri a vakokat, akkor ezt a konstruktort kell használni
+	 * @param houseCommandType BLIND
+	 * @param nthPlayer hanyadik játékos a körben
+	 * @param players hány játékos van összesen a körben
+	 */
+	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, int nthPlayer, int players, int dealer) {
+		this.houseCommandType = houseCommandType;
+		this.nthPlayer = nthPlayer;
+		this.players = players;
+		this.dealer = dealer;
+	}
 
 	/**
 	 * Ha a szerver TURN vagy RIVER leosztást küld, akkor ezt a konstruktort kell használni
@@ -40,11 +54,10 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * @param card1 a playernek küldött első kártya
 	 * @param card2 a playernek küldött második kártya
 	 */
-	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, Card card2, int nthPlayer, int players) {
+	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, Card card2) {
 		this(houseCommandType, card1);
 		this.card2 = card2;
-		this.nthPlayer = nthPlayer;
-		this.players = players;
+		
 	}
 	
 	/**
@@ -82,4 +95,15 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	public int getPlayers() {
 		return players;
 	}
+
+	@Override
+	public String toString() {
+		return "[" + houseCommandType + " " + card1 + " " + card2 + " " + card3 + "]";
+	}
+
+	public int getDealer() {
+		return dealer;
+	}
+	
+	
 }

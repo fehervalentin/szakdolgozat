@@ -47,6 +47,8 @@ public interface PokerRemote extends Remote {
 	 */
 	void modifyPassword(UUID uuid, String oldPassword, String newPassword) throws RemoteException, PokerDataBaseException, PokerInvalidPassword, PokerUnauthenticatedException;
 	
+	Player refreshPlayer(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
+	
 	
 	
 	
@@ -138,7 +140,7 @@ public interface PokerRemote extends Remote {
 	
 	
 	
-	void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerHoldemCommand playerCommand) throws RemoteException, PokerUnauthenticatedException;
+	void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerHoldemCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException;
 	
 	void connectToTable(UUID uuid, PokerTable t, RemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException;
 }
