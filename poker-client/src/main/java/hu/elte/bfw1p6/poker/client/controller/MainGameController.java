@@ -113,6 +113,7 @@ public class MainGameController implements Initializable, PokerClientController,
 			printHouseCommand(houseHoldemCommand);
 			switch (houseHoldemCommand.getHouseCommandType()) {
 			case BLIND: {
+				myDebt = BigDecimal.ZERO;
 				blind(houseHoldemCommand);
 				break;
 			}
@@ -184,7 +185,7 @@ public class MainGameController implements Initializable, PokerClientController,
 				// és mi van ha én magam emeltem...
 				if (!playerHoldemCommand.getSender().equals(model.getUserName())) {
 					myDebt = myDebt.add(playerHoldemCommand.getRaiseAmount());
-				} else {
+				} else { // ha én magam emeltem, akkor a szerver elszámolta a teljes adósságom
 					myDebt = BigDecimal.ZERO;
 				}
 				if (youAreNth == whosOn) {
@@ -212,7 +213,7 @@ public class MainGameController implements Initializable, PokerClientController,
 		} else {
 			callButton.setDisable(true);
 		}
-		whosOn %= players;
+		//whosOn %= players;
 	}
 
 	private void incrementWhosOn() {
@@ -222,13 +223,13 @@ public class MainGameController implements Initializable, PokerClientController,
 
 	private void smallBlind() {
 		BigDecimal amount = pokerTable.getDefaultPot().divide(new BigDecimal(2));
-		myDebt = myDebt.subtract(amount);
+		myDebt = myDebt.add(amount);
 		alreadInPot = alreadInPot.add(amount);
 		sendPlayerCommand(HoldemPlayerCommandType.BLIND, amount, null);
 	}
 
 	private void bigBlind() {
-		myDebt = myDebt.subtract(pokerTable.getDefaultPot());
+//		myDebt = myDebt.add(pokerTable.getDefaultPot());
 		alreadInPot = alreadInPot.add(pokerTable.getDefaultPot());
 		sendPlayerCommand(HoldemPlayerCommandType.BLIND, pokerTable.getDefaultPot(), null);
 	}
@@ -325,8 +326,9 @@ public class MainGameController implements Initializable, PokerClientController,
 	 * @param event az esemény
 	 */
 	@FXML protected void handleCall(ActionEvent event) {
-		myDebt = myDebt.subtract(myDebt);
-		sendPlayerCommand(HoldemPlayerCommandType.CALL, new BigDecimal(0).add(myDebt), null);
+		BigDecimal amount = BigDecimal.ZERO.add(myDebt);
+		myDebt = myDebt.subtract(amount);
+		sendPlayerCommand(HoldemPlayerCommandType.CALL, BigDecimal.ZERO.add(amount), null);
 	}
 
 	@FXML protected void handleCheck(ActionEvent event) {

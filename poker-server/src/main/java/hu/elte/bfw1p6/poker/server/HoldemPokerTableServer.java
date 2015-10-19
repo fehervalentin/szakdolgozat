@@ -31,7 +31,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private final String ERR_BALANCE_MSG = "Nincs elég zsetonod!";
 
 	/**
@@ -78,7 +78,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		deck = new Deck();
 		house = new House();
 		clients = new ArrayList<>();
-		// a játékosoknak osztok először lapokat
+		// a vakokat kérem be legelőször
 		this.actualHoldemHouseCommandType = HoldemHouseCommandType.values()[0];
 	}
 
@@ -89,21 +89,21 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			} else {
 				clients.add(client);
 				if (clients.size() >= minPlayer) {
-					playersInRound = clients.size();
-					thinkerPlayer = 0;
-
-					// be kell kérni a vakokat
-					collectBlinds();
-					// két lap kézbe
-					dealCardsToPlayers();
-
-					// megkezdődik az első kör (flop előtt) kisvak nagyvak etc...
-					// nézni kell, hogy hol tart a kör, ha körbeértünk, akkor mehet a flop, vagy adott esetben újabb körök!!!
-					// pl valaki emel...
+					startRound();
 				}
 			}
 		}
 		return clients.size();
+	}
+
+	private void startRound() {
+		deck.reset();
+		playersInRound = clients.size();
+		thinkerPlayer = 0;
+		// be kell kérni a vakokat
+		collectBlinds();
+		// két lap kézbe
+		dealCardsToPlayers();
 	}
 
 	private void collectBlinds() {
@@ -188,6 +188,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	}
 
 	public synchronized void receivePlayerCommand(RemoteObserver client, PlayerHoldemCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException {
+		// ha valid klienstől érkezik üzenet, azt feldolgozzuk, körbeküldjük, majd kört léptetünk
 		if (clients.contains(client)) {
 			switch(playerCommand.getPlayerCommandType()) {
 			case BLIND: {
@@ -220,24 +221,31 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			default:
 				break;
 			}
-			if (thinkerPlayer >= playersInRound) {
-				switch (actualHoldemHouseCommandType) {
-				case FLOP: {
-					flop();
-					break;
+			// ha már kijött a river és az utolsó körben (rivernél) már mindenki nyilatkozott legalább egyszer, akkor új játszma kezdődik
+			if (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && thinkerPlayer >= playersInRound) {
+				System.out.println("új kör");
+				startRound();
+			} else {
+				// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
+				if (thinkerPlayer >= playersInRound) {
+					switch (actualHoldemHouseCommandType) {
+					case FLOP: {
+						flop();
+						break;
+					}
+					case TURN: {
+						turn();
+						break;
+					}
+					case RIVER: {
+						river();
+						break;
+					}
+					default:
+						break;
+					}
+					thinkerPlayer %= playersInRound;
 				}
-				case TURN: {
-					turn();
-					break;
-				}
-				case RIVER: {
-					river();
-					break;
-				}
-				default:
-					break;
-				}
-				thinkerPlayer %= playersInRound;
 			}
 			notifyClients(playerCommand);
 		}
@@ -272,7 +280,11 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	}
 
 	private boolean isThereEnoughMoney(User u, PlayerHoldemCommand playerCommand) throws PokerUserBalanceException {
-		if (playerCommand.getCallAmount().compareTo(BigDecimal.ZERO) < 0) {
+		BigDecimal newBalance = u.getBalance().subtract(playerCommand.getCallAmount());
+		if (playerCommand.getRaiseAmount() != null) {
+			newBalance = newBalance.subtract(playerCommand.getRaiseAmount());
+		}
+		if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
 			throw new PokerUserBalanceException(ERR_BALANCE_MSG);
 		}
 		return true;
