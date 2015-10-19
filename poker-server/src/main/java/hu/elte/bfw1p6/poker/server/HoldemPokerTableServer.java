@@ -54,13 +54,22 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	 */
 	private List<RemoteObserver> clients;
 
+	/**
+	 * Kártyapakli
+	 */
 	private Deck deck;
 
 	private House house;
 
+	/**
+	 * Hány játékos játszik az adott körben
+	 */
 	private int playersInRound;
 
-	private int thinkerPlayer; // úgy kell megcsinálni, hogy call, checknél ++, raisenél = 0!!!;
+	/**
+	 * Hány játékos adott már le voksot az adott körben (raise-nél = 1)
+	 */
+	private int thinkerPlayer;
 
 	private int round = 0;
 
@@ -251,27 +260,19 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		}
 	}
 
-	private void raise(PlayerHoldemCommand playerCommand) throws PokerDataBaseException {
-		User u = UserRepository.getInstance().findByUserName(playerCommand.getSender());
-		BigDecimal newBalance = u.getBalance().subtract(playerCommand.getCallAmount().subtract(playerCommand.getRaiseAmount()));
-		if (newBalance.compareTo(new BigDecimal(0)) < 0) {
-			System.out.println("nagy para van");
-			//throw new Poker
-		} else {
-			u.setBalance(u.getBalance().subtract(playerCommand.getCallAmount()));
-			UserRepository.getInstance().modify(u);
-		}
+	private void raise(PlayerHoldemCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException {
+		refreshBalance(playerCommand);
 	}
 
 	private void blind(PlayerHoldemCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException {
-		User u = UserRepository.getInstance().findByUserName(playerCommand.getSender());
-		if (isThereEnoughMoney(u, playerCommand)) {
-			u.setBalance(u.getBalance().subtract(playerCommand.getCallAmount()));
-			UserRepository.getInstance().modify(u);
-		}
+		refreshBalance(playerCommand);
 	}
 
 	private void call(PlayerHoldemCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException {
+		refreshBalance(playerCommand);
+	}
+	
+	private void refreshBalance(PlayerHoldemCommand playerCommand) throws PokerUserBalanceException, PokerDataBaseException {
 		User u = UserRepository.getInstance().findByUserName(playerCommand.getSender());
 		if (isThereEnoughMoney(u, playerCommand)) {
 			u.setBalance(u.getBalance().subtract(playerCommand.getCallAmount()));
