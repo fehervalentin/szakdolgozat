@@ -1,8 +1,6 @@
 package hu.elte.bfw1p6.poker.command.holdem;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
@@ -20,9 +18,25 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * Hanyadik játékos vagy az asztalnál
+	 */
 	private int nthPlayer;
+	
+	/**
+	 * Hány játékos van összesen
+	 */
 	private int players;
+	
+	/**
+	 * Ki az osztó az adott leosztásban
+	 */
 	private int dealer;
+	
+	/**
+	 * Ki következik éppen
+	 */
+	private int whosOn;
 	
 	private HoldemHouseCommandType houseCommandType;
 	private Card card1, card2, card3;
@@ -34,11 +48,12 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * @param players hány játékos van összesen a körben
 	 * @param dealer ki az aktuális osztó
 	 */
-	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, int nthPlayer, int players, int dealer) {
+	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, int nthPlayer, int players, int dealer, int whosOn) {
 		this.houseCommandType = houseCommandType;
 		this.nthPlayer = nthPlayer;
 		this.players = players;
 		this.dealer = dealer;
+		this.whosOn = whosOn;
 	}
 
 	/**
@@ -46,9 +61,10 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * @param houseCommandType TURN vagy RIVER
 	 * @param card1 a háznak osztott, körbeküldendő kártyalap
 	 */
-	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1) {
+	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, int whosOn) {
 		this.houseCommandType = houseCommandType;
 		this.card1 = card1;
+		this.whosOn = whosOn;
 	}
 	
 	/**
@@ -57,8 +73,8 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * @param card1 a playernek küldött első kártya
 	 * @param card2 a playernek küldött második kártya
 	 */
-	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, Card card2) {
-		this(houseCommandType, card1);
+	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, Card card2, int whosOn) {
+		this(houseCommandType, card1, whosOn);
 		this.card2 = card2;
 		
 	}
@@ -70,8 +86,8 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * @param card2 a ház második lapja, amit körbe kell küldeni
 	 * @param card3 a ház harmadik lapja, amit körbe kell küldeni
 	 */
-	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, Card card2, Card card3) {
-		this(houseCommandType, card1);
+	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, Card card2, Card card3, int whosOn) {
+		this(houseCommandType, card1, whosOn);
 		this.card2 = card2;
 		this.card3 = card3;
 	}
@@ -97,6 +113,9 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	}
 	public int getPlayers() {
 		return players;
+	}
+	public int getWhosOn() {
+		return whosOn;
 	}
 
 	@Override

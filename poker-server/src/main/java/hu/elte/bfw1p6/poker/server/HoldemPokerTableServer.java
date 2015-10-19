@@ -67,13 +67,21 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	private int playersInRound;
 
 	/**
+	 * Ki az osztó az adott körben
+	 */
+	private int dealer = -1;
+
+	/**
+	 * Ki van soron éppen
+	 */
+	private int whosOn;
+	
+	/**
 	 * Hány játékos adott már le voksot az adott körben (raise-nél = 1)
 	 */
-	private int thinkerPlayer;
+	private int votedPlayers;
 
-	private int round = 0;
-
-	private BigDecimal actualRaise;
+//	private BigDecimal actualRaise;
 
 	private int minPlayer = 2;
 
@@ -106,9 +114,12 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	}
 
 	private void startRound() {
-		deck.reset();
 		playersInRound = clients.size();
-		thinkerPlayer = 0;
+		++dealer;
+		dealer %= playersInRound;
+		deck.reset();
+		votedPlayers = 0;
+		whosOn = (dealer + 3) % playersInRound;
 		// be kell kérni a vakokat
 		collectBlinds();
 		// két lap kézbe
@@ -116,9 +127,9 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	}
 
 	private void collectBlinds() {
-		actualRaise = pokerTable.getDefaultPot();
+//		actualRaise = pokerTable.getDefaultPot();
 		for (int i = 0; i < clients.size(); i++) {
-			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, i, clients.size(), round);
+			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, i, clients.size(), dealer, whosOn);
 			try {
 				clients.get(i).update(null, pokerCommand);
 			} catch (RemoteException e) {
@@ -147,26 +158,26 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	private void dealCardsToPlayers() {
 		for (int i = 0; i < clients.size(); i++) {
 			int j = i;
-			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard());
+			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), whosOn);
 			sendPokerCommand(j, pokerCommand);
 		}
 		nextStep();
 	}
 
 	private void flop() {
-		PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), deck.popCard());
+		PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), deck.popCard(), whosOn);
 		notifyClients(pokerCommand);
 		nextStep();
 	}
 
 	private void turn() {
-		PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard());
+		PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), whosOn);
 		notifyClients(pokerCommand);
 		nextStep();
 	}
 
 	private void river() {
-		PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard());
+		PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), whosOn);
 		notifyClients(pokerCommand);
 		nextStep();
 	}
@@ -206,37 +217,43 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			}
 			case CALL: {
 				call(playerCommand);
-				++thinkerPlayer;
+				++votedPlayers;
+				++whosOn;
 				break;
 			}
 			case CHECK: {
-				++thinkerPlayer;
+				++votedPlayers;
+				++whosOn;
 				break;
 			}
 			case FOLD: {
-				++thinkerPlayer;
+				++votedPlayers;
+				++whosOn;
 				break;
 			}
 			case RAISE: {
 				raise(playerCommand);
-				thinkerPlayer = 1;
+				votedPlayers = 1;
+				++whosOn;
 				break;
 			}
 			case QUIT: {
 				clients.remove(client);
-				++thinkerPlayer;
+				++votedPlayers;
+				++whosOn;
 				break;
 			}
 			default:
 				break;
 			}
 			// ha már kijött a river és az utolsó körben (rivernél) már mindenki nyilatkozott legalább egyszer, akkor új játszma kezdődik
-			if (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && thinkerPlayer >= playersInRound) {
+			if (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && votedPlayers >= playersInRound) {
 				System.out.println("új kör");
 				startRound();
 			} else {
 				// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
-				if (thinkerPlayer >= playersInRound) {
+				if (votedPlayers >= playersInRound) {
+					whosOn %= playersInRound;
 					switch (actualHoldemHouseCommandType) {
 					case FLOP: {
 						flop();
@@ -253,9 +270,14 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 					default:
 						break;
 					}
-					thinkerPlayer %= playersInRound;
+					votedPlayers = 0;
 				}
 			}
+//			System.out.println("Ennyien vagyunk: " + playersInRound);
+//			System.out.println("WhosOn vagas elott:" + whosOn);
+			whosOn %= playersInRound;
+//			System.out.println("WhosOn vagas utan:" + whosOn);
+			playerCommand.setWhosOn(whosOn);
 			notifyClients(playerCommand);
 		}
 	}

@@ -23,6 +23,8 @@ public class PlayerHoldemCommand implements PokerCommand, Serializable {
 	
 	private String sender;
 	
+	private int whosOn;
+	
 	/**
 	 * Konstruktor
 	 * @param playerCommandType A Command típusa
@@ -69,4 +71,13 @@ public class PlayerHoldemCommand implements PokerCommand, Serializable {
 	public void setSender(String sender) {
 		this.sender = sender;
 	}
+
+	public int getWhosOn() {
+		return whosOn;
+	}
+
+	public void setWhosOn(int whosOn) {
+		this.whosOn = whosOn;
+	}
+	
 }

@@ -47,11 +47,6 @@ public class MainGameController implements Initializable, PokerClientController,
 	private CommunicatorController commController;
 
 	private Alert errorAlert;
-	
-	/**
-	 * Jelenleg ki következik.
-	 */
-	private int whosOn;
 
 	/**
 	 * Hanyadik vagyok a körben.
@@ -62,11 +57,6 @@ public class MainGameController implements Initializable, PokerClientController,
 	 * Hány játékos van velem együtt.
 	 */
 	private int players;
-
-	/**
-	 * Az aktuális osztó sorszáma.
-	 */
-	private int dealer;
 
 	/**
 	 * A tartozásom az asztal felé, amit <b>CALL</b> vagy <b>RAISE</b> esetén meg kell adnom.
@@ -118,11 +108,12 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case PLAYER: {
-				player();
+				player(houseHoldemCommand);
 				break;
 			}
 			case FLOP: {
-				if (youAreNth == whosOn) {
+				System.out.println("Flop: " + youAreNth + " " + houseHoldemCommand.getWhosOn());
+				if (youAreNth == houseHoldemCommand.getWhosOn()) {
 					enableButtons();
 				} else {
 					disableButtons();
@@ -130,7 +121,7 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case TURN: {
-				if (youAreNth == whosOn) {
+				if (youAreNth == houseHoldemCommand.getWhosOn()) {
 					enableButtons();
 				} else {
 					disableButtons();
@@ -138,7 +129,7 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case RIVER: {
-				if (youAreNth == whosOn) {
+				if (youAreNth == houseHoldemCommand.getWhosOn()) {
 					enableButtons();
 				} else {
 					disableButtons();
@@ -156,10 +147,9 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case CALL: {
-				incrementWhosOn();
 				System.out.println(playerHoldemCommand.getSender() + " CALL");
-//				System.out.println("Yrnth: " + youAreNth + " Whoson: " + whosOn);
-				if (youAreNth == whosOn) {
+				System.out.println("You are nth: " + youAreNth + " Whoson: " + playerHoldemCommand.getWhosOn());
+				if (youAreNth == playerHoldemCommand.getWhosOn()) {
 					enableButtons();
 //					System.out.println("Adósságom: " + myDebt);
 				} else {
@@ -168,8 +158,10 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case CHECK: {
-				incrementWhosOn();
-				if (youAreNth == whosOn) {
+				System.out.println(playerHoldemCommand.getSender() + " CHECK");
+				System.out.println("You are nth: " + youAreNth + " Whoson: " + playerHoldemCommand.getWhosOn());
+				if (youAreNth == playerHoldemCommand.getWhosOn()) {
+					System.out.println("itt vagyok!!!!!");
 					enableButtons();
 				} else {
 					disableButtons();
@@ -177,18 +169,16 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case FOLD: {
-				incrementWhosOn();
 				break;
 			}
 			case RAISE: {
-				incrementWhosOn();
 				// és mi van ha én magam emeltem...
 				if (!playerHoldemCommand.getSender().equals(model.getUserName())) {
 					myDebt = myDebt.add(playerHoldemCommand.getRaiseAmount());
 				} else { // ha én magam emeltem, akkor a szerver elszámolta a teljes adósságom
 					myDebt = BigDecimal.ZERO;
 				}
-				if (youAreNth == whosOn) {
+				if (youAreNth == playerHoldemCommand.getWhosOn()) {
 					enableButtons();
 					checkButton.setDisable(true);
 				} else {
@@ -213,12 +203,6 @@ public class MainGameController implements Initializable, PokerClientController,
 		} else {
 			callButton.setDisable(true);
 		}
-		//whosOn %= players;
-	}
-
-	private void incrementWhosOn() {
-		++whosOn;
-		whosOn %= players;
 	}
 
 	private void smallBlind() {
@@ -278,40 +262,38 @@ public class MainGameController implements Initializable, PokerClientController,
 		youAreNth = houseHoldemCommand.getNthPlayer();
 		players = houseHoldemCommand.getPlayers();
 		// első körben az a dealer, aki elsőként csatlakozott, roundonként +1
-		dealer = houseHoldemCommand.getDealer();
-		System.out.println("Hanyadik vagy a körben: " + youAreNth);
-		System.out.println("Aktuális dealer: " + dealer);
-		if (areYouTheSmallBlind()) {
+		System.out.println("Hanyadik játékos vagy a szerveren: " + youAreNth);
+		System.out.println("Aktuális dealer: " + houseHoldemCommand.getDealer());
+		if (areYouTheSmallBlind(houseHoldemCommand)) {
 			System.out.println("Betettem a kis vakot");
 			smallBlind();
-		} else if (areYouTheBigBlind()) {
+		} else if (areYouTheBigBlind(houseHoldemCommand)) {
 			System.out.println("Betettem a nagy vakot");
 			bigBlind();
 		}
 		// nagyvaktól eggyel balra ülő kezd
-		whosOn = ((dealer + 3) % players);
-		System.out.println("Az éppen soron levő játékos: " + whosOn);
+		System.out.println("Az éppen soron levő játékos: " + houseHoldemCommand.getWhosOn());
 	}
 	
 	/**
 	 * A dealer mellett közvetlenül balra ülő játékos köteles kis vakot betenni.
 	 * @return ha nekem kell betenni a kis vakot, akkor true, különben false.
 	 */
-	private boolean areYouTheSmallBlind() {
-		return youAreNth == ((dealer + 1) % players);
+	private boolean areYouTheSmallBlind(HouseHoldemCommand houseHoldemCommand) {
+		return youAreNth == ((houseHoldemCommand.getDealer() + 1) % players);
 	}
 	
 	/**
 	 * A dealer mellett kettővel balra ülő játékos köteles nagy vakot betenni.
 	 * @return ha nekem kell betenni a nagy vakot, akkor true, különben false.
 	 */
-	private boolean areYouTheBigBlind() {
-		return youAreNth == ((dealer + 2) % players);
+	private boolean areYouTheBigBlind(HouseHoldemCommand houseHoldemCommand) {
+		return youAreNth == ((houseHoldemCommand.getDealer() + 2) % players);
 	}
 
-	private void player() {
-		System.out.println(youAreNth + " " + whosOn);
-		if (youAreNth == whosOn) {
+	private void player(HouseHoldemCommand houseHoldemCommand) {
+		System.out.println(youAreNth + " " + houseHoldemCommand.getWhosOn());
+		if (youAreNth == houseHoldemCommand.getWhosOn()) {
 			if (myDebt.compareTo(BigDecimal.ZERO) > 0) {
 				enableButtons();
 				checkButton.setDisable(true);
