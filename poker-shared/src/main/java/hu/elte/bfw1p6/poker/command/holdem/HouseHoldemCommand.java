@@ -60,6 +60,7 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * Ha a szerver TURN vagy RIVER leosztást küld, akkor ezt a konstruktort kell használni
 	 * @param houseCommandType TURN vagy RIVER
 	 * @param card1 a háznak osztott, körbeküldendő kártyalap
+	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
 	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, int whosOn) {
 		this.houseCommandType = houseCommandType;
@@ -72,6 +73,7 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * @param houseCommandType PLAYER
 	 * @param card1 a playernek küldött első kártya
 	 * @param card2 a playernek küldött második kártya
+	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
 	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, Card card2, int whosOn) {
 		this(houseCommandType, card1, whosOn);
@@ -85,6 +87,7 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * @param card1 a ház első lapja, amit körbe kell küldeni
 	 * @param card2 a ház második lapja, amit körbe kell küldeni
 	 * @param card3 a ház harmadik lapja, amit körbe kell küldeni
+	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
 	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, Card card2, Card card3, int whosOn) {
 		this(houseCommandType, card1, whosOn);

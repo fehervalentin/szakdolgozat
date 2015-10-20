@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 import hu.elte.bfw1p6.poker.command.PokerCommand;
+import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
 
 /**
@@ -25,6 +26,8 @@ public class PlayerHoldemCommand implements PokerCommand, Serializable {
 	
 	private int whosOn;
 	
+	private int whosQuit;
+	
 	/**
 	 * Konstruktor
 	 * @param playerCommandType A Command típusa
@@ -34,6 +37,11 @@ public class PlayerHoldemCommand implements PokerCommand, Serializable {
 		this.playerCommandType = playerCommandType;
 		this.callAmount = callAmount;
 		this.raiseAmount = raiseAmount;
+	}
+	
+	public PlayerHoldemCommand(HoldemPlayerCommandType playerCommandType, int whosQuit) {
+		this.playerCommandType = playerCommandType;
+		this.whosOn = whosQuit;
 	}
 	
 	/**
@@ -78,6 +86,10 @@ public class PlayerHoldemCommand implements PokerCommand, Serializable {
 
 	public void setWhosOn(int whosOn) {
 		this.whosOn = whosOn;
+	}
+	
+	public int getWhosQuit() {
+		return whosQuit;
 	}
 	
 }

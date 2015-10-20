@@ -169,6 +169,9 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case FOLD: {
+				if (youAreNth > playerHoldemCommand.getWhosQuit()) {
+					--youAreNth;
+				}
 				break;
 			}
 			case RAISE: {
@@ -209,13 +212,13 @@ public class MainGameController implements Initializable, PokerClientController,
 		BigDecimal amount = pokerTable.getDefaultPot().divide(new BigDecimal(2));
 		myDebt = myDebt.add(amount);
 		alreadInPot = alreadInPot.add(amount);
-		sendPlayerCommand(HoldemPlayerCommandType.BLIND, amount, null);
+		sendPlayerCommand(HoldemPlayerCommandType.BLIND, amount, null, null);
 	}
 
 	private void bigBlind() {
 //		myDebt = myDebt.add(pokerTable.getDefaultPot());
 		alreadInPot = alreadInPot.add(pokerTable.getDefaultPot());
-		sendPlayerCommand(HoldemPlayerCommandType.BLIND, pokerTable.getDefaultPot(), null);
+		sendPlayerCommand(HoldemPlayerCommandType.BLIND, pokerTable.getDefaultPot(), null, null);
 	}
 
 	private void printHouseCommand(HouseHoldemCommand command) {
@@ -223,7 +226,7 @@ public class MainGameController implements Initializable, PokerClientController,
 		System.out.println(command);
 	}
 
-	private void sendPlayerCommand(HoldemPlayerCommandType type, BigDecimal callAmount, BigDecimal raiseAmount) {
+	private void sendPlayerCommand(HoldemPlayerCommandType type, BigDecimal callAmount, BigDecimal raiseAmount, Integer whosQuit) {
 		new Thread() {
 
 			@Override
@@ -310,25 +313,26 @@ public class MainGameController implements Initializable, PokerClientController,
 	@FXML protected void handleCall(ActionEvent event) {
 		BigDecimal amount = BigDecimal.ZERO.add(myDebt);
 		myDebt = myDebt.subtract(amount);
-		sendPlayerCommand(HoldemPlayerCommandType.CALL, BigDecimal.ZERO.add(amount), null);
+		sendPlayerCommand(HoldemPlayerCommandType.CALL, BigDecimal.ZERO.add(amount), null, null);
 	}
 
 	@FXML protected void handleCheck(ActionEvent event) {
-		sendPlayerCommand(HoldemPlayerCommandType.CHECK, null, null);
+		sendPlayerCommand(HoldemPlayerCommandType.CHECK, null, null, null);
 	}
 
 	@FXML protected void handleRaise(ActionEvent event) {
 		BigDecimal amount = new BigDecimal(6);
 		alreadInPot = alreadInPot.add(myDebt).add(amount);
-		sendPlayerCommand(HoldemPlayerCommandType.RAISE, myDebt, amount);
+		sendPlayerCommand(HoldemPlayerCommandType.RAISE, myDebt, amount, null);
 	}
 
 	@FXML protected void handleFold(ActionEvent event) {
-		sendPlayerCommand(HoldemPlayerCommandType.FOLD, null, null);
+		youAreNth = -1;
+		sendPlayerCommand(HoldemPlayerCommandType.FOLD, null, null, youAreNth);
 	}
 
 	@FXML protected void handleQuit(ActionEvent event) {
-		sendPlayerCommand(HoldemPlayerCommandType.QUIT, null, null);
+		sendPlayerCommand(HoldemPlayerCommandType.QUIT, null, null, youAreNth);
 		frameController.setTableListerFXML();
 	}
 }
