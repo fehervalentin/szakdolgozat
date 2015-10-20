@@ -93,16 +93,7 @@ public interface PokerRemote extends Remote {
 	List<PokerTable> getTables(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
 	
 	
-	
-	
-
-	void registerObserver(UUID uuid, RemoteObserver proc) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
-
 	void unRegisterObserver(UUID uuid, TableViewObserver proc) throws RemoteException;
-
-
-
-
 
 
 
@@ -131,15 +122,9 @@ public interface PokerRemote extends Remote {
 
 	boolean isAdmin(UUID uuid) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException;
 
-
-	void addObserver(UUID uuid, RemoteObserver observer) throws RemoteException;
-
 	List<PokerTable> registerTableViewObserver(UUID uuid, RemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
 
 	void removeTableViewObserver(RemoteObserver observer) throws RemoteException;
-	
-	
-	
 	
 	void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerHoldemCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
 	

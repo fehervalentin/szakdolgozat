@@ -73,8 +73,6 @@ public class TableListerController implements PokerClientController, Initializab
 		try {
 			List<PokerTable> tables = model.registerTableViewObserver(commCont);
 			tableView.getItems().setAll(tables);
-			//			model.registerObserver(frameController);
-			//			model.addObserver(this);
 		} catch (RemoteException | PokerDataBaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

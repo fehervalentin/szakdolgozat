@@ -67,16 +67,9 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 
 		try {
 			System.out.println("***POKER SZERVER***");
-			//PokerLoginRemote pokerLoginRemote = (PokerLoginRemote) UnicastRemoteObject.exportObject(this, Integer.valueOf(pokerProperties.getProperty("port")));
 			System.out.println(Integer.valueOf(pokerProperties.getProperty("rmiport")));
 			System.out.println(pokerProperties.getProperty("name"));
-			/*Registry registry = LocateRegistry.createRegistry(Integer.valueOf(pokerProperties.getProperty("rmiport")));
-			try {
-				registry.bind(pokerProperties.getProperty("name"), this);
-				System.out.println("bindelte");
-			} catch (AlreadyBoundException e) {
-				 e.printStackTrace();
-			}*/
+			
 			Registry rmiRegistry = LocateRegistry.createRegistry(Integer.valueOf(pokerProperties.getProperty("rmiport")));
 			PokerRemote pokerRemote = (PokerRemote) UnicastRemoteObject.exportObject(this, Integer.valueOf(pokerProperties.getProperty("rmiport")));
 			rmiRegistry.bind(pokerProperties.getProperty("name"), pokerRemote);
@@ -133,23 +126,6 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public synchronized void registerObserver(UUID uuid, RemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
-		//		System.out.println(uuid.toString());
-		//		observers.put(uuid, proc);
-		//		System.out.println(observers.hashCode());
-		//		System.out.println(this);
-		//		System.out.println("Observerek: " + observers.size());
-		List<PokerTable> tables = getTables(uuid);
-		TableListerObserver tlo = new TableListerObserver(observer);
-		this.addObserver(tlo);
-		String asd = "muha222!";
-		this.setChanged();
-		this.notifyObservers(asd);
-		//		proc.updateTableView(tables);
-
-	}
-
-	@Override
 	public void unRegisterObserver(UUID uuid, TableViewObserver pcc) throws RemoteException {
 		// TODO Auto-generated method stub
 
@@ -192,16 +168,6 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	public void registration(String username, String password) throws RemoteException, PokerDataBaseException {
 		User u = UserBuilder.geInstance().buildUser(username, password);
 		UserRepository.getInstance().save(u);
-	}
-
-	@Override
-	public void addObserver(UUID uuid, RemoteObserver o) throws RemoteException {
-		TableListerObserver wp = new TableListerObserver(o);
-		tlos.add(wp);
-		this.addObserver(wp);
-		this.setChanged();
-		String asd = "muha!";
-		this.notifyObservers(asd);
 	}
 
 	@Override

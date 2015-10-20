@@ -160,6 +160,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		for (int i = 0; i < clients.size(); i++) {
 			Card c1 = deck.popCard();
 			Card c2 = deck.popCard();
+			playersCards.put(i, new ArrayList<>());
 			playersCards.get(i).add(c1);
 			playersCards.get(i).add(c2);
 			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), whosOn);
@@ -208,7 +209,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				break;
 			}
 			case FOLD: {
-				++votedPlayers;
+//				++votedPlayers;
 				--playersInRound;
 				break;
 			}
@@ -219,7 +220,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			}
 			case QUIT: {
 				clients.remove(client);
-				++votedPlayers;
+//				++votedPlayers;
 				--playersInRound;
 				break;
 			}
@@ -244,25 +245,20 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 					whosOn = (dealer + 1) % playersInRound;
 					switch (actualHoldemHouseCommandType) {
 					case FLOP: {
-						Card c1 = deck.popCard();
-						Card c2 = deck.popCard();
-						Card c3 = deck.popCard();
-						houseCards.add(c1);
-						houseCards.add(c2);
-						houseCards.add(c3);
-						pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, c1, c2, c3, whosOn);
+						for (int i = 0; i < 3; i++) {
+							houseCards.add(deck.popCard());
+						}
+						pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, houseCards.get(0), houseCards.get(1), houseCards.get(2), whosOn);
 						break;
 					}
 					case TURN: {
-						Card c1 = deck.popCard();
-						houseCards.add(c1);
-						pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, c1, whosOn);
+						houseCards.add(deck.popCard());
+						pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, houseCards.get(3), whosOn);
 						break;
 					}
 					case RIVER: {
-						Card c1 = deck.popCard();
-						houseCards.add(c1);
-						pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, c1, whosOn);
+						houseCards.add(deck.popCard());
+						pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, houseCards.get(4), whosOn);
 						break;
 					}
 					default:

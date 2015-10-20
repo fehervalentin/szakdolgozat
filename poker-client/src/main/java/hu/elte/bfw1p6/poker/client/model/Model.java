@@ -63,14 +63,6 @@ public class Model {
 		return tables;
 	}
 
-	public void registerObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
-		pokerRemote.registerObserver(pokerSession.getId(), observer);
-	}
-
-	public void addObserver(RemoteObserver observer) throws RemoteException {
-		pokerRemote.addObserver(pokerSession.getId(), observer);
-	}
-
 	public List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		return pokerRemote.registerTableViewObserver(pokerSession.getId(), observer);
 	}

@@ -169,6 +169,7 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case FOLD: {
+				System.out.println(playerHoldemCommand.getSender() + " FOLD");
 				if (youAreNth > playerHoldemCommand.getWhosQuit()) {
 					--youAreNth;
 				}
@@ -327,8 +328,9 @@ public class MainGameController implements Initializable, PokerClientController,
 	}
 
 	@FXML protected void handleFold(ActionEvent event) {
+		int tempNth = youAreNth;
 		youAreNth = -1;
-		sendPlayerCommand(HoldemPlayerCommandType.FOLD, null, null, youAreNth);
+		sendPlayerCommand(HoldemPlayerCommandType.FOLD, null, null, tempNth);
 	}
 
 	@FXML protected void handleQuit(ActionEvent event) {
