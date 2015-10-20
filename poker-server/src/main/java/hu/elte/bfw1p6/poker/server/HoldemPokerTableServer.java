@@ -211,6 +211,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			case FOLD: {
 //				++votedPlayers;
 				--playersInRound;
+				--whosOn;
 				break;
 			}
 			case RAISE: {

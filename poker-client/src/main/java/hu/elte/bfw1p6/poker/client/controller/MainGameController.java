@@ -170,8 +170,14 @@ public class MainGameController implements Initializable, PokerClientController,
 			}
 			case FOLD: {
 				System.out.println(playerHoldemCommand.getSender() + " FOLD");
+				System.out.println("You are nth: " + youAreNth + " Whoson: " + playerHoldemCommand.getWhosOn());
 				if (youAreNth > playerHoldemCommand.getWhosQuit()) {
 					--youAreNth;
+				}
+				if (youAreNth == playerHoldemCommand.getWhosOn()) {
+					enableButtons();
+				} else {
+					disableButtons();
 				}
 				break;
 			}
@@ -233,7 +239,12 @@ public class MainGameController implements Initializable, PokerClientController,
 			@Override
 			public void run() {
 				try {
-					PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(type, callAmount, raiseAmount);
+					PlayerHoldemCommand playerHoldemCommand = null;
+					if (type == HoldemPlayerCommandType.FOLD) {
+						playerHoldemCommand = new PlayerHoldemCommand(type, whosQuit);
+					} else {
+						playerHoldemCommand = new PlayerHoldemCommand(type, callAmount, raiseAmount);
+					}
 					model.sendCommandToTable(pokerTable, commController, playerHoldemCommand);
 				} catch (RemoteException e) {
 					e.printStackTrace();
