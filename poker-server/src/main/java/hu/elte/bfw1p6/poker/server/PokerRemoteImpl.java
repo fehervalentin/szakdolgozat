@@ -40,7 +40,6 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 
 	private static final long serialVersionUID = 1L;
 
-	private final String UNAUTH_ERR_MSG = "Nem vagy autentikálva!";
 	private final String ERR_BAD_PW = "Hibás jelszó!";
 
 	private PokerProperties pokerProperties;
@@ -83,7 +82,8 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	public synchronized void deleteTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		if (sessionService.isAuthenticated(uuid)) {
 			PokerTableRepository.getInstance().deleteTable(t);
-			this.notifyObservers();
+			this.setChanged();
+			this.notifyObservers(getTables(uuid));
 		}
 	}
 
@@ -91,7 +91,8 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	public synchronized void createTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		if (sessionService.isAuthenticated(uuid)) {
 			PokerTableRepository.getInstance().save(t);
-			this.notifyObservers();
+			this.setChanged();
+			this.notifyObservers(getTables(uuid));
 		}
 	}
 
@@ -174,8 +175,6 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	public List<PokerTable> registerTableViewObserver(UUID uuid, RemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		TableListerObserver tvo = new TableListerObserver(observer);
 		this.addObserver(tvo);
-		this.setChanged();
-		this.notifyObservers(getTables(uuid));
 		return getTables(uuid);
 	}
 
