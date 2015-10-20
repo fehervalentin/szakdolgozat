@@ -21,7 +21,6 @@ import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.repository.UserRepository;
 import hu.elte.bfw1p6.poker.server.logic.Deck;
-import hu.elte.bfw1p6.poker.server.logic.House;
 
 /**
  * Maga a póker asztal megvalósítása
@@ -37,76 +36,83 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	private final String ERR_BALANCE_MSG = "Nincs elég zsetonod!";
 
 	/**
-	 * Maga az asztal entitás, le lehet kérni mindent...
+	 * Maga az asztal entitás.
 	 */
 	private PokerTable pokerTable;
 
 	/**
-	 * Épp milyen utasítást fog kiadni a szerver (hol tartunk a körben)
+	 * Épp milyen utasítást fog kiadni a szerver (hol tartunk a körben).
 	 */
 	private HoldemHouseCommandType actualHoldemHouseCommandType;
 
 	/**
-	 * Maga a pénz stack
+	 * Maga a pénz stack.
 	 */
-	private BigDecimal stack;
+	private BigDecimal moneyStack;
 
 	/**
-	 * Kliensek (observerek)
+	 * Kliensek (observerek).
 	 */
 	private List<RemoteObserver> clients;
 
 	/**
-	 * Kártyapakli
+	 * Kártyapakli.
 	 */
 	private Deck deck;
 
-	private House house;
-	
+	/**
+	 * Hát lapjai.
+	 */
 	private List<Card> houseCards;
+	
+	/**
+	 * Kliensek lapjai.
+	 */
 	private HashMap<Integer, List<Card>> playersCards;
 
 	/**
-	 * Hány játékos játszik az adott körben
+	 * Hány játékos játszik az adott körben.
 	 */
 	private int playersInRound;
 
 	/**
-	 * Ki az osztó az adott körben
+	 * Ki az osztó az adott körben.
 	 */
 	private int dealer = -1;
 
 	/**
-	 * Ki van soron éppen
+	 * Ki van soron éppen.
 	 */
 	private int whosOn;
 
 	/**
-	 * Hány játékos adott már le voksot az adott körben (raise-nél = 1)
+	 * Hány játékos adott már le voksot az adott körben (raise-nél = 1).
 	 */
 	private int votedPlayers;
 
-	//	private BigDecimal actualRaise;
-
-	private int minPlayer = 3;
-
 	/**
-	 * valahogy kéne Decket nyilvan tartani inteket küldök át, és simán filename alapján visszakeresik maguknak a kliensek...
-	 * @param pokerTable
+	 * Legalább hány játékos kell, hogy elinduljon a játék.
+	 * Asztaltól fogom lekérni.
 	 */
+	@Deprecated
+	private int minPlayer = 3;
 
 	public HoldemPokerTableServer(PokerTable pokerTable) throws RemoteException {
 		this.pokerTable = pokerTable;
-		deck = new Deck();
-		house = new House();
-		houseCards = new ArrayList<>();
-		playersCards = new HashMap<>();
-		clients = new ArrayList<>();
-		// a vakokat kérem be legelőször
+		this.deck = new Deck();
+		this.houseCards = new ArrayList<>();
+		this.playersCards = new HashMap<>();
+		this.clients = new ArrayList<>();
+//		a vakokat kérem be legelőször
 //		this.actualHoldemHouseCommandType = HoldemHouseCommandType.BLIND;
 		this.actualHoldemHouseCommandType = HoldemHouseCommandType.values()[0];
 	}
 
+	/**
+	 * Az asztalhoz való csatlakozás.
+	 * @param client a csatlakozni kívánó kliens
+	 * @throws PokerTooMuchPlayerException
+	 */
 	public synchronized void join(RemoteObserver client) throws PokerTooMuchPlayerException {
 		if (!clients.contains(client)) {
 			if (clients.size() >= pokerTable.getMaxPlayers()) {
@@ -119,12 +125,19 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	}
 
 	private void startRound() {
+		//ha elegen vagyunk az asztalnál, akkor indulhat a játék
 		if (clients.size() >= minPlayer) {
+			// megnézem, hogy aktuális hány játékos van az asztalnál
 			playersInRound = clients.size();
+			//következő játékos a dealer
 			++dealer;
+			//nem baj, ha körbeértünk...
 			dealer %= playersInRound;
+			//a kártyapaklit megkeverjük
 			deck.reset();
+			//senki sem beszélt még
 			votedPlayers = 0;
+			//a dealertől balra ülő harmadik játékos kezd
 			whosOn = (dealer + 3) % playersInRound;
 			// be kell kérni a vakokat
 			collectBlinds();
@@ -134,7 +147,6 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	}
 
 	private void collectBlinds() {
-		//		actualRaise = pokerTable.getDefaultPot();
 		for (int i = 0; i < clients.size(); i++) {
 			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, i, clients.size(), dealer, whosOn);
 			sendPokerCommand(i, pokerCommand);
@@ -148,7 +160,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			@Override
 			public void run() {
 				try {
-					clients.get(i).update(null, pokerCommand);
+					clients.get(i).update(pokerCommand);
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -177,7 +189,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				@Override
 				public void run() {
 					try {
-						pokerTableServerObserver.update(null, pokerCommand);
+						pokerTableServerObserver.update(pokerCommand);
 					} catch (RemoteException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -287,7 +299,9 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 
 	private boolean isThereEnoughMoney(User u, PlayerHoldemCommand playerCommand) throws PokerUserBalanceException {
 		BigDecimal newBalance = u.getBalance().subtract(playerCommand.getCallAmount());
+		moneyStack = moneyStack.add(playerCommand.getCallAmount());
 		if (playerCommand.getRaiseAmount() != null) {
+			moneyStack = moneyStack.add(playerCommand.getRaiseAmount());
 			newBalance = newBalance.subtract(playerCommand.getRaiseAmount());
 		}
 		if (newBalance.compareTo(BigDecimal.ZERO) < 0) {

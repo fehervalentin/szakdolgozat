@@ -25,7 +25,7 @@ public class TableListerObserver implements Observer, Serializable {
 				List<?> maybeTables = (List<?>)arg;
 				
 				if (maybeTables.size() > 0 && (maybeTables.get(0) instanceof PokerTable)) {
-					ro.update(o.toString(), arg);
+					ro.update(arg);
 				}
 			}
 		} catch (RemoteException e) {

@@ -16,7 +16,7 @@ public class CommunicatorController extends UnicastRemoteObject implements Remot
 	}
 
 	@Override
-	public void update(Object observable, Object updateMsg) throws RemoteException {
+	public void update(Object updateMsg) throws RemoteException {
 		contr.updateMe(updateMsg);
 	}
 

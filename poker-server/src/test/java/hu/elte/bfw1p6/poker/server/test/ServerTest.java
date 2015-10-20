@@ -48,7 +48,7 @@ public class ServerTest {
 			RemoteObserver client = new RemoteObserver() {
 				
 				@Override
-				public void update(Object observable, Object updateMsg) throws RemoteException {
+				public void update(Object updateMsg) throws RemoteException {
 					Assert.assertThat(updateMsg, instanceOf(HouseHoldemCommand.class));
 //					HouseHoldemCommand command = (HouseHoldemCommand)updateMsg;
 //					Assert.assertTrue(command.getHouseCommandType() == HoldemHouseCommandType.BLIND);

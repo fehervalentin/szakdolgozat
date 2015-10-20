@@ -47,6 +47,7 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * @param nthPlayer hanyadik játékos vagy a körben
 	 * @param players hány játékos van összesen a körben
 	 * @param dealer ki az aktuális osztó
+	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
 	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, int nthPlayer, int players, int dealer, int whosOn) {
 		this.houseCommandType = houseCommandType;
@@ -90,8 +91,7 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
 	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, Card card2, Card card3, int whosOn) {
-		this(houseCommandType, card1, whosOn);
-		this.card2 = card2;
+		this(houseCommandType, card1, card2, whosOn);
 		this.card3 = card3;
 	}
 	
@@ -120,15 +120,13 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	public int getWhosOn() {
 		return whosOn;
 	}
+	
+	public int getDealer() {
+		return dealer;
+	}
 
 	@Override
 	public String toString() {
 		return "[" + houseCommandType + " " + card1 + " " + card2 + " " + card3 + "]";
 	}
-
-	public int getDealer() {
-		return dealer;
-	}
-	
-	
 }
