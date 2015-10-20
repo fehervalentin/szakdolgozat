@@ -191,6 +191,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			switch(playerCommand.getPlayerCommandType()) {
 			case BLIND: {
 				refreshBalance(playerCommand);
+				--whosOn;
 				break;
 			}
 			case CALL: {
@@ -223,6 +224,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			}
 			++whosOn;
 			whosOn %= playersInRound;
+			System.out.println("WhosOn: " + whosOn);
 			playerCommand.setWhosOn(whosOn);
 			notifyClients(playerCommand);
 			// ha már kijött a river és az utolsó körben (rivernél) már mindenki nyilatkozott legalább egyszer, akkor új játszma kezdődik
@@ -234,6 +236,8 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
 				if (votedPlayers >= playersInRound) {
 					PokerCommand pokerCommand = null;
+					// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást!
+					whosOn = (dealer + 1) % playersInRound;
 					switch (actualHoldemHouseCommandType) {
 					case FLOP: {
 						pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), deck.popCard(), whosOn);

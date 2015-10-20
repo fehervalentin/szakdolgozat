@@ -21,6 +21,22 @@ insert into pokerdb.users (balance, username, password, admin)
 		FALSE
 	);
 	
+insert into pokerdb.users (balance, username, password, admin)
+	values(
+		10000.00,
+		'asd4',
+		'$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq',
+		FALSE
+	);
+	
+insert into pokerdb.users (balance, username, password, admin)
+	values(
+		10000.00,
+		'asd5',
+		'$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq',
+		FALSE
+	);
+	
 insert into pokerdb.poker_types (name) values('HOLDEM');
 insert into pokerdb.poker_types (name) values('CLASSIC');
 

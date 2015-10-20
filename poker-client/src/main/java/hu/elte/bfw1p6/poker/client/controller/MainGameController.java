@@ -66,7 +66,7 @@ public class MainGameController implements Initializable, PokerClientController,
 	/**
 	 * Az összeg, amit már betettem a potba.
 	 */
-	private BigDecimal alreadInPot;
+//	private BigDecimal alreadInPot;
 
 	@Override
 	public void setDelegateController(FrameController frameController) {
@@ -82,7 +82,7 @@ public class MainGameController implements Initializable, PokerClientController,
 
 		pokerTable = ConnectTableHelper.getInstance().getPokerTable();
 		myDebt = pokerTable.getDefaultPot();
-		alreadInPot = BigDecimal.ZERO;
+//		alreadInPot = BigDecimal.ZERO;
 		try {
 			commController = new CommunicatorController(this);
 			model.connectToTable(pokerTable, commController);
@@ -103,7 +103,7 @@ public class MainGameController implements Initializable, PokerClientController,
 			printHouseCommand(houseHoldemCommand);
 			switch (houseHoldemCommand.getHouseCommandType()) {
 			case BLIND: {
-				myDebt = BigDecimal.ZERO;
+				myDebt = pokerTable.getDefaultPot();
 				blind(houseHoldemCommand);
 				break;
 			}
@@ -210,14 +210,14 @@ public class MainGameController implements Initializable, PokerClientController,
 
 	private void smallBlind() {
 		BigDecimal amount = pokerTable.getDefaultPot().divide(new BigDecimal(2));
-		myDebt = myDebt.add(amount);
-		alreadInPot = alreadInPot.add(amount);
+		myDebt = myDebt.subtract(amount);
+//		alreadInPot = alreadInPot.add(amount);
 		sendPlayerCommand(HoldemPlayerCommandType.BLIND, amount, null, null);
 	}
 
 	private void bigBlind() {
-//		myDebt = myDebt.add(pokerTable.getDefaultPot());
-		alreadInPot = alreadInPot.add(pokerTable.getDefaultPot());
+		myDebt = myDebt.subtract(pokerTable.getDefaultPot());
+//		alreadInPot = alreadInPot.add(pokerTable.getDefaultPot());
 		sendPlayerCommand(HoldemPlayerCommandType.BLIND, pokerTable.getDefaultPot(), null, null);
 	}
 
@@ -322,7 +322,7 @@ public class MainGameController implements Initializable, PokerClientController,
 
 	@FXML protected void handleRaise(ActionEvent event) {
 		BigDecimal amount = new BigDecimal(6);
-		alreadInPot = alreadInPot.add(myDebt).add(amount);
+//		alreadInPot = alreadInPot.add(myDebt).add(amount);
 		sendPlayerCommand(HoldemPlayerCommandType.RAISE, myDebt, amount, null);
 	}
 
