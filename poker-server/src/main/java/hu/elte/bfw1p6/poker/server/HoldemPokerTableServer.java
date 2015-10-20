@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
@@ -15,6 +16,7 @@ import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
+import hu.elte.bfw1p6.poker.model.Card;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.repository.UserRepository;
@@ -60,6 +62,9 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	private Deck deck;
 
 	private House house;
+	
+	private List<Card> houseCards;
+	private HashMap<Integer, List<Card>> playersCards;
 
 	/**
 	 * Hány játékos játszik az adott körben
@@ -94,12 +99,15 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		this.pokerTable = pokerTable;
 		deck = new Deck();
 		house = new House();
+		houseCards = new ArrayList<>();
+		playersCards = new HashMap<>();
 		clients = new ArrayList<>();
 		// a vakokat kérem be legelőször
+//		this.actualHoldemHouseCommandType = HoldemHouseCommandType.BLIND;
 		this.actualHoldemHouseCommandType = HoldemHouseCommandType.values()[0];
 	}
 
-	public synchronized int join(RemoteObserver client) throws PokerTooMuchPlayerException {
+	public synchronized void join(RemoteObserver client) throws PokerTooMuchPlayerException {
 		if (!clients.contains(client)) {
 			if (clients.size() >= pokerTable.getMaxPlayers()) {
 				throw new PokerTooMuchPlayerException("Az asztal betelt, nem tudsz csatlakozni!");
@@ -108,7 +116,6 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				startRound();
 			}
 		}
-		return clients.size();
 	}
 
 	private void startRound() {
@@ -130,24 +137,18 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		//		actualRaise = pokerTable.getDefaultPot();
 		for (int i = 0; i < clients.size(); i++) {
 			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, i, clients.size(), dealer, whosOn);
-			try {
-				clients.get(i).update(null, pokerCommand);
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			//sendPokerCommand(j, pokerCommand);
+			sendPokerCommand(i, pokerCommand);
 		}
 		nextStep();
 	}
 
-	private void sendPokerCommand(int j, PokerCommand pokerCommand) {
+	private void sendPokerCommand(int i, PokerCommand pokerCommand) {
 		new Thread() {
 
 			@Override
 			public void run() {
 				try {
-					clients.get(j).update(null, pokerCommand);
+					clients.get(i).update(null, pokerCommand);
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -157,9 +158,12 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 
 	private void dealCardsToPlayers() {
 		for (int i = 0; i < clients.size(); i++) {
-			int j = i;
+			Card c1 = deck.popCard();
+			Card c2 = deck.popCard();
+			playersCards.get(i).add(c1);
+			playersCards.get(i).add(c2);
 			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), whosOn);
-			sendPokerCommand(j, pokerCommand);
+			sendPokerCommand(i, pokerCommand);
 		}
 		nextStep();
 	}
@@ -240,15 +244,25 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 					whosOn = (dealer + 1) % playersInRound;
 					switch (actualHoldemHouseCommandType) {
 					case FLOP: {
-						pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), deck.popCard(), whosOn);
+						Card c1 = deck.popCard();
+						Card c2 = deck.popCard();
+						Card c3 = deck.popCard();
+						houseCards.add(c1);
+						houseCards.add(c2);
+						houseCards.add(c3);
+						pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, c1, c2, c3, whosOn);
 						break;
 					}
 					case TURN: {
-						pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), whosOn);
+						Card c1 = deck.popCard();
+						houseCards.add(c1);
+						pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, c1, whosOn);
 						break;
 					}
 					case RIVER: {
-						pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), whosOn);
+						Card c1 = deck.popCard();
+						houseCards.add(c1);
+						pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, c1, whosOn);
 						break;
 					}
 					default:
