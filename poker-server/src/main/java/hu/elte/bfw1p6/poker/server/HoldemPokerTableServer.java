@@ -95,7 +95,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	 * Asztaltól fogom lekérni.
 	 */
 	@Deprecated
-	private int minPlayer = 3;
+	private int minPlayer = 2;
 
 	public HoldemPokerTableServer(PokerTable pokerTable) throws RemoteException {
 		this.pokerTable = pokerTable;
@@ -233,9 +233,12 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				break;
 			}
 			case QUIT: {
+				System.out.println("WhosQuit param: " + playerCommand.getWhosQuit());
+				System.out.println("Kliens visszakeresve: " + clients.indexOf(client));
 				clients.remove(client);
 //				++votedPlayers;
 				--playersInRound;
+				--whosOn;
 				break;
 			}
 			default:

@@ -203,6 +203,16 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case QUIT: {
+				System.out.println(playerHoldemCommand.getSender() + " FOLD");
+				System.out.println("You are nth: " + youAreNth + " Whoson: " + playerHoldemCommand.getWhosOn());
+				if (youAreNth > playerHoldemCommand.getWhosQuit()) {
+					--youAreNth;
+				}
+				if (youAreNth == playerHoldemCommand.getWhosOn()) {
+					enableButtons();
+				} else {
+					disableButtons();
+				}
 				break;
 			}
 			default: {
@@ -246,7 +256,7 @@ public class MainGameController implements Initializable, PokerClientController,
 			public void run() {
 				try {
 					PlayerHoldemCommand playerHoldemCommand = null;
-					if (type == HoldemPlayerCommandType.FOLD) {
+					if (type == HoldemPlayerCommandType.FOLD || type == HoldemPlayerCommandType.QUIT) {
 						playerHoldemCommand = new PlayerHoldemCommand(type, whosQuit);
 					} else {
 						playerHoldemCommand = new PlayerHoldemCommand(type, callAmount, raiseAmount);

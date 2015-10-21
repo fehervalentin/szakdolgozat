@@ -39,6 +39,11 @@ public class PlayerHoldemCommand implements PokerCommand, Serializable {
 		this.raiseAmount = raiseAmount;
 	}
 	
+	/**
+	 * Ezt a konstruktort kell használni, ha a játékos ki szeretne lépni
+	 * @param playerCommandType a command típusa: QUIT
+	 * @param whosQuit a játékos a sorban (lehet nem is kell elküldeni, hanem a lista alapján visszakeresni szerveroldalon, és úgy megkapni...
+	 */
 	public PlayerHoldemCommand(HoldemPlayerCommandType playerCommandType, int whosQuit) {
 		this.playerCommandType = playerCommandType;
 		this.whosOn = whosQuit;
