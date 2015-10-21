@@ -104,9 +104,6 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		this.playersCards = new HashMap<>();
 		this.clients = new ArrayList<>();
 		this.moneyStack = new BigDecimal(0);
-//		a vakokat kérem be legelőször
-//		this.actualHoldemHouseCommandType = HoldemHouseCommandType.BLIND;
-		this.actualHoldemHouseCommandType = HoldemHouseCommandType.values()[0];
 	}
 
 	/**
@@ -128,6 +125,9 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	private void startRound() {
 		//ha elegen vagyunk az asztalnál, akkor indulhat a játék
 		if (clients.size() >= minPlayer) {
+//			a vakokat kérem be legelőször
+//			actualHoldemHouseCommandType = HoldemHouseCommandType.BLIND;
+			actualHoldemHouseCommandType = HoldemHouseCommandType.values()[0];
 			// megnézem, hogy aktuális hány játékos van az asztalnál
 			playersInRound = clients.size();
 			//következő játékos a dealer
@@ -247,7 +247,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			playerCommand.setWhosOn(whosOn);
 			notifyClients(playerCommand);
 			// ha már kijött a river és az utolsó körben (rivernél) már mindenki nyilatkozott legalább egyszer, akkor új játszma kezdődik
-			if (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && votedPlayers >= playersInRound) {
+			if (playersInRound == 1 || (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && votedPlayers >= playersInRound)) {
 				// itt kell eldönteni, hogy ki nyert, és azt körbe is kell ám küldeni!
 				System.out.println("új kör");
 				startRound();

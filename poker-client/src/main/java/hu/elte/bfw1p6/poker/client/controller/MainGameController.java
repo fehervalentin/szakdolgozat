@@ -87,12 +87,17 @@ public class MainGameController implements Initializable, PokerClientController,
 		try {
 			commController = new CommunicatorController(this);
 			model.connectToTable(pokerTable, commController);
-		} catch (RemoteException | PokerTooMuchPlayerException e) {
+		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (PokerTooMuchPlayerException e) {
+			errorAlert.setContentText(e.getMessage());
+			errorAlert.showAndWait();
+			frameController.setTableListerFXML();
 		} catch (PokerUnauthenticatedException e) {
 			errorAlert.setContentText(e.getMessage());
 			errorAlert.showAndWait();
+			frameController.setLoginFXML();
 		}
 	}
 
