@@ -103,6 +103,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		this.houseCards = new ArrayList<>();
 		this.playersCards = new HashMap<>();
 		this.clients = new ArrayList<>();
+		this.moneyStack = new BigDecimal(0);
 //		a vakokat kérem be legelőször
 //		this.actualHoldemHouseCommandType = HoldemHouseCommandType.BLIND;
 		this.actualHoldemHouseCommandType = HoldemHouseCommandType.values()[0];

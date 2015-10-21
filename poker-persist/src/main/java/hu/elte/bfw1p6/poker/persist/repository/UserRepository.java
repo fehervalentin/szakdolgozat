@@ -11,7 +11,7 @@ import hu.elte.bfw1p6.poker.model.entity.Player;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.DBManager;
-import hu.elte.bfw1p6.poker.persist.dao.SQLExceptionInterceptor;
+import hu.elte.bfw1p6.poker.persist.dao.SQLExceptionTranslator;
 
 public class UserRepository {
 	private static final String TABLE_NAME = "users";
@@ -25,7 +25,7 @@ public class UserRepository {
 
 	private static UserRepository instance = null;
 
-	private SQLExceptionInterceptor interceptor = SQLExceptionInterceptor.getInstance();
+	private SQLExceptionTranslator sqlExceptionTranslator = SQLExceptionTranslator.getInstance();
 
 	private UserRepository() throws PokerDataBaseException {
 		loadColumns();
@@ -54,7 +54,7 @@ public class UserRepository {
 			pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
-			throw interceptor.interceptException(e);
+			throw sqlExceptionTranslator.interceptException(e);
 		}
 	}
 
@@ -77,7 +77,7 @@ public class UserRepository {
 			pstmt.close();
 			return u;
 		} catch (SQLException e) {
-			throw interceptor.interceptException(e);
+			throw sqlExceptionTranslator.interceptException(e);
 		}
 	}
 
@@ -91,7 +91,7 @@ public class UserRepository {
 			pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
-			throw interceptor.interceptException(e);
+			throw sqlExceptionTranslator.interceptException(e);
 		}
 	}
 
@@ -105,7 +105,7 @@ public class UserRepository {
 			pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
-			throw interceptor.interceptException(e);
+			throw sqlExceptionTranslator.interceptException(e);
 		}
 	}
 
@@ -121,7 +121,7 @@ public class UserRepository {
 				columns[i] = rs.getMetaData().getColumnLabel(i + 2);
 			}
 		} catch (SQLException e) {
-			throw interceptor.interceptException(e);
+			throw sqlExceptionTranslator.interceptException(e);
 		}
 		createQueries();
 	}
@@ -180,7 +180,7 @@ public class UserRepository {
 
 			pstmt.close();
 		} catch (SQLException e) {
-			throw interceptor.interceptException(e);
+			throw sqlExceptionTranslator.interceptException(e);
 		}
 
 	}

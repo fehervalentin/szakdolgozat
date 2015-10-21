@@ -6,21 +6,21 @@ import java.util.Iterator;
 
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 
-public class SQLExceptionInterceptor {
-	private static SQLExceptionInterceptor instance = null;
+public class SQLExceptionTranslator {
+	private static SQLExceptionTranslator instance = null;
 	
 	private final int IGNORE_ERR_CODE = 45000;
 	
 	private HashMap<String, String> mappings;
 
-	private SQLExceptionInterceptor() {
+	private SQLExceptionTranslator() {
 		mappings = new HashMap<>();
 		fillMapper();
 	}
 
-	public static synchronized SQLExceptionInterceptor getInstance() {
+	public static synchronized SQLExceptionTranslator getInstance() {
 		if (instance == null) {
-			instance = new SQLExceptionInterceptor();
+			instance = new SQLExceptionTranslator();
 		}
 		return instance;
 	}

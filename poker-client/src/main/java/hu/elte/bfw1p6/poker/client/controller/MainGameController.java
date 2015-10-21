@@ -75,6 +75,7 @@ public class MainGameController implements Initializable, PokerClientController,
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		youAreNth = -1;
 		model = new MainGameModel();
 		System.out.println(model.getUserName());
 		errorAlert = new Alert(AlertType.ERROR);

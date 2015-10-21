@@ -1,7 +1,7 @@
 CREATE TRIGGER pokerdb.create_table_trigger BEFORE INSERT ON pokerdb.poker_tables
 	FOR EACH ROW
 	BEGIN
-		IF (NEW.name > 30) THEN
+		IF (CHAR_LENGTH(NEW.name) > 30) THEN
 			SIGNAL SQLSTATE '45000'
 			SET MESSAGE_TEXT = 'CONSTRAINT_POKER_TABLES_NAME_LENGHT';
 		end IF;

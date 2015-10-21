@@ -32,3 +32,6 @@ CREATE TABLE pokerdb.poker_tables (
     FOREIGN KEY (poker_type_id) REFERENCES pokerdb.poker_types(id) ON DELETE CASCADE
 );
 
+--ALTER TABLE pokerdb.users ADD CONSTRAINT CONSTRAINT_USERS_USERNAME_LENGHT CHECK (!(3 <= CHAR_LENGTH(username) && CHAR_LENGTH(username) <= 20));
+--ALTER TABLE pokerdb.poker_tables ADD CONSTRAINT CONSTRAINT_POKER_TABLES_NAME_LENGHT CHECK (CHAR_LENGTH(name) < 30);
+

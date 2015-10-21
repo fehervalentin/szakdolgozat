@@ -11,7 +11,7 @@ import java.util.List;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.persist.dao.DBManager;
-import hu.elte.bfw1p6.poker.persist.dao.SQLExceptionInterceptor;
+import hu.elte.bfw1p6.poker.persist.dao.SQLExceptionTranslator;
 
 public class PokerTableRepository {
 	private static final String TABLE_NAME = "poker_tables";
@@ -24,7 +24,7 @@ public class PokerTableRepository {
 	private String UPDATE;
 	private String DELETE = "DELETE FROM " + TABLE_NAME + " WHERE id=?;";
 
-	private SQLExceptionInterceptor interceptor = SQLExceptionInterceptor.getInstance();
+	private SQLExceptionTranslator sqlExceptionTranslator = SQLExceptionTranslator.getInstance();
 
 	private PokerTableRepository() throws PokerDataBaseException {
 		loadColumns();
@@ -48,7 +48,7 @@ public class PokerTableRepository {
 			pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
-			throw interceptor.interceptException(e);
+			throw sqlExceptionTranslator.interceptException(e);
 		}
 	}
 
@@ -72,7 +72,7 @@ public class PokerTableRepository {
 
 			stmt.close();
 		} catch (SQLException e) {
-			throw interceptor.interceptException(e);
+			throw sqlExceptionTranslator.interceptException(e);
 		}
 		return tables;
 	}
@@ -85,7 +85,7 @@ public class PokerTableRepository {
 			pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
-			throw interceptor.interceptException(e);
+			throw sqlExceptionTranslator.interceptException(e);
 		}
 	}
 
@@ -102,7 +102,7 @@ public class PokerTableRepository {
 
 			pstmt.close();
 		} catch (SQLException e) {
-			throw interceptor.interceptException(e);
+			throw sqlExceptionTranslator.interceptException(e);
 		}
 
 	}
@@ -119,7 +119,7 @@ public class PokerTableRepository {
 				columns[i] = rs.getMetaData().getColumnLabel(i + 2);
 			}
 		} catch (SQLException e) {
-			throw interceptor.interceptException(e);
+			throw sqlExceptionTranslator.interceptException(e);
 		}
 		createQueries();
 	}
