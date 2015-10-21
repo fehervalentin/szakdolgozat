@@ -81,6 +81,7 @@ public class PlayerHoldemCommand implements PokerCommand, Serializable {
 		this.sender = sender;
 	}
 
+	@Override
 	public int getWhosOn() {
 		return whosOn;
 	}

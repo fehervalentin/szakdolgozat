@@ -31,7 +31,12 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2753404861902526567L;
+
+	/**
+	 * 
+	 */
+//	private static final long serialVersionUID = 1L;
 
 	private final String ERR_BALANCE_MSG = "Nincs elég zsetonod!";
 
@@ -95,7 +100,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	 * Asztaltól fogom lekérni.
 	 */
 	@Deprecated
-	private int minPlayer = 2;
+	private int minPlayer = 3;
 
 	public HoldemPokerTableServer(PokerTable pokerTable) throws RemoteException {
 		this.pokerTable = pokerTable;

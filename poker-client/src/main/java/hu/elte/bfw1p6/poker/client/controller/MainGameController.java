@@ -11,6 +11,7 @@ import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerObserverController;
 import hu.elte.bfw1p6.poker.client.model.MainGameModel;
 import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
+import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
 import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
@@ -62,11 +63,6 @@ public class MainGameController implements Initializable, PokerClientController,
 	 * A tartozásom az asztal felé, amit <b>CALL</b> vagy <b>RAISE</b> esetén meg kell adnom.
 	 */
 	private BigDecimal myDebt;
-	
-	/**
-	 * Az összeg, amit már betettem a potba.
-	 */
-//	private BigDecimal alreadInPot;
 
 	@Override
 	public void setDelegateController(FrameController frameController) {
@@ -83,7 +79,6 @@ public class MainGameController implements Initializable, PokerClientController,
 
 		pokerTable = ConnectTableHelper.getInstance().getPokerTable();
 		myDebt = pokerTable.getDefaultPot();
-//		alreadInPot = BigDecimal.ZERO;
 		try {
 			commController = new CommunicatorController(this);
 			model.connectToTable(pokerTable, commController);
@@ -99,6 +94,11 @@ public class MainGameController implements Initializable, PokerClientController,
 			errorAlert.showAndWait();
 			frameController.setLoginFXML();
 		}
+		
+		callButton.setDisable(true);
+		checkButton.setDisable(true);
+		raiseButton.setDisable(true);
+		foldButton.setDisable(true);
 	}
 
 	@Override
@@ -114,32 +114,20 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case PLAYER: {
-				player(houseHoldemCommand);
+//				player(houseHoldemCommand);
+				modifyButtonVisibilities(houseHoldemCommand);
 				break;
 			}
 			case FLOP: {
-				System.out.println("Flop: " + youAreNth + " " + houseHoldemCommand.getWhosOn());
-				if (youAreNth == houseHoldemCommand.getWhosOn()) {
-					enableButtons();
-				} else {
-					disableButtons();
-				}
+				modifyButtonVisibilities(houseHoldemCommand);
 				break;
 			}
 			case TURN: {
-				if (youAreNth == houseHoldemCommand.getWhosOn()) {
-					enableButtons();
-				} else {
-					disableButtons();
-				}
+				modifyButtonVisibilities(houseHoldemCommand);
 				break;
 			}
 			case RIVER: {
-				if (youAreNth == houseHoldemCommand.getWhosOn()) {
-					enableButtons();
-				} else {
-					disableButtons();
-				}
+				modifyButtonVisibilities(houseHoldemCommand);
 				break;
 			}
 			default: {
@@ -148,70 +136,36 @@ public class MainGameController implements Initializable, PokerClientController,
 			}
 		} else if (updateMsg instanceof PlayerHoldemCommand) {
 			PlayerHoldemCommand playerHoldemCommand = (PlayerHoldemCommand)updateMsg;
+			System.out.println(playerHoldemCommand.getSender() + " " + playerHoldemCommand.getPlayerCommandType());
+			System.out.println("You are nth: " + youAreNth + " Whoson: " + playerHoldemCommand.getWhosOn());
+			modifyButtonVisibilities(playerHoldemCommand);
+			// TODO: megjelenítés miatt maradt meg a switch-case...!
 			switch (playerHoldemCommand.getPlayerCommandType()) {
 			case BLIND: {
 				break;
 			}
 			case CALL: {
-				System.out.println(playerHoldemCommand.getSender() + " CALL");
-				System.out.println("You are nth: " + youAreNth + " Whoson: " + playerHoldemCommand.getWhosOn());
-				if (youAreNth == playerHoldemCommand.getWhosOn()) {
-					enableButtons();
-//					System.out.println("Adósságom: " + myDebt);
-				} else {
-					disableButtons();
-				}
 				break;
 			}
 			case CHECK: {
-				System.out.println(playerHoldemCommand.getSender() + " CHECK");
-				System.out.println("You are nth: " + youAreNth + " Whoson: " + playerHoldemCommand.getWhosOn());
-				if (youAreNth == playerHoldemCommand.getWhosOn()) {
-					System.out.println("itt vagyok!!!!!");
-					enableButtons();
-				} else {
-					disableButtons();
-				}
 				break;
 			}
 			case FOLD: {
-				System.out.println(playerHoldemCommand.getSender() + " FOLD");
-				System.out.println("You are nth: " + youAreNth + " Whoson: " + playerHoldemCommand.getWhosOn());
 				if (youAreNth > playerHoldemCommand.getWhosQuit()) {
 					--youAreNth;
-				}
-				if (youAreNth == playerHoldemCommand.getWhosOn()) {
-					enableButtons();
-				} else {
-					disableButtons();
 				}
 				break;
 			}
 			case RAISE: {
 				// és mi van ha én magam emeltem...
-				if (!playerHoldemCommand.getSender().equals(model.getUserName())) {
-					myDebt = myDebt.add(playerHoldemCommand.getRaiseAmount());
-				} else { // ha én magam emeltem, akkor a szerver elszámolta a teljes adósságom
-					myDebt = BigDecimal.ZERO;
-				}
-				if (youAreNth == playerHoldemCommand.getWhosOn()) {
-					enableButtons();
-					checkButton.setDisable(true);
-				} else {
-					disableButtons();
-				}
+				// ha én magam emeltem, akkor a szerver elszámolta a teljes adósságom
+				myDebt = !playerHoldemCommand.getSender().equals(model.getUserName()) ? myDebt.add(playerHoldemCommand.getRaiseAmount()) : BigDecimal.ZERO;
+				checkButton.setDisable(true);
 				break;
 			}
 			case QUIT: {
-				System.out.println(playerHoldemCommand.getSender() + " FOLD");
-				System.out.println("You are nth: " + youAreNth + " Whoson: " + playerHoldemCommand.getWhosOn());
 				if (youAreNth > playerHoldemCommand.getWhosQuit()) {
 					--youAreNth;
-				}
-				if (youAreNth == playerHoldemCommand.getWhosOn()) {
-					enableButtons();
-				} else {
-					disableButtons();
 				}
 				break;
 			}
@@ -228,6 +182,19 @@ public class MainGameController implements Initializable, PokerClientController,
 			checkButton.setDisable(true);
 		} else {
 			callButton.setDisable(true);
+		}
+	}
+	
+	private void modifyButtonVisibilities(PokerCommand pokerCommand) {
+		if (pokerCommand instanceof HouseHoldemCommand) {
+			pokerCommand = (HouseHoldemCommand)pokerCommand;
+		} else if (pokerCommand instanceof PlayerHoldemCommand) {
+			pokerCommand = (PlayerHoldemCommand)pokerCommand;
+		}
+		if (youAreNth == pokerCommand.getWhosOn()) {
+			enableButtons();
+		} else {
+			disableButtons();
 		}
 	}
 
@@ -323,7 +290,6 @@ public class MainGameController implements Initializable, PokerClientController,
 	}
 
 	private void player(HouseHoldemCommand houseHoldemCommand) {
-		System.out.println(youAreNth + " " + houseHoldemCommand.getWhosOn());
 		if (youAreNth == houseHoldemCommand.getWhosOn()) {
 			if (myDebt.compareTo(BigDecimal.ZERO) > 0) {
 				enableButtons();
@@ -350,7 +316,6 @@ public class MainGameController implements Initializable, PokerClientController,
 
 	@FXML protected void handleRaise(ActionEvent event) {
 		BigDecimal amount = new BigDecimal(6);
-//		alreadInPot = alreadInPot.add(myDebt).add(amount);
 		sendPlayerCommand(HoldemPlayerCommandType.RAISE, myDebt, amount, null);
 	}
 

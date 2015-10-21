@@ -117,6 +117,8 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	public int getPlayers() {
 		return players;
 	}
+	
+	@Override
 	public int getWhosOn() {
 		return whosOn;
 	}
