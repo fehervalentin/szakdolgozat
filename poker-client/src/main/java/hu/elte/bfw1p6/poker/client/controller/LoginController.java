@@ -46,7 +46,12 @@ public class LoginController implements Initializable, PokerClientController {
 		passwordField.setText("asd");
 	}
 	
-	@FXML protected void loginHandler(ActionEvent event) {
+	public void setDelegateController(FrameController fc) {
+		this.frameController = fc;
+	}
+	
+	@FXML
+	protected void loginHandler(ActionEvent event) {
 		try {
 			model.login(usernameField.getText(), passwordField.getText());
 			frameController.setTableListerFXML();
@@ -56,11 +61,8 @@ public class LoginController implements Initializable, PokerClientController {
 		}
 	}
 	
-	public void setDelegateController(FrameController fc) {
-		this.frameController = fc;
-	}
-	
-	public void goToReg() {
+	@FXML
+	protected void goToReg() {
 		frameController.setRegistrationFXML();
 	}
 }

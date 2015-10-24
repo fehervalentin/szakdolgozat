@@ -7,11 +7,11 @@ import java.rmi.server.UnicastRemoteObject;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class FrameController extends UnicastRemoteObject {
 	
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 5840336279442691891L;
 	
 	private final String FXML_PREFIX = "/fxml/";
 	private final String LOGIN_FXML = "Login.fxml";
@@ -21,10 +21,25 @@ public class FrameController extends UnicastRemoteObject {
 	private final String MAIN_GAME_FXML = "MainGame.fxml";
 	private final String PROFILE_MANAGER_FXML = "ProfileManager.fxml";
 	
+	
+	
+	private final int MENU_GAME_WIDHT = 900;
+	private final int MENU_GAME_HEIGHT = 500;
+	
+	private final int MAIN_GAME_WIDHT = 1366;
+	private final int MAIN_GAME_HEIGHT = 768;
+	
 	private Scene scene;
 	
-	public FrameController(Scene scene) throws RemoteException {
-		setLoginFXML();
+	private Stage stage;
+	
+	public FrameController(Stage stage) throws RemoteException {
+		this.stage = stage;
+		setStageSize(MAIN_GAME_WIDHT, MAIN_GAME_HEIGHT);
+//		setStageSize(MENU_GAME_WIDHT, MENU_GAME_HEIGHT);
+		setMainGameFXML();
+//		setLoginFXML();
+		
 	}
 
 	public void setRegistrationFXML() {
@@ -44,6 +59,7 @@ public class FrameController extends UnicastRemoteObject {
 	}
 	
 	public void setMainGameFXML() {
+		setStageSize(MAIN_GAME_WIDHT, MAIN_GAME_HEIGHT);
 		setFXML(FXML_PREFIX + MAIN_GAME_FXML);
 	}
 	
@@ -68,5 +84,10 @@ public class FrameController extends UnicastRemoteObject {
 
 	public Scene getScene() {
 		return scene;
+	}
+	
+	private void setStageSize(int width, int height) {
+		stage.setWidth(width);
+		stage.setHeight(height);
 	}
 }

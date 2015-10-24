@@ -9,24 +9,67 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.image.*?>
 
-<AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane fx:id="mainGamePane" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="hu.elte.bfw1p6.poker.client.controller.MainGameController">
 	<children>
-		<GridPane alignment="center" hgap="10" vgap="10">
-			<Label fx:id="pokerLabel" GridPane.columnIndex="0"
-				GridPane.rowIndex="0" GridPane.columnSpan="20" text="Bejelentkezés"
-				styleClass="header-text" alignment="center" />
+		<ImageView fx:id="imageView" fitHeight="1650" fitWidth="1050"
+			layoutX="150" layoutY="50" pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="/images/table.jpg" backgroundLoading="true" />
+			</image>
+		</ImageView>
+		<ImageView fx:id="profileImage" fitHeight="80" fitWidth="80"
+			layoutX="628" layoutY="540" pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="/images/profile.png" backgroundLoading="true" />
+			</image>
+		</ImageView>
+		<ImageView fx:id="profileImage1" fitHeight="80" fitWidth="80"
+			layoutX="188" layoutY="485" pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="/images/profile.png" backgroundLoading="true" />
+			</image>
+		</ImageView>
+		<ImageView fx:id="profileImage2" fitHeight="80" fitWidth="80"
+			layoutX="232" layoutY="40" pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="/images/profile.png" backgroundLoading="true" />
+			</image>
+		</ImageView>
+		<ImageView fx:id="profileImage3" fitHeight="80" fitWidth="80"
+			layoutX="631" layoutY="0" pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="/images/profile.png" backgroundLoading="true" />
+			</image>
+		</ImageView>
+		<ImageView fx:id="profileImage4" fitHeight="80" fitWidth="80"
+			layoutX="1031" layoutY="45" pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="/images/profile.png" backgroundLoading="true" />
+			</image>
+		</ImageView>
+		<ImageView fx:id="profileImage5" fitHeight="80" fitWidth="80"
+			layoutX="1084" layoutY="485" pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="/images/profile.png" backgroundLoading="true" />
+			</image>
+		</ImageView>
+		<GridPane alignment="center" hgap="10" vgap="10" layoutX="450" layoutY="680">
+<!-- 			<Label fx:id="pokerLabel" GridPane.columnIndex="0" -->
+<!-- 				GridPane.rowIndex="0" GridPane.columnSpan="20" text="Bejelentkezés" -->
+<!-- 				styleClass="header-text" alignment="center" /> -->
 			<Button fx:id="callButton" text="Call" onAction="#handleCall"
-				styleClass="rich-blue" GridPane.columnIndex="8" GridPane.rowIndex="12" />
+				styleClass="rich-blue" GridPane.columnIndex="0" GridPane.rowIndex="0" />
 			<Button fx:id="checkButton" text="Check" onAction="#handleCheck"
-				styleClass="rich-blue" GridPane.columnIndex="9" GridPane.rowIndex="12" />
+				styleClass="rich-blue" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 			<Button fx:id="raiseButton" text="Raise" onAction="#handleRaise"
-				styleClass="rich-blue" GridPane.columnIndex="10" GridPane.rowIndex="12" />
+				styleClass="rich-blue" GridPane.columnIndex="2" GridPane.rowIndex="0" />
 			<Button fx:id="foldButton" text="Fold" onAction="#handleFold"
-				styleClass="rich-blue" GridPane.columnIndex="11" GridPane.rowIndex="12" />
-				<Button fx:id="quitButton" text="Quit" onAction="#handleQuit"
-				styleClass="rich-blue" GridPane.columnIndex="12" GridPane.rowIndex="12" />
+				styleClass="rich-blue" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+			<Button fx:id="quitButton" text="Quit" onAction="#handleQuit"
+				styleClass="rich-blue" GridPane.columnIndex="4" GridPane.rowIndex="0" />
 		</GridPane>
 	</children>
 </AnchorPane>

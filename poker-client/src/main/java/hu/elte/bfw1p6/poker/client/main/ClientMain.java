@@ -11,20 +11,22 @@ import javafx.stage.WindowEvent;
 public class ClientMain extends Application {
 
 	private final String TITLE = "Poker";
+	private final String CSS_PATH = "/styles/login.css";
+	
 	private Scene scene;
 	private FrameController frameController;
 	
     @Override
     public void start(Stage stage) throws Exception {
-        frameController = new FrameController(scene);
+        frameController = new FrameController(stage);
         scene = frameController.getScene();
-        scene.getStylesheets().add("/styles/login.css");
+        scene.getStylesheets().add(CSS_PATH);
         
         stage.setTitle(TITLE);
         stage.setScene(scene);
         stage.setOnCloseRequest(getFormCloseEvent());
-        stage.setWidth(900);
-        stage.setHeight(500);
+//        stage.setWidth(900);
+//        stage.setHeight(500);
         stage.setResizable(false);
         stage.show();
     }

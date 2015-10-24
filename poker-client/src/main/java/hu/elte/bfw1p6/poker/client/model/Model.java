@@ -106,8 +106,4 @@ public class Model {
 	public PokerSession getPokerSession() {
 		return pokerSession;
 	}
-
-	/*public List<Table> getTables() {
-		return pokerRemote.getTables();
-	}*/
 }

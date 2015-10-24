@@ -50,10 +50,10 @@ public class MainGameModel {
 		this.pokerRemote = RMIRepository.getInstance().getPokerRemote();
 		this.youAreNth = -1;
 		this.pokerTable = ConnectTableHelper.getInstance().getPokerTable();
-		this.myDebt = pokerTable.getDefaultPot();
+//		this.myDebt = pokerTable.getDefaultPot();
 		this.communicatorController = communicatorController;
 
-		System.out.println(getUserName());
+//		System.out.println(getUserName());
 	}
 
 	public void connectToTable(RemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException {

@@ -17,18 +17,22 @@ import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
-import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.event.ActionEvent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 public class MainGameController implements Initializable, PokerClientController, PokerObserverController {
 
+	@FXML private AnchorPane mainGamePane;
+	
 	@FXML private Label pokerLabel;
 
 	@FXML private Button callButton;
@@ -36,23 +40,35 @@ public class MainGameController implements Initializable, PokerClientController,
 	@FXML private Button raiseButton;
 	@FXML private Button foldButton;
 	@FXML private Button quitButton;
+	
+	@FXML private ImageView imageView;
+	
+	@FXML private ImageView profileImage;
+	@FXML private ImageView profileImage1;
+	@FXML private ImageView profileImage2;
+	@FXML private ImageView profileImage3;
+	@FXML private ImageView profileImage4;
+	@FXML private ImageView profileImage5;
 
 	private MainGameModel model;
 
 	private FrameController frameController;
 
 	private CommunicatorController commController;
+	
+	private Scene scene;
 
 	private Alert errorAlert;
 
 	@Override
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
+		this.scene = this.frameController.getScene();
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		errorAlert = new Alert(AlertType.ERROR);
+		/*errorAlert = new Alert(AlertType.ERROR);
 
 		try {
 			commController = new CommunicatorController(this);
@@ -63,19 +79,13 @@ public class MainGameController implements Initializable, PokerClientController,
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (PokerTooMuchPlayerException e) {
-			errorAlert.setContentText(e.getMessage());
-			errorAlert.showAndWait();
+			showErrorAlert(e.getMessage());
 			frameController.setTableListerFXML();
 		} catch (PokerUnauthenticatedException e) {
-			errorAlert.setContentText(e.getMessage());
-			errorAlert.showAndWait();
+			showErrorAlert(e.getMessage());
 			frameController.setLoginFXML();
 		}
-
-		callButton.setDisable(true);
-		checkButton.setDisable(true);
-		raiseButton.setDisable(true);
-		foldButton.setDisable(true);
+		modifyButtonsDisability(true);*/
 	}
 
 	@Override
@@ -89,8 +99,7 @@ public class MainGameController implements Initializable, PokerClientController,
 				try {
 					model.blind(commController, houseHoldemCommand);
 				} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
-					errorAlert.setContentText(e.getMessage());
-					errorAlert.showAndWait();
+					showErrorAlert(e.getMessage());
 				}
 				break;
 			}
@@ -169,38 +178,25 @@ public class MainGameController implements Initializable, PokerClientController,
 		} else if (pokerCommand instanceof PlayerHoldemCommand) {
 			pokerCommand = (PlayerHoldemCommand)pokerCommand;
 		}
-		if (model.getYouAreNth() == pokerCommand.getWhosOn()) {
-			enableButtons();
-		} else {
-			disableButtons();
-		}
+		boolean disable = model.getYouAreNth() == pokerCommand.getWhosOn() ? false : true;
+		modifyButtonsDisability(disable);
 	}
 
-	private void disableButtons() {
-		callButton.setDisable(true);
-		checkButton.setDisable(true);
-		foldButton.setDisable(true);
-		raiseButton.setDisable(true);
-	}
-
-	private void enableButtons() {
-		callButton.setDisable(false);
-		checkButton.setDisable(false);
-		foldButton.setDisable(false);
-		raiseButton.setDisable(false);
+	private void modifyButtonsDisability(boolean disable) {
+		callButton.setDisable(disable);
+		checkButton.setDisable(disable);
+		foldButton.setDisable(disable);
+		raiseButton.setDisable(disable);
 	}
 
 	private void player(HouseHoldemCommand houseHoldemCommand) {
-		if (model.getYouAreNth() == houseHoldemCommand.getWhosOn()) {
-			if (model.getMyDebt().compareTo(BigDecimal.ZERO) > 0) {
-				enableButtons();
-				checkButton.setDisable(true);
-			}
-		} else {
-			disableButtons();
+		boolean disable = model.getYouAreNth() == houseHoldemCommand.getWhosOn() ? false : true;
+		modifyButtonsDisability(disable);
+		if (model.getMyDebt().compareTo(BigDecimal.ZERO) > 0) {
+			checkButton.setDisable(true);
 		}
 	}
-	
+
 	private void printHouseCommand(HouseHoldemCommand command) {
 		System.out.println("----------------");
 		System.out.println(command);
@@ -214,8 +210,7 @@ public class MainGameController implements Initializable, PokerClientController,
 		try {
 			model.call();
 		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
-			errorAlert.setContentText(e.getMessage());
-			errorAlert.showAndWait();
+			showErrorAlert(e.getMessage());
 		}
 	}
 
@@ -223,8 +218,7 @@ public class MainGameController implements Initializable, PokerClientController,
 		try {
 			model.check();
 		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
-			errorAlert.setContentText(e.getMessage());
-			errorAlert.showAndWait();
+			showErrorAlert(e.getMessage());
 		}
 	}
 
@@ -232,8 +226,7 @@ public class MainGameController implements Initializable, PokerClientController,
 		try {
 			model.raise(new BigDecimal(6));
 		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
-			errorAlert.setContentText(e.getMessage());
-			errorAlert.showAndWait();
+			showErrorAlert(e.getMessage());
 		}
 	}
 
@@ -241,18 +234,22 @@ public class MainGameController implements Initializable, PokerClientController,
 		try {
 			model.fold();
 		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
-			errorAlert.setContentText(e.getMessage());
-			errorAlert.showAndWait();
+			showErrorAlert(e.getMessage());
 		}
 	}
 
 	@FXML protected void handleQuit(ActionEvent event) {
-		try {
+		/*try {
 			model.quit();
 		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
-			errorAlert.setContentText(e.getMessage());
-			errorAlert.showAndWait();
-		}
-		frameController.setTableListerFXML();
+			showErrorAlert(e.getMessage());
+		}*/
+		frameController.setMainGameFXML();
+//		frameController.setTableListerFXML();
+	}
+
+	private void showErrorAlert(String msg) {
+		errorAlert.setContentText(msg);
+		errorAlert.showAndWait();
 	}
 }
