@@ -5,7 +5,6 @@ import java.rmi.RemoteException;
 
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 
-
 /**
  * A kliens implementálja.
  * @author feher
