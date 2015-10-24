@@ -24,7 +24,7 @@ import javafx.scene.control.PasswordField;
 
 public class ProfileManagerController implements Initializable, PokerClientController {
 
-	private final String DIFF_PASS_MSG = "A két jelszó nem egyezik!";
+	private final String DIFF_PW_MSG = "A két jelszó nem egyezik!";
 	private final String CHANGED_PW_MSG = "Sikeresen megváltoztattad a jelszavadat!";
 
 	private FrameController frameController;
@@ -70,7 +70,7 @@ public class ProfileManagerController implements Initializable, PokerClientContr
 				newPassword.equals("") ||
 				rePassword.equals("")) {
 			alert.setAlertType(AlertType.ERROR);
-			alert.setContentText(DIFF_PASS_MSG);
+			alert.setContentText(DIFF_PW_MSG);
 			alert.showAndWait();
 		} else {
 			try {

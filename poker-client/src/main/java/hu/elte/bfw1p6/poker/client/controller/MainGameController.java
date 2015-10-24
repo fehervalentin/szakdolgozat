@@ -255,9 +255,4 @@ public class MainGameController implements Initializable, PokerClientController,
 		}
 		frameController.setTableListerFXML();
 	}
-
-	@Override
-	public PokerPlayer getPlayer() {
-		return model.getPlayer();
-	}
 }

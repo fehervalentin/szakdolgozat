@@ -54,12 +54,6 @@ public class ServerTest {
 //					HouseHoldemCommand command = (HouseHoldemCommand)updateMsg;
 //					Assert.assertTrue(command.getHouseCommandType() == HoldemHouseCommandType.BLIND);
 				}
-
-				@Override
-				public PokerPlayer getPlayer() throws RemoteException {
-					// TODO Auto-generated method stub
-					return null;
-				}
 			};
 //			sv.join(client);
 		}

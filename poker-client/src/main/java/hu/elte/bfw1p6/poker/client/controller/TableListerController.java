@@ -85,7 +85,6 @@ public class TableListerController implements PokerClientController, Initializab
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
 		tableName.setCellValueFactory(new PropertyValueFactory<PokerTable, String>("name"));
 		pokerType.setCellValueFactory(new PropertyValueFactory<PokerTable, PokerType>("pokerType"));
 		maxTime.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>("maxTime"));
@@ -190,10 +189,5 @@ public class TableListerController implements PokerClientController, Initializab
 		List<PokerTable> tables = (List<PokerTable>)updateMsg;
 		tableView.getItems().setAll(tables);
 		System.out.println("MEGKAPTAM A TÁBLÁKAT");
-	}
-
-	@Override
-	public PokerPlayer getPlayer() {
-		return model.getPlayer();
 	}
 }

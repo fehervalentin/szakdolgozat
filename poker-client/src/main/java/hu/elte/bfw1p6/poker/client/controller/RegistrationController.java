@@ -23,7 +23,8 @@ import javafx.scene.layout.AnchorPane;
 public class RegistrationController implements Initializable, PokerClientController {
 	
 	private final String REG_OK_MSG = "Sikeresen regisztráltál!";
-	private final String REG_DIFF_PW = "A két jelszó nem egyezik!";
+	private final String REG_ERR_DIFF_PW = "A két jelszó nem egyezik!";
+	private final String ERR_STYLECLASS = "hiba";
 	
 	@FXML
 	private AnchorPane rootPane;
@@ -70,14 +71,14 @@ public class RegistrationController implements Initializable, PokerClientControl
 	}
 	
 	@FXML protected void handleRegistrationButton(ActionEvent event) {
-//		usernameField.getStyleClass().remove("hiba");
-		passwordField.getStyleClass().remove("hiba");
-		rePasswordField.getStyleClass().remove("hiba");
+//		usernameField.getStyleClass().remove(ERR_STYLECLASS);
+		passwordField.getStyleClass().remove(ERR_STYLECLASS);
+		rePasswordField.getStyleClass().remove(ERR_STYLECLASS);
 		
 		if (!passwordField.getText().equals(rePasswordField.getText())) {
-			passwordField.getStyleClass().add("hiba");
-			rePasswordField.getStyleClass().add("hiba");
-			alertError.setContentText(REG_DIFF_PW);
+			passwordField.getStyleClass().add(ERR_STYLECLASS);
+			rePasswordField.getStyleClass().add(ERR_STYLECLASS);
+			alertError.setContentText(REG_ERR_DIFF_PW);
 			alertError.showAndWait();
 			return;
 		}

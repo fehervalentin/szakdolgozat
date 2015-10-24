@@ -20,10 +20,4 @@ public class CommunicatorController extends UnicastRemoteObject implements Remot
 	public void update(Object updateMsg) throws RemoteException {
 		contr.updateMe(updateMsg);
 	}
-
-	@Override
-	public PokerPlayer getPlayer() throws RemoteException {
-		return contr.getPlayer();
-	}
-
 }
