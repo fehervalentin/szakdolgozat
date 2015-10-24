@@ -12,19 +12,37 @@ import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
  *
  */
 public class PlayerHoldemCommand implements PokerCommand, Serializable {
+
+	private static final long serialVersionUID = -4550840731511497967L;
+
 	/**
-	 * 
+	 * Az utasítás típusa.
 	 */
-	private static final long serialVersionUID = 1L;
-	
 	private HoldemPlayerCommandType playerCommandType;
+	
+	/**
+	 * A megadandó tét.
+	 */
 	private BigDecimal callAmount;
+	
+	/**
+	 * Az emelendő tét.
+	 */
 	private BigDecimal raiseAmount;
 	
+	/**
+	 * Az üzenetet küldő játékos neve.
+	 */
 	private String sender;
 	
+	/**
+	 * Ki van éppen soron.
+	 */
 	private int whosOn;
 	
+	/**
+	 * Ki lépett ki.
+	 */
 	private int whosQuit;
 	
 	/**
@@ -33,46 +51,25 @@ public class PlayerHoldemCommand implements PokerCommand, Serializable {
 	 * @param callAmount CALL esetén a megadandó összeg
 	 * @param raiseAmount RAISE esetén az emelendő összeg
 	 */
-	public PlayerHoldemCommand(HoldemPlayerCommandType playerCommandType, BigDecimal callAmount, BigDecimal raiseAmount) {
+	public PlayerHoldemCommand(HoldemPlayerCommandType playerCommandType, BigDecimal callAmount, BigDecimal raiseAmount, Integer whosQuit) {
 		this.playerCommandType = playerCommandType;
 		this.callAmount = callAmount;
 		this.raiseAmount = raiseAmount;
-	}
-	
-	/**
-	 * Ezt a konstruktort kell használni, ha a játékos ki szeretne lépni
-	 * @param playerCommandType a command típusa: QUIT
-	 * @param whosQuit a játékos a sorban (lehet nem is kell elküldeni, hanem a lista alapján visszakeresni szerveroldalon, és úgy megkapni...
-	 */
-	public PlayerHoldemCommand(HoldemPlayerCommandType playerCommandType, int whosQuit) {
-		this.playerCommandType = playerCommandType;
-		this.whosOn = whosQuit;
+		this.whosQuit = whosQuit;
 	}
 
 	public BigDecimal getCallAmount() {
 		return callAmount;
 	}
-	
-	/**
-	 * Emelés esetén az emelendő összeg.
-	 * @return az emelendő összeg
-	 */
+
 	public BigDecimal getRaiseAmount() {
 		return raiseAmount;
 	}
 	
-	/**
-	 * 
-	 * @return A játékos által választott utasítás
-	 */
 	public HoldemPlayerCommandType getPlayerCommandType() {
 		return playerCommandType;
 	}
 	
-	/**
-	 * 
-	 * @return Az utasítást küldő felhasználó neve
-	 */
 	public String getSender() {
 		return sender;
 	}

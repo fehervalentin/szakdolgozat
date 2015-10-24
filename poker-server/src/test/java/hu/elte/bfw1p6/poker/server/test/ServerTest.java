@@ -16,6 +16,7 @@ import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
+import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.server.HoldemPokerTableServer;
 
@@ -52,6 +53,12 @@ public class ServerTest {
 					Assert.assertThat(updateMsg, instanceOf(HouseHoldemCommand.class));
 //					HouseHoldemCommand command = (HouseHoldemCommand)updateMsg;
 //					Assert.assertTrue(command.getHouseCommandType() == HoldemHouseCommandType.BLIND);
+				}
+
+				@Override
+				public PokerPlayer getPlayer() throws RemoteException {
+					// TODO Auto-generated method stub
+					return null;
 				}
 			};
 //			sv.join(client);

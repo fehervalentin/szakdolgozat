@@ -15,7 +15,7 @@ import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
-import hu.elte.bfw1p6.poker.model.entity.Player;
+import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 
 public interface PokerRemote extends Remote {
@@ -36,7 +36,7 @@ public interface PokerRemote extends Remote {
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
 	 */
-	void deletePlayer(UUID uuid, Player player) throws RemoteException, PokerDataBaseException;
+	void deletePlayer(UUID uuid, PokerPlayer player) throws RemoteException, PokerDataBaseException;
 
 	/**
 	 * Adott felhasználói fiókhoz tartozó jelszó cseréje
@@ -48,7 +48,7 @@ public interface PokerRemote extends Remote {
 	 */
 	void modifyPassword(UUID uuid, String oldPassword, String newPassword) throws RemoteException, PokerDataBaseException, PokerInvalidPassword, PokerUnauthenticatedException;
 	
-	Player refreshPlayer(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
+	PokerPlayer refreshPlayer(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
 	
 	
 	

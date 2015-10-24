@@ -2,9 +2,10 @@ package hu.elte.bfw1p6.poker.command.holdem;
 
 import java.io.Serializable;
 
+import com.cantero.games.poker.texasholdem.Card;
+
 import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
-import hu.elte.bfw1p6.poker.model.Card;
 
 
 /**
@@ -13,28 +14,26 @@ import hu.elte.bfw1p6.poker.model.Card;
  *
  */
 public class HouseHoldemCommand implements PokerCommand, Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
+	private static final long serialVersionUID = 7270842556559660805L;
+
 	/**
-	 * Hanyadik játékos vagy az asztalnál
+	 * Hanyadik játékos vagy az asztalnál.
 	 */
 	private int nthPlayer;
 	
 	/**
-	 * Hány játékos van összesen
+	 * Hány játékos van összesen.
 	 */
 	private int players;
 	
 	/**
-	 * Ki az osztó az adott leosztásban
+	 * Ki az osztó az adott leosztásban.
 	 */
 	private int dealer;
 	
 	/**
-	 * Ki következik éppen
+	 * Ki következik éppen.
 	 */
 	private int whosOn;
 	
@@ -42,7 +41,7 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	private Card card1, card2, card3;
 	
 	/**
-	 * Ha a szerver bekéri a vakokat, akkor ezt a konstruktort kell használni
+	 * Ha a szerver bekéri a vakokat, akkor ezt a konstruktort kell használni.
 	 * @param houseCommandType BLIND
 	 * @param nthPlayer hanyadik játékos vagy a körben
 	 * @param players hány játékos van összesen a körben

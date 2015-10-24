@@ -26,7 +26,7 @@ import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
-import hu.elte.bfw1p6.poker.model.entity.Player;
+import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.repository.PokerTableRepository;
@@ -212,12 +212,12 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public void deletePlayer(UUID uuid, Player player) throws RemoteException, PokerDataBaseException {
+	public void deletePlayer(UUID uuid, PokerPlayer player) throws RemoteException, PokerDataBaseException {
 		UserRepository.getInstance().deletePlayer(player);
 	}
 
 	@Override
-	public Player refreshPlayer(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+	public PokerPlayer refreshPlayer(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		return UserRepository.getInstance().findByUserName(sessionService.lookUpUserName(uuid)).getPlayer();
 	}
 }

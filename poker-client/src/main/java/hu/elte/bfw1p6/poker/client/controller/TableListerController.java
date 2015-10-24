@@ -15,6 +15,7 @@ import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidSession;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
+import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.fxml.FXML;
@@ -191,5 +192,10 @@ public class TableListerController implements PokerClientController, Initializab
 		List<PokerTable> tables = (List<PokerTable>)updateMsg;
 		tableView.getItems().setAll(tables);
 		System.out.println("MEGKAPTAM A TÁBLÁKAT");
+	}
+
+	@Override
+	public PokerPlayer getPlayer() {
+		return model.getPlayer();
 	}
 }

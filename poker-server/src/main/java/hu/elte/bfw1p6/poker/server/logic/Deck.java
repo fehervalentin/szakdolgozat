@@ -5,7 +5,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import hu.elte.bfw1p6.poker.model.Card;
+import com.cantero.games.poker.texasholdem.Card;
+import com.cantero.games.poker.texasholdem.CardRankEnum;
+import com.cantero.games.poker.texasholdem.CardSuitEnum;
+
 import hu.elte.bfw1p6.poker.model.CardSuit;
 
 /**
@@ -40,11 +43,13 @@ public class Deck {
 	}
 	
 	private void loadCards() {
-        double temp;
-        for (int i = 1; i <= NUMER_OF_CARDS; i++) {
-            temp = Math.floor(i / 4.1);
-            cards.add(new Card(i, CardSuit.values()[(i % 4)], (int) (14 - temp)));
+        int suitsLenght = CardSuit.values().length;
+        for (int i = 0; i < NUMER_OF_CARDS / suitsLenght; i++) {
+        	for (int j = 0; j < suitsLenght; j++) {
+        		cards.add(new Card(CardSuitEnum.values()[j], CardRankEnum.values()[i]));
+        	}
         }
+        System.out.println(this);
     }
 	
 	/**
@@ -64,4 +69,17 @@ public class Deck {
 		stackPointer = 0;
 		Collections.shuffle(cards, new Random(System.nanoTime()));
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("Deck:[" + System.lineSeparator());
+		for (int i = 0; i < NUMER_OF_CARDS; i++) {
+			sb.append(cards.get(i).toString());
+			sb.append(System.lineSeparator());
+		}
+		sb.append("]");
+		return sb.toString();
+	}
+	
+	
 }

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.cantero.games.poker.texasholdem.Card;
+
 import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
@@ -16,7 +18,6 @@ import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
-import hu.elte.bfw1p6.poker.model.Card;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.repository.UserRepository;
@@ -28,15 +29,8 @@ import hu.elte.bfw1p6.poker.server.logic.Deck;
  *
  */
 public class HoldemPokerTableServer extends UnicastRemoteObject {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2753404861902526567L;
 
-	/**
-	 * 
-	 */
-//	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2753404861902526567L;
 
 	private final String ERR_BALANCE_MSG = "Nincs elég zsetonod!";
 
@@ -178,10 +172,16 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		for (int i = 0; i < clients.size(); i++) {
 			Card c1 = deck.popCard();
 			Card c2 = deck.popCard();
+			try {
+				clients.get(i).getPlayer().setCards(new Card[]{c1, c2});
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			playersCards.put(i, new ArrayList<>());
 			playersCards.get(i).add(c1);
 			playersCards.get(i).add(c2);
-			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, deck.popCard(), deck.popCard(), whosOn);
+			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, c1, c2, whosOn);
 			sendPokerCommand(i, pokerCommand);
 		}
 		nextStep();
@@ -210,7 +210,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 
 	public synchronized void receivePlayerCommand(RemoteObserver client, PlayerHoldemCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException {
 		// ha valid klienstől érkezik üzenet, azt feldolgozzuk, körbeküldjük
-		if (clients.contains(client)) {
+//		if (clients.contains(client)) {
 			switch(playerCommand.getPlayerCommandType()) {
 			case BLIND: {
 				refreshBalance(playerCommand);
@@ -291,7 +291,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 					votedPlayers = 0;
 				}
 			}
-		}
+//		}
 	}
 	
 	private void nextStep() {

@@ -3,28 +3,38 @@ package hu.elte.bfw1p6.poker.model.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.cantero.games.poker.texasholdem.Player;
 
-public class Player implements Serializable	{
+public class PokerPlayer extends Player implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = -7074017817656740948L;
+
+	/**
+	 * A játékos felhasználó neve.
+	 */
 	protected String userName;
 	
+	/**
+	 * A játékos regisztráció dátuma.
+	 */
 	protected long regDate;
 	
+	/**
+	 * A játékos egyenlege.
+	 */
 	protected BigDecimal balance;
 	
-	public Player() {
+	public PokerPlayer() {
 		
 	}
 	
-	public Player(String userName, BigDecimal balance, long regDate) {
+	public PokerPlayer(String userName, BigDecimal balance, long regDate) {
 		this.userName = userName;
 		this.balance = balance;
 		this.regDate = regDate;
 	}
 
-	public Player(String username) {
+	public PokerPlayer(String username) {
 		this.userName = username;
 	}
 

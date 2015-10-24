@@ -2,13 +2,20 @@ package hu.elte.bfw1p6.poker.model.entity;
 
 import java.math.BigDecimal;
 
-public class User extends Player implements EntityWithId {
+public class User extends PokerPlayer implements EntityWithId {
 
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
 
+	/**
+	 * A felhasználó hashelt jelszava.
+	 */
 	private String password;
+	
+	/**
+	 * A felhasználó admin-e.
+	 */
 	private Boolean admin;
 
 	public User(String username) {
@@ -51,8 +58,8 @@ public class User extends Player implements EntityWithId {
 		return admin;
 	}
 	
-	public Player getPlayer() {
-		Player p = new Player();
+	public PokerPlayer getPlayer() {
+		PokerPlayer p = new PokerPlayer();
 		p.userName = this.userName;
 		p.balance = this.balance;
 		p.regDate = this.regDate;

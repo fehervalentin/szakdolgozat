@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
-import hu.elte.bfw1p6.poker.model.entity.Player;
+import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.DBManager;
@@ -95,7 +95,7 @@ public class UserRepository {
 		}
 	}
 
-	public void deletePlayer(Player player) throws PokerDataBaseException {
+	public void deletePlayer(PokerPlayer player) throws PokerDataBaseException {
 		try {
 			User u = findByUserName(player.getUserName());
 			Connection con = DBManager.getInstance().getConnection();
@@ -160,9 +160,9 @@ public class UserRepository {
 		return sb.toString();
 	}
 
-	public Player getPlayerByName(String username) throws PokerDataBaseException {
+	public PokerPlayer getPlayerByName(String username) throws PokerDataBaseException {
 		User user = findByUserName(username);
-		Player player = new Player(user.getUserName(), user.getBalance(), user.getRegDate());
+		PokerPlayer player = new PokerPlayer(user.getUserName(), user.getBalance(), user.getRegDate());
 		return player;
 	}
 

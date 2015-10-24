@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
+import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 
 public class CommunicatorController extends UnicastRemoteObject implements RemoteObserver {
 	
@@ -18,6 +19,11 @@ public class CommunicatorController extends UnicastRemoteObject implements Remot
 	@Override
 	public void update(Object updateMsg) throws RemoteException {
 		contr.updateMe(updateMsg);
+	}
+
+	@Override
+	public PokerPlayer getPlayer() throws RemoteException {
+		return contr.getPlayer();
 	}
 
 }

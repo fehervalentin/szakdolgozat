@@ -11,7 +11,7 @@ import hu.elte.bfw1p6.poker.exception.PokerInvalidSession;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
-import hu.elte.bfw1p6.poker.model.entity.Player;
+import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 
@@ -99,7 +99,7 @@ public class Model {
 		pokerRemote.modifyPassword(pokerSession.getId(), oldPassword, newPassword);
 	}
 	
-	public Player getPlayer() {
+	public PokerPlayer getPlayer() {
 		return pokerSession.getPlayer();
 	}
 	
