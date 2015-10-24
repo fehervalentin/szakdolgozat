@@ -70,7 +70,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	/**
 	 * Kliensek lapjai.
 	 */
-	private Hashtable<RemoteObserver, List<Card>> playersCards;
+	private HashMap<RemoteObserver, List<Card>> playersCards;
 
 	/**
 	 * Hány játékos játszik az adott körben.
@@ -105,7 +105,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		this.pokerTable = pokerTable;
 		this.deck = new Deck();
 		this.houseCards = new ArrayList<>();
-		this.playersCards = new Hashtable<>();
+		this.playersCards = new HashMap<>();
 		this.clients = new ArrayList<>();
 		this.moneyStack = new BigDecimal(0);
 		this.players = new ArrayList<>();

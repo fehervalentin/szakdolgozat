@@ -52,13 +52,13 @@ public class MainGameController implements Initializable, PokerClientController,
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		model = new MainGameModel(commController);
 		errorAlert = new Alert(AlertType.ERROR);
-		pokerLabel.setText(model.getUserName());
 
 		try {
 			commController = new CommunicatorController(this);
+			model = new MainGameModel(commController);
 			model.connectToTable(commController);
+			pokerLabel.setText(model.getUserName());
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
