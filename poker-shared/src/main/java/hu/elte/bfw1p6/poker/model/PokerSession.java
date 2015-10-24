@@ -1,6 +1,7 @@
 package hu.elte.bfw1p6.poker.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
@@ -25,8 +26,8 @@ public class PokerSession implements Serializable {
 	public PokerPlayer getPlayer() {
 		return player;
 	}
-	
-	public void setPlayer(PokerPlayer player) {
-		this.player = player;
+
+	public void refreshBalance(BigDecimal refreshBalance) {
+//		player.set
 	}
 }

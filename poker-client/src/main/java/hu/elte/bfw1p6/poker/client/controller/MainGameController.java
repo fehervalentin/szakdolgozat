@@ -87,7 +87,7 @@ public class MainGameController implements Initializable, PokerClientController,
 			switch (houseHoldemCommand.getHouseCommandType()) {
 			case BLIND: {
 				try {
-					model.blind(houseHoldemCommand);
+					model.blind(commController, houseHoldemCommand);
 				} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
 					errorAlert.setContentText(e.getMessage());
 					errorAlert.showAndWait();
@@ -95,7 +95,7 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case PLAYER: {
-				//				player(houseHoldemCommand);
+				model.player(houseHoldemCommand);
 				modifyButtonVisibilities(houseHoldemCommand);
 				break;
 			}

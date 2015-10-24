@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
@@ -69,7 +70,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	/**
 	 * Kliensek lapjai.
 	 */
-	private HashMap<RemoteObserver, List<Card>> playersCards;
+	private Hashtable<RemoteObserver, List<Card>> playersCards;
 
 	/**
 	 * Hány játékos játszik az adott körben.
@@ -104,7 +105,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		this.pokerTable = pokerTable;
 		this.deck = new Deck();
 		this.houseCards = new ArrayList<>();
-		this.playersCards = new HashMap<>();
+		this.playersCards = new Hashtable<>();
 		this.clients = new ArrayList<>();
 		this.moneyStack = new BigDecimal(0);
 		this.players = new ArrayList<>();
@@ -121,6 +122,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				throw new PokerTooMuchPlayerException("Az asztal betelt, nem tudsz csatlakozni!");
 			} else {
 				clients.add(client);
+				System.out.println("JOIN: " + client.toString());
 				startRound();
 			}
 		}
@@ -209,7 +211,8 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 
 	public synchronized void receivePlayerCommand(RemoteObserver client, PlayerHoldemCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		// ha valid klienstől érkezik üzenet, azt feldolgozzuk, körbeküldjük
-//		if (clients.contains(client)) {
+		System.out.println("VALID-E: " + client.toString());
+		if (clients.contains(client)) {
 			switch(playerCommand.getPlayerCommandType()) {
 			case BLIND: {
 				refreshBalance(playerCommand);
@@ -255,8 +258,8 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			notifyClients(playerCommand);
 			// ha már kijött a river és az utolsó körben (rivernél) már mindenki nyilatkozott legalább egyszer, akkor új játszma kezdődik
 			if (playersInRound == 1 || (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && votedPlayers >= playersInRound)) {
-//				List<IPlayer> winner = HoldemHandEvaluator.
 				List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(clients, houseCards, players, playersCards);
+				
 				Card[] cards = winner.get(0).getCards();
 				System.out.println(cards[0]);
 				System.out.println(cards[1]);
@@ -295,7 +298,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 					votedPlayers = 0;
 				}
 			}
-//		}
+		}
 	}
 
 	

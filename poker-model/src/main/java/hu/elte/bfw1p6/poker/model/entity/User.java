@@ -42,10 +42,6 @@ public class User extends PokerPlayer implements EntityWithId {
 		return password;
 	}
 
-	public void setBalance(BigDecimal balance) {
-		this.balance = balance;
-	}
-
 	public void setId(int id) {
 		this.id = id;
 	}

@@ -49,4 +49,8 @@ public class PokerPlayer extends Player implements Serializable {
 	public BigDecimal getBalance() {
 		return balance;
 	}
+	
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
+	}
 }

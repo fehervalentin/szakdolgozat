@@ -3,6 +3,8 @@ package hu.elte.bfw1p6.poker.client.model;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 
+import com.cantero.games.poker.texasholdem.Card;
+
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
@@ -25,6 +27,8 @@ public class MainGameModel {
 	private PokerRemote pokerRemote;
 
 	private PokerTable pokerTable;
+	
+	private CommunicatorController communicatorController;
 
 	/**
 	 * Hanyadik vagyok a körben.
@@ -41,15 +45,13 @@ public class MainGameModel {
 	 */
 	private BigDecimal myDebt;
 	
-	private CommunicatorController communicatorController;
-
-	public MainGameModel(CommunicatorController communicatorControlle) {
-		this.communicatorController = communicatorController;
+	public MainGameModel(CommunicatorController communicatorController) {
 		this.pokerSession = Model.getInstance().getPokerSession();
 		this.pokerRemote = RMIRepository.getInstance().getPokerRemote();
 		this.youAreNth = -1;
 		this.pokerTable = ConnectTableHelper.getInstance().getPokerTable();
 		this.myDebt = pokerTable.getDefaultPot();
+		this.communicatorController = communicatorController;
 
 		System.out.println(getUserName());
 	}
@@ -58,10 +60,10 @@ public class MainGameModel {
 		pokerRemote.connectToTable(pokerSession.getId(), pokerTable, observer);
 	}
 
-	public void sendCommandToTable(RemoteObserver observer, PlayerHoldemCommand playerHoldemCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void sendCommandToTable(PlayerHoldemCommand playerHoldemCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		playerHoldemCommand.setSender(pokerSession.getPlayer().getUserName());
-		pokerRemote.sendPlayerCommand(pokerSession.getId(), pokerTable, observer, playerHoldemCommand);
-		pokerSession.setPlayer(pokerRemote.refreshPlayer(pokerSession.getId()));
+		pokerRemote.sendPlayerCommand(pokerSession.getId(), pokerTable, communicatorController, playerHoldemCommand);
+		pokerSession.refreshBalance(pokerRemote.refreshBalance(pokerSession.getId()));
 		System.out.println("uj balance: " + pokerSession.getPlayer().getBalance());
 	}
 
@@ -76,7 +78,7 @@ public class MainGameModel {
 	 * @throws PokerDataBaseException 
 	 * @throws PokerUnauthenticatedException 
 	 */
-	public void blind(HouseHoldemCommand houseHoldemCommand) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void blind(CommunicatorController commController, HouseHoldemCommand houseHoldemCommand) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		myDebt = pokerTable.getDefaultPot();
 		youAreNth = houseHoldemCommand.getNthPlayer();
 		players = houseHoldemCommand.getPlayers();
@@ -100,7 +102,7 @@ public class MainGameModel {
 
 	/**
 	 * A vakot rakja be az asztalra
-	 * @param divider ha nagy vakot rakunk be, akkor az értéke 1 legyen, ha kis vakot, akkor az értéke 2 legyen.
+	 * @param divider ha nagy vakot rakunk be, akkor az értéke 1 legyen, ha kis vakot, akkor az értéke 2 legyen. Vagy lehet boolean, és akkor convert to int, majd +1...
 	 * @throws PokerUserBalanceException 
 	 * @throws PokerDataBaseException 
 	 * @throws PokerUnauthenticatedException 
@@ -209,7 +211,7 @@ public class MainGameModel {
 		
 		PlayerHoldemCommand playerHoldemCommand = new PlayerHoldemCommand(type, callAmount, raiseAmount, whosQuit);
 		try {
-			sendCommandToTable(communicatorController, playerHoldemCommand);
+			sendCommandToTable(playerHoldemCommand);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -253,5 +255,9 @@ public class MainGameModel {
 	public void receivedCheckCommand(PlayerHoldemCommand playerHoldemCommand) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void player(HouseHoldemCommand houseHoldemCommand) {
+		pokerSession.getPlayer().setCards(new Card[]{houseHoldemCommand.getCard1(), houseHoldemCommand.getCard2()});
 	}
 }

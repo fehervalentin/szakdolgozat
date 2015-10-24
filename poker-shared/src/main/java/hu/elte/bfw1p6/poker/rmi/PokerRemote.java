@@ -1,5 +1,6 @@
 package hu.elte.bfw1p6.poker.rmi;
 
+import java.math.BigDecimal;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -48,7 +49,7 @@ public interface PokerRemote extends Remote {
 	 */
 	void modifyPassword(UUID uuid, String oldPassword, String newPassword) throws RemoteException, PokerDataBaseException, PokerInvalidPassword, PokerUnauthenticatedException;
 	
-	PokerPlayer refreshPlayer(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
+	BigDecimal refreshBalance(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
 	
 	
 	

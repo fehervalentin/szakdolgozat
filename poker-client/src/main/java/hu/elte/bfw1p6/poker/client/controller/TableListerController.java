@@ -92,8 +92,6 @@ public class TableListerController implements PokerClientController, Initializab
 		maxPlayers.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>("maxPlayers"));
 		defaultPot.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>("defaultPot"));
 		maxBet.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>("maxBet"));
-
-		//		observer = new TableViewObserverImpl(this);
 	}
 
 	@FXML

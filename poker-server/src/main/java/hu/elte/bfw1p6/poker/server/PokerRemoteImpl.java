@@ -1,6 +1,7 @@
 package hu.elte.bfw1p6.poker.server;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
@@ -217,7 +218,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public PokerPlayer refreshPlayer(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
-		return UserRepository.getInstance().findByUserName(sessionService.lookUpUserName(uuid)).getPlayer();
+	public BigDecimal refreshBalance(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+		return UserRepository.getInstance().findByUserName(sessionService.lookUpUserName(uuid)).getPlayer().getBalance();
 	}
 }
