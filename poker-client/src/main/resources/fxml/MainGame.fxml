@@ -23,7 +23,7 @@
 			</image>
 		</ImageView>
 		<ImageView fx:id="imageView" fitHeight="40" fitWidth="40"
-			layoutX="970" layoutY="505" pickOnBounds="true" preserveRatio="true">
+			layoutX="320" layoutY="500" pickOnBounds="true" preserveRatio="true">
 			<image>
 				<Image url="/images/dealer.png" backgroundLoading="true" />
 			</image>

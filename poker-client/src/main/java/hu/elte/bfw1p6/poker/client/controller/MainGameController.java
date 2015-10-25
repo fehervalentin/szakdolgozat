@@ -42,7 +42,7 @@ public class MainGameController implements Initializable, PokerClientController,
 	@FXML private Button quitButton;
 
 	private MainView mainView;
-	
+
 	private MainGameModel model;
 
 	private FrameController frameController;
@@ -103,7 +103,7 @@ public class MainGameController implements Initializable, PokerClientController,
 				model.player(houseHoldemCommand);
 				modifyButtonVisibilities(houseHoldemCommand);
 				Platform.runLater(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						mainView.showMyCards(houseHoldemCommand);
@@ -113,14 +113,35 @@ public class MainGameController implements Initializable, PokerClientController,
 			}
 			case FLOP: {
 				modifyButtonVisibilities(houseHoldemCommand);
+				Platform.runLater(new Runnable() {
+
+					@Override
+					public void run() {
+						mainView.flop(houseHoldemCommand);
+					}
+				});
 				break;
 			}
 			case TURN: {
 				modifyButtonVisibilities(houseHoldemCommand);
+				Platform.runLater(new Runnable() {
+
+					@Override
+					public void run() {
+						mainView.turn(houseHoldemCommand);
+					}
+				});
 				break;
 			}
 			case RIVER: {
 				modifyButtonVisibilities(houseHoldemCommand);
+				Platform.runLater(new Runnable() {
+
+					@Override
+					public void run() {
+						mainView.river(houseHoldemCommand);
+					}
+				});
 				break;
 			}
 			default: {

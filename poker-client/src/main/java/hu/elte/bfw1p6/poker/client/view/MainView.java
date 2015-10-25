@@ -19,6 +19,9 @@ public class MainView {
 	private List<ImageView> profileImages;
 	private List<ImageView> opponentsCards;
 	private List<ImageView> opponentsCardSides;
+	private List<ImageView> houseCards;
+	
+	private ImageView dealerButtonImageView;
 	
 	private AnchorPane mainGamePane;
 	
@@ -28,12 +31,18 @@ public class MainView {
 		this.profileImages = new ArrayList<>();
 		this.opponentsCards = new ArrayList<>();
 		this.opponentsCardSides = new ArrayList<>();
+		this.houseCards = new ArrayList<>();
+		setDealerButton();
 		setMyProfile();
 		setProfileImages();
 		setDeck();
 		setCards();
 		setHouseCards();
-		hideAll();
+		hideAllProfiles();
+	}
+	
+	private void setDealerButton() {
+		dealerButtonImageView = new ImageView(new Image(defaultValues.DEALER_BUTTON_IMAGE_URL));
 	}
 	
 	private void setMyProfile() {
@@ -86,13 +95,16 @@ public class MainView {
 	}
 	
 	private void setHouseCards() {
+		int gap = 20;
 		ImageView previous = new ImageView(new Image(defaultValues.DECK_IMAGE_URL));
-		previous.setLayoutX(defaultValues.DECK_POINT[0] + 20);
+		previous.setLayoutX(defaultValues.DECK_POINT[0] + gap);
 		previous.setLayoutY(defaultValues.DECK_POINT[1]);
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < defaultValues.PROFILE_COUNT; i++) {
 			ImageView card = new ImageView(new Image("/images/cards/1.png"));
 			card.setLayoutX(previous.getLayoutX() + defaultValues.CARD_WIDTH + 5);
 			card.setLayoutY(previous.getLayoutY());
+			card.setVisible(false);
+			houseCards.add(card);
 			mainGamePane.getChildren().add(card);
 			previous = card;
 		}
@@ -122,7 +134,7 @@ public class MainView {
 		return 52 - (card.getRankToInt() * 4) - (4 - card.getSuit().ordinal() - 1);
 	}
 	
-	private void hideAll() {
+	private void hideAllProfiles() {
 		for (int i = 0; i < profileImages.size(); i++) {
 			profileImages.get(i).setVisible(false);
 			opponentsCards.get(i).setVisible(false);
@@ -130,14 +142,50 @@ public class MainView {
 
 		}
 	}
+	
+	public void hideHouseCards() {
+		for (int i = 0; i < houseCards.size(); i++) {
+			houseCards.get(i).setVisible(false);
+		}
+	}
 
 	public void blind(HouseHoldemCommand houseHoldemCommand) {
+		hideHouseCards();
 		int n = houseHoldemCommand.getPlayers();
 		for (int i = 0; i < n - 1; i++) {
 			profileImages.get(i).setVisible(true);
 			opponentsCards.get(i).setVisible(true);
 			opponentsCardSides.get(i).setVisible(true);
-
 		}
+		
+		int k = houseHoldemCommand.getDealer();
+		dealerButtonImageView.setLayoutX(defaultValues.DEALER_BUTTON_POSITIONS[k * 2]);
+		dealerButtonImageView.setLayoutY(defaultValues.DEALER_BUTTON_POSITIONS[k * 2 + 1]);
+		dealerButtonImageView.setVisible(true);
+	}
+
+	public void flop(HouseHoldemCommand houseHoldemCommand) {
+		int value = mapCard(houseHoldemCommand.getCard1());
+		int value2 = mapCard(houseHoldemCommand.getCard2());
+		int value3= mapCard(houseHoldemCommand.getCard3());
+		houseCards.get(0).setImage(new Image("/images/cards/" + value + ".png"));
+		houseCards.get(1).setImage(new Image("/images/cards/" + value2 + ".png"));
+		houseCards.get(2).setImage(new Image("/images/cards/" + value3 + ".png"));
+		
+		houseCards.get(0).setVisible(true);
+		houseCards.get(1).setVisible(true);
+		houseCards.get(2).setVisible(true);
+	}
+	
+	public void turn(HouseHoldemCommand houseHoldemCommand) {
+		int value = mapCard(houseHoldemCommand.getCard1());
+		houseCards.get(3).setImage(new Image("/images/cards/" + value + ".png"));
+		houseCards.get(3).setVisible(true);
+	}
+	
+	public void river(HouseHoldemCommand houseHoldemCommand) {
+		int value = mapCard(houseHoldemCommand.getCard1());
+		houseCards.get(4).setImage(new Image("/images/cards/" + value + ".png"));
+		houseCards.get(4).setVisible(true);
 	}
 }
