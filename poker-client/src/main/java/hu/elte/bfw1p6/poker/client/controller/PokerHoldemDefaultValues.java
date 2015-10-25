@@ -25,8 +25,10 @@ public class PokerHoldemDefaultValues {
 	/**
 	 * A profilképeket hova kell generálni.
 	 */
-	public final int[] PROFILE_POINTS = new int[]{628, 540, 188, 485, 232, 40, 631, 0, 1031, 45, 1084, 485};
+	public final int[] PROFILE_POINTS = new int[]{188, 485, 232, 40, 631, 0, 1031, 45, 1084, 485};
 	
+	public final int[] MY_PROFILE_POINT = new int[]{628, 540};
+
 	/**
 	 * A lefordított kártyalapokat hova kell generálni.
 	 */
@@ -47,7 +49,7 @@ public class PokerHoldemDefaultValues {
 	/**
 	 * Maximum hány darab játékos lehet egy asztalnál.
 	 */
-	public final int PROFILE_COUNT = 6;
+	public final int PROFILE_COUNT = 5;
 
 	/**
 	 * A kártyalapok magassága.

@@ -4,7 +4,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
-import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 
 public class CommunicatorController extends UnicastRemoteObject implements RemoteObserver {
 	

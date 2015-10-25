@@ -14,6 +14,8 @@
 <AnchorPane fx:id="mainGamePane" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="hu.elte.bfw1p6.poker.client.controller.MainGameController">
 	<children>
+		<Label fx:id="pokerLabel" GridPane.rowIndex="0" text="Bejelentkezés"
+			styleClass="header-text" alignment="center" />
 		<ImageView fx:id="imageView" fitHeight="1650" fitWidth="1050"
 			layoutX="150" layoutY="50" pickOnBounds="true" preserveRatio="true">
 			<image>
@@ -26,10 +28,8 @@
 				<Image url="/images/dealer.png" backgroundLoading="true" />
 			</image>
 		</ImageView>
-		<GridPane alignment="center" hgap="10" vgap="10" layoutX="450" layoutY="680">
-<!-- 			<Label fx:id="pokerLabel" GridPane.columnIndex="0" -->
-<!-- 				GridPane.rowIndex="0" GridPane.columnSpan="20" text="Bejelentkezés" -->
-<!-- 				styleClass="header-text" alignment="center" /> -->
+		<GridPane alignment="center" hgap="10" vgap="10" layoutX="450"
+			layoutY="680">
 			<Button fx:id="callButton" text="Call" onAction="#handleCall"
 				styleClass="rich-blue" GridPane.columnIndex="0" GridPane.rowIndex="0" />
 			<Button fx:id="checkButton" text="Check" onAction="#handleCheck"

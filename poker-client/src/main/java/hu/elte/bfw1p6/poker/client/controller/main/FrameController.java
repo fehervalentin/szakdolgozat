@@ -35,10 +35,10 @@ public class FrameController extends UnicastRemoteObject {
 	
 	public FrameController(Stage stage) throws RemoteException {
 		this.stage = stage;
-		setStageSize(MAIN_GAME_WIDHT, MAIN_GAME_HEIGHT);
-//		setStageSize(MENU_GAME_WIDHT, MENU_GAME_HEIGHT);
-		setMainGameFXML();
-//		setLoginFXML();
+//		setStageSize(MAIN_GAME_WIDHT, MAIN_GAME_HEIGHT);
+		setStageSize(MENU_GAME_WIDHT, MENU_GAME_HEIGHT);
+//		setMainGameFXML();
+		setLoginFXML();
 		
 	}
 
