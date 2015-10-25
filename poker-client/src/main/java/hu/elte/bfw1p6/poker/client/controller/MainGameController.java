@@ -145,7 +145,8 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			default: {
-				break;
+				throw new IllegalArgumentException();
+//				break;
 			}
 			}
 		} else if (updateMsg instanceof PlayerHoldemCommand) {

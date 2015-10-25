@@ -7,7 +7,6 @@ import com.cantero.games.poker.texasholdem.Card;
 
 import hu.elte.bfw1p6.poker.client.controller.PokerHoldemDefaultValues;
 import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
-import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -26,6 +25,10 @@ public class MainView {
 	private ImageView dealerButtonImageView;
 
 	private AnchorPane mainGamePane;
+	
+	private int youAreNth;
+	private int dealer;
+	private int clientsCount;
 
 	public MainView(AnchorPane mainGamePane) {
 		defaultValues = PokerHoldemDefaultValues.getInstance();
@@ -103,10 +106,10 @@ public class MainView {
 	private void setHouseCards() {
 		int gap = 5;
 		ImageView previous = new ImageView(new Image(defaultValues.DECK_IMAGE_URL));
-		previous.setLayoutX(defaultValues.DECK_POINT[0] + gap);
+		previous.setLayoutX(defaultValues.DECK_POINT[0] + 20);
 		previous.setLayoutY(defaultValues.DECK_POINT[1]);
 		for (int i = 0; i < defaultValues.PROFILE_COUNT; i++) {
-			ImageView card = new ImageView(new Image("/images/cards/1.png"));
+			ImageView card = new ImageView(new Image(IMAGE_PREFIX + "1.png"));
 			card.setLayoutX(previous.getLayoutX() + defaultValues.CARD_WIDTH + gap);
 			card.setLayoutY(previous.getLayoutY());
 			card.setVisible(false);
@@ -128,13 +131,17 @@ public class MainView {
 		card1.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
 		card2.setLayoutX(defaultValues.MY_CARDS_POSITION[0] + defaultValues.CARD_WIDTH + gap);
 		card2.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
-		Platform.runLater(new Runnable(){
-
-			@Override
-			public void run() {
-				mainGamePane.getChildren().addAll(card1, card2);
-			}
-		});
+		mainGamePane.getChildren().addAll(card1, card2);
+		
+//		profileImages.get(houseHoldemCommand.getWhosOn()).getStyleClass().add("glow");
+		profileImages.get(houseHoldemCommand.getWhosOn()).setVisible(false);
+//		Platform.runLater(new Runnable(){
+//
+//			@Override
+//			public void run() {
+//				mainGamePane.getChildren().addAll(card1, card2);
+//			}
+//		});
 	}
 
 	private int mapCard(Card card) {
@@ -165,47 +172,23 @@ public class MainView {
 			opponentsCardSides.get(i).setVisible(true);
 		}
 
-		int d = houseHoldemCommand.getDealer();
-		int nTh = houseHoldemCommand.getNthPlayer();
-		int s = houseHoldemCommand.getPlayers();
-		System.out.println("K: " + d);
-		System.out.println("NthPlayer: " + nTh);
+		dealer = houseHoldemCommand.getDealer();
+		youAreNth = houseHoldemCommand.getNthPlayer();
+		clientsCount = houseHoldemCommand.getPlayers();
+		System.out.println("K: " + dealer);
+		System.out.println("NthPlayer: " + youAreNth);
 //		int value = (s - Math.abs(d - nTh)) % s;
-		int value = (s + d - nTh) % s;
-		/*if (nTh <= d) {
-			value = d - nTh;
-			System.out.println("if");
-		} else {
-			System.out.println("else");
-			value = houseHoldemCommand.getPlayers() - nTh;
-		}*/
+		int value = (clientsCount + dealer - youAreNth) % clientsCount;
 		System.out.println("Hol van a vak: " + value);
-		/*if (d == houseHoldemCommand.getNthPlayer()) {
-			dealerButtonImageView.setLayoutX(580);
-			dealerButtonImageView.setLayoutY(530);
-		} else {
-			if (d - 1 >= 0) {
-				--d;
-			}
-			dealerButtonImageView.setLayoutX(defaultValues.DEALER_BUTTON_POSITIONS[k * 2]);
-			dealerButtonImageView.setLayoutY(defaultValues.DEALER_BUTTON_POSITIONS[k * 2 + 1]);
-		}*/
 		dealerButtonImageView.setLayoutX(defaultValues.DEALER_BUTTON_POSITIONS[value * 2]);
 		dealerButtonImageView.setLayoutY(defaultValues.DEALER_BUTTON_POSITIONS[value * 2 + 1]);
 		dealerButtonImageView.setVisible(true);
 	}
 
 	public void flop(HouseHoldemCommand houseHoldemCommand) {
-		int value = mapCard(houseHoldemCommand.getCard1());
-		int value2 = mapCard(houseHoldemCommand.getCard2());
-		int value3= mapCard(houseHoldemCommand.getCard3());
-		houseCards.get(0).setImage(new Image(IMAGE_PREFIX + value + ".png"));
-		houseCards.get(1).setImage(new Image(IMAGE_PREFIX + value2 + ".png"));
-		houseCards.get(2).setImage(new Image(IMAGE_PREFIX + value3 + ".png"));
-
-		houseCards.get(0).setVisible(true);
-		houseCards.get(1).setVisible(true);
-		houseCards.get(2).setVisible(true);
+		revealCard(houseHoldemCommand, 0);
+		revealCard(houseHoldemCommand, 1);
+		revealCard(houseHoldemCommand, 2);
 	}
 
 	public void turn(HouseHoldemCommand houseHoldemCommand) {
@@ -217,7 +200,7 @@ public class MainView {
 	}
 
 	private void revealCard(HouseHoldemCommand houseHoldemCommand, int i) {
-		int value = mapCard(houseHoldemCommand.getCard1());
+		int value = mapCard((i == 1)? houseHoldemCommand.getCard1() : (i == 2)? houseHoldemCommand.getCard3() : houseHoldemCommand.getCard1());
 		houseCards.get(i).setImage(new Image(IMAGE_PREFIX + value + ".png"));
 		houseCards.get(i).setVisible(true);
 	}
