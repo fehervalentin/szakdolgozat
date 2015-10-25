@@ -17,43 +17,13 @@
 		<ImageView fx:id="imageView" fitHeight="1650" fitWidth="1050"
 			layoutX="150" layoutY="50" pickOnBounds="true" preserveRatio="true">
 			<image>
-				<Image url="/images/table.jpg" backgroundLoading="true" />
+				<Image url="/images/table.png" backgroundLoading="true" />
 			</image>
 		</ImageView>
-		<ImageView fx:id="profileImage" fitHeight="80" fitWidth="80"
-			layoutX="628" layoutY="540" pickOnBounds="true" preserveRatio="true">
+		<ImageView fx:id="imageView" fitHeight="40" fitWidth="40"
+			layoutX="970" layoutY="505" pickOnBounds="true" preserveRatio="true">
 			<image>
-				<Image url="/images/profile.png" backgroundLoading="true" />
-			</image>
-		</ImageView>
-		<ImageView fx:id="profileImage1" fitHeight="80" fitWidth="80"
-			layoutX="188" layoutY="485" pickOnBounds="true" preserveRatio="true">
-			<image>
-				<Image url="/images/profile.png" backgroundLoading="true" />
-			</image>
-		</ImageView>
-		<ImageView fx:id="profileImage2" fitHeight="80" fitWidth="80"
-			layoutX="232" layoutY="40" pickOnBounds="true" preserveRatio="true">
-			<image>
-				<Image url="/images/profile.png" backgroundLoading="true" />
-			</image>
-		</ImageView>
-		<ImageView fx:id="profileImage3" fitHeight="80" fitWidth="80"
-			layoutX="631" layoutY="0" pickOnBounds="true" preserveRatio="true">
-			<image>
-				<Image url="/images/profile.png" backgroundLoading="true" />
-			</image>
-		</ImageView>
-		<ImageView fx:id="profileImage4" fitHeight="80" fitWidth="80"
-			layoutX="1031" layoutY="45" pickOnBounds="true" preserveRatio="true">
-			<image>
-				<Image url="/images/profile.png" backgroundLoading="true" />
-			</image>
-		</ImageView>
-		<ImageView fx:id="profileImage5" fitHeight="80" fitWidth="80"
-			layoutX="1084" layoutY="485" pickOnBounds="true" preserveRatio="true">
-			<image>
-				<Image url="/images/profile.png" backgroundLoading="true" />
+				<Image url="/images/dealer.png" backgroundLoading="true" />
 			</image>
 		</ImageView>
 		<GridPane alignment="center" hgap="10" vgap="10" layoutX="450" layoutY="680">

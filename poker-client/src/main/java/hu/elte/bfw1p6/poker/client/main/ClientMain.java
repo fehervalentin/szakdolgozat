@@ -25,15 +25,11 @@ public class ClientMain extends Application {
         stage.setTitle(TITLE);
         stage.setScene(scene);
         stage.setOnCloseRequest(getFormCloseEvent());
-//        stage.setWidth(900);
-//        stage.setHeight(500);
         stage.setResizable(false);
         stage.show();
     }
 
     public static void main(String[] args) {
-//    	System.setProperty("java.rmi.server.codebase", "file:///" + System.getProperty("user.dir") + "src/main/java/hu/elte/bfw1p6/poker/server/");
-//    	System.setProperty("java.rmi.server.useCodebaseOnly", "false");
         launch(args);
     }
     
