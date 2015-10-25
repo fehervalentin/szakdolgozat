@@ -37,13 +37,16 @@ public class PokerHoldemDefaultValues {
 	 * A lefordított kártyalapokat hova kell generálni.
 	 */
 	public final int[] CARD_B1FV_POINTS = new int[]{293, 400, 322, 200, 640, 155, 940, 180, 1000, 400};
+	
+	/* A saját kártyalapjaimnak a helye. */
+	public final int[] MY_CARDS_POSITION = new int[]{600, 430};
 
 	/**
 	 * A kártyapakli elhelyezkedése.
 	 */
 	public final int[] DECK_POINT = new int[]{430, 300};
 
-	public final int[] DEALER_BUTTON_POSITIONS = new int[]{320, 500, 265, 240, 720, 160, 1020, 200, 970, 505};
+	public final int[] DEALER_BUTTON_POSITIONS = new int[]{580, 530, 320, 500, 265, 240, 720, 160, 1020, 200, 970, 505};
 
 	/**
 	 * A profilkép magassága és szélessége.
