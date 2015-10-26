@@ -106,7 +106,7 @@ public class MainGameController implements Initializable, PokerClientController,
 
 					@Override
 					public void run() {
-						mainView.showMyCards(houseHoldemCommand);
+						mainView.player(houseHoldemCommand);
 					}
 				});
 				break;

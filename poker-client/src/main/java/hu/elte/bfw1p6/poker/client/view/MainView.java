@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
+import com.cantero.games.poker.texasholdem.CardSuitEnum;
 
 import hu.elte.bfw1p6.poker.client.controller.PokerHoldemDefaultValues;
 import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -21,6 +23,9 @@ public class MainView {
 	private List<ImageView> opponentsCards;
 	private List<ImageView> opponentsCardSides;
 	private List<ImageView> houseCards;
+	
+	private ImageView myCard1;
+	private ImageView myCard2;
 
 	private ImageView dealerButtonImageView;
 
@@ -29,16 +34,17 @@ public class MainView {
 	private int youAreNth;
 	private int dealer;
 	private int clientsCount;
+	
+	private int HOLVANADEALERGOMB;
 
 	public MainView(AnchorPane mainGamePane) {
-		defaultValues = PokerHoldemDefaultValues.getInstance();
+		this.defaultValues = PokerHoldemDefaultValues.getInstance();
 		this.mainGamePane = mainGamePane;
 		this.profileImages = new ArrayList<>();
 		this.opponentsCards = new ArrayList<>();
 		this.opponentsCardSides = new ArrayList<>();
 		this.houseCards = new ArrayList<>();
 		setDealerButton();
-		setMyProfile();
 		setProfileImages();
 		setDeck();
 		setCards();
@@ -54,17 +60,9 @@ public class MainView {
 		mainGamePane.getChildren().add(dealerButtonImageView);
 	}
 
-	private void setMyProfile() {
-		ImageView iv = new ImageView(new Image(defaultValues.PROFILE_IMAGE_URL));
-		iv.setLayoutX(defaultValues.MY_PROFILE_POINT[0]);
-		iv.setLayoutY(defaultValues.MY_PROFILE_POINT[1]);
-		iv.fitHeightProperty().set(defaultValues.PROFILE_SIZE);
-		iv.fitWidthProperty().set(defaultValues.PROFILE_SIZE);
-		mainGamePane.getChildren().add(iv);
-	}
-
 	private void setProfileImages() {
-		for (int i = 0; i < defaultValues.PROFILE_COUNT * 2 - 2; i+=2) {
+		// a saját profilképem is idemegy
+		for (int i = 0; i < defaultValues.PROFILE_COUNT * 2; i+=2) {
 			ImageView iv = new ImageView(new Image(defaultValues.PROFILE_IMAGE_URL));
 			iv.setLayoutX(defaultValues.PROFILE_POINTS[i]);
 			iv.setLayoutY(defaultValues.PROFILE_POINTS[i+1]);
@@ -76,6 +74,8 @@ public class MainView {
 	}
 
 	private void setCards() {
+		// a saját kártyáim nem idemennek
+		// a 0. helyen az első hely lapjai vannak
 		for (int i = 0; i < defaultValues.PROFILE_COUNT * 2 - 2; i+=2) {
 			ImageView card = new ImageView(new Image(defaultValues.CARD_BACKFACE_IMAGE));
 			card.setLayoutX(defaultValues.CARD_B1FV_POINTS[i]);
@@ -119,42 +119,19 @@ public class MainView {
 		}
 	}
 
-	public void showMyCards(HouseHoldemCommand houseHoldemCommand) {
-		int gap = 5;
-		int value = mapCard(houseHoldemCommand.getCard1());
-		int value2 = mapCard(houseHoldemCommand.getCard2());
-		System.out.println("Egyi lapom: " + value);
-		System.out.println("Masik lapom: " + value2);
-		ImageView card1 = new ImageView(new Image(IMAGE_PREFIX + value + ".png"));
-		ImageView card2 = new ImageView(new Image(IMAGE_PREFIX + value2 + ".png"));
-		card1.setLayoutX(defaultValues.MY_CARDS_POSITION[0]);
-		card1.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
-		card2.setLayoutX(defaultValues.MY_CARDS_POSITION[0] + defaultValues.CARD_WIDTH + gap);
-		card2.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
-		mainGamePane.getChildren().addAll(card1, card2);
-		
-//		profileImages.get(houseHoldemCommand.getWhosOn()).getStyleClass().add("glow");
-		profileImages.get(houseHoldemCommand.getWhosOn()).setVisible(false);
-//		Platform.runLater(new Runnable(){
-//
-//			@Override
-//			public void run() {
-//				mainGamePane.getChildren().addAll(card1, card2);
-//			}
-//		});
-	}
-
 	private int mapCard(Card card) {
-		return 52 - (card.getRankToInt() * 4) - (4 - card.getSuit().ordinal() - 1);
+		return 52 - (card.getRankToInt() * CardSuitEnum.values().length) - (CardSuitEnum.values().length - card.getSuit().ordinal() - 1);
 	}
 
 	private void hideAllProfiles() {
-		for (int i = 0; i < profileImages.size(); i++) {
+		for (int i = 0; i < opponentsCards.size(); i++) {
 			profileImages.get(i).setVisible(false);
 			opponentsCards.get(i).setVisible(false);
 			opponentsCardSides.get(i).setVisible(false);
-
 		}
+		// el van csúszva: a 0. én vagyok, az utolsót nem érinti a ciklus
+		profileImages.get(0).setVisible(true);
+		profileImages.get(opponentsCards.size()).setVisible(false);
 	}
 
 	public void hideHouseCards() {
@@ -164,25 +141,71 @@ public class MainView {
 	}
 
 	public void blind(HouseHoldemCommand houseHoldemCommand) {
+		System.out.println("blind...................");
 		hideHouseCards();
-		int n = houseHoldemCommand.getPlayers();
-		for (int i = 0; i < n - 1; i++) {
+		for (int i = 0; i < houseHoldemCommand.getPlayers(); i++) {
 			profileImages.get(i).setVisible(true);
+			// TODO: ITT EL VAN CSÚSZVA
 			opponentsCards.get(i).setVisible(true);
 			opponentsCardSides.get(i).setVisible(true);
 		}
+		
+		opponentsCards.get(houseHoldemCommand.getPlayers() - 1).setVisible(false);
+		opponentsCardSides.get(houseHoldemCommand.getPlayers() - 1).setVisible(false);
 
 		dealer = houseHoldemCommand.getDealer();
 		youAreNth = houseHoldemCommand.getNthPlayer();
 		clientsCount = houseHoldemCommand.getPlayers();
+		System.out.println("BLIND MOCSKOSUL NEM NULLA TE FÉREGFASZ: " + clientsCount);
 		System.out.println("K: " + dealer);
 		System.out.println("NthPlayer: " + youAreNth);
 //		int value = (s - Math.abs(d - nTh)) % s;
-		int value = (clientsCount + dealer - youAreNth) % clientsCount;
-		System.out.println("Hol van a vak: " + value);
-		dealerButtonImageView.setLayoutX(defaultValues.DEALER_BUTTON_POSITIONS[value * 2]);
-		dealerButtonImageView.setLayoutY(defaultValues.DEALER_BUTTON_POSITIONS[value * 2 + 1]);
+		HOLVANADEALERGOMB = (clientsCount + dealer - youAreNth) % clientsCount;
+		System.out.println("Hol van a vak: " + HOLVANADEALERGOMB);
+		dealerButtonImageView.setLayoutX(defaultValues.DEALER_BUTTON_POSITIONS[HOLVANADEALERGOMB * 2]);
+		dealerButtonImageView.setLayoutY(defaultValues.DEALER_BUTTON_POSITIONS[HOLVANADEALERGOMB * 2 + 1]);
 		dealerButtonImageView.setVisible(true);
+	}
+	
+	public void player(HouseHoldemCommand houseHoldemCommand) {
+		System.out.println("show my card.....................");
+		int gap = 5;
+		int value = mapCard(houseHoldemCommand.getCard1());
+		int value2 = mapCard(houseHoldemCommand.getCard2());
+		System.out.println("Egyik lapom: " + value);
+		System.out.println("Masik lapom: " + value2);
+		myCard1 = new ImageView(new Image(IMAGE_PREFIX + value + ".png"));
+		myCard2 = new ImageView(new Image(IMAGE_PREFIX + value2 + ".png"));
+		myCard1.setLayoutX(defaultValues.MY_CARDS_POSITION[0]);
+		myCard1.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
+		myCard2.setLayoutX(defaultValues.MY_CARDS_POSITION[0] + defaultValues.CARD_WIDTH + gap);
+		myCard2.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
+//		hideAllProfiles();
+		
+//		Platform.runLater(new Runnable(){
+//
+//			@Override
+//			public void run() {
+//				profileImages.get(houseHoldemCommand.getWhosOn()).setVisible(false);
+//				dealerButtonImageView.setVisible(false);
+//		System.out.println("eleje: " + (clientsCount + dealer - youAreNth));
+		System.out.println("PLAYER 2. MOCSKOSUL NEM NULLA TE FÉREGFASZ: " + clientsCount);
+		System.out.println("ELŐTTE " + clientsCount);
+		int next = (HOLVANADEALERGOMB + 3) % 2;
+		System.out.println("NEXT BAZDMEG: " + next);
+//		int eleje = clientsCount + houseHoldemCommand.getWhosOn() - youAreNth;
+//		if (eleje > clientsCount) {
+//			eleje %= clientsCount;
+//		}
+//				int value_ = (clientsCount + dealer - youAreNth) % clientsCount;
+//				System.out.println("glow........................" + value_);
+//				asd();
+				profileImages.get(next).getStyleClass().add("glow");
+//				profileImages.get(next).setFitHeight(20);
+//				profileImages.get(next).setFitWidth(20);
+				mainGamePane.getChildren().addAll(myCard1, myCard2);
+//			}
+//		});
 	}
 
 	public void flop(HouseHoldemCommand houseHoldemCommand) {
@@ -200,7 +223,7 @@ public class MainView {
 	}
 
 	private void revealCard(HouseHoldemCommand houseHoldemCommand, int i) {
-		int value = mapCard((i == 1)? houseHoldemCommand.getCard1() : (i == 2)? houseHoldemCommand.getCard3() : houseHoldemCommand.getCard1());
+		int value = mapCard((i == 1) ? houseHoldemCommand.getCard1() : (i == 2) ? houseHoldemCommand.getCard3() : houseHoldemCommand.getCard1());
 		houseCards.get(i).setImage(new Image(IMAGE_PREFIX + value + ".png"));
 		houseCards.get(i).setVisible(true);
 	}

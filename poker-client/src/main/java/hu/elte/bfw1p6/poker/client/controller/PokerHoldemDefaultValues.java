@@ -27,11 +27,8 @@ public class PokerHoldemDefaultValues {
 	public final String CARD_BACKFACE_IMAGE= "/images/cards/b1fv.png";
 
 
-	/* A saját profilképem helye. */
-	public final int[] MY_PROFILE_POINT = new int[]{628, 540};
-
 	/* A többi profilkép helye. */
-	public final int[] PROFILE_POINTS = new int[]{188, 485, 232, 40, 631, 0, 1031, 45, 1084, 485};
+	public final int[] PROFILE_POINTS = new int[]{628, 540, 188, 485, 232, 40, 631, 0, 1031, 45, 1084, 485};
 	
 	/**
 	 * A lefordított kártyalapokat hova kell generálni.
