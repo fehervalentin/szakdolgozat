@@ -63,6 +63,7 @@ public class MainGameController implements Initializable, PokerClientController,
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		errorAlert = new Alert(AlertType.ERROR);
+		mainView = new MainView(mainGamePane);
 
 		try {
 			commController = new CommunicatorController(this);
@@ -80,7 +81,6 @@ public class MainGameController implements Initializable, PokerClientController,
 			frameController.setLoginFXML();
 		}
 		modifyButtonsDisability(true);
-		mainView = new MainView(mainGamePane);
 	}
 
 	@Override
@@ -88,97 +88,62 @@ public class MainGameController implements Initializable, PokerClientController,
 		// ha a ház küld utasítást
 		if (updateMsg instanceof HouseHoldemCommand) {
 			HouseHoldemCommand houseHoldemCommand = (HouseHoldemCommand)updateMsg;
-			printHouseCommand(houseHoldemCommand);
+//			printHouseCommand(houseHoldemCommand);
+
 			switch (houseHoldemCommand.getHouseCommandType()) {
 			case BLIND: {
-				try {
-					model.blind(commController, houseHoldemCommand);
-					mainView.blind(houseHoldemCommand);
-				} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
-					showErrorAlert(e.getMessage());
-				}
+				receivedBlindHouseCommand(houseHoldemCommand);
 				break;
 			}
 			case PLAYER: {
-				model.player(houseHoldemCommand);
-				modifyButtonVisibilities(houseHoldemCommand);
-				Platform.runLater(new Runnable() {
-
-					@Override
-					public void run() {
-						mainView.player(houseHoldemCommand);
-					}
-				});
+				receivedPlayerHouseCommand(houseHoldemCommand);
 				break;
 			}
 			case FLOP: {
-				modifyButtonVisibilities(houseHoldemCommand);
-				Platform.runLater(new Runnable() {
-
-					@Override
-					public void run() {
-						mainView.flop(houseHoldemCommand);
-					}
-				});
+				receivedFlopHouseCommand(houseHoldemCommand);
 				break;
 			}
 			case TURN: {
-				modifyButtonVisibilities(houseHoldemCommand);
-				Platform.runLater(new Runnable() {
-
-					@Override
-					public void run() {
-						mainView.turn(houseHoldemCommand);
-					}
-				});
+				receivedTurnHouseCommand(houseHoldemCommand);
 				break;
 			}
 			case RIVER: {
-				modifyButtonVisibilities(houseHoldemCommand);
-				Platform.runLater(new Runnable() {
-
-					@Override
-					public void run() {
-						mainView.river(houseHoldemCommand);
-					}
-				});
+				receivedRiverHouseCommand(houseHoldemCommand);
 				break;
 			}
 			default: {
 				throw new IllegalArgumentException();
-//				break;
 			}
 			}
 		} else if (updateMsg instanceof PlayerHoldemCommand) {
 			PlayerHoldemCommand playerHoldemCommand = (PlayerHoldemCommand)updateMsg;
-			System.out.println(playerHoldemCommand.getSender() + " " + playerHoldemCommand.getPlayerCommandType());
-			System.out.println("You are nth: " + model.getYouAreNth() + " Whoson: " + playerHoldemCommand.getWhosOn());
+//			System.out.println("Ki kuldte a player commandot: " + playerHoldemCommand.getSender() + "\nMilyen command: " + playerHoldemCommand.getPlayerCommandType());
+//			System.out.println("You are nth: " + model.getYouAreNth() + " Whoson: " + playerHoldemCommand.getWhosOn());
 			modifyButtonVisibilities(playerHoldemCommand);
-			// TODO: megjelenítés miatt maradt meg a switch-case...!
+
 			switch (playerHoldemCommand.getPlayerCommandType()) {
 			case BLIND: {
-				model.receivedBlindCommand(playerHoldemCommand);
+				receivedBlindPlayerCommand(playerHoldemCommand);
 				break;
 			}
 			case CALL: {
-				model.receivedCallCommand(playerHoldemCommand);
+				receivedCallPlayerCommand(playerHoldemCommand);
 				break;
 			}
 			case CHECK: {
-				model.receivedCheckCommand(playerHoldemCommand);
+				receivedCheckPlayerCommand(playerHoldemCommand);
 				break;
 			}
 			case FOLD: {
-				model.receivedFoldCommand(playerHoldemCommand);
+				receivedFoldPlayerCommand(playerHoldemCommand);
 				break;
 			}
 			case RAISE: {
-				model.receivedRaiseCommand(playerHoldemCommand);
-				checkButton.setDisable(true);
+				receivedRaisePlayerCommand(playerHoldemCommand);
 				break;
 			}
 			case QUIT: {
-				model.receivedQuitCommand(playerHoldemCommand);
+				receivedQuitPlayerCommand(playerHoldemCommand);
 				break;
 			}
 			default: {
@@ -188,7 +153,7 @@ public class MainGameController implements Initializable, PokerClientController,
 		} else {
 			throw new IllegalArgumentException();
 		}
-		System.out.println("Adósságom: " + model.getMyDebt());
+//		System.out.println("Adósságom: " + model.getMyDebt());
 		// ha van adósságom
 		if (model.getMyDebt().compareTo(BigDecimal.ZERO) > 0) {
 			checkButton.setDisable(true);
@@ -196,6 +161,91 @@ public class MainGameController implements Initializable, PokerClientController,
 			callButton.setDisable(true);
 		}
 	}
+
+
+
+	private void receivedBlindHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+		System.out.println("A haz utasítást küldött: " + houseHoldemCommand.getHouseCommandType());
+		try {
+			mainView.receivedBlindHouseCommand(houseHoldemCommand);
+			model.receivedBlindHouseCommand(houseHoldemCommand);
+		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
+			showErrorAlert(e.getMessage());
+		}
+	}
+
+	private void receivedPlayerHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+		System.out.println("A haz utasítást küldött: " + houseHoldemCommand.getHouseCommandType());
+		model.player(houseHoldemCommand);
+		modifyButtonVisibilities(houseHoldemCommand);
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				mainView.player(houseHoldemCommand);
+			}
+		});
+	}
+
+	private void receivedFlopHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+		modifyButtonVisibilities(houseHoldemCommand);
+		mainView.flop(houseHoldemCommand);
+	}
+
+	private void receivedTurnHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+		modifyButtonVisibilities(houseHoldemCommand);
+		mainView.turn(houseHoldemCommand);
+	}
+
+	private void receivedRiverHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+		modifyButtonVisibilities(houseHoldemCommand);
+		mainView.river(houseHoldemCommand);
+	}
+
+
+
+	private void receivedBlindPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+		System.out.println("A(z) " + playerHoldemCommand.getSender() + " játékos utasítást küldött: " + playerHoldemCommand.getPlayerCommandType());
+		model.receivedBlindPlayerCommand(playerHoldemCommand);
+		mainView.receivedBlindPlayerCommand(playerHoldemCommand);
+		//TODO: modelben elvileg semmi, megjelenítésben pedig vakot kell berakni az asztalra...
+		//TODO: meg kiírni hogy most már mennyi lett a pot
+	}
+
+	private void receivedCallPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+		model.receivedCallPlayerCommand(playerHoldemCommand);
+		mainView.receivedCallPlayerCommand(playerHoldemCommand);
+	}
+
+	private void receivedCheckPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+		model.receivedCheckPlayerCommand(playerHoldemCommand);
+		mainView.receivedCheckPlayerCommand(playerHoldemCommand);
+	}
+
+	private void receivedFoldPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+		model.receivedFoldPlayerCommand(playerHoldemCommand);
+		mainView.receivedFoldPlayerCommand(playerHoldemCommand);
+	}
+
+	private void receivedRaisePlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+		model.receivedRaisePlayerCommand(playerHoldemCommand);
+		mainView.receivedRaisePlayerCommand(playerHoldemCommand);
+		checkButton.setDisable(true);
+	}
+
+	private void receivedQuitPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+		model.receivedQuitPlayerCommand(playerHoldemCommand);
+		mainView.receivedQuitPlayerCommand(playerHoldemCommand);
+	}
+
+
+
+
+
+
+
+
+
 
 	private void modifyButtonVisibilities(PokerCommand pokerCommand) {
 		if (pokerCommand instanceof HouseHoldemCommand) {

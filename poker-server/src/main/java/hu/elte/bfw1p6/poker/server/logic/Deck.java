@@ -49,7 +49,7 @@ public class Deck {
         		cards.add(new Card(CardSuitEnum.values()[j], CardRankEnum.values()[i]));
         	}
         }
-        System.out.println(this);
+//        System.out.println(this);
     }
 	
 	/**

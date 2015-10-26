@@ -20,13 +20,18 @@ public class PokerHoldemDefaultValues {
 	public final String DECK_IMAGE_URL = "/images/cards/deck.png";
 
 	/**
-	 * Lefele fordított kárytaszél
+	 * Lefele fordított kártyaszél
 	 * <img src="../../../../../../../resources/images/cards/b1pl.png" />
 	 */
 	public final String CARD_SIDE_IMAGE_URL = "/images/cards/b1pl.png";
 	public final String CARD_BACKFACE_IMAGE= "/images/cards/b1fv.png";
 
-
+	public final int[] CHIPS_POINT = new int[]{485, 465};
+	
+	public final int CHIPS_EPSILON = 20;
+	
+	public final int CHIPS_SIZE = 20;
+	
 	/* A többi profilkép helye. */
 	public final int[] PROFILE_POINTS = new int[]{628, 540, 188, 485, 232, 40, 631, 0, 1031, 45, 1084, 485};
 	

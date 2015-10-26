@@ -168,7 +168,7 @@ public class UserRepository {
 
 	public synchronized void modify(User u) throws PokerDataBaseException {
 		try {
-			System.out.println(u.getBalance());
+//			System.out.println(u.getBalance());
 			Connection con = DBManager.getInstance().getConnection();
 			PreparedStatement pstmt = con.prepareStatement(UPDATE);
 			for (int i = 0; i < columns.length; i++) {

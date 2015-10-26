@@ -2,12 +2,14 @@ package hu.elte.bfw1p6.poker.client.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.cantero.games.poker.texasholdem.Card;
 import com.cantero.games.poker.texasholdem.CardSuitEnum;
 
 import hu.elte.bfw1p6.poker.client.controller.PokerHoldemDefaultValues;
 import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
+import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,6 +18,7 @@ import javafx.scene.layout.AnchorPane;
 public class MainView {
 
 	private final String IMAGE_PREFIX = "/images/cards/";
+	private final String CHIP_PREFIX = "/images/chips/";
 
 	private PokerHoldemDefaultValues defaultValues;
 
@@ -23,19 +26,24 @@ public class MainView {
 	private List<ImageView> opponentsCards;
 	private List<ImageView> opponentsCardSides;
 	private List<ImageView> houseCards;
-	
+	private List<ImageView> chips;
+
 	private ImageView myCard1;
 	private ImageView myCard2;
 
 	private ImageView dealerButtonImageView;
 
 	private AnchorPane mainGamePane;
-	
+
 	private int youAreNth;
 	private int dealer;
 	private int clientsCount;
-	
+
+	private Random random;
+
 	private int HOLVANADEALERGOMB;
+
+	private int KIKOVETKEZIK = -1;
 
 	public MainView(AnchorPane mainGamePane) {
 		this.defaultValues = PokerHoldemDefaultValues.getInstance();
@@ -44,6 +52,19 @@ public class MainView {
 		this.opponentsCards = new ArrayList<>();
 		this.opponentsCardSides = new ArrayList<>();
 		this.houseCards = new ArrayList<>();
+		this.chips = new ArrayList<>();
+		this.random = new Random();
+
+		this.myCard1 = new ImageView();
+		this.myCard2 = new ImageView();
+		mainGamePane.getChildren().addAll(myCard1, myCard2);
+
+		int gap = 5;
+		myCard1.setLayoutX(defaultValues.MY_CARDS_POSITION[0]);
+		myCard1.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
+		myCard2.setLayoutX(defaultValues.MY_CARDS_POSITION[0] + defaultValues.CARD_WIDTH + gap);
+		myCard2.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
+
 		setDealerButton();
 		setProfileImages();
 		setDeck();
@@ -140,91 +161,172 @@ public class MainView {
 		}
 	}
 
-	public void blind(HouseHoldemCommand houseHoldemCommand) {
-		System.out.println("blind...................");
-		hideHouseCards();
-		for (int i = 0; i < houseHoldemCommand.getPlayers(); i++) {
-			profileImages.get(i).setVisible(true);
-			// TODO: ITT EL VAN CSÚSZVA
-			opponentsCards.get(i).setVisible(true);
-			opponentsCardSides.get(i).setVisible(true);
-		}
-		
-		opponentsCards.get(houseHoldemCommand.getPlayers() - 1).setVisible(false);
-		opponentsCardSides.get(houseHoldemCommand.getPlayers() - 1).setVisible(false);
-
+	public void receivedBlindHouseCommand(HouseHoldemCommand houseHoldemCommand) {
 		dealer = houseHoldemCommand.getDealer();
 		youAreNth = houseHoldemCommand.getNthPlayer();
 		clientsCount = houseHoldemCommand.getPlayers();
-		System.out.println("BLIND MOCSKOSUL NEM NULLA TE FÉREGFASZ: " + clientsCount);
-		System.out.println("K: " + dealer);
-		System.out.println("NthPlayer: " + youAreNth);
-//		int value = (s - Math.abs(d - nTh)) % s;
+		System.out.println("Beallitom a clientsCount erteket: " + clientsCount);
 		HOLVANADEALERGOMB = (clientsCount + dealer - youAreNth) % clientsCount;
-		System.out.println("Hol van a vak: " + HOLVANADEALERGOMB);
-		dealerButtonImageView.setLayoutX(defaultValues.DEALER_BUTTON_POSITIONS[HOLVANADEALERGOMB * 2]);
-		dealerButtonImageView.setLayoutY(defaultValues.DEALER_BUTTON_POSITIONS[HOLVANADEALERGOMB * 2 + 1]);
-		dealerButtonImageView.setVisible(true);
+		Platform.runLater(
+				new Runnable() {
+
+					@Override
+					public void run() {
+						clearChips();
+						hideHouseCards();
+						for (int i = 0; i < houseHoldemCommand.getPlayers(); i++) {
+							profileImages.get(i).setVisible(true);
+							// TODO: ITT EL VAN CSÚSZVA
+							opponentsCards.get(i).setVisible(true);
+							opponentsCardSides.get(i).setVisible(true);
+						}
+
+						opponentsCards.get(houseHoldemCommand.getPlayers() - 1).setVisible(false);
+						opponentsCardSides.get(houseHoldemCommand.getPlayers() - 1).setVisible(false);
+
+
+						dealerButtonImageView.setLayoutX(defaultValues.DEALER_BUTTON_POSITIONS[HOLVANADEALERGOMB * 2]);
+						dealerButtonImageView.setLayoutY(defaultValues.DEALER_BUTTON_POSITIONS[HOLVANADEALERGOMB * 2 + 1]);
+						dealerButtonImageView.setVisible(true);
+					}
+				});
 	}
-	
+
 	public void player(HouseHoldemCommand houseHoldemCommand) {
-		System.out.println("show my card.....................");
-		int gap = 5;
 		int value = mapCard(houseHoldemCommand.getCard1());
 		int value2 = mapCard(houseHoldemCommand.getCard2());
-		System.out.println("Egyik lapom: " + value);
-		System.out.println("Masik lapom: " + value2);
-		myCard1 = new ImageView(new Image(IMAGE_PREFIX + value + ".png"));
-		myCard2 = new ImageView(new Image(IMAGE_PREFIX + value2 + ".png"));
-		myCard1.setLayoutX(defaultValues.MY_CARDS_POSITION[0]);
-		myCard1.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
-		myCard2.setLayoutX(defaultValues.MY_CARDS_POSITION[0] + defaultValues.CARD_WIDTH + gap);
-		myCard2.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
-//		hideAllProfiles();
-		
-//		Platform.runLater(new Runnable(){
-//
-//			@Override
-//			public void run() {
-//				profileImages.get(houseHoldemCommand.getWhosOn()).setVisible(false);
-//				dealerButtonImageView.setVisible(false);
-//		System.out.println("eleje: " + (clientsCount + dealer - youAreNth));
-		System.out.println("PLAYER 2. MOCSKOSUL NEM NULLA TE FÉREGFASZ: " + clientsCount);
-		System.out.println("ELŐTTE " + clientsCount);
-		int next = (HOLVANADEALERGOMB + 3) % 2;
-		System.out.println("NEXT BAZDMEG: " + next);
-//		int eleje = clientsCount + houseHoldemCommand.getWhosOn() - youAreNth;
-//		if (eleje > clientsCount) {
-//			eleje %= clientsCount;
-//		}
-//				int value_ = (clientsCount + dealer - youAreNth) % clientsCount;
-//				System.out.println("glow........................" + value_);
-//				asd();
-				profileImages.get(next).getStyleClass().add("glow");
-//				profileImages.get(next).setFitHeight(20);
-//				profileImages.get(next).setFitWidth(20);
-				mainGamePane.getChildren().addAll(myCard1, myCard2);
-//			}
-//		});
+		//		System.out.println("Egyik lapom: " + value);
+		//		System.out.println("Masik lapom: " + value2);
+		myCard1.setImage(new Image(IMAGE_PREFIX + value + ".png"));
+		myCard2.setImage(new Image(IMAGE_PREFIX + value2 + ".png"));
+
+		if (KIKOVETKEZIK != -1) {
+			profileImages.get(KIKOVETKEZIK).getStyleClass().remove("glow");
+		}
+		KIKOVETKEZIK = (HOLVANADEALERGOMB + 3) % 2;
+		profileImages.get(KIKOVETKEZIK).getStyleClass().add("glow");
 	}
 
 	public void flop(HouseHoldemCommand houseHoldemCommand) {
-		revealCard(houseHoldemCommand, 0);
-		revealCard(houseHoldemCommand, 1);
-		revealCard(houseHoldemCommand, 2);
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				colorSmallBlind();
+				revealCard(houseHoldemCommand, 0);
+				revealCard(houseHoldemCommand, 1);
+				revealCard(houseHoldemCommand, 2);
+			}
+		});
 	}
 
 	public void turn(HouseHoldemCommand houseHoldemCommand) {
-		revealCard(houseHoldemCommand, 3);
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				colorSmallBlind();
+				revealCard(houseHoldemCommand, 3);
+			}
+		});
 	}
 
 	public void river(HouseHoldemCommand houseHoldemCommand) {
-		revealCard(houseHoldemCommand, 4);
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				colorSmallBlind();
+				revealCard(houseHoldemCommand, 4);
+			}
+		});
 	}
 
 	private void revealCard(HouseHoldemCommand houseHoldemCommand, int i) {
 		int value = mapCard((i == 1) ? houseHoldemCommand.getCard1() : (i == 2) ? houseHoldemCommand.getCard3() : houseHoldemCommand.getCard1());
 		houseCards.get(i).setImage(new Image(IMAGE_PREFIX + value + ".png"));
 		houseCards.get(i).setVisible(true);
+	}
+
+	public void colorNextPlayer() {
+		profileImages.get(KIKOVETKEZIK).getStyleClass().remove("glow");
+		++KIKOVETKEZIK;
+		KIKOVETKEZIK %= clientsCount;
+		profileImages.get(KIKOVETKEZIK).getStyleClass().add("glow");
+	}
+
+	public void colorSmallBlind() {
+		profileImages.get(KIKOVETKEZIK).getStyleClass().remove("glow");
+		KIKOVETKEZIK = HOLVANADEALERGOMB + 1;
+		KIKOVETKEZIK %= clientsCount;
+		profileImages.get(KIKOVETKEZIK).getStyleClass().add("glow");
+	}
+
+	public void receivedBlindPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				colorNextPlayer();
+				addChip();
+			}
+		});
+	}
+
+	public void receivedCallPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				colorNextPlayer();
+				addChip();
+			}
+		});
+
+	}
+
+	public void receivedCheckPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+		colorNextPlayer();
+	}
+
+	public void receivedFoldPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void receivedRaisePlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				colorNextPlayer();
+				addChip();
+				addChip();
+			}
+		});
+	}
+
+	public void receivedQuitPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void addChip() {
+		ImageView chip = new ImageView(new Image(CHIP_PREFIX + "black.png"));
+		int max = defaultValues.CHIPS_POINT[0] + 20;
+		int min = defaultValues.CHIPS_POINT[1] - 20;
+		chip.setLayoutX(random.nextInt(max - min) + min);
+		chip.setLayoutY(random.nextInt(max - min) + min);
+		chip.setFitHeight(defaultValues.CHIPS_SIZE);
+		chip.setFitWidth(defaultValues.CHIPS_SIZE);
+		chips.add(chip);
+		mainGamePane.getChildren().add(chip);
+	}
+
+	private void clearChips() {
+		for (ImageView imageView : chips) {
+			mainGamePane.getChildren().remove(imageView);
+		}
+		chips.clear();
 	}
 }

@@ -64,7 +64,7 @@ public class MainGameModel {
 		playerHoldemCommand.setSender(pokerSession.getPlayer().getUserName());
 		pokerRemote.sendPlayerCommand(pokerSession.getId(), pokerTable, communicatorController, playerHoldemCommand);
 		pokerSession.refreshBalance(pokerRemote.refreshBalance(pokerSession.getId()));
-		System.out.println("uj balance: " + pokerSession.getPlayer().getBalance());
+//		System.out.println("uj balance: " + pokerSession.getPlayer().getBalance());
 	}
 
 	public String getUserName() {
@@ -78,22 +78,22 @@ public class MainGameModel {
 	 * @throws PokerDataBaseException 
 	 * @throws PokerUnauthenticatedException 
 	 */
-	public void blind(CommunicatorController commController, HouseHoldemCommand houseHoldemCommand) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void receivedBlindHouseCommand(HouseHoldemCommand houseHoldemCommand) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		myDebt = pokerTable.getDefaultPot();
 		youAreNth = houseHoldemCommand.getNthPlayer();
 		players = houseHoldemCommand.getPlayers();
 		// első körben az a dealer, aki elsőként csatlakozott, roundonként +1
-		System.out.println("Hanyadik játékos vagy a szerveren: " + youAreNth);
-		System.out.println("Aktuális dealer: " + houseHoldemCommand.getDealer());
+//		System.out.println("Hanyadik játékos vagy a szerveren: " + youAreNth);
+//		System.out.println("Aktuális dealer: " + houseHoldemCommand.getDealer());
 		if (areYouTheSmallBlind(houseHoldemCommand)) {
-			System.out.println("Betettem a kis vakot");
+//			System.out.println("Betettem a kis vakot");
 			smallBlind();
 		} else if (areYouTheBigBlind(houseHoldemCommand)) {
-			System.out.println("Betettem a nagy vakot");
+//			System.out.println("Betettem a nagy vakot");
 			bigBlind();
 		}
 		// nagyvaktól eggyel balra ülő kezd
-		System.out.println("Az éppen soron levő játékos: " + houseHoldemCommand.getWhosOn());
+//		System.out.println("Az éppen soron levő játékos: " + houseHoldemCommand.getWhosOn());
 	}
 
 	public void setMyDebt(BigDecimal myDebt) {
@@ -180,19 +180,19 @@ public class MainGameModel {
 		sendPlayerCommand(HoldemPlayerCommandType.QUIT, null, null, youAreNth);		
 	}
 
-	public void receivedFoldCommand(PlayerHoldemCommand playerHoldemCommand) {
+	public void receivedFoldPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
 		if (youAreNth > playerHoldemCommand.getWhosQuit()) {
 			--youAreNth;
 		}
 	}
 
-	public void receivedRaiseCommand(PlayerHoldemCommand playerHoldemCommand) {
+	public void receivedRaisePlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
 		// és mi van ha én magam emeltem...
 		// ha én magam emeltem, akkor a szerver elszámolta a teljes adósságom
 		myDebt = !playerHoldemCommand.getSender().equals(getUserName()) ? myDebt.add(playerHoldemCommand.getRaiseAmount()) : BigDecimal.ZERO;
 	}
 
-	public void receivedQuitCommand(PlayerHoldemCommand playerHoldemCommand) {
+	public void receivedQuitPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
 		if (youAreNth > playerHoldemCommand.getWhosQuit()) {
 			--youAreNth;
 		}
@@ -242,17 +242,17 @@ public class MainGameModel {
 		return pokerSession.getPlayer();
 	}
 
-	public void receivedBlindCommand(PlayerHoldemCommand playerHoldemCommand) {
+	public void receivedBlindPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void receivedCallCommand(PlayerHoldemCommand playerHoldemCommand) {
+	public void receivedCallPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void receivedCheckCommand(PlayerHoldemCommand playerHoldemCommand) {
+	public void receivedCheckPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
 		// TODO Auto-generated method stub
 		
 	}
