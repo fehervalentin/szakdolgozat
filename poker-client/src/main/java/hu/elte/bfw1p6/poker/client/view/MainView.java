@@ -16,10 +16,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 public class MainView {
+	
+	
 
-	private final String IMAGE_PREFIX = "/images/cards/";
-	private final String CHIP_PREFIX = "/images/chips/";
-
+	/**
+	 * Mindenféle konstans érték.
+	 */
 	private PokerHoldemDefaultValues defaultValues;
 
 	private List<ImageView> profileImages;
@@ -83,8 +85,11 @@ public class MainView {
 
 	private void setProfileImages() {
 		// a saját profilképem is idemegy
+		// és mi van ha mindenkinek saját profile képet akarok betölteni...?
+		Image profileImage = new Image(defaultValues.PROFILE_IMAGE_URL);
+		// kettesével kell menni (x,y) párok miatt
 		for (int i = 0; i < defaultValues.PROFILE_COUNT * 2; i+=2) {
-			ImageView iv = new ImageView(new Image(defaultValues.PROFILE_IMAGE_URL));
+			ImageView iv = new ImageView(profileImage);
 			iv.setLayoutX(defaultValues.PROFILE_POINTS[i]);
 			iv.setLayoutY(defaultValues.PROFILE_POINTS[i+1]);
 			iv.fitHeightProperty().set(defaultValues.PROFILE_SIZE);
@@ -97,6 +102,7 @@ public class MainView {
 	private void setCards() {
 		// a saját kártyáim nem idemennek
 		// a 0. helyen az első hely lapjai vannak
+		// kettessével kell menni (x,y) párok miatt
 		for (int i = 0; i < defaultValues.PROFILE_COUNT * 2 - 2; i+=2) {
 			ImageView card = new ImageView(new Image(defaultValues.CARD_BACKFACE_IMAGE));
 			card.setLayoutX(defaultValues.CARD_B1FV_POINTS[i]);
@@ -130,7 +136,7 @@ public class MainView {
 		previous.setLayoutX(defaultValues.DECK_POINT[0] + 20);
 		previous.setLayoutY(defaultValues.DECK_POINT[1]);
 		for (int i = 0; i < defaultValues.PROFILE_COUNT; i++) {
-			ImageView card = new ImageView(new Image(IMAGE_PREFIX + "1.png"));
+			ImageView card = new ImageView(new Image(defaultValues.CARD_IMAGE_PREFIX + "1.png"));
 			card.setLayoutX(previous.getLayoutX() + defaultValues.CARD_WIDTH + gap);
 			card.setLayoutY(previous.getLayoutY());
 			card.setVisible(false);
@@ -160,12 +166,21 @@ public class MainView {
 			houseCards.get(i).setVisible(false);
 		}
 	}
+	
+	private void resetOpacity() {
+		myCard1.setOpacity(1);
+		myCard2.setOpacity(1);
+		for (int i = 0; i < opponentsCards.size(); i++) {
+			opponentsCards.get(i).setOpacity(1);
+			opponentsCardSides.get(i).setOpacity(1);
+		}
+	}
 
 	public void receivedBlindHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+		resetOpacity();
 		dealer = houseHoldemCommand.getDealer();
 		youAreNth = houseHoldemCommand.getNthPlayer();
 		clientsCount = houseHoldemCommand.getPlayers();
-		System.out.println("Beallitom a clientsCount erteket: " + clientsCount);
 		HOLVANADEALERGOMB = (clientsCount + dealer - youAreNth) % clientsCount;
 		Platform.runLater(
 				new Runnable() {
@@ -176,11 +191,10 @@ public class MainView {
 						hideHouseCards();
 						for (int i = 0; i < houseHoldemCommand.getPlayers(); i++) {
 							profileImages.get(i).setVisible(true);
-							// TODO: ITT EL VAN CSÚSZVA
 							opponentsCards.get(i).setVisible(true);
 							opponentsCardSides.get(i).setVisible(true);
 						}
-
+						// ugye el van csúszva, mert a profilképeknél én is szerepel, de a kártyáknál nem
 						opponentsCards.get(houseHoldemCommand.getPlayers() - 1).setVisible(false);
 						opponentsCardSides.get(houseHoldemCommand.getPlayers() - 1).setVisible(false);
 
@@ -192,21 +206,24 @@ public class MainView {
 				});
 	}
 
-	public void player(HouseHoldemCommand houseHoldemCommand) {
-		int value = mapCard(houseHoldemCommand.getCard1());
-		int value2 = mapCard(houseHoldemCommand.getCard2());
-		//		System.out.println("Egyik lapom: " + value);
-		//		System.out.println("Masik lapom: " + value2);
-		myCard1.setImage(new Image(IMAGE_PREFIX + value + ".png"));
-		myCard2.setImage(new Image(IMAGE_PREFIX + value2 + ".png"));
+	public void receivedPlayerHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+		Platform.runLater(new Runnable() {
 
-		if (KIKOVETKEZIK != -1) {
-			profileImages.get(KIKOVETKEZIK).getStyleClass().remove("glow");
-		}
-		//2 => 3
-		//3 => 4
-		KIKOVETKEZIK = (HOLVANADEALERGOMB + clientsCount + 1) % clientsCount;
-		profileImages.get(KIKOVETKEZIK).getStyleClass().add("glow");
+			@Override
+			public void run() {
+				int value = mapCard(houseHoldemCommand.getCard1());
+				int value2 = mapCard(houseHoldemCommand.getCard2());
+				myCard1.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
+				myCard2.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value2 + ".png"));
+				
+				// előző körből vadászom le a glowt (ha nem volt előző kör, tehát ez az első kör...)
+				if (KIKOVETKEZIK != -1) {
+					profileImages.get(KIKOVETKEZIK).getStyleClass().remove("glow");
+				}
+				KIKOVETKEZIK = (HOLVANADEALERGOMB + clientsCount + 1) % clientsCount;
+				profileImages.get(KIKOVETKEZIK).getStyleClass().add("glow");
+			}
+		});
 	}
 
 	public void flop(HouseHoldemCommand houseHoldemCommand) {
@@ -245,23 +262,19 @@ public class MainView {
 	}
 
 	private void revealCard(HouseHoldemCommand houseHoldemCommand, int i) {
-		int value = mapCard((i == 1) ? houseHoldemCommand.getCard1() : (i == 2) ? houseHoldemCommand.getCard3() : houseHoldemCommand.getCard1());
-		houseCards.get(i).setImage(new Image(IMAGE_PREFIX + value + ".png"));
+		Card card = null;
+		if (i == 0 || i == 3 || i == 4) {
+			card = houseHoldemCommand.getCard1();
+		} else if (i == 1) {
+			card = houseHoldemCommand.getCard2();
+		} else if (i == 2) {
+			card = houseHoldemCommand.getCard3();
+		} else {
+			throw new IllegalArgumentException();
+		}
+		int value = mapCard(card);
+		houseCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
 		houseCards.get(i).setVisible(true);
-	}
-
-	public void colorNextPlayer() {
-		profileImages.get(KIKOVETKEZIK).getStyleClass().remove("glow");
-		++KIKOVETKEZIK;
-		KIKOVETKEZIK %= clientsCount;
-		profileImages.get(KIKOVETKEZIK).getStyleClass().add("glow");
-	}
-
-	public void colorSmallBlind() {
-		profileImages.get(KIKOVETKEZIK).getStyleClass().remove("glow");
-		KIKOVETKEZIK = HOLVANADEALERGOMB + 1;
-		KIKOVETKEZIK %= clientsCount;
-		profileImages.get(KIKOVETKEZIK).getStyleClass().add("glow");
 	}
 
 	public void receivedBlindPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
@@ -292,8 +305,17 @@ public class MainView {
 	}
 
 	public void receivedFoldPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
-		// TODO Auto-generated method stub
-
+		double opacity = 0.4;
+		int whoFold = playerHoldemCommand.getWhosOn();
+		int value = (HOLVANADEALERGOMB + whoFold + clientsCount) % clientsCount;
+		if (value == 0) {
+			myCard1.setOpacity(opacity);
+			myCard2.setOpacity(opacity);
+		} else {
+			opponentsCards.get(value).setOpacity(opacity);
+			opponentsCardSides.get(value).setOpacity(opacity);
+		}
+		colorNextPlayer();
 	}
 
 	public void receivedRaisePlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
@@ -313,8 +335,31 @@ public class MainView {
 
 	}
 
-	public void addChip() {
-		ImageView chip = new ImageView(new Image(CHIP_PREFIX + "black.png"));
+	/**
+	 * A következő játékost színezem be.
+	 */
+	private void colorNextPlayer() {
+		profileImages.get(KIKOVETKEZIK).getStyleClass().remove("glow");
+		++KIKOVETKEZIK;
+		KIKOVETKEZIK %= clientsCount;
+		profileImages.get(KIKOVETKEZIK).getStyleClass().add("glow");
+	}
+
+	/**
+	 * A kis vak játékost színezem be.
+	 */
+	private void colorSmallBlind() {
+		profileImages.get(KIKOVETKEZIK).getStyleClass().remove("glow");
+		KIKOVETKEZIK = HOLVANADEALERGOMB + 1;
+		KIKOVETKEZIK %= clientsCount;
+		profileImages.get(KIKOVETKEZIK).getStyleClass().add("glow");
+	}
+
+	/**
+	 * Random helyezek el chipeket az asztalon.
+	 */
+	private void addChip() {
+		ImageView chip = new ImageView(new Image(defaultValues.CHIP_IMAGE_PREFIX + "black.png"));
 		int max = defaultValues.CHIPS_POINT[0] + 20;
 		int min = defaultValues.CHIPS_POINT[1] - 20;
 		chip.setLayoutX(random.nextInt(max - min) + min);
@@ -325,6 +370,9 @@ public class MainView {
 		mainGamePane.getChildren().add(chip);
 	}
 
+	/**
+	 * Kitörlöm a chipeket.
+	 */
 	private void clearChips() {
 		for (ImageView imageView : chips) {
 			mainGamePane.getChildren().remove(imageView);

@@ -18,7 +18,6 @@ import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -89,7 +88,8 @@ public class MainGameController implements Initializable, PokerClientController,
 		if (updateMsg instanceof HouseHoldemCommand) {
 			HouseHoldemCommand houseHoldemCommand = (HouseHoldemCommand)updateMsg;
 //			printHouseCommand(houseHoldemCommand);
-
+			System.out.println("A haz utasítást küldött: " + houseHoldemCommand.getHouseCommandType());
+			
 			switch (houseHoldemCommand.getHouseCommandType()) {
 			case BLIND: {
 				receivedBlindHouseCommand(houseHoldemCommand);
@@ -100,14 +100,17 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case FLOP: {
+				System.out.println("Flop: " + houseHoldemCommand.getCard1() + " " + houseHoldemCommand.getCard2() + " " + houseHoldemCommand.getCard3());
 				receivedFlopHouseCommand(houseHoldemCommand);
 				break;
 			}
 			case TURN: {
+				System.out.println("Turn: " + houseHoldemCommand.getCard1());
 				receivedTurnHouseCommand(houseHoldemCommand);
 				break;
 			}
 			case RIVER: {
+				System.out.println("River: " + houseHoldemCommand.getCard1());
 				receivedRiverHouseCommand(houseHoldemCommand);
 				break;
 			}
@@ -119,8 +122,8 @@ public class MainGameController implements Initializable, PokerClientController,
 			PlayerHoldemCommand playerHoldemCommand = (PlayerHoldemCommand)updateMsg;
 //			System.out.println("Ki kuldte a player commandot: " + playerHoldemCommand.getSender() + "\nMilyen command: " + playerHoldemCommand.getPlayerCommandType());
 //			System.out.println("You are nth: " + model.getYouAreNth() + " Whoson: " + playerHoldemCommand.getWhosOn());
-			modifyButtonVisibilities(playerHoldemCommand);
-
+			System.out.println("A(z) " + playerHoldemCommand.getSender() + " játékos utasítást küldött: " + playerHoldemCommand.getPlayerCommandType());
+			
 			switch (playerHoldemCommand.getPlayerCommandType()) {
 			case BLIND: {
 				receivedBlindPlayerCommand(playerHoldemCommand);
@@ -136,6 +139,7 @@ public class MainGameController implements Initializable, PokerClientController,
 			}
 			case FOLD: {
 				receivedFoldPlayerCommand(playerHoldemCommand);
+//				modifyButtonVisibilities(playerHoldemCommand);
 				break;
 			}
 			case RAISE: {
@@ -150,6 +154,7 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			}
+			modifyButtonVisibilities(playerHoldemCommand);
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -165,7 +170,6 @@ public class MainGameController implements Initializable, PokerClientController,
 
 
 	private void receivedBlindHouseCommand(HouseHoldemCommand houseHoldemCommand) {
-		System.out.println("A haz utasítást küldött: " + houseHoldemCommand.getHouseCommandType());
 		try {
 			mainView.receivedBlindHouseCommand(houseHoldemCommand);
 			model.receivedBlindHouseCommand(houseHoldemCommand);
@@ -175,16 +179,9 @@ public class MainGameController implements Initializable, PokerClientController,
 	}
 
 	private void receivedPlayerHouseCommand(HouseHoldemCommand houseHoldemCommand) {
-		System.out.println("A haz utasítást küldött: " + houseHoldemCommand.getHouseCommandType());
-		model.player(houseHoldemCommand);
+		model.receivedPlayerHouseCommand(houseHoldemCommand);
 		modifyButtonVisibilities(houseHoldemCommand);
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				mainView.player(houseHoldemCommand);
-			}
-		});
+		mainView.receivedPlayerHouseCommand(houseHoldemCommand);
 	}
 
 	private void receivedFlopHouseCommand(HouseHoldemCommand houseHoldemCommand) {
@@ -205,7 +202,6 @@ public class MainGameController implements Initializable, PokerClientController,
 
 
 	private void receivedBlindPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
-		System.out.println("A(z) " + playerHoldemCommand.getSender() + " játékos utasítást küldött: " + playerHoldemCommand.getPlayerCommandType());
 		model.receivedBlindPlayerCommand(playerHoldemCommand);
 		mainView.receivedBlindPlayerCommand(playerHoldemCommand);
 		//TODO: modelben elvileg semmi, megjelenítésben pedig vakot kell berakni az asztalra...

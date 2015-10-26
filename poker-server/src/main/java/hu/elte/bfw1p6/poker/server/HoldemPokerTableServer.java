@@ -267,7 +267,6 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			}
 			++whosOn;
 			whosOn %= playersInRound;
-//			System.out.println("WhosOn: " + whosOn);
 			playerCommand.setWhosOn(whosOn);
 			notifyClients(playerCommand);
 

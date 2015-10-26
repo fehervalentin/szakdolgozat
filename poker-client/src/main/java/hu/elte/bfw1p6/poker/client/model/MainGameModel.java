@@ -257,7 +257,7 @@ public class MainGameModel {
 		
 	}
 
-	public void player(HouseHoldemCommand houseHoldemCommand) {
+	public void receivedPlayerHouseCommand(HouseHoldemCommand houseHoldemCommand) {
 		pokerSession.getPlayer().setCards(new Card[]{houseHoldemCommand.getCard1(), houseHoldemCommand.getCard2()});
 	}
 }

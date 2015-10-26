@@ -3,6 +3,10 @@ package hu.elte.bfw1p6.poker.client.controller;
 public class PokerHoldemDefaultValues {
 
 	private static PokerHoldemDefaultValues instance = null;
+	
+	public final String CARD_IMAGE_PREFIX = "/images/cards/";
+	
+	public final String CHIP_IMAGE_PREFIX = "/images/chips/";
 
 	/**
 	 * A dealer zseton kép URL-je.
