@@ -203,7 +203,9 @@ public class MainView {
 		if (KIKOVETKEZIK != -1) {
 			profileImages.get(KIKOVETKEZIK).getStyleClass().remove("glow");
 		}
-		KIKOVETKEZIK = (HOLVANADEALERGOMB + 3) % 2;
+		//2 => 3
+		//3 => 4
+		KIKOVETKEZIK = (HOLVANADEALERGOMB + clientsCount + 1) % clientsCount;
 		profileImages.get(KIKOVETKEZIK).getStyleClass().add("glow");
 	}
 
