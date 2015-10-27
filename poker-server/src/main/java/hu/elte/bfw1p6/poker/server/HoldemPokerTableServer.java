@@ -97,9 +97,11 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	 * Asztaltól fogom lekérni.
 	 */
 	@Deprecated
-	private int minPlayer = 3;
+	private int minPlayer = 2;
 
 	private List<PokerPlayer> players;
+	
+	private List<String> clientsNames;
 
 	public HoldemPokerTableServer(PokerTable pokerTable) throws RemoteException {
 		this.pokerTable = pokerTable;
@@ -109,6 +111,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		this.clients = new ArrayList<>();
 		this.moneyStack = new BigDecimal(0);
 		this.players = new ArrayList<>();
+		this.clientsNames = new ArrayList<>();
 	}
 
 	/**
@@ -116,12 +119,13 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	 * @param client a csatlakozni kívánó kliens
 	 * @throws PokerTooMuchPlayerException
 	 */
-	public synchronized void join(RemoteObserver client) throws PokerTooMuchPlayerException {
+	public synchronized void join(RemoteObserver client, String userName) throws PokerTooMuchPlayerException {
 		if (!clients.contains(client)) {
 			if (clients.size() >= pokerTable.getMaxPlayers()) {
 				throw new PokerTooMuchPlayerException("Az asztal betelt, nem tudsz csatlakozni!");
 			} else {
 				clients.add(client);
+				clientsNames.add(userName);
 				System.out.println("JOIN: " + client.toString());
 				startRound();
 			}
@@ -155,8 +159,9 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 
 	private void collectBlinds() {
 		for (int i = 0; i < clients.size(); i++) {
-			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, i, clients.size(), dealer, whosOn);
-			sendPokerCommand(i, pokerCommand);
+			HouseHoldemCommand houseHoldemCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, i, clients.size(), dealer, whosOn);
+			houseHoldemCommand.setPlayersNames(clientsNames);
+			sendPokerCommand(i, houseHoldemCommand);
 		}
 		nextStep();
 	}

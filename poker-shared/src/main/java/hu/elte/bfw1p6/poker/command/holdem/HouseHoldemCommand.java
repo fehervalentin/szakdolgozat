@@ -1,6 +1,7 @@
 package hu.elte.bfw1p6.poker.command.holdem;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
 
@@ -36,6 +37,8 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * Ki következik éppen.
 	 */
 	private int whosOn;
+	
+	private List<String> playersNames;
 	
 	private HoldemHouseCommandType houseCommandType;
 	private Card card1, card2, card3;
@@ -129,5 +132,13 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	@Override
 	public String toString() {
 		return "[" + houseCommandType + " " + card1 + " " + card2 + " " + card3 + "]";
+	}
+
+	public void setPlayersNames(List<String> playersNames) {
+		this.playersNames = playersNames;
+	}
+	
+	public List<String> getPlayersNames() {
+		return playersNames;
 	}
 }

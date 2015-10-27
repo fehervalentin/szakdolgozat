@@ -208,7 +208,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	public void connectToTable(UUID uuid, PokerTable t, RemoteObserver client) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException {
 		if (sessionService.isAuthenticated(uuid)) {
 			HoldemPokerTableServer pts = pokerTableservers.get(t.getName());
-			pts.join(client);
+			pts.join(client, sessionService.lookUpUserName(uuid));
 		}
 	}
 

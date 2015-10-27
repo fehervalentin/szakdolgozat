@@ -33,7 +33,7 @@ public class ServerTest {
 		
 		for (int i = 0; i <= pokerTable.getMaxPlayers(); i++) {
 			clients.add(mock(RemoteObserver.class));
-			sv.join(clients.get(i));
+			sv.join(clients.get(i), null);
 		}
 	}
 	

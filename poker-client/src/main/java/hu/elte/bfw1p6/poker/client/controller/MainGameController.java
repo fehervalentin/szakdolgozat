@@ -18,6 +18,7 @@ import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -143,6 +144,7 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case RAISE: {
+				System.out.println("A RAISE mértéke: " + playerHoldemCommand.getRaiseAmount());
 				receivedRaisePlayerCommand(playerHoldemCommand);
 				break;
 			}
@@ -160,11 +162,17 @@ public class MainGameController implements Initializable, PokerClientController,
 		}
 //		System.out.println("Adósságom: " + model.getMyDebt());
 		// ha van adósságom
-		if (model.getMyDebt().compareTo(BigDecimal.ZERO) > 0) {
-			checkButton.setDisable(true);
-		} else {
-			callButton.setDisable(true);
-		}
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (model.getMyDebt().compareTo(BigDecimal.ZERO) > 0) {
+					checkButton.setDisable(true);
+				} else {
+					callButton.setDisable(true);
+				}
+			}
+		});
 	}
 
 
@@ -185,6 +193,7 @@ public class MainGameController implements Initializable, PokerClientController,
 	}
 
 	private void receivedFlopHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+//		System.out.println("Flop kommand: " + model.getYouAreNth() + "  " + houseHoldemCommand.getWhosOn());
 		modifyButtonVisibilities(houseHoldemCommand);
 		mainView.flop(houseHoldemCommand);
 	}
@@ -254,10 +263,16 @@ public class MainGameController implements Initializable, PokerClientController,
 	}
 
 	private void modifyButtonsDisability(boolean disable) {
-		callButton.setDisable(disable);
-		checkButton.setDisable(disable);
-		foldButton.setDisable(disable);
-		raiseButton.setDisable(disable);
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				callButton.setDisable(disable);
+				checkButton.setDisable(disable);
+				foldButton.setDisable(disable);
+				raiseButton.setDisable(disable);
+			}
+		});
 	}
 
 	private void player(HouseHoldemCommand houseHoldemCommand) {

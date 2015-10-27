@@ -11,6 +11,7 @@ import hu.elte.bfw1p6.poker.client.controller.PokerHoldemDefaultValues;
 import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
 import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
 import javafx.application.Platform;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -29,6 +30,7 @@ public class MainView {
 	private List<ImageView> opponentsCardSides;
 	private List<ImageView> houseCards;
 	private List<ImageView> chips;
+	private List<Label> userNameLabels;
 
 	private ImageView myCard1;
 	private ImageView myCard2;
@@ -55,6 +57,7 @@ public class MainView {
 		this.opponentsCardSides = new ArrayList<>();
 		this.houseCards = new ArrayList<>();
 		this.chips = new ArrayList<>();
+		this.userNameLabels = new ArrayList<>();
 		this.random = new Random();
 
 		this.myCard1 = new ImageView();
@@ -72,6 +75,7 @@ public class MainView {
 		setDeck();
 		setCards();
 		setHouseCards();
+		setLabels();
 		hideAllProfiles();
 	}
 
@@ -81,6 +85,15 @@ public class MainView {
 		dealerButtonImageView.setFitWidth(defaultValues.DEALER_BUTTON_SIZE);
 		dealerButtonImageView.setVisible(false);
 		mainGamePane.getChildren().add(dealerButtonImageView);
+	}
+	
+	private void setLabelUserNames(List<String> userNames) {
+		System.out.println("Usernames size: " + userNames.size());
+		for (int i = 0; i < userNames.size(); i++) {
+			String username = userNames.get(i);
+			userNameLabels.get(i).setVisible(true);
+			userNameLabels.get(i).setText(username);
+		}
 	}
 
 	private void setProfileImages() {
@@ -98,7 +111,20 @@ public class MainView {
 			mainGamePane.getChildren().add(iv);
 		}
 	}
-
+	
+	private void setLabels() {
+		// kettesével kell menni (x,y) párok miatt
+		for (int i = 0; i < defaultValues.PROFILE_COUNT * 2; i+=2) {
+			Label label = new Label();
+			userNameLabels.add(label);
+			label.setLayoutX(defaultValues.PROFILE_POINTS[i]);
+			label.setLayoutY(defaultValues.PROFILE_POINTS[i+1]);
+//			iv.fitHeightProperty().set(defaultValues.PROFILE_SIZE);
+//			iv.fitWidthProperty().set(defaultValues.PROFILE_SIZE);
+			mainGamePane.getChildren().add(label);
+		}
+	}
+	
 	private void setCards() {
 		// a saját kártyáim nem idemennek
 		// a 0. helyen az első hely lapjai vannak
@@ -155,12 +181,14 @@ public class MainView {
 			profileImages.get(i).setVisible(false);
 			opponentsCards.get(i).setVisible(false);
 			opponentsCardSides.get(i).setVisible(false);
+			userNameLabels.get(i).setVisible(false);
 		}
 		// el van csúszva: a 0. én vagyok, az utolsót nem érinti a ciklus
 		profileImages.get(0).setVisible(true);
 		profileImages.get(opponentsCards.size()).setVisible(false);
+		userNameLabels.get(0).setVisible(true);
 	}
-
+	
 	public void hideHouseCards() {
 		for (int i = 0; i < houseCards.size(); i++) {
 			houseCards.get(i).setVisible(false);
@@ -177,7 +205,6 @@ public class MainView {
 	}
 
 	public void receivedBlindHouseCommand(HouseHoldemCommand houseHoldemCommand) {
-		resetOpacity();
 		clientsCount = houseHoldemCommand.getPlayers();
 		whosOut = new boolean[clientsCount];
 		DEALER_BUTTON_POSITION = (clientsCount + houseHoldemCommand.getDealer() - houseHoldemCommand.getNthPlayer()) % clientsCount;
@@ -186,6 +213,8 @@ public class MainView {
 
 					@Override
 					public void run() {
+						setLabelUserNames(houseHoldemCommand.getPlayersNames());
+						resetOpacity();
 						clearChips();
 						hideHouseCards();
 						for (int i = 0; i < houseHoldemCommand.getPlayers(); i++) {
@@ -323,6 +352,7 @@ public class MainView {
 					myCard1.setOpacity(opacity);
 					myCard2.setOpacity(opacity);
 				} else {
+					// ugye el van csúszva! (direkt!!!)
 					opponentsCards.get(NEXT_PLAYER - 1).setOpacity(opacity);
 					opponentsCardSides.get(NEXT_PLAYER - 1).setOpacity(opacity);
 				}
