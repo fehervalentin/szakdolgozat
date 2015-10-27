@@ -52,6 +52,8 @@ public class MainView {
 
 	private boolean whosOut[];
 
+	private int youAreNth;
+
 	public MainView(AnchorPane mainGamePane) {
 		this.defaultValues = PokerHoldemDefaultValues.getInstance();
 		this.mainGamePane = mainGamePane;
@@ -65,6 +67,8 @@ public class MainView {
 		
 		this.winnerCard1 = new ImageView();
 		this.winnerCard2 = new ImageView();
+		mainGamePane.getChildren().add(winnerCard1);
+		mainGamePane.getChildren().add(winnerCard2);
 
 		this.myCard1 = new ImageView();
 		this.myCard2 = new ImageView();
@@ -97,8 +101,8 @@ public class MainView {
 		System.out.println("Usernames size: " + userNames.size());
 		for (int i = 0; i < userNames.size(); i++) {
 			String username = userNames.get(i);
-			userNameLabels.get(i).setVisible(true);
-			userNameLabels.get(i).setText(username);
+			userNameLabels.get((i + youAreNth) % clientsCount).setVisible(true);
+			userNameLabels.get((i + youAreNth) % clientsCount).setText(username);
 		}
 	}
 
@@ -214,7 +218,8 @@ public class MainView {
 		hideAllProfiles();
 		clientsCount = houseHoldemCommand.getPlayers();
 		whosOut = new boolean[clientsCount];
-		DEALER_BUTTON_POSITION = (clientsCount + houseHoldemCommand.getDealer() - houseHoldemCommand.getNthPlayer()) % clientsCount;
+		youAreNth = houseHoldemCommand.getNthPlayer();
+		DEALER_BUTTON_POSITION = (clientsCount + houseHoldemCommand.getDealer() - youAreNth) % clientsCount;
 		Platform.runLater(
 				new Runnable() {
 
@@ -323,19 +328,22 @@ public class MainView {
 					}
 				}
 				System.out.println("A j erteke: " + j);
-				opponentsCards.get(j).setVisible(false);
-				opponentsCardSides.get(j).setVisible(false);
-				int gap = 5;
-				winnerCard1.setLayoutX(defaultValues.CARD_B1FV_POINTS[j * 2]);
-				winnerCard1.setLayoutY(defaultValues.CARD_B1FV_POINTS[j * 2 + 1]);
-				winnerCard1.setLayoutX(defaultValues.CARD_B1FV_POINTS[j * 2] + defaultValues.CARD_WIDTH + gap);
-				winnerCard1.setLayoutY(defaultValues.CARD_B1FV_POINTS[j * 2 + 1]);
-				
-				winnerCard1.setVisible(true);
-				winnerCard2.setVisible(true);
-				
-				mainGamePane.getChildren().add(winnerCard1);
-				mainGamePane.getChildren().add(winnerCard2);
+				// én nyertem...
+				if (j == 0) {
+					
+				} else {
+					--j;
+					opponentsCards.get(j).setVisible(false);
+					opponentsCardSides.get(j).setVisible(false);
+					int gap = 5;
+					winnerCard1.setLayoutX(defaultValues.CARD_B1FV_POINTS[j * 2]);
+					winnerCard1.setLayoutY(defaultValues.CARD_B1FV_POINTS[j * 2 + 1]);
+					winnerCard2.setLayoutX(defaultValues.CARD_B1FV_POINTS[j * 2] + defaultValues.CARD_WIDTH + gap);
+					winnerCard2.setLayoutY(defaultValues.CARD_B1FV_POINTS[j * 2 + 1]);
+					
+					winnerCard1.setVisible(true);
+					winnerCard2.setVisible(true);
+				}
 			}
 		});
 //		try {

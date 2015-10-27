@@ -188,6 +188,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	}
 
 	private void dealCardsToPlayers() {
+		playersCards.clear();
 		for (int i = 0; i < clients.size(); i++) {
 			Card c1 = deck.popCard();
 			Card c2 = deck.popCard();
@@ -295,6 +296,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				whosOn = (dealer + 1) % playersInRound;
 				switch (actualHoldemHouseCommandType) {
 				case FLOP: {
+					houseCards.clear();
 					for (int i = 0; i < 3; i++) {
 						houseCards.add(deck.popCard());
 					}
@@ -312,6 +314,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 					break;
 				}
 				case WINNER: {
+					players.clear();
 					List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(clients, houseCards, players, playersCards);
 					Card[] cards = winner.get(0).getCards();
 					String winnerUserName = "";
@@ -330,29 +333,11 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 					break;
 				}
 				System.out.println("Next round");
-				if (pokerCommand == null) {
-					System.out.println("NULLLLLLLLLLLLLLLLLLLLLL");
-				}
 				notifyClients(pokerCommand);
 				nextStep();
 				votedPlayers = 0;
 			}
 		}
-	}
-
-	private void broadcastWinner(Card[] cards) {
-		/*String winnerUserName = "";
-		for (int i = 0; i < players.size(); i++) {
-			if (players.get(i).getCards()[0].equals(cards[0]) && players.get(i).getCards()[1].equals(cards[1])) {
-				winnerUserName = clientsNames.get(i);
-				break;
-			}
-		}
-		System.out.println("A győztes neve: " + winnerUserName);
-		System.out.println("A győztes első lapja: " + cards[0]);
-		System.out.println("A győztes második lapja: " + cards[1]);
-		PokerCommand winnerCommand = new HouseHoldemCommand(HoldemHouseCommandType.WINNER, cards[0], cards[1], winnerUserName);
-		notifyClients(winnerCommand);*/
 	}
 
 	private void nextStep() {
