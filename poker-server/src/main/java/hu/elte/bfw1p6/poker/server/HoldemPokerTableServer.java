@@ -100,7 +100,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	private int minPlayer = 2;
 
 	private List<PokerPlayer> players;
-	
+
 	private List<String> clientsNames;
 
 	public HoldemPokerTableServer(PokerTable pokerTable) throws RemoteException {
@@ -194,7 +194,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			playersCards.put(clients.get(i), new ArrayList<>());
 			playersCards.get(clients.get(i)).add(c1);
 			playersCards.get(clients.get(i)).add(c2);
-			PokerCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, c1, c2, whosOn);
+			HouseHoldemCommand pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, c1, c2, whosOn);
 			sendPokerCommand(i, pokerCommand);
 		}
 		nextStep();
@@ -209,6 +209,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			} else if (pokerCommand instanceof PlayerHoldemCommand) {
 				System.out.println("Utasitas típusa: " + ((PlayerHoldemCommand)pokerCommand).getPlayerCommandType());
 			}
+//			System.out.println(pokerCommand.getClass());
 			System.out.println("-----------------------------------------------");
 			new Thread() {
 
@@ -273,6 +274,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			++whosOn;
 			whosOn %= playersInRound;
 			playerCommand.setWhosOn(whosOn);
+			System.out.println("receivePlayerCommand");
 			notifyClients(playerCommand);
 
 			nextRound();
@@ -281,14 +283,9 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 
 	private void nextRound() throws RemoteException {
 		// ha már kijött a river és az utolsó körben (rivernél) már mindenki nyilatkozott legalább egyszer, akkor új játszma kezdődik
+		System.out.println("VotedPlayers: " + votedPlayers);
+		System.out.println("Players in round: " + playersInRound);
 		if (playersInRound == 1 || (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && votedPlayers >= playersInRound)) {
-			List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(clients, houseCards, players, playersCards);
-
-			Card[] cards = winner.get(0).getCards();
-			System.out.println(cards[0]);
-			System.out.println(cards[1]);
-			// itt kell eldönteni, hogy ki nyert, és azt körbe is kell ám küldeni!
-			System.out.println("új kör");
 			startRound();
 		} else {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
@@ -314,14 +311,48 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 					pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, houseCards.get(4), whosOn);
 					break;
 				}
+				case WINNER: {
+					List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(clients, houseCards, players, playersCards);
+					Card[] cards = winner.get(0).getCards();
+					String winnerUserName = "";
+					for (int i = 0; i < players.size(); i++) {
+						if (players.get(i).getCards()[0].equals(cards[0]) && players.get(i).getCards()[1].equals(cards[1])) {
+							winnerUserName = clientsNames.get(i);
+							break;
+						}
+					}
+					System.out.println("A győztes neve: " + winnerUserName);
+					System.out.println("A győztes első lapja: " + cards[0]);
+					System.out.println("A győztes második lapja: " + cards[1]);
+					pokerCommand = new HouseHoldemCommand(HoldemHouseCommandType.WINNER, cards[0], cards[1], winnerUserName);
+				}
 				default:
 					break;
+				}
+				System.out.println("Next round");
+				if (pokerCommand == null) {
+					System.out.println("NULLLLLLLLLLLLLLLLLLLLLL");
 				}
 				notifyClients(pokerCommand);
 				nextStep();
 				votedPlayers = 0;
 			}
 		}
+	}
+
+	private void broadcastWinner(Card[] cards) {
+		/*String winnerUserName = "";
+		for (int i = 0; i < players.size(); i++) {
+			if (players.get(i).getCards()[0].equals(cards[0]) && players.get(i).getCards()[1].equals(cards[1])) {
+				winnerUserName = clientsNames.get(i);
+				break;
+			}
+		}
+		System.out.println("A győztes neve: " + winnerUserName);
+		System.out.println("A győztes első lapja: " + cards[0]);
+		System.out.println("A győztes második lapja: " + cards[1]);
+		PokerCommand winnerCommand = new HouseHoldemCommand(HoldemHouseCommandType.WINNER, cards[0], cards[1], winnerUserName);
+		notifyClients(winnerCommand);*/
 	}
 
 	private void nextStep() {

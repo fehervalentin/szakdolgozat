@@ -115,6 +115,11 @@ public class MainGameController implements Initializable, PokerClientController,
 				receivedRiverHouseCommand(houseHoldemCommand);
 				break;
 			}
+			case WINNER: {
+				System.out.println("Winner: " + houseHoldemCommand.getWinnerUserName() + " " + houseHoldemCommand.getCard1() + " " + houseHoldemCommand.getCard2());
+				receivedWinnerHouseCommand(houseHoldemCommand);
+				break;
+			}
 			default: {
 				throw new IllegalArgumentException();
 			}
@@ -175,8 +180,6 @@ public class MainGameController implements Initializable, PokerClientController,
 		});
 	}
 
-
-
 	private void receivedBlindHouseCommand(HouseHoldemCommand houseHoldemCommand) {
 		try {
 			mainView.receivedBlindHouseCommand(houseHoldemCommand);
@@ -208,7 +211,13 @@ public class MainGameController implements Initializable, PokerClientController,
 		mainView.river(houseHoldemCommand);
 	}
 
+	private void receivedWinnerHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+		mainView.winner(houseHoldemCommand);
+	}
 
+
+	
+	
 
 	private void receivedBlindPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
 		model.receivedBlindPlayerCommand(playerHoldemCommand);

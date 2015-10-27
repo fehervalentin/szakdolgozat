@@ -44,8 +44,11 @@ public class MainView {
 	private Random random;
 
 	private int DEALER_BUTTON_POSITION;
-	
+
 	private int NEXT_PLAYER = -1;
+	
+	private ImageView winnerCard1;
+	private ImageView winnerCard2;
 
 	private boolean whosOut[];
 
@@ -59,6 +62,9 @@ public class MainView {
 		this.chips = new ArrayList<>();
 		this.userNameLabels = new ArrayList<>();
 		this.random = new Random();
+		
+		this.winnerCard1 = new ImageView();
+		this.winnerCard2 = new ImageView();
 
 		this.myCard1 = new ImageView();
 		this.myCard2 = new ImageView();
@@ -86,7 +92,7 @@ public class MainView {
 		dealerButtonImageView.setVisible(false);
 		mainGamePane.getChildren().add(dealerButtonImageView);
 	}
-	
+
 	private void setLabelUserNames(List<String> userNames) {
 		System.out.println("Usernames size: " + userNames.size());
 		for (int i = 0; i < userNames.size(); i++) {
@@ -111,7 +117,7 @@ public class MainView {
 			mainGamePane.getChildren().add(iv);
 		}
 	}
-	
+
 	private void setLabels() {
 		// kettesével kell menni (x,y) párok miatt
 		for (int i = 0; i < defaultValues.PROFILE_COUNT * 2; i+=2) {
@@ -119,12 +125,12 @@ public class MainView {
 			userNameLabels.add(label);
 			label.setLayoutX(defaultValues.PROFILE_POINTS[i]);
 			label.setLayoutY(defaultValues.PROFILE_POINTS[i+1]);
-//			iv.fitHeightProperty().set(defaultValues.PROFILE_SIZE);
-//			iv.fitWidthProperty().set(defaultValues.PROFILE_SIZE);
+			//			iv.fitHeightProperty().set(defaultValues.PROFILE_SIZE);
+			//			iv.fitWidthProperty().set(defaultValues.PROFILE_SIZE);
 			mainGamePane.getChildren().add(label);
 		}
 	}
-	
+
 	private void setCards() {
 		// a saját kártyáim nem idemennek
 		// a 0. helyen az első hely lapjai vannak
@@ -188,7 +194,7 @@ public class MainView {
 		profileImages.get(opponentsCards.size()).setVisible(false);
 		userNameLabels.get(0).setVisible(true);
 	}
-	
+
 	public void hideHouseCards() {
 		for (int i = 0; i < houseCards.size(); i++) {
 			houseCards.get(i).setVisible(false);
@@ -205,6 +211,7 @@ public class MainView {
 	}
 
 	public void receivedBlindHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+		hideAllProfiles();
 		clientsCount = houseHoldemCommand.getPlayers();
 		whosOut = new boolean[clientsCount];
 		DEALER_BUTTON_POSITION = (clientsCount + houseHoldemCommand.getDealer() - houseHoldemCommand.getNthPlayer()) % clientsCount;
@@ -213,11 +220,14 @@ public class MainView {
 
 					@Override
 					public void run() {
+						winnerCard1.setVisible(false);
+						winnerCard2.setVisible(false);
 						setLabelUserNames(houseHoldemCommand.getPlayersNames());
 						resetOpacity();
 						clearChips();
 						hideHouseCards();
 						for (int i = 0; i < houseHoldemCommand.getPlayers(); i++) {
+							userNameLabels.get(i).setVisible(true);
 							profileImages.get(i).setVisible(true);
 							opponentsCards.get(i).setVisible(true);
 							opponentsCardSides.get(i).setVisible(true);
@@ -292,6 +302,48 @@ public class MainView {
 				revealCard(houseHoldemCommand, 4);
 			}
 		});
+	}
+
+	public void winner(HouseHoldemCommand houseHoldemCommand) {
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				int value = mapCard(houseHoldemCommand.getCard1());
+				int value2 = mapCard(houseHoldemCommand.getCard2());
+				winnerCard1.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
+				winnerCard2.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value2 + ".png"));
+				int j = -1;
+				for (int i = 0; i < userNameLabels.size(); i++) {
+					System.out.println("Keresek: " + userNameLabels.get(i).getText());
+					System.out.println("Keresek2: " + houseHoldemCommand.getWinnerUserName());
+					if (userNameLabels.get(i).getText().equals(houseHoldemCommand.getWinnerUserName())) {
+						j = i;
+						break;
+					}
+				}
+				System.out.println("A j erteke: " + j);
+				opponentsCards.get(j).setVisible(false);
+				opponentsCardSides.get(j).setVisible(false);
+				int gap = 5;
+				winnerCard1.setLayoutX(defaultValues.CARD_B1FV_POINTS[j * 2]);
+				winnerCard1.setLayoutY(defaultValues.CARD_B1FV_POINTS[j * 2 + 1]);
+				winnerCard1.setLayoutX(defaultValues.CARD_B1FV_POINTS[j * 2] + defaultValues.CARD_WIDTH + gap);
+				winnerCard1.setLayoutY(defaultValues.CARD_B1FV_POINTS[j * 2 + 1]);
+				
+				winnerCard1.setVisible(true);
+				winnerCard2.setVisible(true);
+				
+				mainGamePane.getChildren().add(winnerCard1);
+				mainGamePane.getChildren().add(winnerCard2);
+			}
+		});
+//		try {
+//			Thread.sleep(1500);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	private void revealCard(HouseHoldemCommand houseHoldemCommand, int i) {
@@ -403,11 +455,11 @@ public class MainView {
 		} while (whosOut[NEXT_PLAYER]);
 		addNextEffect();
 	}
-	
+
 	private void removeNextEffect() {
 		profileImages.get(NEXT_PLAYER).getStyleClass().remove("glow");
 	}
-	
+
 	private void addNextEffect() {
 		profileImages.get(NEXT_PLAYER).getStyleClass().add("glow");
 	}

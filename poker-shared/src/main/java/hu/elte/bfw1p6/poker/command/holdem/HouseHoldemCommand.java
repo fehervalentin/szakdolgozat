@@ -42,6 +42,8 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	
 	private HoldemHouseCommandType houseCommandType;
 	private Card card1, card2, card3;
+
+	private String winnerUserName;
 	
 	/**
 	 * Ha a szerver bekéri a vakokat, akkor ezt a konstruktort kell használni.
@@ -85,7 +87,7 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	}
 	
 	/**
-	 * Ha a szerver FLOP leosztást küld, akkor ezt a konstruktort kell használni
+	 * Ha a szerver FLOP leosztást küld, akkor ezt a konstruktort kell használni.
 	 * @param houseCommandType FLOP
 	 * @param card1 a ház első lapja, amit körbe kell küldeni
 	 * @param card2 a ház második lapja, amit körbe kell küldeni
@@ -95,6 +97,18 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, Card card2, Card card3, int whosOn) {
 		this(houseCommandType, card1, card2, whosOn);
 		this.card3 = card3;
+	}
+	
+	/**
+	 * Ha a szerver WINNER utasítást küld, akkor ezt a konstruktort kell használni.
+	 * @param houseCommandType WINNER
+	 * @param card1 a nyertes első lapja
+	 * @param card2 a nyertes második lapja
+	 * @param winnerUserName a nyertes neve
+	 */
+	public HouseHoldemCommand(HoldemHouseCommandType houseCommandType, Card card1, Card card2, String winnerUserName) {
+		this(houseCommandType, card1, card2, -1);
+		this.winnerUserName = winnerUserName;
 	}
 	
 	public HoldemHouseCommandType getHouseCommandType() {
@@ -140,5 +154,9 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	
 	public List<String> getPlayersNames() {
 		return playersNames;
+	}
+	
+	public String getWinnerUserName() {
+		return winnerUserName;
 	}
 }
