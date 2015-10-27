@@ -16,8 +16,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 public class MainView {
-	
-	
+
+
 
 	/**
 	 * Mindenféle konstans érték.
@@ -37,15 +37,15 @@ public class MainView {
 
 	private AnchorPane mainGamePane;
 
-	private int youAreNth;
-	private int dealer;
 	private int clientsCount;
 
 	private Random random;
 
-	private int HOLVANADEALERGOMB;
+	private int DEALER_BUTTON_POSITION;
+	
+	private int NEXT_PLAYER = -1;
 
-	private int KIKOVETKEZIK = -1;
+	private boolean whosOut[];
 
 	public MainView(AnchorPane mainGamePane) {
 		this.defaultValues = PokerHoldemDefaultValues.getInstance();
@@ -166,7 +166,7 @@ public class MainView {
 			houseCards.get(i).setVisible(false);
 		}
 	}
-	
+
 	private void resetOpacity() {
 		myCard1.setOpacity(1);
 		myCard2.setOpacity(1);
@@ -178,10 +178,9 @@ public class MainView {
 
 	public void receivedBlindHouseCommand(HouseHoldemCommand houseHoldemCommand) {
 		resetOpacity();
-		dealer = houseHoldemCommand.getDealer();
-		youAreNth = houseHoldemCommand.getNthPlayer();
 		clientsCount = houseHoldemCommand.getPlayers();
-		HOLVANADEALERGOMB = (clientsCount + dealer - youAreNth) % clientsCount;
+		whosOut = new boolean[clientsCount];
+		DEALER_BUTTON_POSITION = (clientsCount + houseHoldemCommand.getDealer() - houseHoldemCommand.getNthPlayer()) % clientsCount;
 		Platform.runLater(
 				new Runnable() {
 
@@ -199,8 +198,8 @@ public class MainView {
 						opponentsCardSides.get(houseHoldemCommand.getPlayers() - 1).setVisible(false);
 
 
-						dealerButtonImageView.setLayoutX(defaultValues.DEALER_BUTTON_POSITIONS[HOLVANADEALERGOMB * 2]);
-						dealerButtonImageView.setLayoutY(defaultValues.DEALER_BUTTON_POSITIONS[HOLVANADEALERGOMB * 2 + 1]);
+						dealerButtonImageView.setLayoutX(defaultValues.DEALER_BUTTON_POSITIONS[DEALER_BUTTON_POSITION * 2]);
+						dealerButtonImageView.setLayoutY(defaultValues.DEALER_BUTTON_POSITIONS[DEALER_BUTTON_POSITION * 2 + 1]);
 						dealerButtonImageView.setVisible(true);
 					}
 				});
@@ -215,13 +214,18 @@ public class MainView {
 				int value2 = mapCard(houseHoldemCommand.getCard2());
 				myCard1.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
 				myCard2.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value2 + ".png"));
-				
+
 				// előző körből vadászom le a glowt (ha nem volt előző kör, tehát ez az első kör...)
-				if (KIKOVETKEZIK != -1) {
-					profileImages.get(KIKOVETKEZIK).getStyleClass().remove("glow");
+				if (NEXT_PLAYER != -1) {
+					profileImages.get(NEXT_PLAYER).getStyleClass().remove("glow");
 				}
-				KIKOVETKEZIK = (HOLVANADEALERGOMB + clientsCount + 1) % clientsCount;
-				profileImages.get(KIKOVETKEZIK).getStyleClass().add("glow");
+				//				KIKOVETKEZIK = (HOLVANADEALERGOMB + clientsCount + 1) % clientsCount;
+				// a dealertől balra ülő harmadik játékos kezdi a preflopot
+				NEXT_PLAYER = (DEALER_BUTTON_POSITION + 3) % clientsCount;
+				System.out.println("Dealer gomb helye: " + DEALER_BUTTON_POSITION);
+				System.out.println("Hanyan vagyunk: " + clientsCount);
+				System.out.println("Ki a következő játékos: " + NEXT_PLAYER);
+				profileImages.get(NEXT_PLAYER).getStyleClass().add("glow");
 			}
 		});
 	}
@@ -282,7 +286,6 @@ public class MainView {
 
 			@Override
 			public void run() {
-				colorNextPlayer();
 				addChip();
 			}
 		});
@@ -301,21 +304,32 @@ public class MainView {
 	}
 
 	public void receivedCheckPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
-		colorNextPlayer();
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				colorNextPlayer();
+			}
+		});
 	}
 
 	public void receivedFoldPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
-		double opacity = 0.4;
-		int whoFold = playerHoldemCommand.getWhosOn();
-		int value = (HOLVANADEALERGOMB + whoFold + clientsCount) % clientsCount;
-		if (value == 0) {
-			myCard1.setOpacity(opacity);
-			myCard2.setOpacity(opacity);
-		} else {
-			opponentsCards.get(value).setOpacity(opacity);
-			opponentsCardSides.get(value).setOpacity(opacity);
-		}
-		colorNextPlayer();
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				double opacity = 0.4;
+				if (NEXT_PLAYER == 0) {
+					myCard1.setOpacity(opacity);
+					myCard2.setOpacity(opacity);
+				} else {
+					opponentsCards.get(NEXT_PLAYER - 1).setOpacity(opacity);
+					opponentsCardSides.get(NEXT_PLAYER - 1).setOpacity(opacity);
+				}
+				whosOut[NEXT_PLAYER] = true;
+				colorNextPlayer();
+			}
+		});
 	}
 
 	public void receivedRaisePlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
@@ -339,20 +353,33 @@ public class MainView {
 	 * A következő játékost színezem be.
 	 */
 	private void colorNextPlayer() {
-		profileImages.get(KIKOVETKEZIK).getStyleClass().remove("glow");
-		++KIKOVETKEZIK;
-		KIKOVETKEZIK %= clientsCount;
-		profileImages.get(KIKOVETKEZIK).getStyleClass().add("glow");
+		removeNextEffect();
+		do {
+			++NEXT_PLAYER;
+			NEXT_PLAYER %= clientsCount;
+		} while (whosOut[NEXT_PLAYER]);
+		addNextEffect();
 	}
 
 	/**
 	 * A kis vak játékost színezem be.
 	 */
 	private void colorSmallBlind() {
-		profileImages.get(KIKOVETKEZIK).getStyleClass().remove("glow");
-		KIKOVETKEZIK = HOLVANADEALERGOMB + 1;
-		KIKOVETKEZIK %= clientsCount;
-		profileImages.get(KIKOVETKEZIK).getStyleClass().add("glow");
+		removeNextEffect();
+		NEXT_PLAYER = DEALER_BUTTON_POSITION;
+		do {
+			++NEXT_PLAYER;
+			NEXT_PLAYER %= clientsCount;
+		} while (whosOut[NEXT_PLAYER]);
+		addNextEffect();
+	}
+	
+	private void removeNextEffect() {
+		profileImages.get(NEXT_PLAYER).getStyleClass().remove("glow");
+	}
+	
+	private void addNextEffect() {
+		profileImages.get(NEXT_PLAYER).getStyleClass().add("glow");
 	}
 
 	/**
