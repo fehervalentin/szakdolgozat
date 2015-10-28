@@ -102,6 +102,8 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	private List<PokerPlayer> players;
 
 	private List<String> clientsNames;
+	
+	private int foldCounter = 0;
 
 	public HoldemPokerTableServer(PokerTable pokerTable) throws RemoteException {
 		this.pokerTable = pokerTable;
@@ -136,6 +138,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	private void startRound() {
 		//ha elegen vagyunk az asztalnál, akkor indulhat a játék
 		if (clients.size() >= minPlayer) {
+			foldCounter = 0;
 			//			a vakokat kérem be legelőször
 			//			actualHoldemHouseCommandType = HoldemHouseCommandType.BLIND;
 			actualHoldemHouseCommandType = HoldemHouseCommandType.values()[0];
@@ -256,6 +259,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				//				++votedPlayers;
 				--playersInRound;
 				--whosOn;
+				++foldCounter;
 				// mert aki nagyobb az ő sorszámánál, az lejjebb csúszik eggyel.
 				break;
 			}
@@ -297,7 +301,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			if (votedPlayers >= playersInRound) {
 				HouseHoldemCommand houseHoldemCommand = new HouseHoldemCommand();
 				// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
-				whosOn = (dealer + 1) % playersInRound;
+				whosOn = (dealer + 1 + foldCounter) % playersInRound;
 				switch (actualHoldemHouseCommandType) {
 				case FLOP: {
 					houseCards.add(deck.popCard());
@@ -318,6 +322,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				}
 				case WINNER: {
 					players.clear();
+					//TODO: aki foldolt annak ne vegyük figyelembe a lapjait
 					List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(clients, houseCards, players, playersCards);
 					Card[] cards = winner.get(0).getCards();
 					// TODO: és mi van ha döntetlen?
