@@ -87,10 +87,10 @@ public class MainGameModel {
 //		System.out.println("Aktuális dealer: " + houseHoldemCommand.getDealer());
 		if (areYouTheSmallBlind(houseHoldemCommand)) {
 //			System.out.println("Betettem a kis vakot");
-			smallBlind();
+			tossBlind(false);
 		} else if (areYouTheBigBlind(houseHoldemCommand)) {
 //			System.out.println("Betettem a nagy vakot");
-			bigBlind();
+			tossBlind(true);
 		}
 		// nagyvaktól eggyel balra ülő kezd
 //		System.out.println("Az éppen soron levő játékos: " + houseHoldemCommand.getWhosOn());
@@ -101,42 +101,16 @@ public class MainGameModel {
 	}
 
 	/**
-	 * A vakot rakja be az asztalra
-	 * @param divider ha nagy vakot rakunk be, akkor az értéke 1 legyen, ha kis vakot, akkor az értéke 2 legyen. Vagy lehet boolean, és akkor convert to int, majd +1...
+	 * A vakot rakja be az asztalra.
+	 * @param bigBlind ha nagy vakot szeretnénk berakni, akkor az értéke true, különben false
 	 * @throws PokerUserBalanceException 
 	 * @throws PokerDataBaseException 
 	 * @throws PokerUnauthenticatedException 
 	 */
-	private void tossBlind(int divider) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
-		if (divider == 0) return;
-		BigDecimal amount = pokerTable.getDefaultPot().divide(new BigDecimal(divider));
+	private void tossBlind(Boolean bigBlind) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+		BigDecimal amount = pokerTable.getDefaultPot().divide(new BigDecimal(bigBlind ? 1 : 2));
 		myDebt = myDebt.subtract(amount);
 		sendPlayerCommand(HoldemPlayerCommandType.BLIND, amount, null, -1);
-	}
-
-	/**
-	 * Kis vakot rakja be.
-	 * @throws PokerUserBalanceException 
-	 * @throws PokerDataBaseException 
-	 * @throws PokerUnauthenticatedException 
-	 */
-	@Deprecated
-	private void smallBlind() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
-		BigDecimal amount = pokerTable.getDefaultPot().divide(new BigDecimal(2));
-		myDebt = myDebt.subtract(amount);
-		sendPlayerCommand(HoldemPlayerCommandType.BLIND, amount, null, -1);
-	}
-
-	/**
-	 * Nagy vakot rakja be.
-	 * @throws PokerUserBalanceException 
-	 * @throws PokerDataBaseException 
-	 * @throws PokerUnauthenticatedException 
-	 */
-	@Deprecated
-	private void bigBlind() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
-		myDebt = myDebt.subtract(pokerTable.getDefaultPot());
-		sendPlayerCommand(HoldemPlayerCommandType.BLIND, pokerTable.getDefaultPot(), null, -1);
 	}
 
 
@@ -189,7 +163,7 @@ public class MainGameModel {
 	public void receivedRaisePlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
 		// és mi van ha én magam emeltem...
 		// ha én magam emeltem, akkor a szerver elszámolta a teljes adósságom
-		myDebt = !playerHoldemCommand.getSender().equals(getUserName()) ? myDebt.add(playerHoldemCommand.getRaiseAmount()) : BigDecimal.ZERO;
+		myDebt = playerHoldemCommand.getSender().equals(getUserName()) ? BigDecimal.ZERO : myDebt.add(playerHoldemCommand.getRaiseAmount());
 	}
 
 	public void receivedQuitPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {

@@ -60,6 +60,14 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 		this.dealer = dealer;
 		this.whosOn = whosOn;
 	}
+	
+	public void setUpBlindCommand(int nthPlayer, int players, int dealer, int whosOn) {
+		this.houseCommandType = HoldemHouseCommandType.BLIND;
+		this.nthPlayer = nthPlayer;
+		this.players = players;
+		this.dealer = dealer;
+		this.whosOn = whosOn;
+	}
 
 	/**
 	 * Ha a szerver TURN vagy RIVER leosztást küld, akkor ezt a konstruktort kell használni

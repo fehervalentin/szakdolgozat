@@ -117,6 +117,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	/**
 	 * Az asztalhoz való csatlakozás.
 	 * @param client a csatlakozni kívánó kliens
+	 * @param userName a csatlakozni kívánó játékos neve
 	 * @throws PokerTooMuchPlayerException
 	 */
 	public synchronized void join(RemoteObserver client, String userName) throws PokerTooMuchPlayerException {
@@ -210,7 +211,6 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			} else if (pokerCommand instanceof PlayerHoldemCommand) {
 				System.out.println("Utasitas típusa: " + ((PlayerHoldemCommand)pokerCommand).getPlayerCommandType());
 			}
-//			System.out.println(pokerCommand.getClass());
 			System.out.println("-----------------------------------------------");
 			new Thread() {
 
@@ -253,6 +253,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 				//				++votedPlayers;
 				--playersInRound;
 				--whosOn;
+				// mert aki nagyobb az ő sorszámánál, az lejjebb csúszik eggyel.
 				break;
 			}
 			case RAISE: {
@@ -287,19 +288,20 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		System.out.println("VotedPlayers: " + votedPlayers);
 		System.out.println("Players in round: " + playersInRound);
 		if (playersInRound == 1 || (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && votedPlayers >= playersInRound)) {
+			//TODO: itt is kell értékelni, hogy ki nyert
 			startRound();
 		} else {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
 			if (votedPlayers >= playersInRound) {
 				PokerCommand pokerCommand = null;
-				// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást!
+				// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
 				whosOn = (dealer + 1) % playersInRound;
 				switch (actualHoldemHouseCommandType) {
 				case FLOP: {
 					houseCards.clear();
-					for (int i = 0; i < 3; i++) {
-						houseCards.add(deck.popCard());
-					}
+					houseCards.add(deck.popCard());
+					houseCards.add(deck.popCard());
+					houseCards.add(deck.popCard());
 					pokerCommand = new HouseHoldemCommand(actualHoldemHouseCommandType, houseCards.get(0), houseCards.get(1), houseCards.get(2), whosOn);
 					break;
 				}
@@ -317,6 +319,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 					players.clear();
 					List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(clients, houseCards, players, playersCards);
 					Card[] cards = winner.get(0).getCards();
+					// TODO: és mi van ha döntetlen?
 					String winnerUserName = "";
 					for (int i = 0; i < players.size(); i++) {
 						if (players.get(i).getCards()[0].equals(cards[0]) && players.get(i).getCards()[1].equals(cards[1])) {

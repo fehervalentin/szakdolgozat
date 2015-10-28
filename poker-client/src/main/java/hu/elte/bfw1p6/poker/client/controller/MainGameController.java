@@ -196,7 +196,7 @@ public class MainGameController implements Initializable, PokerClientController,
 	}
 
 	private void receivedFlopHouseCommand(HouseHoldemCommand houseHoldemCommand) {
-//		System.out.println("Flop kommand: " + model.getYouAreNth() + "  " + houseHoldemCommand.getWhosOn());
+		System.out.println("Flop kommand: " + model.getYouAreNth() + "  " + houseHoldemCommand.getWhosOn());
 		modifyButtonVisibilities(houseHoldemCommand);
 		mainView.flop(houseHoldemCommand);
 	}
@@ -222,8 +222,6 @@ public class MainGameController implements Initializable, PokerClientController,
 	private void receivedBlindPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
 		model.receivedBlindPlayerCommand(playerHoldemCommand);
 		mainView.receivedBlindPlayerCommand(playerHoldemCommand);
-		//TODO: modelben elvileg semmi, megjelenítésben pedig vakot kell berakni az asztalra...
-		//TODO: meg kiírni hogy most már mennyi lett a pot
 	}
 
 	private void receivedCallPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
@@ -268,6 +266,7 @@ public class MainGameController implements Initializable, PokerClientController,
 			pokerCommand = (PlayerHoldemCommand)pokerCommand;
 		}
 		boolean disable = model.getYouAreNth() == pokerCommand.getWhosOn() ? false : true;
+		System.out.println("Flop kommandban button disability: " + model.getYouAreNth() + " " + pokerCommand.getWhosOn());
 		modifyButtonsDisability(disable);
 	}
 
