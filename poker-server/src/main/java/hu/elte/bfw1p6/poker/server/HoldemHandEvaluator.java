@@ -26,28 +26,19 @@ public class HoldemHandEvaluator {
 		return instance;
 	}
 	
-	private void checkPlayersRanking(List<RemoteObserver> clients, List<Card> houseCards, List<PokerPlayer> players, HashMap<RemoteObserver, List<Card>> playersCards) {
-		for (RemoteObserver client : clients) {
-			PokerPlayer player = createPlayer(client, playersCards);
-			players.add(player);
+	private void checkPlayersRanking(List<Card> houseCards, List<PokerPlayer> players) {
+		for (PokerPlayer player : players) {
 			RankingUtil.checkRanking(player, houseCards);
 		}
 	}
 	
-	private PokerPlayer createPlayer(RemoteObserver client, HashMap<RemoteObserver, List<Card>> playersCards) {
-		PokerPlayer player = new PokerPlayer();
-		List<Card> cards = playersCards.get(client);
-		player.setCards(cards.toArray(new Card[0]));
-		return player;
-	}
-	
-	public List<IPlayer> getWinner(List<RemoteObserver> clients, List<Card> houseCards, List<PokerPlayer> players, HashMap<RemoteObserver, List<Card>> playersCards) throws RemoteException {
-		checkPlayersRanking(clients, houseCards, players, playersCards);
+	public List<IPlayer> getWinner(List<Card> houseCards, List<PokerPlayer> players) throws RemoteException {
+		checkPlayersRanking(houseCards, players);
 		List<IPlayer> winnerList = new ArrayList<IPlayer>();
 		IPlayer winner = players.get(0);
 		Integer winnerRank = RankingUtil.getRankingToInt(winner);
 		winnerList.add(winner);
-		for (int i = 1; i < clients.size(); i++) {
+		for (int i = 1; i < players.size(); i++) {
 			IPlayer player = players.get(i);
 			Integer playerRank = RankingUtil.getRankingToInt(player);
 			//Draw game

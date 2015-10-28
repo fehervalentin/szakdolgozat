@@ -68,9 +68,14 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	private List<Card> houseCards;
 
 	/**
-	 * Kliensek lapjai.
+	 * Maguk a játékosok.
 	 */
-	private HashMap<RemoteObserver, List<Card>> playersCards;
+	private List<PokerPlayer> players;
+	
+	/**
+	 * A kliensek username-jei (mert a PokerPlayerben a userName-re nincs setter! (perzisztálást védi...)
+	 */
+	private List<String> clientsNames;
 
 	/**
 	 * Hány játékos játszik az adott körben.
@@ -99,17 +104,13 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	@Deprecated
 	private int minPlayer = 3;
 
-	private List<PokerPlayer> players;
-
-	private List<String> clientsNames;
+	private int foldCounter;
 	
-	private int foldCounter = 0;
-
 	public HoldemPokerTableServer(PokerTable pokerTable) throws RemoteException {
 		this.pokerTable = pokerTable;
 		this.deck = new Deck();
 		this.houseCards = new ArrayList<>();
-		this.playersCards = new HashMap<>();
+//		this.playersCards = new HashMap<>();
 		this.clients = new ArrayList<>();
 		this.moneyStack = BigDecimal.ZERO;
 		this.players = new ArrayList<>();
@@ -156,6 +157,10 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			whosOn = (dealer + 3) % playersInRound;
 			//törlöm a ház lapjait
 			houseCards.clear();
+			//törlöm a játékosokat
+			players.clear();
+			//törlöm a játékosok lapjait
+//			playersCards.clear();
 			// be kell kérni a vakokat
 			collectBlinds();
 			// két lap kézbe
@@ -194,13 +199,12 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	}
 
 	private void dealCardsToPlayers() {
-		playersCards.clear();
 		for (int i = 0; i < clients.size(); i++) {
 			Card c1 = deck.popCard();
 			Card c2 = deck.popCard();
-			playersCards.put(clients.get(i), new ArrayList<>());
-			playersCards.get(clients.get(i)).add(c1);
-			playersCards.get(clients.get(i)).add(c2);
+			PokerPlayer pokerPlayer = new PokerPlayer();
+			pokerPlayer.setCards(new Card[]{c1, c2});
+			players.add(pokerPlayer);
 			HouseHoldemCommand pokerCommand = new HouseHoldemCommand();
 			pokerCommand.setUpPlayerCommand(c1, c2, whosOn);
 			sendPokerCommand(i, pokerCommand);
@@ -321,9 +325,8 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 					break;
 				}
 				case WINNER: {
-					players.clear();
 					//TODO: aki foldolt annak ne vegyük figyelembe a lapjait
-					List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(clients, houseCards, players, playersCards);
+					List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(houseCards, players);
 					Card[] cards = winner.get(0).getCards();
 					// TODO: és mi van ha döntetlen?
 					String winnerUserName = "";
