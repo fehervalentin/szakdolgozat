@@ -98,11 +98,14 @@ public class MainView {
 	}
 
 	private void setLabelUserNames(List<String> userNames) {
-		System.out.println("Usernames size: " + userNames.size());
 		for (int i = 0; i < userNames.size(); i++) {
 			String username = userNames.get(i);
-			userNameLabels.get((i + youAreNth) % clientsCount).setVisible(true);
-			userNameLabels.get((i + youAreNth) % clientsCount).setText(username);
+			int value = (i - youAreNth) % clientsCount;
+			if (value < 0) {
+				value += clientsCount;
+			}
+			userNameLabels.get(value).setVisible(true);
+			userNameLabels.get(value).setText(username);
 		}
 	}
 

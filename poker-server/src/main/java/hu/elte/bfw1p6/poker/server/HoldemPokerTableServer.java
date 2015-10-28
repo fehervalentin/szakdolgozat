@@ -97,7 +97,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 	 * Asztaltól fogom lekérni.
 	 */
 	@Deprecated
-	private int minPlayer = 2;
+	private int minPlayer = 3;
 
 	private List<PokerPlayer> players;
 
