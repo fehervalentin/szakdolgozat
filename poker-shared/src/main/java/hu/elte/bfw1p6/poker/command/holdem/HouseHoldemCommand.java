@@ -66,7 +66,10 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	/**
 	 * A nyertes játékos neve. //TODO: inkább a sorszámát kéne átküldeni?
 	 */
-	private String winnerUserName;
+	private int winner;
+	//private String winnerUserName;
+
+	private int foldCounter;
 	
 	/**
 	 * Ha a szerver BLIND utasítást küld, akkor ezt a metódust kell használni.
@@ -105,12 +108,13 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * @param card3 a ház harmadik lapja, amit körbe kell küldeni
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
-	public void setUpFlopCommand(Card card1, Card card2, Card card3, int whosOn) {
+	public void setUpFlopCommand(Card card1, Card card2, Card card3, int whosOn, int foldCounter) {
 		this.houseCommandType = HoldemHouseCommandType.FLOP;
 		this.card1 = card1;
 		this.card2 = card2;
 		this.card3 = card3;
 		this.whosOn = whosOn;
+		this.foldCounter = foldCounter;
 	}
 	
 	/**
@@ -118,10 +122,11 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * @param card1 a háznak osztott, körbeküldendő kártyalap
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
-	public void setUpTurnCommand(Card card1, int whosOn) {
+	public void setUpTurnCommand(Card card1, int whosOn, int foldCounter) {
 		this.houseCommandType = HoldemHouseCommandType.TURN;
 		this.card1 = card1;
 		this.whosOn = whosOn;
+		this.foldCounter = foldCounter;
 	}
 	
 	/**
@@ -129,10 +134,11 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * @param card1 a háznak osztott, körbeküldendő kártyalap
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
-	public void setUpRiverCommand(Card card1, int whosOn) {
+	public void setUpRiverCommand(Card card1, int whosOn, int foldCounter) {
 		this.houseCommandType = HoldemHouseCommandType.RIVER;
 		this.card1 = card1;
 		this.whosOn = whosOn;
+		this.foldCounter = foldCounter;
 	}
 	
 	/**
@@ -141,11 +147,11 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 	 * @param card2 a nyertes második lapja
 	 * @param winnerUserName a nyertes neve
 	 */
-	public void setUpWinnerCommand(Card card1, Card card2, String winnerUserName) {
+	public void setUpWinnerCommand(Card card1, Card card2, int winner) {
 		this.houseCommandType = HoldemHouseCommandType.WINNER;
 		this.card1 = card1;
 		this.card2 = card2;
-		this.winnerUserName = winnerUserName;
+		this.winner = winner;
 	}
 	
 	public HoldemHouseCommandType getHouseCommandType() {
@@ -189,7 +195,11 @@ public class HouseHoldemCommand implements PokerCommand, Serializable {
 		return clientsNames;
 	}
 	
-	public String getWinnerUserName() {
-		return winnerUserName;
+	public int getWinner() {
+		return winner;
+	}
+	
+	public int getFoldCounter() {
+		return foldCounter;
 	}
 }

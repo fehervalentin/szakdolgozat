@@ -116,7 +116,7 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case WINNER: {
-				System.out.println("Winner: " + houseHoldemCommand.getWinnerUserName() + " " + houseHoldemCommand.getCard1() + " " + houseHoldemCommand.getCard2());
+				System.out.println("Winner: " + houseHoldemCommand.getWinner() + " " + houseHoldemCommand.getCard1() + " " + houseHoldemCommand.getCard2());
 				receivedWinnerHouseCommand(houseHoldemCommand);
 				break;
 			}
@@ -327,6 +327,7 @@ public class MainGameController implements Initializable, PokerClientController,
 	@FXML protected void handleFold(ActionEvent event) {
 		try {
 			model.fold();
+			mainView.fold();
 		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
 		}

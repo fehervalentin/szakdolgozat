@@ -1,5 +1,7 @@
 package hu.elte.bfw1p6.poker.client.model;
 
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -39,7 +41,7 @@ public class Model {
 		return instance;
 	}
 
-	public void login(String username, String password) throws RemoteException, PokerInvalidUserException, PokerDataBaseException {
+	public void login(String username, String password) throws RemoteException, PokerDataBaseException, PokerInvalidUserException {
 		pokerSession = pokerRemote.login(username, password);
 		RMIRepository.getInstance().setPokerSession(pokerSession);
 	}

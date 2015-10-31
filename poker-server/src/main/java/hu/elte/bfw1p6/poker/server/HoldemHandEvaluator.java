@@ -1,16 +1,13 @@
 package hu.elte.bfw1p6.poker.server;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
 import com.cantero.games.poker.texasholdem.IPlayer;
 import com.cantero.games.poker.texasholdem.RankingUtil;
 
-import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 
 public class HoldemHandEvaluator {
@@ -32,7 +29,7 @@ public class HoldemHandEvaluator {
 		}
 	}
 	
-	public List<IPlayer> getWinner(List<Card> houseCards, List<PokerPlayer> players) throws RemoteException {
+	public List<IPlayer> getWinner(List<Card> houseCards, List<PokerPlayer> players) {
 		checkPlayersRanking(houseCards, players);
 		List<IPlayer> winnerList = new ArrayList<IPlayer>();
 		IPlayer winner = players.get(0);

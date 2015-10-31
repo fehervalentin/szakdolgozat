@@ -1,5 +1,6 @@
 package hu.elte.bfw1p6.poker.server.test;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -7,16 +8,12 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-
 import org.junit.Assert;
 import org.junit.Test;
 
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
-import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
-import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.server.HoldemPokerTableServer;
 

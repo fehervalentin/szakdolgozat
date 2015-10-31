@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
@@ -203,7 +202,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			Card c1 = deck.popCard();
 			Card c2 = deck.popCard();
 			PokerPlayer pokerPlayer = new PokerPlayer();
-			pokerPlayer.setCards(new Card[]{c1, c2});
+			pokerPlayer.setCards(c1, c2);
 			players.add(pokerPlayer);
 			HouseHoldemCommand pokerCommand = new HouseHoldemCommand();
 			pokerCommand.setUpPlayerCommand(c1, c2, whosOn);
@@ -262,6 +261,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			case FOLD: {
 				//				++votedPlayers;
 				--playersInRound;
+				players.remove(whosOn);
 				--whosOn;
 				++foldCounter;
 				// mert aki nagyobb az ő sorszámánál, az lejjebb csúszik eggyel.
@@ -311,35 +311,21 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 					houseCards.add(deck.popCard());
 					houseCards.add(deck.popCard());
 					houseCards.add(deck.popCard());
-					houseHoldemCommand.setUpFlopCommand(houseCards.get(0), houseCards.get(1), houseCards.get(2), whosOn);
+					houseHoldemCommand.setUpFlopCommand(houseCards.get(0), houseCards.get(1), houseCards.get(2), whosOn, foldCounter);
 					break;
 				}
 				case TURN: {
 					houseCards.add(deck.popCard());
-					houseHoldemCommand.setUpTurnCommand(houseCards.get(3), whosOn);
+					houseHoldemCommand.setUpTurnCommand(houseCards.get(3), whosOn, foldCounter);
 					break;
 				}
 				case RIVER: {
 					houseCards.add(deck.popCard());
-					houseHoldemCommand.setUpRiverCommand(houseCards.get(4), whosOn);
+					houseHoldemCommand.setUpRiverCommand(houseCards.get(4), whosOn, foldCounter);
 					break;
 				}
 				case WINNER: {
-					//TODO: aki foldolt annak ne vegyük figyelembe a lapjait
-					List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(houseCards, players);
-					Card[] cards = winner.get(0).getCards();
-					// TODO: és mi van ha döntetlen?
-					String winnerUserName = "";
-					for (int i = 0; i < players.size(); i++) {
-						if (players.get(i).getCards()[0].equals(cards[0]) && players.get(i).getCards()[1].equals(cards[1])) {
-							winnerUserName = clientsNames.get(i);
-							break;
-						}
-					}
-					System.out.println("A győztes neve: " + winnerUserName);
-					System.out.println("A győztes első lapja: " + cards[0]);
-					System.out.println("A győztes második lapja: " + cards[1]);
-					houseHoldemCommand.setUpWinnerCommand(cards[0], cards[1], winnerUserName);
+					winner(houseHoldemCommand);
 				}
 				default:
 					break;
@@ -352,6 +338,26 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		}
 	}
 
+	private void winner(HouseHoldemCommand houseHoldemCommand) {
+		//TODO: aki foldolt annak ne vegyük figyelembe a lapjait
+		List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(houseCards, players);
+		Card[] cards = winner.get(0).getCards();
+		// TODO: és mi van ha döntetlen?
+		int winner_ = -1;
+		System.out.println("Players size: " + players.size());
+		for (int i = 0; i < players.size(); i++) {
+			if (players.get(i).getCards()[0].equals(cards[0]) && players.get(i).getCards()[1].equals(cards[1])) {
+//				winner_ = (i - foldCounter) % playersInRound;
+				winner_ = i;
+				break;
+			}
+		}
+		System.out.println("A győztes sorszáma: " + winner_);
+		System.out.println("A győztes első lapja: " + cards[0]);
+		System.out.println("A győztes második lapja: " + cards[1]);
+		houseHoldemCommand.setUpWinnerCommand(cards[0], cards[1], winner_);
+	}
+	
 	private void nextStep() {
 		actualHoldemHouseCommandType = HoldemHouseCommandType.values()[(actualHoldemHouseCommandType.ordinal() + 1) % HoldemHouseCommandType.values().length];
 	}

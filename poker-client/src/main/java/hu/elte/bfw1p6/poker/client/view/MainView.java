@@ -8,6 +8,7 @@ import com.cantero.games.poker.texasholdem.Card;
 import com.cantero.games.poker.texasholdem.CardSuitEnum;
 
 import hu.elte.bfw1p6.poker.client.controller.PokerHoldemDefaultValues;
+import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
 import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
 import javafx.application.Platform;
@@ -17,8 +18,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 public class MainView {
-
-
 
 	/**
 	 * Mindenféle konstans érték.
@@ -45,14 +44,15 @@ public class MainView {
 
 	private int DEALER_BUTTON_POSITION;
 
-	private int NEXT_PLAYER = -1;
-	
 	private ImageView winnerCard1;
 	private ImageView winnerCard2;
 
-	private boolean whosOut[];
+	private int coloredPlayer = -1;
+	private int nextPlayer = -1;
 
 	private int youAreNth;
+
+	private int youWereNth;
 
 	public MainView(AnchorPane mainGamePane) {
 		this.defaultValues = PokerHoldemDefaultValues.getInstance();
@@ -220,7 +220,6 @@ public class MainView {
 	public void receivedBlindHouseCommand(HouseHoldemCommand houseHoldemCommand) {
 		hideAllProfiles();
 		clientsCount = houseHoldemCommand.getPlayers();
-		whosOut = new boolean[clientsCount];
 		youAreNth = houseHoldemCommand.getNthPlayer();
 		DEALER_BUTTON_POSITION = (clientsCount + houseHoldemCommand.getDealer() - youAreNth) % clientsCount;
 		Platform.runLater(
@@ -262,19 +261,24 @@ public class MainView {
 				myCard1.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
 				myCard2.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value2 + ".png"));
 
-				// előző körből vadászom le a glowt (ha nem volt előző kör, tehát ez az első kör...)
-				if (NEXT_PLAYER != -1) {
-					profileImages.get(NEXT_PLAYER).getStyleClass().remove("glow");
-				}
 				//				KIKOVETKEZIK = (HOLVANADEALERGOMB + clientsCount + 1) % clientsCount;
 				// a dealertől balra ülő harmadik játékos kezdi a preflopot
-				NEXT_PLAYER = (DEALER_BUTTON_POSITION + 3) % clientsCount;
+				nextPlayer = ultimateFormula(houseHoldemCommand.getWhosOn());
+//				NEXT_PLAYER = (DEALER_BUTTON_POSITION + 3) % clientsCount;
 				System.out.println("Dealer gomb helye: " + DEALER_BUTTON_POSITION);
 				System.out.println("Hanyan vagyunk: " + clientsCount);
-				System.out.println("Ki a következő játékos: " + NEXT_PLAYER);
-				profileImages.get(NEXT_PLAYER).getStyleClass().add("glow");
+				System.out.println("Ki a következő játékos (ki lett beszinezve): " + nextPlayer);
+				colorNextPlayer(houseHoldemCommand);
 			}
 		});
+	}
+	
+	private int ultimateFormula(int whosOn) {
+		int value = (whosOn - youAreNth) % clientsCount;
+		if (value < 0) {
+			value += clientsCount;
+		}
+		return value;
 	}
 
 	public void flop(HouseHoldemCommand houseHoldemCommand) {
@@ -282,7 +286,9 @@ public class MainView {
 
 			@Override
 			public void run() {
-				colorSmallBlind();
+				colorNextPlayer(houseHoldemCommand);
+//				addNextEffect(nextPlayer);
+				//colorSmallBlind();
 				revealCard(houseHoldemCommand, 0);
 				revealCard(houseHoldemCommand, 1);
 				revealCard(houseHoldemCommand, 2);
@@ -295,7 +301,8 @@ public class MainView {
 
 			@Override
 			public void run() {
-				colorSmallBlind();
+				colorNextPlayer(houseHoldemCommand);
+//				colorSmallBlind();
 				revealCard(houseHoldemCommand, 3);
 			}
 		});
@@ -306,7 +313,7 @@ public class MainView {
 
 			@Override
 			public void run() {
-				colorSmallBlind();
+				colorNextPlayer(houseHoldemCommand);
 				revealCard(houseHoldemCommand, 4);
 			}
 		});
@@ -321,21 +328,19 @@ public class MainView {
 				int value2 = mapCard(houseHoldemCommand.getCard2());
 				winnerCard1.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
 				winnerCard2.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value2 + ".png"));
-				int j = -1;
-				for (int i = 0; i < userNameLabels.size(); i++) {
-					System.out.println("Keresek: " + userNameLabels.get(i).getText());
-					System.out.println("Keresek2: " + houseHoldemCommand.getWinnerUserName());
-					if (userNameLabels.get(i).getText().equals(houseHoldemCommand.getWinnerUserName())) {
-						j = i;
-						break;
-					}
-				}
-				System.out.println("A j erteke: " + j);
+				int j = ultimateFormula(houseHoldemCommand.getWinner());// houseHoldemCommand.getWinner() + youWereNth;
+				System.out.println("You are nth: " + youAreNth);
+//				int j = (houseHoldemCommand.getWinner() + youAreNth) % clientsCount;
+				System.out.println("Ki nyer: " + houseHoldemCommand.getWinner());
+				System.out.println("A j erteke mindenek elott: " + j);
 				// én nyertem...
-				if (j == 0) {
+				if (j == youAreNth) {
 					
 				} else {
-					--j;
+//					--j;
+//					j+=youAreNth;
+//					j %= clientsCount;
+					System.out.println("A j erteke: " + j);
 					opponentsCards.get(j).setVisible(false);
 					opponentsCardSides.get(j).setVisible(false);
 					int gap = 5;
@@ -349,12 +354,6 @@ public class MainView {
 				}
 			}
 		});
-//		try {
-//			Thread.sleep(1500);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 	}
 
 	private void revealCard(HouseHoldemCommand houseHoldemCommand, int i) {
@@ -388,7 +387,7 @@ public class MainView {
 
 			@Override
 			public void run() {
-				colorNextPlayer();
+				colorNextPlayer(playerHoldemCommand);
 				addChip();
 			}
 		});
@@ -400,7 +399,7 @@ public class MainView {
 
 			@Override
 			public void run() {
-				colorNextPlayer();
+				colorNextPlayer(playerHoldemCommand);
 			}
 		});
 	}
@@ -411,16 +410,22 @@ public class MainView {
 			@Override
 			public void run() {
 				double opacity = 0.4;
-				if (NEXT_PLAYER == 0) {
+//				nextPlayer = ultimateFormula(playerHoldemCommand.getWhosOn());
+				int whosQuit = ultimateFormula(playerHoldemCommand.getWhosQuit() - 1);
+				System.out.println("NextPlayer foldban: " + whosQuit);
+				if (whosQuit == 0) {
 					myCard1.setOpacity(opacity);
 					myCard2.setOpacity(opacity);
 				} else {
 					// ugye el van csúszva! (direkt!!!)
-					opponentsCards.get(NEXT_PLAYER - 1).setOpacity(opacity);
-					opponentsCardSides.get(NEXT_PLAYER - 1).setOpacity(opacity);
+					opponentsCards.get(whosQuit).setOpacity(opacity);
+					opponentsCardSides.get(whosQuit).setOpacity(opacity);
 				}
-				whosOut[NEXT_PLAYER] = true;
-				colorNextPlayer();
+//				whosOut[NEXT_PLAYER] = true;
+				/*if (youAreNth > playerHoldemCommand.getWhosQuit()) {
+					--youAreNth;
+				}*/
+				colorNextPlayer(playerHoldemCommand);
 			}
 		});
 	}
@@ -430,7 +435,7 @@ public class MainView {
 
 			@Override
 			public void run() {
-				colorNextPlayer();
+				colorNextPlayer(playerHoldemCommand);
 				addChip();
 				addChip();
 			}
@@ -441,38 +446,17 @@ public class MainView {
 		// TODO Auto-generated method stub
 
 	}
-
-	/**
-	 * A következő játékost színezem be.
-	 */
-	private void colorNextPlayer() {
-		removeNextEffect();
-		do {
-			++NEXT_PLAYER;
-			NEXT_PLAYER %= clientsCount;
-		} while (whosOut[NEXT_PLAYER]);
-		addNextEffect();
-	}
-
-	/**
-	 * A kis vak játékost színezem be.
-	 */
-	private void colorSmallBlind() {
-		removeNextEffect();
-		NEXT_PLAYER = DEALER_BUTTON_POSITION;
-		do {
-			++NEXT_PLAYER;
-			NEXT_PLAYER %= clientsCount;
-		} while (whosOut[NEXT_PLAYER]);
-		addNextEffect();
-	}
-
-	private void removeNextEffect() {
-		profileImages.get(NEXT_PLAYER).getStyleClass().remove("glow");
-	}
-
-	private void addNextEffect() {
-		profileImages.get(NEXT_PLAYER).getStyleClass().add("glow");
+	
+	private void colorNextPlayer(PokerCommand pokerCommand) {
+		nextPlayer = ultimateFormula(pokerCommand.getWhosOn());
+		if (coloredPlayer >= 0) {
+			profileImages.get(coloredPlayer).getStyleClass().remove("glow");
+		}
+		if (nextPlayer >= 0) {
+			profileImages.get(nextPlayer).getStyleClass().add("glow");
+		}
+		coloredPlayer = nextPlayer;
+		nextPlayer = pokerCommand.getWhosOn();
 	}
 
 	/**
@@ -498,5 +482,10 @@ public class MainView {
 			mainGamePane.getChildren().remove(imageView);
 		}
 		chips.clear();
+	}
+
+	public void fold() {
+		youWereNth = youAreNth;
+		youAreNth = -1;
 	}
 }
