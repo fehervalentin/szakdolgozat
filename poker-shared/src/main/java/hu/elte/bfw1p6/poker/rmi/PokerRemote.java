@@ -1,5 +1,6 @@
 package hu.elte.bfw1p6.poker.rmi;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -19,7 +20,7 @@ import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 
-public interface PokerRemote extends Remote {
+public interface PokerRemote extends Remote, Serializable {
 
 	/**
 	 * Regisztráció a póker játékba

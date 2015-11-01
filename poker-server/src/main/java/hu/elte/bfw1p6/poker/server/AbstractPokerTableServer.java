@@ -8,6 +8,9 @@ import java.util.List;
 
 import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
+import hu.elte.bfw1p6.poker.command.HouseCommand;
+import hu.elte.bfw1p6.poker.command.PokerCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
@@ -112,6 +115,24 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		}
 	}
 	
+	protected void prepareNextRound() {
+		foldCounter = 0;
+		// megnézem, hogy aktuális hány játékos van az asztalnál
+		playersInRound = clients.size();
+		//következő játékos a dealer
+		++dealer;
+		//nem baj, ha körbeértünk...
+		dealer %= playersInRound;
+		//a kártyapaklit megkeverjük
+		deck.reset();
+		//senki sem beszélt még
+		votedPlayers = 0;
+		//a dealertől balra ülő harmadik játékos kezd
+		whosOn = (dealer + 3) % playersInRound;
+		//törlöm a játékosokat
+		players.clear();
+	}
+	
 
 	public synchronized void leave(PokerTableServerObserver client) {
 		clients.remove(client);
@@ -139,12 +160,51 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		return true;
 	}
 	
+
+	protected void collectBlinds() {
+		for (int i = 0; i < clients.size(); i++) {
+			HoldemHouseCommand houseHoldemCommand = new HoldemHouseCommand();
+			houseHoldemCommand.setUpBlindCommand(i, clients.size(), dealer, whosOn, clientsNames);
+			sendPokerCommand(i, houseHoldemCommand);
+		}
+		nextStep();
+	}
+	
+	/**
+	 * Egy adott kliensnek küld utasítást.
+	 * @param i a kliens sorszáma
+	 * @param pokerCommand az utasítást
+	 */
+	protected void sendPokerCommand(int i, PokerCommand pokerCommand) {
+		new Thread() {
+
+			@Override
+			public void run() {
+				try {
+					clients.get(i).update(pokerCommand);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}}.start();
+	}
+	
+	/**
+	 * Minden kliensek elküldi az utasítást.
+	 * @param pokerCommand az utasítás
+	 */
+	protected void notifyClients(PokerCommand pokerCommand) {
+		for (int i = 0; i < clients.size(); i++) {
+			sendPokerCommand(i, pokerCommand);
+		}
+	}
+	
 	protected abstract void startRound();
 	
 	protected abstract void nextStep();
 	
 	protected abstract void nextRound() throws RemoteException;
 	
-//	protected abstract void winner(HouseCommand houseCommand);
+	protected abstract void winner(HouseCommand houseCommand);
 
 }

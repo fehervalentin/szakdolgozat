@@ -3,6 +3,8 @@ package hu.elte.bfw1p6.poker.client.model;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 
+import com.cantero.games.poker.texasholdem.Card;
+
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
@@ -230,6 +232,7 @@ public class MainGameModel {
 	}
 
 	public void receivedPlayerHouseCommand(HoldemHouseCommand houseHoldemCommand) {
-		pokerSession.getPlayer().setCards(houseHoldemCommand.getCard1(), houseHoldemCommand.getCard2());
+		Card[] cards = new Card[]{houseHoldemCommand.getCard1(), houseHoldemCommand.getCard2()};
+		pokerSession.getPlayer().setCards(cards);
 	}
 }

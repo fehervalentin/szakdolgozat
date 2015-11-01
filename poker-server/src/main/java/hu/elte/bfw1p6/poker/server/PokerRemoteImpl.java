@@ -37,9 +37,9 @@ import hu.elte.bfw1p6.poker.properties.PokerProperties;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 import hu.elte.bfw1p6.poker.security.service.SessionService;
 
-public class PokerRemoteImpl extends Observable implements PokerRemote, Serializable {
+public class PokerRemoteImpl extends Observable implements PokerRemote {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1184529104056917288L;
 
 	private final String ERR_BAD_PW = "Hibás jelszó!";
 
