@@ -12,8 +12,8 @@ import hu.elte.bfw1p6.poker.client.controller.main.PokerObserverController;
 import hu.elte.bfw1p6.poker.client.model.MainGameModel;
 import hu.elte.bfw1p6.poker.client.view.MainView;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
-import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
@@ -86,8 +86,8 @@ public class MainGameController implements Initializable, PokerClientController,
 	@Override
 	public void updateMe(Object updateMsg) {
 		// ha a ház küld utasítást
-		if (updateMsg instanceof HouseHoldemCommand) {
-			HouseHoldemCommand houseHoldemCommand = (HouseHoldemCommand)updateMsg;
+		if (updateMsg instanceof HoldemHouseCommand) {
+			HoldemHouseCommand houseHoldemCommand = (HoldemHouseCommand)updateMsg;
 //			printHouseCommand(houseHoldemCommand);
 			System.out.println("A haz utasítást küldött: " + houseHoldemCommand.getHouseCommandType());
 			
@@ -124,8 +124,8 @@ public class MainGameController implements Initializable, PokerClientController,
 				throw new IllegalArgumentException();
 			}
 			}
-		} else if (updateMsg instanceof PlayerHoldemCommand) {
-			PlayerHoldemCommand playerHoldemCommand = (PlayerHoldemCommand)updateMsg;
+		} else if (updateMsg instanceof HoldemPlayerCommand) {
+			HoldemPlayerCommand playerHoldemCommand = (HoldemPlayerCommand)updateMsg;
 //			System.out.println("Ki kuldte a player commandot: " + playerHoldemCommand.getSender() + "\nMilyen command: " + playerHoldemCommand.getPlayerCommandType());
 //			System.out.println("You are nth: " + model.getYouAreNth() + " Whoson: " + playerHoldemCommand.getWhosOn());
 			System.out.println("A(z) " + playerHoldemCommand.getSender() + " játékos utasítást küldött: " + playerHoldemCommand.getPlayerCommandType());
@@ -180,7 +180,7 @@ public class MainGameController implements Initializable, PokerClientController,
 		});
 	}
 
-	private void receivedBlindHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+	private void receivedBlindHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		try {
 			mainView.receivedBlindHouseCommand(houseHoldemCommand);
 			model.receivedBlindHouseCommand(houseHoldemCommand);
@@ -189,29 +189,29 @@ public class MainGameController implements Initializable, PokerClientController,
 		}
 	}
 
-	private void receivedPlayerHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+	private void receivedPlayerHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		model.receivedPlayerHouseCommand(houseHoldemCommand);
 		modifyButtonVisibilities(houseHoldemCommand);
 		mainView.receivedPlayerHouseCommand(houseHoldemCommand);
 	}
 
-	private void receivedFlopHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+	private void receivedFlopHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		System.out.println("Flop kommand: " + model.getYouAreNth() + "  " + houseHoldemCommand.getWhosOn());
 		modifyButtonVisibilities(houseHoldemCommand);
 		mainView.flop(houseHoldemCommand);
 	}
 
-	private void receivedTurnHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+	private void receivedTurnHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		modifyButtonVisibilities(houseHoldemCommand);
 		mainView.turn(houseHoldemCommand);
 	}
 
-	private void receivedRiverHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+	private void receivedRiverHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		modifyButtonVisibilities(houseHoldemCommand);
 		mainView.river(houseHoldemCommand);
 	}
 
-	private void receivedWinnerHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+	private void receivedWinnerHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		mainView.winner(houseHoldemCommand);
 	}
 
@@ -219,33 +219,33 @@ public class MainGameController implements Initializable, PokerClientController,
 	
 	
 
-	private void receivedBlindPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+	private void receivedBlindPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
 		model.receivedBlindPlayerCommand(playerHoldemCommand);
 		mainView.receivedBlindPlayerCommand(playerHoldemCommand);
 	}
 
-	private void receivedCallPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+	private void receivedCallPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
 		model.receivedCallPlayerCommand(playerHoldemCommand);
 		mainView.receivedCallPlayerCommand(playerHoldemCommand);
 	}
 
-	private void receivedCheckPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+	private void receivedCheckPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
 		model.receivedCheckPlayerCommand(playerHoldemCommand);
 		mainView.receivedCheckPlayerCommand(playerHoldemCommand);
 	}
 
-	private void receivedFoldPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+	private void receivedFoldPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
 		model.receivedFoldPlayerCommand(playerHoldemCommand);
 		mainView.receivedFoldPlayerCommand(playerHoldemCommand);
 	}
 
-	private void receivedRaisePlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+	private void receivedRaisePlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
 		model.receivedRaisePlayerCommand(playerHoldemCommand);
 		mainView.receivedRaisePlayerCommand(playerHoldemCommand);
 		checkButton.setDisable(true);
 	}
 
-	private void receivedQuitPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+	private void receivedQuitPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
 		model.receivedQuitPlayerCommand(playerHoldemCommand);
 		mainView.receivedQuitPlayerCommand(playerHoldemCommand);
 	}
@@ -260,10 +260,10 @@ public class MainGameController implements Initializable, PokerClientController,
 
 
 	private void modifyButtonVisibilities(PokerCommand pokerCommand) {
-		if (pokerCommand instanceof HouseHoldemCommand) {
-			pokerCommand = (HouseHoldemCommand)pokerCommand;
-		} else if (pokerCommand instanceof PlayerHoldemCommand) {
-			pokerCommand = (PlayerHoldemCommand)pokerCommand;
+		if (pokerCommand instanceof HoldemHouseCommand) {
+			pokerCommand = (HoldemHouseCommand)pokerCommand;
+		} else if (pokerCommand instanceof HoldemPlayerCommand) {
+			pokerCommand = (HoldemPlayerCommand)pokerCommand;
 		}
 		boolean disable = model.getYouAreNth() == pokerCommand.getWhosOn() ? false : true;
 		System.out.println("Flop kommandban button disability: " + model.getYouAreNth() + " " + pokerCommand.getWhosOn());
@@ -283,7 +283,7 @@ public class MainGameController implements Initializable, PokerClientController,
 		});
 	}
 
-	private void player(HouseHoldemCommand houseHoldemCommand) {
+	private void player(HoldemHouseCommand houseHoldemCommand) {
 		boolean disable = model.getYouAreNth() == houseHoldemCommand.getWhosOn() ? false : true;
 		modifyButtonsDisability(disable);
 		if (model.getMyDebt().compareTo(BigDecimal.ZERO) > 0) {
@@ -291,7 +291,7 @@ public class MainGameController implements Initializable, PokerClientController,
 		}
 	}
 
-	private void printHouseCommand(HouseHoldemCommand command) {
+	private void printHouseCommand(HoldemHouseCommand command) {
 		System.out.println("----------------");
 		System.out.println(command);
 	}

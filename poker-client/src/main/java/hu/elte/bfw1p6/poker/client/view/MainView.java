@@ -9,8 +9,8 @@ import com.cantero.games.poker.texasholdem.CardSuitEnum;
 
 import hu.elte.bfw1p6.poker.client.controller.PokerHoldemDefaultValues;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
-import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -217,7 +217,7 @@ public class MainView {
 		}
 	}
 
-	public void receivedBlindHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+	public void receivedBlindHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		hideAllProfiles();
 		clientsCount = houseHoldemCommand.getPlayers();
 		youAreNth = houseHoldemCommand.getNthPlayer();
@@ -251,7 +251,7 @@ public class MainView {
 				});
 	}
 
-	public void receivedPlayerHouseCommand(HouseHoldemCommand houseHoldemCommand) {
+	public void receivedPlayerHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -281,7 +281,7 @@ public class MainView {
 		return value;
 	}
 
-	public void flop(HouseHoldemCommand houseHoldemCommand) {
+	public void flop(HoldemHouseCommand houseHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -296,7 +296,7 @@ public class MainView {
 		});
 	}
 
-	public void turn(HouseHoldemCommand houseHoldemCommand) {
+	public void turn(HoldemHouseCommand houseHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -308,7 +308,7 @@ public class MainView {
 		});
 	}
 
-	public void river(HouseHoldemCommand houseHoldemCommand) {
+	public void river(HoldemHouseCommand houseHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -319,7 +319,7 @@ public class MainView {
 		});
 	}
 
-	public void winner(HouseHoldemCommand houseHoldemCommand) {
+	public void winner(HoldemHouseCommand houseHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -356,7 +356,7 @@ public class MainView {
 		});
 	}
 
-	private void revealCard(HouseHoldemCommand houseHoldemCommand, int i) {
+	private void revealCard(HoldemHouseCommand houseHoldemCommand, int i) {
 		Card card = null;
 		if (i == 0 || i == 3 || i == 4) {
 			card = houseHoldemCommand.getCard1();
@@ -372,7 +372,7 @@ public class MainView {
 		houseCards.get(i).setVisible(true);
 	}
 
-	public void receivedBlindPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+	public void receivedBlindPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -382,7 +382,7 @@ public class MainView {
 		});
 	}
 
-	public void receivedCallPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+	public void receivedCallPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -394,7 +394,7 @@ public class MainView {
 
 	}
 
-	public void receivedCheckPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+	public void receivedCheckPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -404,7 +404,7 @@ public class MainView {
 		});
 	}
 
-	public void receivedFoldPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+	public void receivedFoldPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -430,7 +430,7 @@ public class MainView {
 		});
 	}
 
-	public void receivedRaisePlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+	public void receivedRaisePlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -442,7 +442,7 @@ public class MainView {
 		});
 	}
 
-	public void receivedQuitPlayerCommand(PlayerHoldemCommand playerHoldemCommand) {
+	public void receivedQuitPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
 		// TODO Auto-generated method stub
 
 	}

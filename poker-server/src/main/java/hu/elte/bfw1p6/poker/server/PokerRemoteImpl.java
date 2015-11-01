@@ -19,7 +19,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableListerObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
-import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
@@ -197,7 +197,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerHoldemCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, HoldemPlayerCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		if (sessionService.isAuthenticated(uuid)) {
 			pokerTableservers.get(t.getName()).receivePlayerCommand(client, playerCommand);
 		}
