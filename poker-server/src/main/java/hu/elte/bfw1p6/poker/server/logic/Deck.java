@@ -9,8 +9,6 @@ import com.cantero.games.poker.texasholdem.Card;
 import com.cantero.games.poker.texasholdem.CardRankEnum;
 import com.cantero.games.poker.texasholdem.CardSuitEnum;
 
-import hu.elte.bfw1p6.poker.model.CardSuit;
-
 /**
  * A kártyapaklit megvalósító osztály.
  * @author feher
@@ -43,7 +41,7 @@ public class Deck {
 	}
 	
 	private void loadCards() {
-        int suitsLenght = CardSuit.values().length;
+        int suitsLenght = 4;
         for (int i = 0; i < NUMER_OF_CARDS / suitsLenght; i++) {
         	for (int j = 0; j < suitsLenght; j++) {
         		cards.add(new Card(CardSuitEnum.values()[j], CardRankEnum.values()[i]));
