@@ -60,13 +60,12 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 
 	private void dealCardsToPlayers() {
 		for (int i = 0; i < clients.size(); i++) {
-			Card c1 = deck.popCard();
-			Card c2 = deck.popCard();
+			Card[] cards = new Card[]{deck.popCard(), deck.popCard()};
 			PokerPlayer pokerPlayer = new PokerPlayer();
-			pokerPlayer.setCards(new Card[]{c1, c2});
+			pokerPlayer.setCards(cards);
 			players.add(pokerPlayer);
 			HoldemHouseCommand pokerCommand = new HoldemHouseCommand();
-			pokerCommand.setUpPlayerCommand(c1, c2, whosOn);
+			pokerCommand.setUpDealCommand(cards, whosOn);
 			sendPokerCommand(i, pokerCommand);
 		}
 		nextStep();
@@ -141,20 +140,18 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 				whosOn = (dealer + 1 + foldCounter) % playersInRound;
 				switch (actualHouseCommandType) {
 				case FLOP: {
-					houseCards.add(deck.popCard());
-					houseCards.add(deck.popCard());
-					houseCards.add(deck.popCard());
-					houseHoldemCommand.setUpFlopCommand(houseCards.get(0), houseCards.get(1), houseCards.get(2), whosOn, foldCounter);
+					Card[] cards = new Card[]{deck.popCard(), deck.popCard(), deck.popCard()};
+					houseHoldemCommand.setUpFlopCommand(cards, whosOn, foldCounter);
 					break;
 				}
 				case TURN: {
 					houseCards.add(deck.popCard());
-					houseHoldemCommand.setUpTurnCommand(houseCards.get(3), whosOn, foldCounter);
+					houseHoldemCommand.setUpTurnCommand(new Card[]{houseCards.get(3)}, whosOn, foldCounter);
 					break;
 				}
 				case RIVER: {
 					houseCards.add(deck.popCard());
-					houseHoldemCommand.setUpRiverCommand(houseCards.get(4), whosOn, foldCounter);
+					houseHoldemCommand.setUpRiverCommand(new Card[]{houseCards.get(4)}, whosOn, foldCounter);
 					break;
 				}
 				case WINNER: {
@@ -190,7 +187,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 		System.out.println("A győztes második lapja: " + cards[1]);
 		HoldemHouseCommand asd = (HoldemHouseCommand)houseHoldemCommand;
 		
-		asd.setUpWinnerCommand(cards[0], cards[1], winner_);
+		asd.setUpWinnerCommand(cards, winner_);
 	}
 	
 	@Override

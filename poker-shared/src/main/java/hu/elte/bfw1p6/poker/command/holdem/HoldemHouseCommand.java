@@ -23,7 +23,7 @@ public class HoldemHouseCommand extends HouseCommand {
 	private HoldemHouseCommandType houseCommandType;
 	
 	/**
-	 * Ha a szerver BLIND utasítást küld, akkor ezt a metódust kell használni.
+	 * Ha a holdem szerver BLIND utasítást küld, akkor ezt a metódust kell használni.
 	 * @param nthPlayer hanyadik játékos vagy a körben
 	 * @param players hány játékos van összesen a körben
 	 * @param dealer ki az aktuális osztó
@@ -39,78 +39,69 @@ public class HoldemHouseCommand extends HouseCommand {
 	}
 	
 	/**
-	 * Ha a szerver PLAYER utasítást küld, akkor ezt a metódust kell használni.
+	 * Ha a holdem szerver PLAYER utasítást küld, akkor ezt a metódust kell használni.
 	 * @param card1 a playernek küldött első kártya
 	 * @param card2 a playernek küldött második kártya
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
-	public void setUpPlayerCommand(Card card1, Card card2, int whosOn) {
+	public void setUpDealCommand(Card[] cards, int whosOn) {
 		this.houseCommandType = HoldemHouseCommandType.PLAYER;
-		this.card1 = card1;
-		this.card2 = card2;
+		this.cards = cards;
 		this.whosOn = whosOn;
 	}
 	
 	/**
-	 * Ha a szerver FLOP utasítást küld, akkor ezt a metódust kell használni.
+	 * Ha a holdem szerver FLOP utasítást küld, akkor ezt a metódust kell használni.
 	 * @param houseCommandType FLOP
 	 * @param card1 a ház első lapja, amit körbe kell küldeni
 	 * @param card2 a ház második lapja, amit körbe kell küldeni
 	 * @param card3 a ház harmadik lapja, amit körbe kell küldeni
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
-	public void setUpFlopCommand(Card card1, Card card2, Card card3, int whosOn, int foldCounter) {
+	public void setUpFlopCommand(Card[] cards, int whosOn, int foldCounter) {
 		this.houseCommandType = HoldemHouseCommandType.FLOP;
-		this.card1 = card1;
-		this.card2 = card2;
-		this.card3 = card3;
+		this.cards = cards;
 		this.whosOn = whosOn;
 		this.foldCounter = foldCounter;
 	}
 	
 	/**
-	 * Ha a szerver TURN utasítást küld, akkor ezt a metódust kell használni
+	 * Ha a holdem szerver TURN utasítást küld, akkor ezt a metódust kell használni
 	 * @param card1 a háznak osztott, körbeküldendő kártyalap
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
-	public void setUpTurnCommand(Card card1, int whosOn, int foldCounter) {
+	public void setUpTurnCommand(Card[] cards, int whosOn, int foldCounter) {
 		this.houseCommandType = HoldemHouseCommandType.TURN;
-		this.card1 = card1;
+		this.cards = cards;
 		this.whosOn = whosOn;
 		this.foldCounter = foldCounter;
 	}
 	
 	/**
-	 * Ha a szerver RIVER utasítást küld, akkor ezt a metódust kell használni
+	 * Ha a holdem szerver RIVER utasítást küld, akkor ezt a metódust kell használni
 	 * @param card1 a háznak osztott, körbeküldendő kártyalap
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
-	public void setUpRiverCommand(Card card1, int whosOn, int foldCounter) {
+	public void setUpRiverCommand(Card[] cards, int whosOn, int foldCounter) {
 		this.houseCommandType = HoldemHouseCommandType.RIVER;
-		this.card1 = card1;
+		this.cards = cards;
 		this.whosOn = whosOn;
 		this.foldCounter = foldCounter;
 	}
 	
 	/**
-	 * Ha a szerver WINNER utasítást küld, akkor ezt a metódust kell használni.
+	 * Ha a holdem szerver WINNER utasítást küld, akkor ezt a metódust kell használni.
 	 * @param card1 a nyertes első lapja
 	 * @param card2 a nyertes második lapja
 	 * @param winnerUserName a nyertes neve
 	 */
-	public void setUpWinnerCommand(Card card1, Card card2, int winner) {
+	public void setUpWinnerCommand(Card[] cards, int winner) {
 		this.houseCommandType = HoldemHouseCommandType.WINNER;
-		this.card1 = card1;
-		this.card2 = card2;
+		this.cards = cards;
 		this.winner = winner;
 	}
 	
-	public HoldemHouseCommandType getHouseCommandType() {
+	public HoldemHouseCommandType getCommandType() {
 		return houseCommandType;
-	}
-
-	@Override
-	public String toString() {
-		return "[" + houseCommandType + " " + card1 + " " + card2 + " " + card3 + "]";
 	}
 }

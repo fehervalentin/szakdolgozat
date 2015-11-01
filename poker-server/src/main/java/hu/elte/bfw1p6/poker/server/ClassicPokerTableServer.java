@@ -6,7 +6,6 @@ import com.cantero.games.poker.texasholdem.Card;
 
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import hu.elte.bfw1p6.poker.command.type.ClassicHouseCommandType;
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
@@ -22,7 +21,6 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 
 	protected ClassicPokerTableServer(PokerTable pokerTable) throws RemoteException {
 		super(pokerTable);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -42,16 +40,13 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	
 	private void dealCardsToPlayers() {
 		for (int i = 0; i < clients.size(); i++) {
-			Card c1 = deck.popCard();
-			Card c2 = deck.popCard();
-			Card c3 = deck.popCard();
-			Card c4 = deck.popCard();
-			Card c5 = deck.popCard();
+			Card[] cards = new Card[]{deck.popCard(), deck.popCard(), deck.popCard(), deck.popCard(), deck.popCard()};
 			PokerPlayer pokerPlayer = new PokerPlayer();
-			pokerPlayer.setCards(new Card[]{c1, c2, c3, c4, c5});
+			
+			pokerPlayer.setCards(cards);
 			players.add(pokerPlayer);
 			ClassicHouseCommand pokerCommand = new ClassicHouseCommand();
-			pokerCommand.setUpPlayerCommand(c1, c2, whosOn);
+			pokerCommand.setUpDealCommand(cards, whosOn);
 			sendPokerCommand(i, pokerCommand);
 		}
 		nextStep();

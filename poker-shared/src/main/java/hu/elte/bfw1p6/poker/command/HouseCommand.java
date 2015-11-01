@@ -44,19 +44,9 @@ public class HouseCommand implements PokerCommand {
 	protected int foldCounter;
 	
 	/**
-	 * Az utasítás első lapja.
+	 * Az utasítás kártyalapjai.
 	 */
-	protected Card card1;
-	
-	/**
-	 * Az utasítás második lapja.
-	 */
-	protected Card card2;
-	
-	/**
-	 * Az utasítás harmadik lapja.
-	 */
-	protected Card card3;
+	protected Card[] cards;
 	
 	public List<String> getPlayersNames() {
 		return clientsNames;
@@ -87,15 +77,7 @@ public class HouseCommand implements PokerCommand {
 		return dealer;
 	}
 	
-	public Card getCard1() {
-		return card1;
-	}
-	
-	public Card getCard2() {
-		return card2;
-	}
-	
-	public Card getCard3() {
-		return card3;
+	public Card[] getCards() {
+		return cards;
 	}
 }

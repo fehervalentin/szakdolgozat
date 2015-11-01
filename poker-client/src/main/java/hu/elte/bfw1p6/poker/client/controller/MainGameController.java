@@ -5,6 +5,8 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
+import com.cantero.games.poker.texasholdem.Card;
+
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
@@ -89,9 +91,9 @@ public class MainGameController implements Initializable, PokerClientController,
 		if (updateMsg instanceof HoldemHouseCommand) {
 			HoldemHouseCommand houseHoldemCommand = (HoldemHouseCommand)updateMsg;
 //			printHouseCommand(houseHoldemCommand);
-			System.out.println("A haz utasítást küldött: " + houseHoldemCommand.getHouseCommandType());
+			System.out.println("A haz utasítást küldött: " + houseHoldemCommand.getCommandType());
 			
-			switch (houseHoldemCommand.getHouseCommandType()) {
+			switch (houseHoldemCommand.getCommandType()) {
 			case BLIND: {
 				receivedBlindHouseCommand(houseHoldemCommand);
 				break;
@@ -101,22 +103,24 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case FLOP: {
-				System.out.println("Flop: " + houseHoldemCommand.getCard1() + " " + houseHoldemCommand.getCard2() + " " + houseHoldemCommand.getCard3());
+				Card[] cards = houseHoldemCommand.getCards();
+				System.out.println("Flop: " + cards[0] + " " + cards[1] + " " + cards[3]);
 				receivedFlopHouseCommand(houseHoldemCommand);
 				break;
 			}
 			case TURN: {
-				System.out.println("Turn: " + houseHoldemCommand.getCard1());
+				System.out.println("Turn: " + houseHoldemCommand.getCards()[0]);
 				receivedTurnHouseCommand(houseHoldemCommand);
 				break;
 			}
 			case RIVER: {
-				System.out.println("River: " + houseHoldemCommand.getCard1());
+				System.out.println("River: " + houseHoldemCommand.getCards()[0]);
 				receivedRiverHouseCommand(houseHoldemCommand);
 				break;
 			}
 			case WINNER: {
-				System.out.println("Winner: " + houseHoldemCommand.getWinner() + " " + houseHoldemCommand.getCard1() + " " + houseHoldemCommand.getCard2());
+				Card[] cards = houseHoldemCommand.getCards();
+				System.out.println("Winner: " + houseHoldemCommand.getWinner() + " " + cards[0] + " " + cards[1]);
 				receivedWinnerHouseCommand(houseHoldemCommand);
 				break;
 			}

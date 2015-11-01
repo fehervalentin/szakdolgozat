@@ -256,8 +256,9 @@ public class MainView {
 
 			@Override
 			public void run() {
-				int value = mapCard(houseHoldemCommand.getCard1());
-				int value2 = mapCard(houseHoldemCommand.getCard2());
+				Card[] cards = houseHoldemCommand.getCards();
+				int value = mapCard(cards[0]);
+				int value2 = mapCard(cards[1]);
 				myCard1.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
 				myCard2.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value2 + ".png"));
 
@@ -324,8 +325,9 @@ public class MainView {
 
 			@Override
 			public void run() {
-				int value = mapCard(houseHoldemCommand.getCard1());
-				int value2 = mapCard(houseHoldemCommand.getCard2());
+				Card[] cards = houseHoldemCommand.getCards();
+				int value = mapCard(cards[0]);
+				int value2 = mapCard(cards[1]);
 				winnerCard1.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
 				winnerCard2.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value2 + ".png"));
 				int j = ultimateFormula(houseHoldemCommand.getWinner());// houseHoldemCommand.getWinner() + youWereNth;
@@ -357,13 +359,14 @@ public class MainView {
 	}
 
 	private void revealCard(HoldemHouseCommand houseHoldemCommand, int i) {
+		Card[] cards = houseHoldemCommand.getCards();
 		Card card = null;
 		if (i == 0 || i == 3 || i == 4) {
-			card = houseHoldemCommand.getCard1();
+			card = cards[0];
 		} else if (i == 1) {
-			card = houseHoldemCommand.getCard2();
+			card = cards[1];
 		} else if (i == 2) {
-			card = houseHoldemCommand.getCard3();
+			card = cards[2];
 		} else {
 			throw new IllegalArgumentException();
 		}
