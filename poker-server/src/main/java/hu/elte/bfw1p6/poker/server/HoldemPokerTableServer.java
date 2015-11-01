@@ -48,15 +48,15 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer<HoldemHouse
 			//törlöm a ház lapjait
 			houseCards.clear();
 			//a vakokat kérem be legelőször
-			//actualHoldemHouseCommandType = HoldemHouseCommandType.BLIND;
 			actualHouseCommandType = HoldemHouseCommandType.values()[0];
 			// be kell kérni a vakokat
 			collectBlinds();
 			// két lap kézbe
-			dealCardsToPlayers();
+			dealCardsToPlayers(2);
 		}
 	}
 
+	@Override
 	public synchronized void receivePlayerCommand(RemoteObserver client, HoldemPlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		// ha valid klienstől érkezik üzenet, azt feldolgozzuk, körbeküldjük
 		if (clients.contains(client)) {

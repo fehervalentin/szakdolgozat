@@ -216,9 +216,16 @@ public abstract class AbstractPokerTableServer<T extends CommandType<T>> extends
 	
 	protected abstract void winner(HouseCommand houseCommand);
 
-	protected void dealCardsToPlayers() {
+	/**
+	 * 
+	 * @param cardCount hány darab lapot osztunk ki.
+	 */
+	protected void dealCardsToPlayers(int cardCount) {
 		for (int i = 0; i < clients.size(); i++) {
-			Card[] cards = new Card[]{deck.popCard(), deck.popCard()};
+			Card[] cards = new Card[cardCount];
+			for (int j = 0; j < cards.length; j++) {
+				cards[i] = deck.popCard();
+			}
 			PokerPlayer pokerPlayer = new PokerPlayer();
 			pokerPlayer.setCards(cards);
 			players.add(pokerPlayer);
@@ -230,7 +237,8 @@ public abstract class AbstractPokerTableServer<T extends CommandType<T>> extends
 	}
 	
 	protected abstract HouseCommand<T> getNewCommand();
-	
-//	protected abstract HouseCommand<T> getNewCommandType();
+
+
+	public abstract void receivePlayerCommand(RemoteObserver client, HoldemPlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
 
 }
