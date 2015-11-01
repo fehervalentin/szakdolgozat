@@ -4,9 +4,14 @@ import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
 
-public class HouseCommand implements PokerCommand {
+public class HouseCommand<T extends CommandType<T>> implements PokerCommand {
 
 	private static final long serialVersionUID = -7014194977573759472L;
+	
+	/**
+	 * Az utasítás típusa.
+	 */
+	protected CommandType<T> houseCommandType;
 
 	/**
 	 * Hanyadik játékos vagy az asztalnál.
@@ -79,5 +84,14 @@ public class HouseCommand implements PokerCommand {
 	
 	public Card[] getCards() {
 		return cards;
+	}
+	
+	public CommandType<T> getHouseCommandType() {
+		return houseCommandType;
+	}
+
+	public void setUpDealCommand(Card[] cards, int whosOn) {
+		this.cards = cards;
+		this.whosOn = whosOn;
 	}
 }

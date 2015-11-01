@@ -14,7 +14,6 @@ import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
-import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 
 /**
@@ -22,15 +21,15 @@ import hu.elte.bfw1p6.poker.model.entity.PokerTable;
  * @author feher
  *
  */
-public class HoldemPokerTableServer extends AbstractPokerTableServer {
+public class HoldemPokerTableServer extends AbstractPokerTableServer<HoldemHouseCommandType> {
 
 	private static final long serialVersionUID = 2737496961750222946L;
 	
 	/**
-	 * Épp milyen utasítást fog kiadni a szerver.
+	 * Aktuális utasítás típusa.
 	 */
 	private HoldemHouseCommandType actualHouseCommandType;
-
+	
 	/**
 	 * Ház lapjai.
 	 */
@@ -56,19 +55,6 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 			// két lap kézbe
 			dealCardsToPlayers();
 		}
-	}
-
-	private void dealCardsToPlayers() {
-		for (int i = 0; i < clients.size(); i++) {
-			Card[] cards = new Card[]{deck.popCard(), deck.popCard()};
-			PokerPlayer pokerPlayer = new PokerPlayer();
-			pokerPlayer.setCards(cards);
-			players.add(pokerPlayer);
-			HoldemHouseCommand pokerCommand = new HoldemHouseCommand();
-			pokerCommand.setUpDealCommand(cards, whosOn);
-			sendPokerCommand(i, pokerCommand);
-		}
-		nextStep();
 	}
 
 	public synchronized void receivePlayerCommand(RemoteObserver client, HoldemPlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
@@ -138,9 +124,12 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 				HoldemHouseCommand houseHoldemCommand = new HoldemHouseCommand();
 				// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
 				whosOn = (dealer + 1 + foldCounter) % playersInRound;
-				switch (actualHouseCommandType) {
+				switch (actualHouseCommandType.getActual()) {
 				case FLOP: {
-					Card[] cards = new Card[]{deck.popCard(), deck.popCard(), deck.popCard()};
+					houseCards.add(deck.popCard());
+					houseCards.add(deck.popCard());
+					houseCards.add(deck.popCard());
+					Card[] cards = new Card[]{houseCards.get(0), houseCards.get(1), houseCards.get(2)};
 					houseHoldemCommand.setUpFlopCommand(cards, whosOn, foldCounter);
 					break;
 				}
@@ -189,9 +178,14 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 		
 		asd.setUpWinnerCommand(cards, winner_);
 	}
-	
+
 	@Override
-	public void nextStep() {
+	protected HouseCommand<HoldemHouseCommandType> getNewCommand() {
+		return new HoldemHouseCommand();
+	}
+
+	@Override
+	protected void nextStep() {
 		actualHouseCommandType = actualHouseCommandType.getNext();
 	}
 }

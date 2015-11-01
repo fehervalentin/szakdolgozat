@@ -13,14 +13,9 @@ import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
  * @author feher
  *
  */
-public class HoldemHouseCommand extends HouseCommand {
+public class HoldemHouseCommand extends HouseCommand<HoldemHouseCommandType> {
 	
 	private static final long serialVersionUID = 7270842556559660805L;
-
-	/**
-	 * Az utasítás típusa.
-	 */
-	private HoldemHouseCommandType houseCommandType;
 	
 	/**
 	 * Ha a holdem szerver BLIND utasítást küld, akkor ezt a metódust kell használni.
@@ -102,6 +97,6 @@ public class HoldemHouseCommand extends HouseCommand {
 	}
 	
 	public HoldemHouseCommandType getCommandType() {
-		return houseCommandType;
+		return houseCommandType.getActual();
 	}
 }

@@ -104,7 +104,7 @@ public class MainGameController implements Initializable, PokerClientController,
 			}
 			case FLOP: {
 				Card[] cards = houseHoldemCommand.getCards();
-				System.out.println("Flop: " + cards[0] + " " + cards[1] + " " + cards[3]);
+				System.out.println("Flop: " + cards[0] + " " + cards[1] + " " + cards[2]);
 				receivedFlopHouseCommand(houseHoldemCommand);
 				break;
 			}

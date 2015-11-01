@@ -7,7 +7,7 @@ import com.cantero.games.poker.texasholdem.Card;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.type.ClassicHouseCommandType;
 
-public class ClassicHouseCommand extends HouseCommand {
+public class ClassicHouseCommand extends HouseCommand<ClassicHouseCommandType> {
 
 	private static final long serialVersionUID = 8279536095179839993L;
 

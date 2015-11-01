@@ -6,8 +6,11 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cantero.games.poker.texasholdem.Card;
+
 import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
+import hu.elte.bfw1p6.poker.command.CommandType;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
@@ -21,12 +24,17 @@ import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.repository.UserRepository;
 import hu.elte.bfw1p6.poker.server.logic.Deck;
 
-public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
+public abstract class AbstractPokerTableServer<T extends CommandType<T>> extends UnicastRemoteObject {
 
 	private static final long serialVersionUID = 1954723026118781134L;
 	
 	private final String ERR_TABLE_FULL = "Az asztal betelt, nem tudsz csatlakozni!";
 	private final String ERR_BALANCE_MSG = "Nincs elég zsetonod!";
+	
+	/**
+	 * Épp milyen utasítást fog kiadni a szerver.
+	 */
+//	protected CommandType<T> actualHouseCommandType;
 
 	/**
 	 * Maga az asztal entitás.
@@ -94,6 +102,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		this.moneyStack = BigDecimal.ZERO;
 		this.players = new ArrayList<>();
 		this.clientsNames = new ArrayList<>();
+//		this.actualHouseCommandType = actualHouseCommandType.getValues()[0];
 	}
 	
 
@@ -206,5 +215,22 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	protected abstract void nextRound() throws RemoteException;
 	
 	protected abstract void winner(HouseCommand houseCommand);
+
+	protected void dealCardsToPlayers() {
+		for (int i = 0; i < clients.size(); i++) {
+			Card[] cards = new Card[]{deck.popCard(), deck.popCard()};
+			PokerPlayer pokerPlayer = new PokerPlayer();
+			pokerPlayer.setCards(cards);
+			players.add(pokerPlayer);
+			HouseCommand<T> houseCommand = getNewCommand();
+			houseCommand.setUpDealCommand(cards, whosOn);
+			sendPokerCommand(i, houseCommand);
+		}
+		nextStep();
+	}
+	
+	protected abstract HouseCommand<T> getNewCommand();
+	
+//	protected abstract HouseCommand<T> getNewCommandType();
 
 }
