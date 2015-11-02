@@ -9,13 +9,13 @@ import com.cantero.games.poker.texasholdem.Card;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
-import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
-import hu.elte.bfw1p6.poker.client.controller.main.PokerObserverController;
-import hu.elte.bfw1p6.poker.client.model.MainGameModel;
+import hu.elte.bfw1p6.poker.client.model.HouseClientMainGameModel;
 import hu.elte.bfw1p6.poker.client.view.MainView;
-import hu.elte.bfw1p6.poker.command.PokerCommand;
+import hu.elte.bfw1p6.poker.command.PlayerCommand;
+import hu.elte.bfw1p6.poker.command.api.PokerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
+import hu.elte.bfw1p6.poker.command.type.HoldemPlayerPokerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
@@ -23,7 +23,6 @@ import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -31,7 +30,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
-public class MainGameController implements Initializable, PokerClientController, PokerObserverController {
+public class HoldemMainGameController extends AbstractMainGameController<HoldemPlayerPokerCommandType> {
 
 	@FXML private AnchorPane mainGamePane;
 
@@ -45,15 +44,7 @@ public class MainGameController implements Initializable, PokerClientController,
 
 	private MainView mainView;
 
-	private MainGameModel model;
-
-	private FrameController frameController;
-
-	private CommunicatorController commController;
-
-	private Scene scene;
-
-	private Alert errorAlert;
+	private HouseClientMainGameModel model;
 
 
 	@Override
@@ -69,7 +60,7 @@ public class MainGameController implements Initializable, PokerClientController,
 
 		try {
 			commController = new CommunicatorController(this);
-			model = new MainGameModel(commController);
+			model = new HouseClientMainGameModel(commController);
 			model.connectToTable(commController);
 			pokerLabel.setText(model.getUserName());
 		} catch (RemoteException e) {
@@ -128,13 +119,17 @@ public class MainGameController implements Initializable, PokerClientController,
 				throw new IllegalArgumentException();
 			}
 			}
-		} else if (updateMsg instanceof HoldemPlayerCommand) {
-			HoldemPlayerCommand playerHoldemCommand = (HoldemPlayerCommand)updateMsg;
+		} else if (updateMsg instanceof PlayerCommand<?>) {
+			PlayerCommand<?> playerHoldemCommand_ = (PlayerCommand<?>)updateMsg;
+			/*if (playerHoldemCommand_.getClass().getGenericSuperclass(). instanceof HoldemPlayerCommandType) {
+				
+			}*/
+			PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand = (PlayerCommand<HoldemPlayerPokerCommandType>)playerHoldemCommand_;
 //			System.out.println("Ki kuldte a player commandot: " + playerHoldemCommand.getSender() + "\nMilyen command: " + playerHoldemCommand.getPlayerCommandType());
 //			System.out.println("You are nth: " + model.getYouAreNth() + " Whoson: " + playerHoldemCommand.getWhosOn());
 			System.out.println("A(z) " + playerHoldemCommand.getSender() + " játékos utasítást küldött: " + playerHoldemCommand.getPlayerCommandType());
 			
-			switch (playerHoldemCommand.getPlayerCommandType()) {
+			switch (playerHoldemCommand.getPlayerCommandType().getActual()) {
 			case BLIND: {
 				receivedBlindPlayerCommand(playerHoldemCommand);
 				break;
@@ -223,33 +218,33 @@ public class MainGameController implements Initializable, PokerClientController,
 	
 	
 
-	private void receivedBlindPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
+	private void receivedBlindPlayerCommand(PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand) {
 		model.receivedBlindPlayerCommand(playerHoldemCommand);
 		mainView.receivedBlindPlayerCommand(playerHoldemCommand);
 	}
 
-	private void receivedCallPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
+	private void receivedCallPlayerCommand(PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand) {
 		model.receivedCallPlayerCommand(playerHoldemCommand);
 		mainView.receivedCallPlayerCommand(playerHoldemCommand);
 	}
 
-	private void receivedCheckPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
+	private void receivedCheckPlayerCommand(PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand) {
 		model.receivedCheckPlayerCommand(playerHoldemCommand);
 		mainView.receivedCheckPlayerCommand(playerHoldemCommand);
 	}
 
-	private void receivedFoldPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
+	private void receivedFoldPlayerCommand(PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand) {
 		model.receivedFoldPlayerCommand(playerHoldemCommand);
 		mainView.receivedFoldPlayerCommand(playerHoldemCommand);
 	}
 
-	private void receivedRaisePlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
+	private void receivedRaisePlayerCommand(PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand) {
 		model.receivedRaisePlayerCommand(playerHoldemCommand);
 		mainView.receivedRaisePlayerCommand(playerHoldemCommand);
 		checkButton.setDisable(true);
 	}
 
-	private void receivedQuitPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
+	private void receivedQuitPlayerCommand(PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand) {
 		model.receivedQuitPlayerCommand(playerHoldemCommand);
 		mainView.receivedQuitPlayerCommand(playerHoldemCommand);
 	}

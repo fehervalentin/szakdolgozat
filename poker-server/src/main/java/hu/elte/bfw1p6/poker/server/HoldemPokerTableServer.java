@@ -8,27 +8,28 @@ import com.cantero.games.poker.texasholdem.Card;
 import com.cantero.games.poker.texasholdem.IPlayer;
 
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
-import hu.elte.bfw1p6.poker.command.HouseCommand;
+import hu.elte.bfw1p6.poker.command.HousePokerCommand;
+import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
-import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
+import hu.elte.bfw1p6.poker.command.type.HoldemHousePokerCommandType;
+import hu.elte.bfw1p6.poker.command.type.HoldemPlayerPokerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 
 /**
- * Maga a póker asztal megvalósítása
+ * Maga a póker asztal megvalósítása.
  * @author feher
  *
  */
-public class HoldemPokerTableServer extends AbstractPokerTableServer<HoldemHouseCommandType> {
+public class HoldemPokerTableServer extends AbstractPokerTableServer<HoldemHousePokerCommandType, HoldemPlayerPokerCommandType> {
 
 	private static final long serialVersionUID = 2737496961750222946L;
 	
 	/**
 	 * Aktuális utasítás típusa.
 	 */
-	private HoldemHouseCommandType actualHouseCommandType;
+	private HoldemHousePokerCommandType actualHouseCommandType;
 	
 	/**
 	 * Ház lapjai.
@@ -48,7 +49,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer<HoldemHouse
 			//törlöm a ház lapjait
 			houseCards.clear();
 			//a vakokat kérem be legelőször
-			actualHouseCommandType = HoldemHouseCommandType.values()[0];
+			actualHouseCommandType = HoldemHousePokerCommandType.values()[0];
 			// be kell kérni a vakokat
 			collectBlinds();
 			// két lap kézbe
@@ -57,10 +58,10 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer<HoldemHouse
 	}
 
 	@Override
-	public synchronized void receivePlayerCommand(RemoteObserver client, HoldemPlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public synchronized void receivePlayerCommand(RemoteObserver client, PlayerCommand<HoldemPlayerPokerCommandType> playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		// ha valid klienstől érkezik üzenet, azt feldolgozzuk, körbeküldjük
 		if (clients.contains(client)) {
-			switch(playerCommand.getPlayerCommandType()) {
+			switch(playerCommand.getPlayerCommandType().getActual()) {
 			case BLIND: {
 				refreshBalance(playerCommand);
 				--whosOn;
@@ -115,7 +116,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer<HoldemHouse
 		// ha már kijött a river és az utolsó körben (rivernél) már mindenki nyilatkozott legalább egyszer, akkor új játszma kezdődik
 		System.out.println("VotedPlayers: " + votedPlayers);
 		System.out.println("Players in round: " + playersInRound);
-		if (playersInRound == 1 || (actualHouseCommandType == HoldemHouseCommandType.BLIND && votedPlayers >= playersInRound)) {
+		if (playersInRound == 1 || (actualHouseCommandType == HoldemHousePokerCommandType.BLIND && votedPlayers >= playersInRound)) {
 			//TODO: itt is kell értékelni, hogy ki nyert
 			startRound();
 		} else {
@@ -158,7 +159,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer<HoldemHouse
 	}
 
 	@Override
-	protected void winner(HouseCommand houseHoldemCommand) {
+	protected void winner(HousePokerCommand houseHoldemCommand) {
 		List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(houseCards, players);
 		Card[] cards = winner.get(0).getCards();
 		// TODO: és mi van ha döntetlen?
@@ -180,7 +181,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer<HoldemHouse
 	}
 
 	@Override
-	protected HouseCommand<HoldemHouseCommandType> getNewCommand() {
+	protected HousePokerCommand<HoldemHousePokerCommandType> getNewCommand() {
 		return new HoldemHouseCommand();
 	}
 

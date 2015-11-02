@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
 
-import hu.elte.bfw1p6.poker.command.HouseCommand;
-import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
+import hu.elte.bfw1p6.poker.command.HousePokerCommand;
+import hu.elte.bfw1p6.poker.command.type.HoldemHousePokerCommandType;
 
 
 /**
@@ -13,7 +13,7 @@ import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
  * @author feher
  *
  */
-public class HoldemHouseCommand extends HouseCommand<HoldemHouseCommandType> {
+public class HoldemHouseCommand extends HousePokerCommand<HoldemHousePokerCommandType> {
 	
 	private static final long serialVersionUID = 7270842556559660805L;
 	
@@ -25,7 +25,7 @@ public class HoldemHouseCommand extends HouseCommand<HoldemHouseCommandType> {
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
 	public void setUpBlindCommand(int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
-		this.houseCommandType = HoldemHouseCommandType.BLIND;
+		this.houseCommandType = HoldemHousePokerCommandType.BLIND;
 		this.nthPlayer = nthPlayer;
 		this.players = players;
 		this.dealer = dealer;
@@ -40,7 +40,7 @@ public class HoldemHouseCommand extends HouseCommand<HoldemHouseCommandType> {
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
 	public void setUpDealCommand(Card[] cards, int whosOn) {
-		this.houseCommandType = HoldemHouseCommandType.PLAYER;
+		this.houseCommandType = HoldemHousePokerCommandType.PLAYER;
 		this.cards = cards;
 		this.whosOn = whosOn;
 	}
@@ -54,7 +54,7 @@ public class HoldemHouseCommand extends HouseCommand<HoldemHouseCommandType> {
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
 	public void setUpFlopCommand(Card[] cards, int whosOn, int foldCounter) {
-		this.houseCommandType = HoldemHouseCommandType.FLOP;
+		this.houseCommandType = HoldemHousePokerCommandType.FLOP;
 		this.cards = cards;
 		this.whosOn = whosOn;
 		this.foldCounter = foldCounter;
@@ -66,7 +66,7 @@ public class HoldemHouseCommand extends HouseCommand<HoldemHouseCommandType> {
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
 	public void setUpTurnCommand(Card[] cards, int whosOn, int foldCounter) {
-		this.houseCommandType = HoldemHouseCommandType.TURN;
+		this.houseCommandType = HoldemHousePokerCommandType.TURN;
 		this.cards = cards;
 		this.whosOn = whosOn;
 		this.foldCounter = foldCounter;
@@ -78,7 +78,7 @@ public class HoldemHouseCommand extends HouseCommand<HoldemHouseCommandType> {
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
 	public void setUpRiverCommand(Card[] cards, int whosOn, int foldCounter) {
-		this.houseCommandType = HoldemHouseCommandType.RIVER;
+		this.houseCommandType = HoldemHousePokerCommandType.RIVER;
 		this.cards = cards;
 		this.whosOn = whosOn;
 		this.foldCounter = foldCounter;
@@ -91,12 +91,12 @@ public class HoldemHouseCommand extends HouseCommand<HoldemHouseCommandType> {
 	 * @param winnerUserName a nyertes neve
 	 */
 	public void setUpWinnerCommand(Card[] cards, int winner) {
-		this.houseCommandType = HoldemHouseCommandType.WINNER;
+		this.houseCommandType = HoldemHousePokerCommandType.WINNER;
 		this.cards = cards;
 		this.winner = winner;
 	}
 	
-	public HoldemHouseCommandType getCommandType() {
+	public HoldemHousePokerCommandType getCommandType() {
 		return houseCommandType.getActual();
 	}
 }

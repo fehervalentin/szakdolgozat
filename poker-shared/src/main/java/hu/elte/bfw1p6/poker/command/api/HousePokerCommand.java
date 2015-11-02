@@ -1,17 +1,19 @@
-package hu.elte.bfw1p6.poker.command;
+package hu.elte.bfw1p6.poker.command.api;
 
 import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
 
-public class HouseCommand<T extends CommandType<T>> implements PokerCommand {
+import hu.elte.bfw1p6.poker.command.type.api.HousePokerCommandType;
 
-	private static final long serialVersionUID = -7014194977573759472L;
+public abstract class HousePokerCommand<T extends HousePokerCommandType<T>> implements PokerCommand {
+
+	private static final long serialVersionUID = 2198480990289949810L;
 	
 	/**
 	 * Az utasítás típusa.
 	 */
-	protected CommandType<T> houseCommandType;
+	protected HousePokerCommandType<T> houseCommandType;
 
 	/**
 	 * Hanyadik játékos vagy az asztalnál.
@@ -86,7 +88,7 @@ public class HouseCommand<T extends CommandType<T>> implements PokerCommand {
 		return cards;
 	}
 	
-	public CommandType<T> getHouseCommandType() {
+	public HousePokerCommandType<T> getHouseCommandType() {
 		return houseCommandType;
 	}
 

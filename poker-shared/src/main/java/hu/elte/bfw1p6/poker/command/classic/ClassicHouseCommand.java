@@ -4,17 +4,17 @@ import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
 
-import hu.elte.bfw1p6.poker.command.HouseCommand;
-import hu.elte.bfw1p6.poker.command.type.ClassicHouseCommandType;
+import hu.elte.bfw1p6.poker.command.HousePokerCommand;
+import hu.elte.bfw1p6.poker.command.type.ClassicHousePokerCommandType;
 
-public class ClassicHouseCommand extends HouseCommand<ClassicHouseCommandType> {
+public class ClassicHouseCommand extends HousePokerCommand<ClassicHousePokerCommandType> {
 
 	private static final long serialVersionUID = 8279536095179839993L;
 
 	/**
 	 * Az utasítás típusa.
 	 */
-	private ClassicHouseCommandType houseCommandType;
+	private ClassicHousePokerCommandType houseCommandType;
 	
 	/**
 	 * Ha a classic szerver BLIND utasítást küld, akkor ezt a metódust kell használni.
@@ -24,7 +24,7 @@ public class ClassicHouseCommand extends HouseCommand<ClassicHouseCommandType> {
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
 	public void setUpBlindCommand(int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
-		this.houseCommandType = ClassicHouseCommandType.BLIND;
+		this.houseCommandType = ClassicHousePokerCommandType.BLIND;
 		this.nthPlayer = nthPlayer;
 		this.players = players;
 		this.dealer = dealer;
@@ -42,7 +42,7 @@ public class ClassicHouseCommand extends HouseCommand<ClassicHouseCommandType> {
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
 	public void setUpDealCommand(Card[] cards, int whosOn) {
-		this.houseCommandType = ClassicHouseCommandType.DEAL;
+		this.houseCommandType = ClassicHousePokerCommandType.DEAL;
 		this.cards = cards;
 		this.whosOn = whosOn;
 	}
@@ -54,7 +54,7 @@ public class ClassicHouseCommand extends HouseCommand<ClassicHouseCommandType> {
 	 * @param winnerUserName a nyertes neve
 	 */
 	public void setUpBetCommand(int whosOn) {
-		this.houseCommandType = ClassicHouseCommandType.BET;
+		this.houseCommandType = ClassicHousePokerCommandType.BET;
 		this.whosOn = whosOn;
 	}
 	
@@ -65,7 +65,7 @@ public class ClassicHouseCommand extends HouseCommand<ClassicHouseCommandType> {
 	 * @param winnerUserName a nyertes neve
 	 */
 	public void setUpChangeCommand(int whosOn) {
-		this.houseCommandType = ClassicHouseCommandType.CHANGE;
+		this.houseCommandType = ClassicHousePokerCommandType.CHANGE;
 		this.whosOn = whosOn;
 	}
 	
@@ -76,7 +76,7 @@ public class ClassicHouseCommand extends HouseCommand<ClassicHouseCommandType> {
 	 * @param winnerUserName a nyertes neve
 	 */
 	public void setUpBet2Command(int whosOn) {
-		this.houseCommandType = ClassicHouseCommandType.BET2;
+		this.houseCommandType = ClassicHousePokerCommandType.BET2;
 		this.whosOn = whosOn;
 	}
 	
@@ -87,12 +87,12 @@ public class ClassicHouseCommand extends HouseCommand<ClassicHouseCommandType> {
 	 * @param winnerUserName a nyertes neve
 	 */
 	public void setUpWinnerCommand(Card[] cards, int winner) {
-		this.houseCommandType = ClassicHouseCommandType.WINNER;
+		this.houseCommandType = ClassicHousePokerCommandType.WINNER;
 		this.cards = cards;
 		this.winner = winner;
 	}
 	
-	public ClassicHouseCommandType getCommandType() {
+	public ClassicHousePokerCommandType getCommandType() {
 		return houseCommandType;
 	}
 }

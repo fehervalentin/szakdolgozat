@@ -8,7 +8,7 @@ import com.cantero.games.poker.texasholdem.Card;
 import com.cantero.games.poker.texasholdem.CardSuitEnum;
 
 import hu.elte.bfw1p6.poker.client.controller.PokerHoldemDefaultValues;
-import hu.elte.bfw1p6.poker.command.PokerCommand;
+import hu.elte.bfw1p6.poker.command.api.PokerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import javafx.application.Platform;

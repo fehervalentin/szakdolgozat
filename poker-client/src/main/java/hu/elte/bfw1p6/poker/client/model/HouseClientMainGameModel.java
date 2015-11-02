@@ -4,68 +4,27 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
-import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
-import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
-import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
+import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
-import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
+import hu.elte.bfw1p6.poker.command.type.HoldemHousePokerCommandType;
+import hu.elte.bfw1p6.poker.command.type.HoldemPlayerPokerCommandType;
+import hu.elte.bfw1p6.poker.command.type.api.PokerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
-import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
-import hu.elte.bfw1p6.poker.model.PokerSession;
-import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
-import hu.elte.bfw1p6.poker.model.entity.PokerTable;
-import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 
-public class MainGameModel {
+public class HouseClientMainGameModel extends AbstractPokerClientModel<HoldemHousePokerCommandType, HoldemPlayerPokerCommandType> {
 
-	private PokerSession pokerSession;
-	private PokerRemote pokerRemote;
-
-	private PokerTable pokerTable;
-	
-	private CommunicatorController communicatorController;
-
-	/**
-	 * Hanyadik vagyok a körben.
-	 */
-	private int youAreNth;
-
-	/**
-	 * Hány játékos van velem együtt.
-	 */
-	private int players;
-
-	/**
-	 * A tartozásom az asztal felé, amit <b>CALL</b> vagy <b>RAISE</b> esetén meg kell adnom.
-	 */
-	private BigDecimal myDebt;
-	
-	public MainGameModel(CommunicatorController communicatorController) {
-		this.pokerSession = Model.getInstance().getPokerSession();
-		this.pokerRemote = RMIRepository.getInstance().getPokerRemote();
-		this.youAreNth = -1;
-		this.pokerTable = ConnectTableHelper.getInstance().getPokerTable();
-		this.myDebt = pokerTable.getDefaultPot();
-		this.communicatorController = communicatorController;
-
-		System.out.println("Ki vagyok: " + getUserName());
+	public HouseClientMainGameModel(CommunicatorController communicatorController) {
+		super(communicatorController);
 	}
 
-	public void connectToTable(RemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException {
-		pokerRemote.connectToTable(pokerSession.getId(), pokerTable, observer);
-	}
-
-	public void sendCommandToTable(HoldemPlayerCommand playerHoldemCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	@Override
+	public void sendCommandToTable(PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		playerHoldemCommand.setSender(pokerSession.getPlayer().getUserName());
 		pokerRemote.sendPlayerCommand(pokerSession.getId(), pokerTable, communicatorController, playerHoldemCommand);
-//		System.out.println("uj balance: " + pokerSession.getPlayer().getBalance());
-	}
-
-	public String getUserName() {
-		return pokerSession.getPlayer().getUserName();
+		//		System.out.println("uj balance: " + pokerSession.getPlayer().getBalance());
 	}
 
 	/**
@@ -80,21 +39,17 @@ public class MainGameModel {
 		youAreNth = houseHoldemCommand.getNthPlayer();
 		players = houseHoldemCommand.getPlayers();
 		// első körben az a dealer, aki elsőként csatlakozott, roundonként +1
-//		System.out.println("Hanyadik játékos vagy a szerveren: " + youAreNth);
-//		System.out.println("Aktuális dealer: " + houseHoldemCommand.getDealer());
+		//		System.out.println("Hanyadik játékos vagy a szerveren: " + youAreNth);
+		//		System.out.println("Aktuális dealer: " + houseHoldemCommand.getDealer());
 		if (areYouTheSmallBlind(houseHoldemCommand)) {
-//			System.out.println("Betettem a kis vakot");
+			//			System.out.println("Betettem a kis vakot");
 			tossBlind(false);
 		} else if (areYouTheBigBlind(houseHoldemCommand)) {
-//			System.out.println("Betettem a nagy vakot");
+			//			System.out.println("Betettem a nagy vakot");
 			tossBlind(true);
 		}
 		// nagyvaktól eggyel balra ülő kezd
-//		System.out.println("Az éppen soron levő játékos: " + houseHoldemCommand.getWhosOn());
-	}
-
-	public void setMyDebt(BigDecimal myDebt) {
-		this.myDebt = myDebt;
+		//		System.out.println("Az éppen soron levő játékos: " + houseHoldemCommand.getWhosOn());
 	}
 
 	/**
@@ -107,7 +62,7 @@ public class MainGameModel {
 	private void tossBlind(Boolean bigBlind) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		BigDecimal amount = pokerTable.getDefaultPot().divide(new BigDecimal(bigBlind ? 1 : 2));
 		myDebt = myDebt.subtract(amount);
-		sendPlayerCommand(HoldemPlayerCommandType.BLIND, amount, null, -1);
+		sendPlayerCommand(HoldemPlayerPokerCommandType.BLIND, amount, null, -1);
 	}
 
 
@@ -130,25 +85,25 @@ public class MainGameModel {
 	public void call() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		BigDecimal amount = BigDecimal.ZERO.add(myDebt);
 		myDebt = myDebt.subtract(amount);
-		sendPlayerCommand(HoldemPlayerCommandType.CALL, amount, null, -1);
+		sendPlayerCommand(HoldemPlayerPokerCommandType.CALL, amount, null, -1);
 	}
 
 	public void check() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
-		sendPlayerCommand(HoldemPlayerCommandType.CHECK, null, null, -1);
+		sendPlayerCommand(HoldemPlayerPokerCommandType.CHECK, null, null, -1);
 	}
 
 	public void raise(BigDecimal amount) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
-		sendPlayerCommand(HoldemPlayerCommandType.RAISE, myDebt, amount, -1);
+		sendPlayerCommand(HoldemPlayerPokerCommandType.RAISE, myDebt, amount, -1);
 	}
 
 	public void fold() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		int tempNth = youAreNth;
 		youAreNth = -1;
-		sendPlayerCommand(HoldemPlayerCommandType.FOLD, null, null, tempNth);
+		sendPlayerCommand(HoldemPlayerPokerCommandType.FOLD, null, null, tempNth);
 	}
 
 	public void quit() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
-		sendPlayerCommand(HoldemPlayerCommandType.QUIT, null, null, youAreNth);		
+		sendPlayerCommand(HoldemPlayerPokerCommandType.QUIT, null, null, youAreNth);		
 	}
 
 	public void receivedFoldPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
@@ -163,24 +118,11 @@ public class MainGameModel {
 		myDebt = playerHoldemCommand.getSender().equals(getUserName()) ? BigDecimal.ZERO : myDebt.add(playerHoldemCommand.getRaiseAmount());
 	}
 
-	public void receivedQuitPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
-		if (youAreNth > playerHoldemCommand.getWhosQuit()) {
-			--youAreNth;
-		}
-	}
-	
-	public BigDecimal getMyDebt() {
-		return myDebt;
-	}
-	
-	public int getYouAreNth() {
-		return youAreNth;
-	}
-	
 
-	private void sendPlayerCommand(HoldemPlayerCommandType type, BigDecimal callAmount, BigDecimal raiseAmount, Integer whosQuit) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
-		
-		HoldemPlayerCommand playerHoldemCommand = new HoldemPlayerCommand(type, callAmount, raiseAmount, whosQuit);
+	private void sendPlayerCommand(PokerCommandType<HoldemPlayerPokerCommandType> type, BigDecimal callAmount, BigDecimal raiseAmount, Integer whosQuit) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+
+		PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand = new PlayerCommand<>(HoldemPlayerPokerCommandType.BLIND, callAmount, raiseAmount, whosQuit);
+//		HoldemPlayerCommand playerHoldemCommand = new HoldemPlayerCommand(type.getActual(), callAmount, raiseAmount, whosQuit);
 		try {
 			sendCommandToTable(playerHoldemCommand);
 		} catch (RemoteException e) {
@@ -209,23 +151,20 @@ public class MainGameModel {
 			}}.start();*/
 	}
 
-	public PokerPlayer getPlayer() {
-		return pokerSession.getPlayer();
-	}
 
 	public void receivedBlindPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void receivedCallPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void receivedCheckPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void receivedPlayerHouseCommand(HoldemHouseCommand houseHoldemCommand) {

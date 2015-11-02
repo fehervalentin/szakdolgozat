@@ -10,11 +10,11 @@ import com.cantero.games.poker.texasholdem.Card;
 
 import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
-import hu.elte.bfw1p6.poker.command.CommandType;
-import hu.elte.bfw1p6.poker.command.HouseCommand;
-import hu.elte.bfw1p6.poker.command.PokerCommand;
+import hu.elte.bfw1p6.poker.command.HousePokerCommand;
+import hu.elte.bfw1p6.poker.command.PlayerCommand;
+import hu.elte.bfw1p6.poker.command.api.PokerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
+import hu.elte.bfw1p6.poker.command.type.api.PokerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
@@ -24,7 +24,7 @@ import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.repository.UserRepository;
 import hu.elte.bfw1p6.poker.server.logic.Deck;
 
-public abstract class AbstractPokerTableServer<T extends CommandType<T>> extends UnicastRemoteObject {
+public abstract class AbstractPokerTableServer<T extends PokerCommandType<T>, E extends PokerCommandType<E>> extends UnicastRemoteObject {
 
 	private static final long serialVersionUID = 1954723026118781134L;
 	
@@ -148,7 +148,7 @@ public abstract class AbstractPokerTableServer<T extends CommandType<T>> extends
 	}
 	
 
-	public void refreshBalance(HoldemPlayerCommand playerCommand) throws PokerUserBalanceException, PokerDataBaseException {
+	public void refreshBalance(PlayerCommand<E> playerCommand) throws PokerUserBalanceException, PokerDataBaseException {
 		User u = UserRepository.getInstance().findByUserName(playerCommand.getSender());
 		if (isThereEnoughMoney(u, playerCommand)) {
 			u.setBalance(u.getBalance().subtract(playerCommand.getCallAmount()));
@@ -156,7 +156,7 @@ public abstract class AbstractPokerTableServer<T extends CommandType<T>> extends
 		}
 	}
 
-	public boolean isThereEnoughMoney(User u, HoldemPlayerCommand playerCommand) throws PokerUserBalanceException {
+	public boolean isThereEnoughMoney(User u, PlayerCommand<E> playerCommand) throws PokerUserBalanceException {
 		BigDecimal newBalance = u.getBalance().subtract(playerCommand.getCallAmount());
 		moneyStack = moneyStack.add(playerCommand.getCallAmount());
 		if (playerCommand.getRaiseAmount() != null) {
@@ -214,7 +214,7 @@ public abstract class AbstractPokerTableServer<T extends CommandType<T>> extends
 	
 	protected abstract void nextRound() throws RemoteException;
 	
-	protected abstract void winner(HouseCommand houseCommand);
+	protected abstract void winner(HousePokerCommand houseCommand);
 
 	/**
 	 * 
@@ -229,16 +229,16 @@ public abstract class AbstractPokerTableServer<T extends CommandType<T>> extends
 			PokerPlayer pokerPlayer = new PokerPlayer();
 			pokerPlayer.setCards(cards);
 			players.add(pokerPlayer);
-			HouseCommand<T> houseCommand = getNewCommand();
+			HousePokerCommand<T> houseCommand = getNewCommand();
 			houseCommand.setUpDealCommand(cards, whosOn);
 			sendPokerCommand(i, houseCommand);
 		}
 		nextStep();
 	}
 	
-	protected abstract HouseCommand<T> getNewCommand();
+	protected abstract HousePokerCommand<T> getNewCommand();
 
 
-	public abstract void receivePlayerCommand(RemoteObserver client, HoldemPlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
+	public abstract void receivePlayerCommand(RemoteObserver client, PlayerCommand<E> playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
 
 }

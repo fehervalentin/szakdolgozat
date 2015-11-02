@@ -3,37 +3,23 @@ package hu.elte.bfw1p6.poker.command.holdem;
 import java.math.BigDecimal;
 
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
-import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
+import hu.elte.bfw1p6.poker.command.type.HoldemHousePokerCommandType;
+import hu.elte.bfw1p6.poker.command.type.HoldemPlayerPokerCommandType;
+import hu.elte.bfw1p6.poker.command.type.api.PokerCommandType;
 
 /**
  * Az osztály valósítja meg a játékosok által küldendő utasításokat
  * @author feher
  *
  */
-public class HoldemPlayerCommand extends PlayerCommand {
+public class HoldemPlayerCommand extends PlayerCommand<HoldemHousePokerCommandType> {
+
+	public HoldemPlayerCommand(PokerCommandType<HoldemHousePokerCommandType> playerCommandType, BigDecimal callAmount,
+			BigDecimal raiseAmount, Integer whosQuit) {
+		super(playerCommandType, callAmount, raiseAmount, whosQuit);
+		// TODO Auto-generated constructor stub
+	}
 
 	private static final long serialVersionUID = -2735676865228502296L;
-	
-	/**
-	 * Az utasítás típusa.
-	 */
-	private HoldemPlayerCommandType playerCommandType;
-	
-	/**
-	 * Konstruktor
-	 * @param playerCommandType A Command típusa
-	 * @param callAmount CALL esetén a megadandó összeg
-	 * @param raiseAmount RAISE esetén az emelendő összeg
-	 */
-	public HoldemPlayerCommand(HoldemPlayerCommandType playerCommandType, BigDecimal callAmount, BigDecimal raiseAmount, Integer whosQuit) {
-		this.playerCommandType = playerCommandType;
-		this.callAmount = callAmount;
-		this.raiseAmount = raiseAmount;
-		this.whosQuit = whosQuit;
-	}
-	
-	public HoldemPlayerCommandType getPlayerCommandType() {
-		return playerCommandType;
-	}
 	
 }

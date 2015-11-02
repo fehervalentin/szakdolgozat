@@ -1,18 +1,18 @@
-package hu.elte.bfw1p6.poker.command;
+package hu.elte.bfw1p6.poker.command.api;
 
 import java.math.BigDecimal;
 
 import hu.elte.bfw1p6.poker.command.type.api.PlayerPokerCommandType;
 import hu.elte.bfw1p6.poker.command.type.api.PokerCommandType;
 
-public class PlayerCommand<T extends PlayerPokerCommandType<T>> implements Command {
-
+public abstract class PlayerPokerCommand<T extends PlayerPokerCommandType<T>> implements PokerCommand {
+	
 	private static final long serialVersionUID = -2991066310623664425L;
 
 	/**
 	 * Az utasítás típusa.
 	 */
-	protected PokerCommandType<T> playerCommandType;
+	protected PlayerPokerCommandType<T> type;
 	
 	/**
 	 * A megadandó tét.
@@ -45,8 +45,8 @@ public class PlayerCommand<T extends PlayerPokerCommandType<T>> implements Comma
 	 * @param callAmount CALL esetén a megadandó összeg
 	 * @param raiseAmount RAISE esetén az emelendő összeg
 	 */
-	public PlayerCommand(PokerCommandType<T> playerCommandType, BigDecimal callAmount, BigDecimal raiseAmount, Integer whosQuit) {
-		this.playerCommandType = playerCommandType;
+	public PlayerPokerCommand(T type, BigDecimal callAmount, BigDecimal raiseAmount, Integer whosQuit) {
+		this.type = type;
 		this.callAmount = callAmount;
 		this.raiseAmount = raiseAmount;
 		this.whosQuit = whosQuit;
@@ -81,7 +81,7 @@ public class PlayerCommand<T extends PlayerPokerCommandType<T>> implements Comma
 		return raiseAmount;
 	}
 	
-	public PokerCommandType<T> getPlayerCommandType() {
-		return playerCommandType;
+	public PokerCommandType<T> getType() {
+		return type;
 	}
 }

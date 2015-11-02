@@ -18,7 +18,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableListerObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
+import hu.elte.bfw1p6.poker.command.type.api.PokerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
@@ -48,7 +48,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 
 	private List<TableListerObserver> tlos;
 
-	private Hashtable<String, AbstractPokerTableServer<?>> pokerTableservers;
+	private Hashtable<String, AbstractPokerTableServer<?, ?>> pokerTableservers;
 
 	public PokerRemoteImpl() throws RemoteException {
 		this.pokerProperties = PokerProperties.getInstance();
@@ -197,7 +197,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, HoldemPlayerCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PokerCommandType<?> playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		if (sessionService.isAuthenticated(uuid)) {
 			pokerTableservers.get(t.getName()).receivePlayerCommand(client, playerCommand);
 		}
@@ -207,7 +207,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	@Override
 	public void connectToTable(UUID uuid, PokerTable t, RemoteObserver client) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException {
 		if (sessionService.isAuthenticated(uuid)) {
-			AbstractPokerTableServer<?> pts = pokerTableservers.get(t.getName());
+			AbstractPokerTableServer<?,?> pts = pokerTableservers.get(t.getName());
 			pts.join(client, sessionService.lookUpUserName(uuid));
 		}
 	}
