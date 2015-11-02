@@ -9,8 +9,8 @@ import com.cantero.games.poker.texasholdem.CardSuitEnum;
 
 import hu.elte.bfw1p6.poker.client.controller.PokerHoldemDefaultValues;
 import hu.elte.bfw1p6.poker.command.api.PokerCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemHousePokerCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerPokerCommand;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -217,7 +217,7 @@ public class MainView {
 		}
 	}
 
-	public void receivedBlindHouseCommand(HoldemHouseCommand houseHoldemCommand) {
+	public void receivedBlindHouseCommand(HoldemHousePokerCommand houseHoldemCommand) {
 		hideAllProfiles();
 		clientsCount = houseHoldemCommand.getPlayers();
 		youAreNth = houseHoldemCommand.getNthPlayer();
@@ -251,7 +251,7 @@ public class MainView {
 				});
 	}
 
-	public void receivedPlayerHouseCommand(HoldemHouseCommand houseHoldemCommand) {
+	public void receivedPlayerHouseCommand(HoldemHousePokerCommand houseHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -282,7 +282,7 @@ public class MainView {
 		return value;
 	}
 
-	public void flop(HoldemHouseCommand houseHoldemCommand) {
+	public void flop(HoldemHousePokerCommand houseHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -297,7 +297,7 @@ public class MainView {
 		});
 	}
 
-	public void turn(HoldemHouseCommand houseHoldemCommand) {
+	public void turn(HoldemHousePokerCommand houseHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -309,7 +309,7 @@ public class MainView {
 		});
 	}
 
-	public void river(HoldemHouseCommand houseHoldemCommand) {
+	public void river(HoldemHousePokerCommand houseHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -320,7 +320,7 @@ public class MainView {
 		});
 	}
 
-	public void winner(HoldemHouseCommand houseHoldemCommand) {
+	public void winner(HoldemHousePokerCommand houseHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -358,7 +358,7 @@ public class MainView {
 		});
 	}
 
-	private void revealCard(HoldemHouseCommand houseHoldemCommand, int i) {
+	private void revealCard(HoldemHousePokerCommand houseHoldemCommand, int i) {
 		Card[] cards = houseHoldemCommand.getCards();
 		Card card = null;
 		if (i == 0 || i == 3 || i == 4) {
@@ -375,7 +375,7 @@ public class MainView {
 		houseCards.get(i).setVisible(true);
 	}
 
-	public void receivedBlindPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
+	public void receivedBlindPlayerCommand(HoldemPlayerPokerCommand playerHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -385,7 +385,7 @@ public class MainView {
 		});
 	}
 
-	public void receivedCallPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
+	public void receivedCallPlayerCommand(HoldemPlayerPokerCommand playerHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -397,7 +397,7 @@ public class MainView {
 
 	}
 
-	public void receivedCheckPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
+	public void receivedCheckPlayerCommand(HoldemPlayerPokerCommand playerHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -407,7 +407,7 @@ public class MainView {
 		});
 	}
 
-	public void receivedFoldPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
+	public void receivedFoldPlayerCommand(HoldemPlayerPokerCommand playerHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -433,7 +433,7 @@ public class MainView {
 		});
 	}
 
-	public void receivedRaisePlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
+	public void receivedRaisePlayerCommand(HoldemPlayerPokerCommand playerHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -445,7 +445,7 @@ public class MainView {
 		});
 	}
 
-	public void receivedQuitPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
+	public void receivedQuitPlayerCommand(HoldemPlayerPokerCommand playerHoldemCommand) {
 		// TODO Auto-generated method stub
 
 	}

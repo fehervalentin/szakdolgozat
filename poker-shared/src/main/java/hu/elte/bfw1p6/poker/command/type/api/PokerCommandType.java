@@ -2,9 +2,9 @@ package hu.elte.bfw1p6.poker.command.type.api;
 
 public interface PokerCommandType<T extends PokerCommandType<T>> {
 	
-	public T getActual();
+	T getActual();
 	
-	public T getNext();
+	T getNext();
 	
-	public T[] getValues();
+	T[] getValues();
 }

@@ -2,17 +2,11 @@ package hu.elte.bfw1p6.poker.command;
 
 import java.math.BigDecimal;
 
-import hu.elte.bfw1p6.poker.command.api.PokerCommand;
 import hu.elte.bfw1p6.poker.command.type.api.PokerCommandType;
 
-public class PlayerPokerCommand<T extends PokerCommandType<T>> implements PokerCommand<T> {
+public class PlayerPokerCommand<T extends PokerCommandType<T>> extends AbstractPokerCommand<T> {
 
 	private static final long serialVersionUID = -8652099535754017708L;
-
-	/**
-	 * Az utasítás típusa.
-	 */
-	protected T type;
 	
 	/**
 	 * A megadandó tét.
@@ -30,11 +24,6 @@ public class PlayerPokerCommand<T extends PokerCommandType<T>> implements PokerC
 	protected String sender;
 	
 	/**
-	 * Ki van éppen soron.
-	 */
-	protected int whosOn;
-	
-	/**
 	 * Ki lépett ki.
 	 */
 	protected int whosQuit;
@@ -45,8 +34,7 @@ public class PlayerPokerCommand<T extends PokerCommandType<T>> implements PokerC
 	 * @param callAmount CALL esetén a megadandó összeg
 	 * @param raiseAmount RAISE esetén az emelendő összeg
 	 */
-	public PlayerPokerCommand(T type, BigDecimal callAmount, BigDecimal raiseAmount, Integer whosQuit) {
-		this.type = type;
+	public PlayerPokerCommand(BigDecimal callAmount, BigDecimal raiseAmount, Integer whosQuit) {
 		this.callAmount = callAmount;
 		this.raiseAmount = raiseAmount;
 		this.whosQuit = whosQuit;
@@ -74,15 +62,5 @@ public class PlayerPokerCommand<T extends PokerCommandType<T>> implements PokerC
 
 	public BigDecimal getRaiseAmount() {
 		return raiseAmount;
-	}
-
-	@Override
-	public int getWhosOn() {
-		return whosOn;
-	}
-	
-	@Override
-	public T getType() {
-		return type;
 	}
 }

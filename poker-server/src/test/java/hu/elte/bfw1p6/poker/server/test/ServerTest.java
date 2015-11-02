@@ -12,7 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemHousePokerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.server.HoldemPokerTableServer;
@@ -47,7 +47,7 @@ public class ServerTest {
 				
 				@Override
 				public void update(Object updateMsg) throws RemoteException {
-					Assert.assertThat(updateMsg, instanceOf(HoldemHouseCommand.class));
+					Assert.assertThat(updateMsg, instanceOf(HoldemHousePokerCommand.class));
 //					HouseHoldemCommand command = (HouseHoldemCommand)updateMsg;
 //					Assert.assertTrue(command.getHouseCommandType() == HoldemHouseCommandType.BLIND);
 				}

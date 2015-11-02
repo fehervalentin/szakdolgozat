@@ -19,4 +19,9 @@ public enum HoldemHousePokerCommandType implements HousePokerCommandType<HoldemH
 	public HoldemHousePokerCommandType getActual() {
 		return this;
 	}
+
+	@Override
+	public HoldemHousePokerCommandType getLastValue() {
+		return values()[values().length - 1];
+	}
 }

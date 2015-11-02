@@ -7,10 +7,11 @@ import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
-import hu.elte.bfw1p6.poker.command.PlayerCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
-import hu.elte.bfw1p6.poker.command.type.HoldemPlayerPokerCommandType;
-import hu.elte.bfw1p6.poker.command.type.api.PokerCommandType;
+import hu.elte.bfw1p6.poker.command.HousePokerCommand;
+import hu.elte.bfw1p6.poker.command.PlayerPokerCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerPokerCommand;
+import hu.elte.bfw1p6.poker.command.type.api.HousePokerCommandType;
+import hu.elte.bfw1p6.poker.command.type.api.PlayerPokerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
@@ -19,7 +20,7 @@ import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 
-public abstract class AbstractPokerClientModel<T extends PokerCommandType<T>, E extends PokerCommandType<E>> {
+public abstract class AbstractPokerClientModel<HPCT extends HousePokerCommandType<HPCT>, HPC extends HousePokerCommand<HPCT>, PPCT extends PlayerPokerCommandType<PPCT>, PPC extends PlayerPokerCommand<PPCT>> {
 
 	protected PokerSession pokerSession;
 	protected PokerRemote pokerRemote;
@@ -70,13 +71,13 @@ public abstract class AbstractPokerClientModel<T extends PokerCommandType<T>, E 
 		return youAreNth;
 	}
 
-	public void receivedQuitPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
+	public void receivedQuitPlayerCommand(HoldemPlayerPokerCommand playerHoldemCommand) {
 		if (youAreNth > playerHoldemCommand.getWhosQuit()) {
 			--youAreNth;
 		}
 	}
 	
-	public abstract void sendCommandToTable(PlayerCommand<E> playerHoldemCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
+	public abstract void sendCommandToTable(PlayerPokerCommand<PPCT> playerPokerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
 
 //	public void setMyDebt(BigDecimal myDebt) {
 //		this.myDebt = myDebt;

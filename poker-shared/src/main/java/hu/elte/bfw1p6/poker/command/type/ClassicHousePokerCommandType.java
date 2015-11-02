@@ -1,10 +1,11 @@
 package hu.elte.bfw1p6.poker.command.type;
 
-import hu.elte.bfw1p6.poker.command.type.api.PlayerPokerCommandType;
+import hu.elte.bfw1p6.poker.command.type.api.HousePokerCommandType;
 
-public enum ClassicHousePokerCommandType implements PlayerPokerCommandType<ClassicHousePokerCommandType> {
+public enum ClassicHousePokerCommandType implements HousePokerCommandType<ClassicHousePokerCommandType> {
 	BLIND, DEAL, BET, CHANGE, BET2, WINNER;
 	
+	@Override
 	public ClassicHousePokerCommandType getNext() {
 		return values()[(ordinal()+1) % values().length];
 	}
@@ -17,5 +18,10 @@ public enum ClassicHousePokerCommandType implements PlayerPokerCommandType<Class
 	@Override
 	public ClassicHousePokerCommandType getActual() {
 		return this;
+	}
+
+	@Override
+	public ClassicHousePokerCommandType getLastValue() {
+		return values()[values().length - 1];
 	}
 }

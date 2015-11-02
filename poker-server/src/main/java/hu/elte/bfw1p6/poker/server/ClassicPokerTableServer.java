@@ -4,16 +4,16 @@ import java.rmi.RemoteException;
 
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.command.HousePokerCommand;
-import hu.elte.bfw1p6.poker.command.PlayerCommand;
-import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
+import hu.elte.bfw1p6.poker.command.PlayerPokerCommand;
+import hu.elte.bfw1p6.poker.command.classic.ClassicHousePokerCommand;
+import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerPokerCommand;
 import hu.elte.bfw1p6.poker.command.type.ClassicHousePokerCommandType;
 import hu.elte.bfw1p6.poker.command.type.ClassicPlayerPokerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 
-public class ClassicPokerTableServer extends AbstractPokerTableServer<ClassicHousePokerCommandType, ClassicPlayerPokerCommandType> {
+public class ClassicPokerTableServer extends AbstractPokerTableServer<ClassicHousePokerCommandType, ClassicHousePokerCommand, ClassicPlayerPokerCommandType, ClassicPlayerPokerCommand> {
 
 	private static final long serialVersionUID = 804318360089503038L;
 
@@ -42,11 +42,6 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer<ClassicHou
 	}
 
 	@Override
-	protected void nextStep() {
-		actualHouseCommandType = actualHouseCommandType.getNext();
-	}
-
-	@Override
 	protected void nextRound() throws RemoteException {
 		// ha már kijött a river és az utolsó körben (rivernél) már mindenki nyilatkozott legalább egyszer, akkor új játszma kezdődik
 		System.out.println("VotedPlayers: " + votedPlayers);
@@ -57,7 +52,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer<ClassicHou
 		} else {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
 			if (votedPlayers >= playersInRound) {
-				ClassicHouseCommand classicHouseCommand = new ClassicHouseCommand();
+				ClassicHousePokerCommand classicHouseCommand = new ClassicHousePokerCommand();
 				// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
 				whosOn = (dealer + 1 + foldCounter) % playersInRound;
 				switch (actualHouseCommandType.getActual()) {
@@ -89,19 +84,21 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer<ClassicHou
 	}
 
 	@Override
-	protected void winner(HousePokerCommand houseCommand) {
+	protected void winner(HousePokerCommand<ClassicHousePokerCommandType> houseCommand) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	protected HousePokerCommand<ClassicHousePokerCommandType> getNewCommand() {
-		return new ClassicHouseCommand();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public void receivePlayerCommand(RemoteObserver client, PlayerCommand<ClassicPlayerPokerCommandType> playerCommand)
-			throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public void receivePlayerCommand(RemoteObserver client,
+			PlayerPokerCommand<ClassicPlayerPokerCommandType> playerCommand)
+					throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		// TODO Auto-generated method stub
 		
 	}

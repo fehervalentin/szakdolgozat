@@ -11,10 +11,10 @@ import com.cantero.games.poker.texasholdem.Card;
 import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.command.HousePokerCommand;
-import hu.elte.bfw1p6.poker.command.PlayerCommand;
+import hu.elte.bfw1p6.poker.command.PlayerPokerCommand;
 import hu.elte.bfw1p6.poker.command.api.PokerCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
-import hu.elte.bfw1p6.poker.command.type.api.PokerCommandType;
+import hu.elte.bfw1p6.poker.command.type.api.HousePokerCommandType;
+import hu.elte.bfw1p6.poker.command.type.api.PlayerPokerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
@@ -24,43 +24,43 @@ import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.repository.UserRepository;
 import hu.elte.bfw1p6.poker.server.logic.Deck;
 
-public abstract class AbstractPokerTableServer<T extends PokerCommandType<T>, E extends PokerCommandType<E>> extends UnicastRemoteObject {
+public abstract class AbstractPokerTableServer<HPCT extends HousePokerCommandType<HPCT>, HPC extends HousePokerCommand<HPCT>, PPCT extends PlayerPokerCommandType<PPCT>, PPC extends PlayerPokerCommand<PPCT>> extends UnicastRemoteObject {
 
 	private static final long serialVersionUID = 1954723026118781134L;
-	
+
 	private final String ERR_TABLE_FULL = "Az asztal betelt, nem tudsz csatlakozni!";
 	private final String ERR_BALANCE_MSG = "Nincs elég zsetonod!";
-	
+
 	/**
 	 * Épp milyen utasítást fog kiadni a szerver.
 	 */
-//	protected CommandType<T> actualHouseCommandType;
+	protected HPCT actualHouseCommandType;
 
 	/**
 	 * Maga az asztal entitás.
 	 */
 	protected PokerTable pokerTable;
-	
+
 	/**
 	 * Maga a pénz stack.
 	 */
 	protected BigDecimal moneyStack;
-	
+
 	/**
 	 * Kliensek (observerek).
 	 */
 	protected List<RemoteObserver> clients;
-	
+
 	/**
 	 * Kártyapakli.
 	 */
 	protected Deck deck;
-	
+
 	/**
 	 * Maguk a játékosok.
 	 */
 	protected List<PokerPlayer> players;
-	
+
 	/**
 	 * A kliensek username-jei (mert a PokerPlayerben a userName-re nincs setter! (perzisztálást védi...)
 	 */
@@ -94,7 +94,7 @@ public abstract class AbstractPokerTableServer<T extends PokerCommandType<T>, E 
 	protected int minPlayer = 3;
 
 	protected int foldCounter;
-	
+
 	protected AbstractPokerTableServer(PokerTable pokerTable) throws RemoteException {
 		this.pokerTable = pokerTable;
 		this.deck = new Deck();
@@ -102,9 +102,9 @@ public abstract class AbstractPokerTableServer<T extends PokerCommandType<T>, E 
 		this.moneyStack = BigDecimal.ZERO;
 		this.players = new ArrayList<>();
 		this.clientsNames = new ArrayList<>();
-//		this.actualHouseCommandType = actualHouseCommandType.getValues()[0];
+		this.actualHouseCommandType = actualHouseCommandType.getValues()[0];
 	}
-	
+
 
 	/**
 	 * Az asztalhoz való csatlakozás.
@@ -123,7 +123,7 @@ public abstract class AbstractPokerTableServer<T extends PokerCommandType<T>, E 
 			startRound();
 		}
 	}
-	
+
 	protected void prepareNextRound() {
 		foldCounter = 0;
 		// megnézem, hogy aktuális hány játékos van az asztalnál
@@ -141,14 +141,14 @@ public abstract class AbstractPokerTableServer<T extends PokerCommandType<T>, E 
 		//törlöm a játékosokat
 		players.clear();
 	}
-	
+
 
 	public synchronized void leave(PokerTableServerObserver client) {
 		clients.remove(client);
 	}
-	
 
-	public void refreshBalance(PlayerCommand<E> playerCommand) throws PokerUserBalanceException, PokerDataBaseException {
+
+	public void refreshBalance(PlayerPokerCommand<PPCT> playerCommand) throws PokerUserBalanceException, PokerDataBaseException {
 		User u = UserRepository.getInstance().findByUserName(playerCommand.getSender());
 		if (isThereEnoughMoney(u, playerCommand)) {
 			u.setBalance(u.getBalance().subtract(playerCommand.getCallAmount()));
@@ -156,7 +156,7 @@ public abstract class AbstractPokerTableServer<T extends PokerCommandType<T>, E 
 		}
 	}
 
-	public boolean isThereEnoughMoney(User u, PlayerCommand<E> playerCommand) throws PokerUserBalanceException {
+	public boolean isThereEnoughMoney(User u, PlayerPokerCommand<PPCT> playerCommand) throws PokerUserBalanceException {
 		BigDecimal newBalance = u.getBalance().subtract(playerCommand.getCallAmount());
 		moneyStack = moneyStack.add(playerCommand.getCallAmount());
 		if (playerCommand.getRaiseAmount() != null) {
@@ -168,23 +168,23 @@ public abstract class AbstractPokerTableServer<T extends PokerCommandType<T>, E 
 		}
 		return true;
 	}
-	
+
 
 	protected void collectBlinds() {
 		for (int i = 0; i < clients.size(); i++) {
-			HoldemHouseCommand houseHoldemCommand = new HoldemHouseCommand();
+			HousePokerCommand<HPCT> houseHoldemCommand = new HousePokerCommand<HPCT>();
 			houseHoldemCommand.setUpBlindCommand(i, clients.size(), dealer, whosOn, clientsNames);
 			sendPokerCommand(i, houseHoldemCommand);
 		}
 		nextStep();
 	}
-	
+
 	/**
 	 * Egy adott kliensnek küld utasítást.
 	 * @param i a kliens sorszáma
 	 * @param pokerCommand az utasítást
 	 */
-	protected void sendPokerCommand(int i, PokerCommand pokerCommand) {
+	protected void sendPokerCommand(int i, PokerCommand<?> pokerCommand) {
 		new Thread() {
 
 			@Override
@@ -197,27 +197,29 @@ public abstract class AbstractPokerTableServer<T extends PokerCommandType<T>, E 
 				}
 			}}.start();
 	}
-	
+
 	/**
 	 * Minden kliensek elküldi az utasítást.
 	 * @param pokerCommand az utasítás
 	 */
-	protected void notifyClients(PokerCommand pokerCommand) {
+	protected void notifyClients(PokerCommand<?> pokerCommand) {
 		for (int i = 0; i < clients.size(); i++) {
 			sendPokerCommand(i, pokerCommand);
 		}
 	}
-	
+
 	protected abstract void startRound();
-	
-	protected abstract void nextStep();
-	
+
+	protected void nextStep() {
+		this.actualHouseCommandType = actualHouseCommandType.getNext();
+	}
+
 	protected abstract void nextRound() throws RemoteException;
-	
-	protected abstract void winner(HousePokerCommand houseCommand);
+
+	protected abstract void winner(HousePokerCommand<HPCT> houseCommand);
 
 	/**
-	 * 
+	 * Kártyákat oszt ki a játékosoknak.
 	 * @param cardCount hány darab lapot osztunk ki.
 	 */
 	protected void dealCardsToPlayers(int cardCount) {
@@ -229,16 +231,15 @@ public abstract class AbstractPokerTableServer<T extends PokerCommandType<T>, E 
 			PokerPlayer pokerPlayer = new PokerPlayer();
 			pokerPlayer.setCards(cards);
 			players.add(pokerPlayer);
-			HousePokerCommand<T> houseCommand = getNewCommand();
+			HousePokerCommand<HPCT> houseCommand = getNewCommand();
 			houseCommand.setUpDealCommand(cards, whosOn);
 			sendPokerCommand(i, houseCommand);
 		}
 		nextStep();
 	}
-	
-	protected abstract HousePokerCommand<T> getNewCommand();
 
+	protected abstract HousePokerCommand<HPCT> getNewCommand();
 
-	public abstract void receivePlayerCommand(RemoteObserver client, PlayerCommand<E> playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
+	public abstract void receivePlayerCommand(RemoteObserver client, PlayerPokerCommand<PPCT> playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
 
 }

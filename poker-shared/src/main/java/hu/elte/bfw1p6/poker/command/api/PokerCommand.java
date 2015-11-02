@@ -10,6 +10,10 @@ import hu.elte.bfw1p6.poker.command.type.api.PokerCommandType;
  *
  */
 public interface PokerCommand<T extends PokerCommandType<T>> extends Serializable {
+	
 	int getWhosOn();
+	
 	T getType();
+	
+	void setType(T type);
 }

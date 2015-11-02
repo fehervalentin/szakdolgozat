@@ -11,10 +11,9 @@ import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.model.HouseClientMainGameModel;
 import hu.elte.bfw1p6.poker.client.view.MainView;
-import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.api.PokerCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemHousePokerCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerPokerCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemPlayerPokerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
@@ -23,7 +22,6 @@ import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -79,12 +77,12 @@ public class HoldemMainGameController extends AbstractMainGameController<HoldemP
 	@Override
 	public void updateMe(Object updateMsg) {
 		// ha a ház küld utasítást
-		if (updateMsg instanceof HoldemHouseCommand) {
-			HoldemHouseCommand houseHoldemCommand = (HoldemHouseCommand)updateMsg;
+		if (updateMsg instanceof HoldemHousePokerCommand) {
+			HoldemHousePokerCommand houseHoldemCommand = (HoldemHousePokerCommand)updateMsg;
 //			printHouseCommand(houseHoldemCommand);
-			System.out.println("A haz utasítást küldött: " + houseHoldemCommand.getCommandType());
+			System.out.println("A haz utasítást küldött: " + houseHoldemCommand.getType());
 			
-			switch (houseHoldemCommand.getCommandType()) {
+			switch (houseHoldemCommand.getType()) {
 			case BLIND: {
 				receivedBlindHouseCommand(houseHoldemCommand);
 				break;
@@ -119,48 +117,44 @@ public class HoldemMainGameController extends AbstractMainGameController<HoldemP
 				throw new IllegalArgumentException();
 			}
 			}
-		} else if (updateMsg instanceof PlayerCommand<?>) {
-			PlayerCommand<?> playerHoldemCommand_ = (PlayerCommand<?>)updateMsg;
-			/*if (playerHoldemCommand_.getClass().getGenericSuperclass(). instanceof HoldemPlayerCommandType) {
-				
-			}*/
-			PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand = (PlayerCommand<HoldemPlayerPokerCommandType>)playerHoldemCommand_;
+		} else if (updateMsg instanceof HoldemPlayerPokerCommand) {
+			HoldemPlayerPokerCommand holdemPlayerCommand = (HoldemPlayerPokerCommand)updateMsg;
 //			System.out.println("Ki kuldte a player commandot: " + playerHoldemCommand.getSender() + "\nMilyen command: " + playerHoldemCommand.getPlayerCommandType());
 //			System.out.println("You are nth: " + model.getYouAreNth() + " Whoson: " + playerHoldemCommand.getWhosOn());
-			System.out.println("A(z) " + playerHoldemCommand.getSender() + " játékos utasítást küldött: " + playerHoldemCommand.getPlayerCommandType());
+			System.out.println("A(z) " + holdemPlayerCommand.getSender() + " játékos utasítást küldött: " + holdemPlayerCommand.getType());
 			
-			switch (playerHoldemCommand.getPlayerCommandType().getActual()) {
+			switch (holdemPlayerCommand.getType().getActual()) {
 			case BLIND: {
-				receivedBlindPlayerCommand(playerHoldemCommand);
+				receivedBlindPlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			case CALL: {
-				receivedCallPlayerCommand(playerHoldemCommand);
+				receivedCallPlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			case CHECK: {
-				receivedCheckPlayerCommand(playerHoldemCommand);
+				receivedCheckPlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			case FOLD: {
-				receivedFoldPlayerCommand(playerHoldemCommand);
+				receivedFoldPlayerCommand(holdemPlayerCommand);
 //				modifyButtonVisibilities(playerHoldemCommand);
 				break;
 			}
 			case RAISE: {
-				System.out.println("A RAISE mértéke: " + playerHoldemCommand.getRaiseAmount());
-				receivedRaisePlayerCommand(playerHoldemCommand);
+				System.out.println("A RAISE mértéke: " + holdemPlayerCommand.getRaiseAmount());
+				receivedRaisePlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			case QUIT: {
-				receivedQuitPlayerCommand(playerHoldemCommand);
+				receivedQuitPlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			default: {
 				break;
 			}
 			}
-			modifyButtonVisibilities(playerHoldemCommand);
+			modifyButtonVisibilities(holdemPlayerCommand);
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -179,7 +173,7 @@ public class HoldemMainGameController extends AbstractMainGameController<HoldemP
 		});
 	}
 
-	private void receivedBlindHouseCommand(HoldemHouseCommand houseHoldemCommand) {
+	private void receivedBlindHouseCommand(HoldemHousePokerCommand houseHoldemCommand) {
 		try {
 			mainView.receivedBlindHouseCommand(houseHoldemCommand);
 			model.receivedBlindHouseCommand(houseHoldemCommand);
@@ -188,29 +182,29 @@ public class HoldemMainGameController extends AbstractMainGameController<HoldemP
 		}
 	}
 
-	private void receivedPlayerHouseCommand(HoldemHouseCommand houseHoldemCommand) {
+	private void receivedPlayerHouseCommand(HoldemHousePokerCommand houseHoldemCommand) {
 		model.receivedPlayerHouseCommand(houseHoldemCommand);
 		modifyButtonVisibilities(houseHoldemCommand);
 		mainView.receivedPlayerHouseCommand(houseHoldemCommand);
 	}
 
-	private void receivedFlopHouseCommand(HoldemHouseCommand houseHoldemCommand) {
+	private void receivedFlopHouseCommand(HoldemHousePokerCommand houseHoldemCommand) {
 		System.out.println("Flop kommand: " + model.getYouAreNth() + "  " + houseHoldemCommand.getWhosOn());
 		modifyButtonVisibilities(houseHoldemCommand);
 		mainView.flop(houseHoldemCommand);
 	}
 
-	private void receivedTurnHouseCommand(HoldemHouseCommand houseHoldemCommand) {
+	private void receivedTurnHouseCommand(HoldemHousePokerCommand houseHoldemCommand) {
 		modifyButtonVisibilities(houseHoldemCommand);
 		mainView.turn(houseHoldemCommand);
 	}
 
-	private void receivedRiverHouseCommand(HoldemHouseCommand houseHoldemCommand) {
+	private void receivedRiverHouseCommand(HoldemHousePokerCommand houseHoldemCommand) {
 		modifyButtonVisibilities(houseHoldemCommand);
 		mainView.river(houseHoldemCommand);
 	}
 
-	private void receivedWinnerHouseCommand(HoldemHouseCommand houseHoldemCommand) {
+	private void receivedWinnerHouseCommand(HoldemHousePokerCommand houseHoldemCommand) {
 		mainView.winner(houseHoldemCommand);
 	}
 
@@ -218,33 +212,33 @@ public class HoldemMainGameController extends AbstractMainGameController<HoldemP
 	
 	
 
-	private void receivedBlindPlayerCommand(PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand) {
+	private void receivedBlindPlayerCommand(HoldemPlayerPokerCommand playerHoldemCommand) {
 		model.receivedBlindPlayerCommand(playerHoldemCommand);
 		mainView.receivedBlindPlayerCommand(playerHoldemCommand);
 	}
 
-	private void receivedCallPlayerCommand(PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand) {
+	private void receivedCallPlayerCommand(HoldemPlayerPokerCommand playerHoldemCommand) {
 		model.receivedCallPlayerCommand(playerHoldemCommand);
 		mainView.receivedCallPlayerCommand(playerHoldemCommand);
 	}
 
-	private void receivedCheckPlayerCommand(PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand) {
+	private void receivedCheckPlayerCommand(HoldemPlayerPokerCommand playerHoldemCommand) {
 		model.receivedCheckPlayerCommand(playerHoldemCommand);
 		mainView.receivedCheckPlayerCommand(playerHoldemCommand);
 	}
 
-	private void receivedFoldPlayerCommand(PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand) {
+	private void receivedFoldPlayerCommand(HoldemPlayerPokerCommand playerHoldemCommand) {
 		model.receivedFoldPlayerCommand(playerHoldemCommand);
 		mainView.receivedFoldPlayerCommand(playerHoldemCommand);
 	}
 
-	private void receivedRaisePlayerCommand(PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand) {
+	private void receivedRaisePlayerCommand(HoldemPlayerPokerCommand playerHoldemCommand) {
 		model.receivedRaisePlayerCommand(playerHoldemCommand);
 		mainView.receivedRaisePlayerCommand(playerHoldemCommand);
 		checkButton.setDisable(true);
 	}
 
-	private void receivedQuitPlayerCommand(PlayerCommand<HoldemPlayerPokerCommandType> playerHoldemCommand) {
+	private void receivedQuitPlayerCommand(HoldemPlayerPokerCommand playerHoldemCommand) {
 		model.receivedQuitPlayerCommand(playerHoldemCommand);
 		mainView.receivedQuitPlayerCommand(playerHoldemCommand);
 	}
@@ -259,10 +253,10 @@ public class HoldemMainGameController extends AbstractMainGameController<HoldemP
 
 
 	private void modifyButtonVisibilities(PokerCommand pokerCommand) {
-		if (pokerCommand instanceof HoldemHouseCommand) {
-			pokerCommand = (HoldemHouseCommand)pokerCommand;
-		} else if (pokerCommand instanceof HoldemPlayerCommand) {
-			pokerCommand = (HoldemPlayerCommand)pokerCommand;
+		if (pokerCommand instanceof HoldemHousePokerCommand) {
+			pokerCommand = (HoldemHousePokerCommand)pokerCommand;
+		} else if (pokerCommand instanceof HoldemPlayerPokerCommand) {
+			pokerCommand = (HoldemPlayerPokerCommand)pokerCommand;
 		}
 		boolean disable = model.getYouAreNth() == pokerCommand.getWhosOn() ? false : true;
 		System.out.println("Flop kommandban button disability: " + model.getYouAreNth() + " " + pokerCommand.getWhosOn());
@@ -282,7 +276,7 @@ public class HoldemMainGameController extends AbstractMainGameController<HoldemP
 		});
 	}
 
-	private void player(HoldemHouseCommand houseHoldemCommand) {
+	private void player(HoldemHousePokerCommand houseHoldemCommand) {
 		boolean disable = model.getYouAreNth() == houseHoldemCommand.getWhosOn() ? false : true;
 		modifyButtonsDisability(disable);
 		if (model.getMyDebt().compareTo(BigDecimal.ZERO) > 0) {
@@ -290,7 +284,7 @@ public class HoldemMainGameController extends AbstractMainGameController<HoldemP
 		}
 	}
 
-	private void printHouseCommand(HoldemHouseCommand command) {
+	private void printHouseCommand(HoldemHousePokerCommand command) {
 		System.out.println("----------------");
 		System.out.println(command);
 	}

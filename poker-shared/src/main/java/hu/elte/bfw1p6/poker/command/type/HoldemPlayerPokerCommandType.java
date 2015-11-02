@@ -1,8 +1,8 @@
 package hu.elte.bfw1p6.poker.command.type;
 
-import hu.elte.bfw1p6.poker.command.type.api.HousePokerCommandType;
+import hu.elte.bfw1p6.poker.command.type.api.PlayerPokerCommandType;
 
-public enum HoldemPlayerPokerCommandType implements HousePokerCommandType<HoldemPlayerPokerCommandType> {
+public enum HoldemPlayerPokerCommandType implements PlayerPokerCommandType<HoldemPlayerPokerCommandType> {
 	BLIND, CALL, CHECK, FOLD, RAISE, QUIT;
 
 	@Override
