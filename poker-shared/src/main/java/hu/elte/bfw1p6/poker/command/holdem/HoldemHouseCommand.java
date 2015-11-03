@@ -33,7 +33,7 @@ public class HoldemHouseCommand extends HouseCommand {
 	private HoldemHouseCommandType houseCommandType;
 	
 	/**
-	 * Ha a szerver BLIND utasítást küld, akkor ezt a metódust kell használni.
+	 * Ha a holdem szerver BLIND utasítást küld, akkor ezt a metódust kell használni.
 	 * @param nthPlayer hanyadik játékos vagy a körben
 	 * @param players hány játékos van összesen a körben
 	 * @param dealer ki az aktuális osztó
@@ -49,7 +49,7 @@ public class HoldemHouseCommand extends HouseCommand {
 	}
 	
 	/**
-	 * Ha a szerver PLAYER utasítást küld, akkor ezt a metódust kell használni.
+	 * Ha a holdem szerver DEAL utasítást küld, akkor ezt a metódust kell használni.
 	 * @param card1 a playernek küldött első kártya
 	 * @param card2 a playernek küldött második kártya
 	 * @param whosOn az épppen következő (soron levő) játékos
@@ -78,7 +78,7 @@ public class HoldemHouseCommand extends HouseCommand {
 	}
 	
 	/**
-	 * Ha a szerver WINNER utasítást küld, akkor ezt a metódust kell használni.
+	 * Ha a holdem szerver WINNER utasítást küld, akkor ezt a metódust kell használni.
 	 * @param card1 a nyertes első lapja
 	 * @param card2 a nyertes második lapja
 	 * @param winnerUserName a nyertes neve

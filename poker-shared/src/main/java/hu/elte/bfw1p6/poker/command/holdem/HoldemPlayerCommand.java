@@ -19,26 +19,9 @@ public class HoldemPlayerCommand extends PlayerCommand {
 	 */
 	private HoldemPlayerCommandType playerCommandType;
 
-	/**
-	 * Konstruktor
-	 * @param playerCommandType A Command típusa
-	 * @param callAmount CALL esetén a megadandó összeg
-	 * @param raiseAmount RAISE esetén az emelendő összeg
-	 */
-	public HoldemPlayerCommand() {
-		//		this.playerCommandType = playerCommandType;
-		//		this.callAmount = callAmount;
-		//		this.raiseAmount = raiseAmount;
-		//		this.whosQuit = whosQuit;
-	}
-
 	public void setUpCallCommand(BigDecimal callAmount) {
 		this.playerCommandType = HoldemPlayerCommandType.CALL;
 		this.callAmount = callAmount;
-	}
-
-	public HoldemPlayerCommandType getPlayerCommandType() {
-		return playerCommandType;
 	}
 
 	public void setUpBlindCommand(BigDecimal callAmount) {
@@ -64,5 +47,9 @@ public class HoldemPlayerCommand extends PlayerCommand {
 	public void setUpQuitCommand(int youAreNth) {
 		this.playerCommandType = HoldemPlayerCommandType.QUIT;
 		this.whosQuit = youAreNth;
+	}
+	
+	public HoldemPlayerCommandType getPlayerCommandType() {
+		return playerCommandType;
 	}
 }
