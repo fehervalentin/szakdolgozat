@@ -199,13 +199,12 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 
 	private void dealCardsToPlayers() {
 		for (int i = 0; i < clients.size(); i++) {
-			Card c1 = deck.popCard();
-			Card c2 = deck.popCard();
+			Card[] cards = new Card[]{deck.popCard(), deck.popCard()};
 			PokerPlayer pokerPlayer = new PokerPlayer();
-			pokerPlayer.setCards(c1, c2);
+			pokerPlayer.setCards(cards);
 			players.add(pokerPlayer);
 			HouseHoldemCommand pokerCommand = new HouseHoldemCommand();
-			pokerCommand.setUpPlayerCommand(c1, c2, whosOn);
+			pokerCommand.setUpPlayerCommand(cards[0], cards[1], whosOn);
 			sendPokerCommand(i, pokerCommand);
 		}
 		nextStep();
