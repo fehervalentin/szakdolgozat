@@ -117,5 +117,4 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 			endOfReceivePlayerCommand(classicPlayerCommand);
 		}
 	}
-
 }
