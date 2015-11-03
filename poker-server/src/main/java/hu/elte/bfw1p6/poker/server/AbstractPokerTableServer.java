@@ -55,7 +55,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Maguk a játékosok.
 	 */
 	protected List<PokerPlayer> players;
-	
+
 	/**
 	 * A kliensek username-jei (mert a PokerPlayerben a userName-re nincs setter! (perzisztálást védi...)
 	 */
@@ -92,7 +92,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * A játékosok száma, akik eldobták a lapjaikat.
 	 */
 	protected int foldCounter;
-	
+
 	protected AbstractPokerTableServer(PokerTable pokerTable) throws RemoteException {
 		super();
 		this.pokerTable = pokerTable;
@@ -102,7 +102,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		this.players = new ArrayList<>();
 		this.clientsNames = new ArrayList<>();
 	}
-	
+
 
 	/**
 	 * Az asztalhoz való csatlakozás.
@@ -126,7 +126,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			}
 		}
 	}
-	
+
 	protected void preStartRound() {
 		foldCounter = 0;
 		// megnézem, hogy aktuális hány játékos van az asztalnál
@@ -144,7 +144,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		//törlöm a játékosokat
 		players.clear();
 	}
-	
+
 	protected void sendPokerCommand(int i, PokerCommand pokerCommand) {
 		System.out.println("spc, ertesitem a " + i + ". klienst!");
 		printCommand(pokerCommand);
@@ -161,7 +161,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 				}
 			}}.start();
 	}
-	
+
 	protected void notifyClients(PokerCommand pokerCommand) {
 		int i = 0;
 		for (RemoteObserver pokerTableServerObserver : clients) {
@@ -182,7 +182,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 				++i;
 		}
 	}
-	
+
 	private void printCommand(PokerCommand pokerCommand) {
 		if (pokerCommand instanceof HoldemHouseCommand) {
 			System.out.println("Utasitas típusa: " + ((HoldemHouseCommand)pokerCommand).getHouseCommandType());
@@ -194,11 +194,11 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			System.out.println("Utasitas típusa: " + ((HoldemHouseCommand)pokerCommand).getHouseCommandType());
 		}
 	}
-	
+
 	public synchronized void leave(PokerTableServerObserver client) {
 		clients.remove(client);
 	}
-	
+
 	protected void refreshBalance(PlayerCommand playerCommand) throws PokerUserBalanceException, PokerDataBaseException {
 		User u = UserRepository.getInstance().findByUserName(playerCommand.getSender());
 		if (isThereEnoughMoney(u, playerCommand)) {
@@ -219,18 +219,64 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		}
 		return true;
 	}
+
+	protected void receivedBlindPlayerCommand(PlayerCommand playerComand) throws PokerUserBalanceException, PokerDataBaseException {
+		refreshBalance(playerComand);
+		--whosOn;
+	}
+
+	protected void receivedCallPlayerCommand(PlayerCommand playerComand) throws PokerUserBalanceException, PokerDataBaseException {
+		refreshBalance(playerComand);
+		++votedPlayers;
+	}
+
+	protected void receivedCheckPlayerCommand(PlayerCommand playerComand) {
+		++votedPlayers;
+	}
+
+	protected void receivedFoldPlayerCommand(PlayerCommand playerComand) {
+		//++votedPlayers;
+		--playersInRound;
+		players.remove(whosOn);
+		--whosOn;
+		++foldCounter;
+		// mert aki nagyobb az ő sorszámánál, az lejjebb csúszik eggyel.
+	}
 	
+	protected void receivedRaisePlayerCommand(PlayerCommand playerComand) throws PokerUserBalanceException, PokerDataBaseException {
+		refreshBalance(playerComand);
+		votedPlayers = 1;
+	}
+	
+	protected void receivedQuitPlayerCommand(RemoteObserver client, PlayerCommand playerComand) {
+		System.out.println("WhosQuit param: " + playerComand.getWhosQuit());
+		System.out.println("Kliens visszakeresve: " + clients.indexOf(client));
+		clients.remove(client);
+		//				++votedPlayers;
+		--playersInRound;
+		--whosOn;
+	}
+	
+	protected void endOfReceivePlayerCommand(PlayerCommand playerComand) throws RemoteException {
+		++whosOn;
+		whosOn %= playersInRound;
+		playerComand.setWhosOn(whosOn);
+		notifyClients(playerComand);
+
+		nextRound();
+	}
+
 	protected abstract void startRound();
-	
+
 	protected abstract void nextStep();
-	
+
 	protected abstract void winner(HouseCommand houseCommand);
-	
+
 	protected abstract void dealCardsToPlayers(int cardCount);
-	
+
 	protected abstract void collectBlinds();
-	
+
 	protected abstract void nextRound() throws RemoteException;
-	
+
 	protected abstract void receivePlayerCommand(RemoteObserver client, PlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
 }

@@ -48,8 +48,6 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 		//a vakokat kérem be legelőször
 		actualHoldemHouseCommandType = HoldemHouseCommandType.values()[0];
 		houseCards.clear();
-		//törlöm a játékosokat
-		players.clear();
 		// be kell kérni a vakokat
 		collectBlinds();
 		// két lap kézbe
@@ -76,9 +74,9 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 			PokerPlayer pokerPlayer = new PokerPlayer();
 			pokerPlayer.setCards(cards);
 			players.add(pokerPlayer);
-			HoldemHouseCommand pokerCommand = new HoldemHouseCommand();
-			pokerCommand.setUpDealCommand(cards, whosOn);
-			sendPokerCommand(i, pokerCommand);
+			HoldemHouseCommand holdemHouseCommand = new HoldemHouseCommand();
+			holdemHouseCommand.setUpDealCommand(cards, whosOn);
+			sendPokerCommand(i, holdemHouseCommand);
 		}
 		nextStep();
 	}
@@ -90,51 +88,33 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 			HoldemPlayerCommand holdemPlayerCommand = (HoldemPlayerCommand)playerCommand;
 			switch(holdemPlayerCommand.getPlayerCommandType()) {
 			case BLIND: {
-				refreshBalance(holdemPlayerCommand);
-				--whosOn;
+				receivedBlindPlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			case CALL: {
-				refreshBalance(holdemPlayerCommand);
-				++votedPlayers;
+				receivedCallPlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			case CHECK: {
-				++votedPlayers;
+				receivedCheckPlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			case FOLD: {
-				//				++votedPlayers;
-				--playersInRound;
-				players.remove(whosOn);
-				--whosOn;
-				++foldCounter;
-				// mert aki nagyobb az ő sorszámánál, az lejjebb csúszik eggyel.
+				receivedFoldPlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			case RAISE: {
-				refreshBalance(holdemPlayerCommand);
-				votedPlayers = 1;
+				receivedRaisePlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			case QUIT: {
-				System.out.println("WhosQuit param: " + holdemPlayerCommand.getWhosQuit());
-				System.out.println("Kliens visszakeresve: " + clients.indexOf(client));
-				clients.remove(client);
-				//				++votedPlayers;
-				--playersInRound;
-				--whosOn;
+				receivedQuitPlayerCommand(client, holdemPlayerCommand);
 				break;
 			}
 			default:
 				break;
 			}
-			++whosOn;
-			whosOn %= playersInRound;
-			holdemPlayerCommand.setWhosOn(whosOn);
-			notifyClients(playerCommand);
-
-			nextRound();
+			endOfReceivePlayerCommand(holdemPlayerCommand);
 		}
 	}
 
@@ -190,7 +170,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	@Override
 	protected void winner(HouseCommand houseCommand) {
 		HoldemHouseCommand holdemHouseCommand = (HoldemHouseCommand)houseCommand;
-		//TODO: aki foldolt annak ne vegyük figyelembe a lapjait
+		//TODO: aki foldolt annak ne vegyük figyelembe a lapjait lehet hogy már kész...
 		List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(houseCards, players);
 		Card[] cards = winner.get(0).getCards();
 		// TODO: és mi van ha döntetlen?
@@ -205,8 +185,6 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 		}
 		System.out.println("A győztes sorszáma: " + winner_);
 		System.out.println("A győztes kártyalapjai: " + Arrays.toString(cards));
-//		System.out.println("A győztes első lapja: " + cards[0]);
-//		System.out.println("A győztes második lapja: " + cards[1]);
 		holdemHouseCommand.setUpWinnerCommand(cards, winner_);
 	}
 
