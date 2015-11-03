@@ -92,46 +92,29 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 				break;
 			}
 			case CALL: {
-				refreshBalance(classicPlayerCommand);
-				++votedPlayers;
+				receivedCallPlayerCommand(classicPlayerCommand);
 				break;
 			}
 			case CHECK: {
-				++votedPlayers;
+				receivedCheckPlayerCommand(classicPlayerCommand);
 				break;
 			}
 			case FOLD: {
-				//				++votedPlayers;
-				--playersInRound;
-				players.remove(whosOn);
-				--whosOn;
-				++foldCounter;
-				// mert aki nagyobb az ő sorszámánál, az lejjebb csúszik eggyel.
+				receivedFoldPlayerCommand(classicPlayerCommand);
 				break;
 			}
 			case RAISE: {
-				refreshBalance(classicPlayerCommand);
-				votedPlayers = 1;
+				receivedRaisePlayerCommand(classicPlayerCommand);
 				break;
 			}
 			case QUIT: {
-				System.out.println("WhosQuit param: " + classicPlayerCommand.getWhosQuit());
-				System.out.println("Kliens visszakeresve: " + clients.indexOf(client));
-				clients.remove(client);
-				//				++votedPlayers;
-				--playersInRound;
-				--whosOn;
+				receivedQuitPlayerCommand(client, classicPlayerCommand);
 				break;
 			}
 			default:
 				break;
 			}
-			++whosOn;
-			whosOn %= playersInRound;
-			classicPlayerCommand.setWhosOn(whosOn);
-			notifyClients(playerCommand);
-
-			nextRound();
+			endOfReceivePlayerCommand(classicPlayerCommand);
 		}
 	}
 
