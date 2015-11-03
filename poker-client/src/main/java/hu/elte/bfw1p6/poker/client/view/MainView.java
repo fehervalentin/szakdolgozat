@@ -251,7 +251,7 @@ public class MainView {
 				});
 	}
 
-	public void receivedPlayerHouseCommand(HoldemHouseCommand houseHoldemCommand) {
+	public void receivedDealHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override

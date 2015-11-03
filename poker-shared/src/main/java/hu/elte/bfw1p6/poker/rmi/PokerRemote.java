@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
+import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
@@ -127,7 +127,7 @@ public interface PokerRemote extends Remote {
 
 	void removeTableViewObserver(RemoteObserver observer) throws RemoteException;
 	
-	void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, HoldemPlayerCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
+	void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
 	
 	void connectToTable(UUID uuid, PokerTable t, RemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException;
 }

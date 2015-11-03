@@ -11,7 +11,7 @@ import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerObserverController;
-import hu.elte.bfw1p6.poker.client.model.MainGameModel;
+import hu.elte.bfw1p6.poker.client.model.HoldemMainGameModel;
 import hu.elte.bfw1p6.poker.client.view.MainView;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
@@ -45,7 +45,7 @@ public class MainGameController implements Initializable, PokerClientController,
 
 	private MainView mainView;
 
-	private MainGameModel model;
+	private HoldemMainGameModel model;
 
 	private FrameController frameController;
 
@@ -69,7 +69,7 @@ public class MainGameController implements Initializable, PokerClientController,
 
 		try {
 			commController = new CommunicatorController(this);
-			model = new MainGameModel(commController);
+			model = new HoldemMainGameModel(commController);
 			model.connectToTable(commController);
 			pokerLabel.setText(model.getUserName());
 		} catch (RemoteException e) {
@@ -99,7 +99,7 @@ public class MainGameController implements Initializable, PokerClientController,
 				break;
 			}
 			case DEAL: {
-				receivedPlayerHouseCommand(houseHoldemCommand);
+				receivedDealHouseCommand(houseHoldemCommand);
 				break;
 			}
 			case FLOP: {
@@ -195,10 +195,10 @@ public class MainGameController implements Initializable, PokerClientController,
 		}
 	}
 
-	private void receivedPlayerHouseCommand(HoldemHouseCommand houseHoldemCommand) {
-		model.receivedPlayerHouseCommand(houseHoldemCommand);
+	private void receivedDealHouseCommand(HoldemHouseCommand houseHoldemCommand) {
+		model.receivedDealHouseCommand(houseHoldemCommand);
 		modifyButtonVisibilities(houseHoldemCommand);
-		mainView.receivedPlayerHouseCommand(houseHoldemCommand);
+		mainView.receivedDealHouseCommand(houseHoldemCommand);
 	}
 
 	private void receivedFlopHouseCommand(HoldemHouseCommand houseHoldemCommand) {
