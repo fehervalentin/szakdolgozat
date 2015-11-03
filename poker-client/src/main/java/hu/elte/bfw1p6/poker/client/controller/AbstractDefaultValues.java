@@ -1,8 +1,13 @@
 package hu.elte.bfw1p6.poker.client.controller;
 
-public class PokerHoldemDefaultValues {
-
-	private static PokerHoldemDefaultValues instance = null;
+public class AbstractDefaultValues {
+	
+	public int[] MY_CARDS_POSITION;
+	
+	public int[] DECK_POINT;
+	
+	public int MY_CARDS_COUNT;
+	
 	
 	public final String CARD_IMAGE_PREFIX = "/images/cards/";
 	
@@ -22,6 +27,7 @@ public class PokerHoldemDefaultValues {
 	 * A kártyapakli kép URL-je
 	 */
 	public final String DECK_IMAGE_URL = "/images/cards/deck.png";
+	
 
 	/**
 	 * Lefele fordított kártyaszél
@@ -29,7 +35,14 @@ public class PokerHoldemDefaultValues {
 	 */
 	public final String CARD_SIDE_IMAGE_URL = "/images/cards/b1pl.png";
 	public final String CARD_BACKFACE_IMAGE= "/images/cards/b1fv.png";
-
+	
+	/**
+	 * A lefordított kártyalapokat hova kell generálni.
+	 */
+	public final int[] CARD_B1FV_POINTS = new int[]{293, 400, 322, 200, 640, 155, 940, 180, 1000, 400};
+	
+	public final int[] DEALER_BUTTON_POSITIONS = new int[]{580, 530, 320, 500, 265, 240, 720, 160, 1020, 200, 970, 505};
+	
 	public final int[] CHIPS_POINT = new int[]{485, 465};
 	
 	public final int CHIPS_EPSILON = 20;
@@ -39,21 +52,6 @@ public class PokerHoldemDefaultValues {
 	/* A többi profilkép helye. */
 	public final int[] PROFILE_POINTS = new int[]{628, 540, 188, 485, 232, 40, 631, 0, 1031, 45, 1084, 485};
 	
-	/**
-	 * A lefordított kártyalapokat hova kell generálni.
-	 */
-	public final int[] CARD_B1FV_POINTS = new int[]{293, 400, 322, 200, 640, 155, 940, 180, 1000, 400};
-	
-	/* A saját kártyalapjaimnak a helye. */
-	public final int[] MY_CARDS_POSITION = new int[]{600, 430};
-
-	/**
-	 * A kártyapakli elhelyezkedése.
-	 */
-	public final int[] DECK_POINT = new int[]{430, 300};
-
-	public final int[] DEALER_BUTTON_POSITIONS = new int[]{580, 530, 320, 500, 265, 240, 720, 160, 1020, 200, 970, 505};
-
 	/**
 	 * A profilkép magassága és szélessége.
 	 */
@@ -80,14 +78,5 @@ public class PokerHoldemDefaultValues {
 	public final int CARD_SIDE_WIDTH = 12;
 	
 	public final int DEALER_BUTTON_SIZE = 40;
-
-	private PokerHoldemDefaultValues() {
-	}
-
-	public synchronized static PokerHoldemDefaultValues getInstance() {
-		if (instance == null) {
-			instance = new PokerHoldemDefaultValues();
-		}
-		return instance;
-	}
+	
 }

@@ -49,10 +49,7 @@ public class TableListerController implements PokerClientController, Initializab
 	@FXML private Button profileManagerButton;
 
 
-	//private Alert alert;
-	private Alert errorAlert;
-
-	//	private TableViewObserverImpl observer;
+	private Alert alert;
 
 	private Model model;
 
@@ -64,7 +61,7 @@ public class TableListerController implements PokerClientController, Initializab
 			e.printStackTrace();
 		}
 		model = Model.getInstance();
-		errorAlert = new Alert(AlertType.ERROR);
+		alert = new Alert(AlertType.ERROR);
 	}
 
 	@Override
@@ -77,8 +74,8 @@ public class TableListerController implements PokerClientController, Initializab
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (PokerUnauthenticatedException e) {
-			errorAlert.setContentText(e.getMessage());
-			errorAlert.showAndWait();
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 
@@ -96,12 +93,16 @@ public class TableListerController implements PokerClientController, Initializab
 	protected void handleConnectToTable() {
 		PokerTable table = getSelectedPokerTable();
 		if (table == null) {
-			errorAlert.setContentText(NO_TABLE_SELECTED_MESSAGE);
-			errorAlert.showAndWait();
+			alert.setContentText(NO_TABLE_SELECTED_MESSAGE);
+			alert.showAndWait();
 		} else {
 			ConnectTableHelper.getInstance().setPokerTable(table);
 			removeObserver();
-			frameController.setMainGameFXML();
+			if(table.getPokerType() == PokerType.HOLDEM) {
+				frameController.setHoldemMainGameFXML();
+			} else if (table.getPokerType() == PokerType.CLASSIC) {
+				frameController.setClassicMainGameFXML();
+			}
 		}
 	}
 
@@ -122,8 +123,8 @@ public class TableListerController implements PokerClientController, Initializab
 			model.setParameterPokerTable(selectedPokerTable);
 			frameController.setCreateTableFXML();
 		} else {
-			errorAlert.setContentText(NO_TABLE_SELECTED_MESSAGE);
-			errorAlert.showAndWait();
+			alert.setContentText(NO_TABLE_SELECTED_MESSAGE);
+			alert.showAndWait();
 		}
 	}
 
@@ -133,19 +134,20 @@ public class TableListerController implements PokerClientController, Initializab
 		if (selectedPokerTable != null) {
 			try {
 				model.deleteTable(selectedPokerTable);
-				errorAlert.setAlertType(AlertType.INFORMATION);
-				errorAlert.setContentText(SUCC_TABLE_DELETE_MSG);
-				errorAlert.showAndWait();
+				alert.setAlertType(AlertType.INFORMATION);
+				alert.setContentText(SUCC_TABLE_DELETE_MSG);
+				alert.showAndWait();
+				alert.setAlertType(AlertType.ERROR);
 			} catch (RemoteException | PokerDataBaseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (PokerUnauthenticatedException e) {
-				errorAlert.setContentText(e.getMessage());
-				errorAlert.showAndWait();
+				alert.setContentText(e.getMessage());
+				alert.showAndWait();
 			}
 		} else {
-			errorAlert.setContentText(NO_TABLE_SELECTED_MESSAGE);
-			errorAlert.showAndWait();
+			alert.setContentText(NO_TABLE_SELECTED_MESSAGE);
+			alert.showAndWait();
 		}
 	}
 
@@ -158,8 +160,8 @@ public class TableListerController implements PokerClientController, Initializab
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (PokerInvalidSession e) {
-			errorAlert.setContentText(e.getMessage());
-			errorAlert.showAndWait();
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 

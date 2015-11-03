@@ -124,35 +124,35 @@ public class CreateTableController implements Initializable, PokerClientControll
 		try {
 			pokerType = PokerType.valueOf(gameTypeComboBox.getSelectionModel().getSelectedItem());
 		} catch (IllegalArgumentException ex) {
-			showAlertBox("Hibás játék mód!");
+			showErrorAlertBox("Hibás játék mód!");
 			return;
 		}
 		try {
 			maxTime = new Integer(maxTimeField.getText());
 		} catch (NumberFormatException ex) {
 			maxTimeField.getStyleClass().add(ERR_STYLECLASS);
-			showAlertBox(String.format(ERR_TEXTFIELD_TEXT, "gondolkodási idő"));
+			showErrorAlertBox(String.format(ERR_TEXTFIELD_TEXT, "gondolkodási idő"));
 			return;
 		}
 		try {
 			maxPlayers = Integer.valueOf(maxPlayerTextField.getText());
 		} catch (NumberFormatException ex) {
 			maxPlayerTextField.getStyleClass().add(ERR_STYLECLASS);
-			showAlertBox(String.format(ERR_TEXTFIELD_TEXT, "maximum játékos"));
+			showErrorAlertBox(String.format(ERR_TEXTFIELD_TEXT, "maximum játékos"));
 			return;
 		}
 		try {
 			defaultPot = BigDecimal.valueOf(Double.valueOf(defaultPotField.getText()));
 		} catch (NumberFormatException ex) {
 			defaultPotField.getStyleClass().add(ERR_STYLECLASS);
-			showAlertBox(String.format(ERR_TEXTFIELD_TEXT, "alaptét"));
+			showErrorAlertBox(String.format(ERR_TEXTFIELD_TEXT, "alaptét"));
 			return;
 		}
 		try {
 			maxBet = BigDecimal.valueOf(Double.valueOf(maxBetTextField.getText()));
 		} catch (NumberFormatException ex) {
 			maxBetTextField.getStyleClass().add(ERR_STYLECLASS);
-			showAlertBox(String.format(ERR_TEXTFIELD_TEXT, "maximum tét"));
+			showErrorAlertBox(String.format(ERR_TEXTFIELD_TEXT, "maximum tét"));
 			return;
 		}
 		
@@ -162,12 +162,12 @@ public class CreateTableController implements Initializable, PokerClientControll
 			try {
 				PokerTable t = new PokerTable(tableName, maxTime, maxPlayers, maxBet, defaultPot, pokerType);
 				model.createTable(t);
-				showAlertBox(SUCC_CREATE_TABLE_MSG);
+				showSuccessAlertBox(SUCC_CREATE_TABLE_MSG);
 				frameController.setTableListerFXML();
 			} catch (RemoteException | PokerDataBaseException e) {
-				showAlertBox(e.getMessage());
+				showErrorAlertBox(e.getMessage());
 			} catch (PokerUnauthenticatedException e) {
-				showAlertBox(e.getMessage());
+				showErrorAlertBox(e.getMessage());
 				frameController.setLoginFXML();
 			}
 		} else {
@@ -182,12 +182,12 @@ public class CreateTableController implements Initializable, PokerClientControll
 				t.setDefaultPot(defaultPot);
 				t.setPokerType(pokerType);
 				model.modifyTable(t);
-				showAlertBox(SUCC_MODIFY_TABLE_MSG);
+				showSuccessAlertBox(SUCC_MODIFY_TABLE_MSG);
 				frameController.setTableListerFXML();
 			} catch (RemoteException | PokerDataBaseException e) {
-				showAlertBox(e.getMessage());
+				showErrorAlertBox(e.getMessage());
 			} catch (PokerUnauthenticatedException e) {
-				showAlertBox(e.getMessage());
+				showErrorAlertBox(e.getMessage());
 			}
 		}
 		model.setParameterPokerTable(null);
@@ -202,8 +202,13 @@ public class CreateTableController implements Initializable, PokerClientControll
 		this.frameController = fc;
 	}
 	
-	private void showAlertBox(String msg) {
+	private void showErrorAlertBox(String msg) {
 		errorAlert.setContentText(msg);
 		errorAlert.showAndWait();
+	}
+	
+	private void showSuccessAlertBox(String msg) {
+		successAlert.setContentText(msg);
+		successAlert.showAndWait();
 	}
 }

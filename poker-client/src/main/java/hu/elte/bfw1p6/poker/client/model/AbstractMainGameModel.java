@@ -9,7 +9,6 @@ import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
@@ -127,15 +126,15 @@ public abstract class AbstractMainGameModel {
 	 */
 	protected abstract void tossBlind(Boolean bigBlind) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
 	
-	protected abstract void call() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
+	public abstract void call() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
 	
-	protected abstract void check() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
+	public abstract void check() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
 	
-	protected abstract void raise(BigDecimal amount) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
+	public abstract void raise(BigDecimal amount) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
 	
-	protected abstract void fold() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
+	public abstract void fold() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
 	
-	protected abstract void quit() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
+	public abstract void quit() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
 	
 	public void receivedBlindPlayerCommand(PlayerCommand playerCommand) {
 		// TODO Auto-generated method stub
@@ -168,8 +167,8 @@ public abstract class AbstractMainGameModel {
 		}
 	}
 	
-	public void receivedQuitPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
-		if (youAreNth > playerHoldemCommand.getWhosQuit()) {
+	public void receivedQuitPlayerCommand(PlayerCommand playerCommand) {
+		if (youAreNth > playerCommand.getWhosQuit()) {
 			--youAreNth;
 		}
 	}

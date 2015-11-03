@@ -12,7 +12,7 @@
 <?import javafx.scene.image.*?>
 
 <AnchorPane fx:id="mainGamePane" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="hu.elte.bfw1p6.poker.client.controller.MainGameController">
+	fx:controller="hu.elte.bfw1p6.poker.client.controller.HoldemMainGameController">
 	<children>
 		<Label fx:id="pokerLabel" GridPane.rowIndex="0" text="Bejelentkezés"
 			styleClass="header-text" alignment="center" />

@@ -15,11 +15,12 @@ public class FrameController extends UnicastRemoteObject {
 	
 	private final String FXML_PREFIX = "/fxml/";
 	private final String LOGIN_FXML = "Login.fxml";
-	private final String REGISTRATION_FXML = "Registration.fxml";
 	private final String CREATE_TABLE_FXML = "CreateTable.fxml";
 	private final String TABLE_LISTER_FXML = "TableLister.fxml";
-	private final String MAIN_GAME_FXML = "MainGame.fxml";
+	private final String REGISTRATION_FXML = "Registration.fxml";
 	private final String PROFILE_MANAGER_FXML = "ProfileManager.fxml";
+	private final String HOLDEM_MAIN_GAME_FXML = "HoldemMainGame.fxml";
+	private final String CLASSIC_MAIN_GAME_FXML = "ClassicMainGame.fxml";
 	
 	
 	
@@ -58,9 +59,14 @@ public class FrameController extends UnicastRemoteObject {
 		setFXML(FXML_PREFIX + CREATE_TABLE_FXML);
 	}
 	
-	public void setMainGameFXML() {
+	public void setHoldemMainGameFXML() {
 		setStageSize(MAIN_GAME_WIDHT, MAIN_GAME_HEIGHT);
-		setFXML(FXML_PREFIX + MAIN_GAME_FXML);
+		setFXML(FXML_PREFIX + HOLDEM_MAIN_GAME_FXML);
+	}
+	
+	public void setClassicMainGameFXML() {
+		setStageSize(MAIN_GAME_WIDHT, MAIN_GAME_HEIGHT);
+		setFXML(FXML_PREFIX + CLASSIC_MAIN_GAME_FXML);
 	}
 	
 	public void setProfileManagerFXML() {

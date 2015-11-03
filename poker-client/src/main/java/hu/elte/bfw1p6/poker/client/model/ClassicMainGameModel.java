@@ -24,7 +24,7 @@ public class ClassicMainGameModel extends AbstractMainGameModel {
 	}
 
 	@Override
-	protected void call() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void call() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		BigDecimal amount = BigDecimal.ZERO.add(myDebt);
 		myDebt = myDebt.subtract(amount);
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
@@ -33,21 +33,21 @@ public class ClassicMainGameModel extends AbstractMainGameModel {
 	}
 
 	@Override
-	protected void check() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void check() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpCheckCommand();
 		sendPlayerCommand(playerCommand);
 	}
 
 	@Override
-	protected void raise(BigDecimal amount) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void raise(BigDecimal amount) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpRaiseCommand(myDebt, amount);
 		sendPlayerCommand(playerCommand);
 	}
 
 	@Override
-	protected void fold() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void fold() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		int tempNth = youAreNth;
 		youAreNth = -1;
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
@@ -56,7 +56,7 @@ public class ClassicMainGameModel extends AbstractMainGameModel {
 	}
 
 	@Override
-	protected void quit() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void quit() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpQuitCommand(youAreNth);
 		sendPlayerCommand(playerCommand);	

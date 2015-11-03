@@ -86,7 +86,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Asztaltól fogom lekérni.
 	 */
 	@Deprecated
-	protected int minPlayer = 3;
+	protected int minPlayer = 2;
 
 	/**
 	 * A játékosok száma, akik eldobták a lapjaikat.
@@ -189,9 +189,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		} else if (pokerCommand instanceof HoldemPlayerCommand) {
 			System.out.println("Utasitas típusa: " + ((HoldemPlayerCommand)pokerCommand).getPlayerCommandType());
 		} else if (pokerCommand instanceof ClassicHouseCommand) {
-			System.out.println("Utasitas típusa: " + ((HoldemHouseCommand)pokerCommand).getHouseCommandType());
+			System.out.println("Utasitas típusa: " + ((ClassicHouseCommand)pokerCommand).getHouseCommandType());
 		} else if (pokerCommand instanceof ClassicPlayerCommand) {
-			System.out.println("Utasitas típusa: " + ((HoldemHouseCommand)pokerCommand).getHouseCommandType());
+			System.out.println("Utasitas típusa: " + ((ClassicPlayerCommand)pokerCommand).getPlayerCommandType());
 		}
 	}
 

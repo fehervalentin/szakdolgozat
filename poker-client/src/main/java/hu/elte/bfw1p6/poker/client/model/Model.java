@@ -1,7 +1,5 @@
 package hu.elte.bfw1p6.poker.client.model;
 
-import java.net.MalformedURLException;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
 

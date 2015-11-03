@@ -1,8 +1,6 @@
 package hu.elte.bfw1p6.poker.client.controller;
 
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
@@ -11,7 +9,6 @@ import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
