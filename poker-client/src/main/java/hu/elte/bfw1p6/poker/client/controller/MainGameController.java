@@ -111,6 +111,7 @@ public class MainGameController implements Initializable, PokerClientController,
 			case TURN: {
 				Card[] cards = houseHoldemCommand.getCards();
 				System.out.println("Turn: " + cards[0]);
+				receivedTurnHouseCommand(houseHoldemCommand);
 				break;
 			}
 			case RIVER: {
@@ -201,7 +202,6 @@ public class MainGameController implements Initializable, PokerClientController,
 	}
 
 	private void receivedFlopHouseCommand(HoldemHouseCommand houseHoldemCommand) {
-		System.out.println("Flop kommand: " + model.getYouAreNth() + "  " + houseHoldemCommand.getWhosOn());
 		modifyButtonVisibilities(houseHoldemCommand);
 		mainView.flop(houseHoldemCommand);
 	}
