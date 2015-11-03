@@ -3,7 +3,7 @@ package hu.elte.bfw1p6.poker.command.type;
 import hu.elte.bfw1p6.poker.command.type.api.HousePokerCommandType;
 
 public enum HoldemHousePokerCommandType implements HousePokerCommandType<HoldemHousePokerCommandType> {
-	BLIND, PLAYER, FLOP, TURN, RIVER, WINNER;
+	BLIND, DEAL, FLOP, TURN, RIVER, WINNER;
 	
 	@Override
 	public HoldemHousePokerCommandType getNext() {

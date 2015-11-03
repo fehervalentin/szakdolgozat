@@ -17,11 +17,6 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer<ClassicHou
 
 	private static final long serialVersionUID = 804318360089503038L;
 
-	/**
-	 * Aktuális utasítás típusa.
-	 */
-	private ClassicHousePokerCommandType actualHouseCommandType;
-
 	protected ClassicPokerTableServer(PokerTable pokerTable) throws RemoteException {
 		super(pokerTable);
 	}

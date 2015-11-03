@@ -87,8 +87,8 @@ public class HoldemMainGameController extends AbstractMainGameController<HoldemP
 				receivedBlindHouseCommand(houseHoldemCommand);
 				break;
 			}
-			case PLAYER: {
-				receivedPlayerHouseCommand(houseHoldemCommand);
+			case DEAL: {
+				receivedDealHouseCommand(houseHoldemCommand);
 				break;
 			}
 			case FLOP: {
@@ -182,7 +182,7 @@ public class HoldemMainGameController extends AbstractMainGameController<HoldemP
 		}
 	}
 
-	private void receivedPlayerHouseCommand(HoldemHousePokerCommand houseHoldemCommand) {
+	private void receivedDealHouseCommand(HoldemHousePokerCommand houseHoldemCommand) {
 		model.receivedPlayerHouseCommand(houseHoldemCommand);
 		modifyButtonVisibilities(houseHoldemCommand);
 		mainView.receivedPlayerHouseCommand(houseHoldemCommand);
