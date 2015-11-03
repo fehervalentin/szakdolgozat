@@ -12,8 +12,8 @@ import com.cantero.games.poker.texasholdem.IPlayer;
 import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HouseHoldemCommand;
-import hu.elte.bfw1p6.poker.command.holdem.PlayerHoldemCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
@@ -169,7 +169,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 
 	private void collectBlinds() {
 		for (int i = 0; i < clients.size(); i++) {
-			HouseHoldemCommand houseHoldemCommand = new HouseHoldemCommand();
+			HoldemHouseCommand houseHoldemCommand = new HoldemHouseCommand();
 			houseHoldemCommand.setUpBlindCommand(i, clients.size(), dealer, whosOn, clientsNames);
 			sendPokerCommand(i, houseHoldemCommand);
 		}
@@ -178,10 +178,10 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 
 	private void sendPokerCommand(int i, PokerCommand pokerCommand) {
 		System.out.println("spc, ertesitem a " + i + ". klienst!");
-		if (pokerCommand instanceof HouseHoldemCommand) {
-			System.out.println("Utasitas típusa: " + ((HouseHoldemCommand)pokerCommand).getHouseCommandType());
-		} else if (pokerCommand instanceof PlayerHoldemCommand) {
-			System.out.println("Utasitas típusa: " + ((PlayerHoldemCommand)pokerCommand).getPlayerCommandType());
+		if (pokerCommand instanceof HoldemHouseCommand) {
+			System.out.println("Utasitas típusa: " + ((HoldemHouseCommand)pokerCommand).getHouseCommandType());
+		} else if (pokerCommand instanceof HoldemPlayerCommand) {
+			System.out.println("Utasitas típusa: " + ((HoldemPlayerCommand)pokerCommand).getPlayerCommandType());
 		}
 		System.out.println("-----------------------------------------------");
 		new Thread() {
@@ -203,8 +203,8 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			PokerPlayer pokerPlayer = new PokerPlayer();
 			pokerPlayer.setCards(cards);
 			players.add(pokerPlayer);
-			HouseHoldemCommand pokerCommand = new HouseHoldemCommand();
-			pokerCommand.setUpPlayerCommand(cards[0], cards[1], whosOn);
+			HoldemHouseCommand pokerCommand = new HoldemHouseCommand();
+			pokerCommand.setUpPlayerCommand(cards, whosOn);
 			sendPokerCommand(i, pokerCommand);
 		}
 		nextStep();
@@ -214,10 +214,10 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		int i = 0;
 		for (RemoteObserver pokerTableServerObserver : clients) {
 			System.out.println("nc, ertesitem a " + i + ". klienst!");
-			if (pokerCommand instanceof HouseHoldemCommand) {
-				System.out.println("Utasitas típusa: " + ((HouseHoldemCommand)pokerCommand).getHouseCommandType());
-			} else if (pokerCommand instanceof PlayerHoldemCommand) {
-				System.out.println("Utasitas típusa: " + ((PlayerHoldemCommand)pokerCommand).getPlayerCommandType());
+			if (pokerCommand instanceof HoldemHouseCommand) {
+				System.out.println("Utasitas típusa: " + ((HoldemHouseCommand)pokerCommand).getHouseCommandType());
+			} else if (pokerCommand instanceof HoldemPlayerCommand) {
+				System.out.println("Utasitas típusa: " + ((HoldemPlayerCommand)pokerCommand).getPlayerCommandType());
 			}
 			System.out.println("-----------------------------------------------");
 			new Thread() {
@@ -239,7 +239,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		clients.remove(client);
 	}
 
-	public synchronized void receivePlayerCommand(RemoteObserver client, PlayerHoldemCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public synchronized void receivePlayerCommand(RemoteObserver client, HoldemPlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		// ha valid klienstől érkezik üzenet, azt feldolgozzuk, körbeküldjük
 		if (clients.contains(client)) {
 			switch(playerCommand.getPlayerCommandType()) {
@@ -302,25 +302,28 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		} else {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
 			if (votedPlayers >= playersInRound) {
-				HouseHoldemCommand houseHoldemCommand = new HouseHoldemCommand();
+				HoldemHouseCommand houseHoldemCommand = new HoldemHouseCommand();
 				// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
 				whosOn = (dealer + 1 + foldCounter) % playersInRound;
 				switch (actualHoldemHouseCommandType) {
 				case FLOP: {
-					houseCards.add(deck.popCard());
-					houseCards.add(deck.popCard());
-					houseCards.add(deck.popCard());
-					houseHoldemCommand.setUpFlopCommand(houseCards.get(0), houseCards.get(1), houseCards.get(2), whosOn, foldCounter);
+					Card[] cards = new Card[]{deck.popCard(), deck.popCard(), deck.popCard()};
+					houseCards.add(cards[0]);
+					houseCards.add(cards[1]);
+					houseCards.add(cards[2]);
+					houseHoldemCommand.setUpFlopCommand(cards, whosOn, foldCounter);
 					break;
 				}
 				case TURN: {
-					houseCards.add(deck.popCard());
-					houseHoldemCommand.setUpTurnCommand(houseCards.get(3), whosOn, foldCounter);
+					Card[] cards = new Card[]{deck.popCard()};
+					houseCards.add(cards[0]);
+					houseHoldemCommand.setUpTurnCommand(cards, whosOn, foldCounter);
 					break;
 				}
 				case RIVER: {
-					houseCards.add(deck.popCard());
-					houseHoldemCommand.setUpRiverCommand(houseCards.get(4), whosOn, foldCounter);
+					Card[] cards = new Card[]{deck.popCard()};
+					houseCards.add(cards[0]);
+					houseHoldemCommand.setUpRiverCommand(cards, whosOn, foldCounter);
 					break;
 				}
 				case WINNER: {
@@ -337,7 +340,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		}
 	}
 
-	private void winner(HouseHoldemCommand houseHoldemCommand) {
+	private void winner(HoldemHouseCommand houseHoldemCommand) {
 		//TODO: aki foldolt annak ne vegyük figyelembe a lapjait
 		List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(houseCards, players);
 		Card[] cards = winner.get(0).getCards();
@@ -354,14 +357,14 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		System.out.println("A győztes sorszáma: " + winner_);
 		System.out.println("A győztes első lapja: " + cards[0]);
 		System.out.println("A győztes második lapja: " + cards[1]);
-		houseHoldemCommand.setUpWinnerCommand(cards[0], cards[1], winner_);
+		houseHoldemCommand.setUpWinnerCommand(cards, winner_);
 	}
 	
 	private void nextStep() {
 		actualHoldemHouseCommandType = HoldemHouseCommandType.values()[(actualHoldemHouseCommandType.ordinal() + 1) % HoldemHouseCommandType.values().length];
 	}
 
-	private void refreshBalance(PlayerHoldemCommand playerCommand) throws PokerUserBalanceException, PokerDataBaseException {
+	private void refreshBalance(HoldemPlayerCommand playerCommand) throws PokerUserBalanceException, PokerDataBaseException {
 		User u = UserRepository.getInstance().findByUserName(playerCommand.getSender());
 		if (isThereEnoughMoney(u, playerCommand)) {
 			u.setBalance(u.getBalance().subtract(playerCommand.getCallAmount()));
@@ -369,7 +372,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 		}
 	}
 
-	private boolean isThereEnoughMoney(User u, PlayerHoldemCommand playerCommand) throws PokerUserBalanceException {
+	private boolean isThereEnoughMoney(User u, HoldemPlayerCommand playerCommand) throws PokerUserBalanceException {
 		BigDecimal newBalance = u.getBalance().subtract(playerCommand.getCallAmount());
 		moneyStack = moneyStack.add(playerCommand.getCallAmount());
 		if (playerCommand.getRaiseAmount() != null) {
