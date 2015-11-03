@@ -39,11 +39,13 @@ public class HouseCommand implements PokerCommand {
 	protected List<String> clientsNames;
 
 	/**
-	 * A nyertes játékos neve. //TODO: inkább a sorszámát kéne átküldeni?
+	 * A nyertes játékos sorszáma.
 	 */
 	protected int winner;
-	//private String winnerUserName;
 
+	/**
+	 * Hányan dobták be a lapjaikat.
+	 */
 	protected int foldCounter;
 
 	@Override

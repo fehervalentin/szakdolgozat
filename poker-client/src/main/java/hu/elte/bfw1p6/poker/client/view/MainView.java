@@ -330,7 +330,7 @@ public class MainView {
 				int value2 = mapCard(cards[1]);
 				winnerCard1.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
 				winnerCard2.setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value2 + ".png"));
-				int j = ultimateFormula(houseHoldemCommand.getWinner());// houseHoldemCommand.getWinner() + youWereNth;
+				int j = ultimateFormula(houseHoldemCommand.getWinner() - 1);// houseHoldemCommand.getWinner() + youWereNth;
 				System.out.println("You are nth: " + youAreNth);
 //				int j = (houseHoldemCommand.getWinner() + youAreNth) % clientsCount;
 				System.out.println("Ki nyer: " + houseHoldemCommand.getWinner());

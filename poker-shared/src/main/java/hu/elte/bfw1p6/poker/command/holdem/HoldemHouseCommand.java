@@ -1,11 +1,13 @@
 package hu.elte.bfw1p6.poker.command.holdem;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.cantero.games.poker.texasholdem.Card;
 
 import hu.elte.bfw1p6.poker.command.HouseCommand;
-import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
+import hu.elte.bfw1p6.poker.command.holdem.type.HoldemHouseCommandType;
 
 
 /**
@@ -16,6 +18,14 @@ import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
 public class HoldemHouseCommand extends HouseCommand {
 	
 	private static final long serialVersionUID = 7270842556559660805L;
+	
+	private static Set<HoldemHouseCommandType> acceptedTypes = new HashSet<>();
+	
+	static {
+		acceptedTypes.add(HoldemHouseCommandType.FLOP);
+		acceptedTypes.add(HoldemHouseCommandType.TURN);
+		acceptedTypes.add(HoldemHouseCommandType.RIVER);
+	}
 
 	/**
 	 * Az utasítás típusa.
@@ -44,46 +54,24 @@ public class HoldemHouseCommand extends HouseCommand {
 	 * @param card2 a playernek küldött második kártya
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
-	public void setUpPlayerCommand(Card cards[], int whosOn) {
-		this.houseCommandType = HoldemHouseCommandType.PLAYER;
+	public void setUpDealCommand(Card cards[], int whosOn) {
+		this.houseCommandType = HoldemHouseCommandType.DEAL;
 		this.cards = cards;
 		this.whosOn = whosOn;
 	}
 	
 	/**
-	 * Ha a szerver FLOP utasítást küld, akkor ezt a metódust kell használni.
-	 * @param houseCommandType FLOP
-	 * @param card1 a ház első lapja, amit körbe kell küldeni
-	 * @param card2 a ház második lapja, amit körbe kell küldeni
-	 * @param card3 a ház harmadik lapja, amit körbe kell küldeni
+	 * Ha a holdem szerver FLOP vagy TURN vagy RIVER utasítást küld, akkor ezt a metódust kell használni.
+	 * @param houseCommandType FLOP vagy TURN vagy RIVER
+	 * @param cards a ház lapjai
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
-	public void setUpFlopCommand(Card[] cards, int whosOn, int foldCounter) {
-		this.houseCommandType = HoldemHouseCommandType.FLOP;
-		this.cards = cards;
-		this.whosOn = whosOn;
-		this.foldCounter = foldCounter;
-	}
-	
-	/**
-	 * Ha a szerver TURN utasítást küld, akkor ezt a metódust kell használni
-	 * @param card1 a háznak osztott, körbeküldendő kártyalap
-	 * @param whosOn az épppen következő (soron levő) játékos
-	 */
-	public void setUpTurnCommand(Card[] cards, int whosOn, int foldCounter) {
-		this.houseCommandType = HoldemHouseCommandType.TURN;
-		this.cards = cards;
-		this.whosOn = whosOn;
-		this.foldCounter = foldCounter;
-	}
-	
-	/**
-	 * Ha a szerver RIVER utasítást küld, akkor ezt a metódust kell használni
-	 * @param card1 a háznak osztott, körbeküldendő kártyalap
-	 * @param whosOn az épppen következő (soron levő) játékos
-	 */
-	public void setUpRiverCommand(Card[] cards, int whosOn, int foldCounter) {
-		this.houseCommandType = HoldemHouseCommandType.RIVER;
+	public void setUpFlopTurnRiverCommand(HoldemHouseCommandType type, Card[] cards, int whosOn, int foldCounter) {
+		if (!acceptedTypes.contains(type)) {
+			throw new IllegalArgumentException("Nem megfelelő utasítás típus!");
+//			throw new IllegalArgumentException("Nem megfelelő utasítás típus! Az alkalmazható típusok: " + acceptedTypes.stream().toArray(String[]::new));
+		}
+		this.houseCommandType = type;
 		this.cards = cards;
 		this.whosOn = whosOn;
 		this.foldCounter = foldCounter;

@@ -98,7 +98,7 @@ public class MainGameController implements Initializable, PokerClientController,
 				receivedBlindHouseCommand(houseHoldemCommand);
 				break;
 			}
-			case PLAYER: {
+			case DEAL: {
 				receivedPlayerHouseCommand(houseHoldemCommand);
 				break;
 			}

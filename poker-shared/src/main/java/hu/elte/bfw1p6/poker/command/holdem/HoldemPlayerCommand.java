@@ -3,7 +3,7 @@ package hu.elte.bfw1p6.poker.command.holdem;
 import java.math.BigDecimal;
 
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
-import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
+import hu.elte.bfw1p6.poker.command.holdem.type.HoldemPlayerCommandType;
 
 /**
  * Az osztály valósítja meg a játékosok által küldendő utasításokat
@@ -18,21 +18,51 @@ public class HoldemPlayerCommand extends PlayerCommand {
 	 * Az utasítás típusa.
 	 */
 	private HoldemPlayerCommandType playerCommandType;
-	
+
 	/**
 	 * Konstruktor
 	 * @param playerCommandType A Command típusa
 	 * @param callAmount CALL esetén a megadandó összeg
 	 * @param raiseAmount RAISE esetén az emelendő összeg
 	 */
-	public HoldemPlayerCommand(HoldemPlayerCommandType playerCommandType, BigDecimal callAmount, BigDecimal raiseAmount, Integer whosQuit) {
-		this.playerCommandType = playerCommandType;
-		this.callAmount = callAmount;
-		this.raiseAmount = raiseAmount;
-		this.whosQuit = whosQuit;
+	public HoldemPlayerCommand() {
+		//		this.playerCommandType = playerCommandType;
+		//		this.callAmount = callAmount;
+		//		this.raiseAmount = raiseAmount;
+		//		this.whosQuit = whosQuit;
 	}
-	
+
+	public void setUpCallCommand(BigDecimal callAmount) {
+		this.playerCommandType = HoldemPlayerCommandType.CALL;
+		this.callAmount = callAmount;
+	}
+
 	public HoldemPlayerCommandType getPlayerCommandType() {
 		return playerCommandType;
+	}
+
+	public void setUpBlindCommand(BigDecimal callAmount) {
+		this.playerCommandType = HoldemPlayerCommandType.BLIND;
+		this.callAmount = callAmount;
+	}
+
+	public void setUpCheckCommand() {
+		this.playerCommandType = HoldemPlayerCommandType.CHECK;
+	}
+
+	public void setUpRaiseCommand(BigDecimal callAmount, BigDecimal raiseAmount) {
+		this.playerCommandType = HoldemPlayerCommandType.RAISE;
+		this.callAmount = callAmount;
+		this.raiseAmount = raiseAmount;
+	}
+
+	public void setUpFoldCommand(int tempNth) {
+		this.playerCommandType = HoldemPlayerCommandType.FOLD;
+		this.whosQuit = tempNth;
+	}
+
+	public void setUpQuitCommand(int youAreNth) {
+		this.playerCommandType = HoldemPlayerCommandType.QUIT;
+		this.whosQuit = youAreNth;
 	}
 }

@@ -14,7 +14,7 @@ import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
-import hu.elte.bfw1p6.poker.command.type.HoldemHouseCommandType;
+import hu.elte.bfw1p6.poker.command.holdem.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
@@ -204,7 +204,7 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 			pokerPlayer.setCards(cards);
 			players.add(pokerPlayer);
 			HoldemHouseCommand pokerCommand = new HoldemHouseCommand();
-			pokerCommand.setUpPlayerCommand(cards, whosOn);
+			pokerCommand.setUpDealCommand(cards, whosOn);
 			sendPokerCommand(i, pokerCommand);
 		}
 		nextStep();
@@ -311,19 +311,19 @@ public class HoldemPokerTableServer extends UnicastRemoteObject {
 					houseCards.add(cards[0]);
 					houseCards.add(cards[1]);
 					houseCards.add(cards[2]);
-					houseHoldemCommand.setUpFlopCommand(cards, whosOn, foldCounter);
+					houseHoldemCommand.setUpFlopTurnRiverCommand(HoldemHouseCommandType.BLIND, cards, whosOn, foldCounter);
 					break;
 				}
 				case TURN: {
 					Card[] cards = new Card[]{deck.popCard()};
 					houseCards.add(cards[0]);
-					houseHoldemCommand.setUpTurnCommand(cards, whosOn, foldCounter);
+					houseHoldemCommand.setUpFlopTurnRiverCommand(actualHoldemHouseCommandType, cards, whosOn, foldCounter);
 					break;
 				}
 				case RIVER: {
 					Card[] cards = new Card[]{deck.popCard()};
 					houseCards.add(cards[0]);
-					houseHoldemCommand.setUpRiverCommand(cards, whosOn, foldCounter);
+					houseHoldemCommand.setUpFlopTurnRiverCommand(actualHoldemHouseCommandType, cards, whosOn, foldCounter);
 					break;
 				}
 				case WINNER: {

@@ -3,15 +3,12 @@ package hu.elte.bfw1p6.poker.client.model;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 
-import com.cantero.games.poker.texasholdem.Card;
-
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
-import hu.elte.bfw1p6.poker.command.type.HoldemPlayerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
@@ -110,7 +107,9 @@ public class MainGameModel {
 	private void tossBlind(Boolean bigBlind) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		BigDecimal amount = pokerTable.getDefaultPot().divide(new BigDecimal(bigBlind ? 1 : 2));
 		myDebt = myDebt.subtract(amount);
-		sendPlayerCommand(HoldemPlayerCommandType.BLIND, amount, null, -1);
+		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
+		playerCommand.setUpBlindCommand(amount);
+		sendPlayerCommand(playerCommand);
 	}
 
 
@@ -133,25 +132,35 @@ public class MainGameModel {
 	public void call() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		BigDecimal amount = BigDecimal.ZERO.add(myDebt);
 		myDebt = myDebt.subtract(amount);
-		sendPlayerCommand(HoldemPlayerCommandType.CALL, amount, null, -1);
+		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
+		playerCommand.setUpCallCommand(amount);
+		sendPlayerCommand(playerCommand);
 	}
 
 	public void check() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
-		sendPlayerCommand(HoldemPlayerCommandType.CHECK, null, null, -1);
+		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
+		playerCommand.setUpCheckCommand();
+		sendPlayerCommand(playerCommand);
 	}
 
 	public void raise(BigDecimal amount) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
-		sendPlayerCommand(HoldemPlayerCommandType.RAISE, myDebt, amount, -1);
+		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
+		playerCommand.setUpRaiseCommand(myDebt, amount);
+		sendPlayerCommand(playerCommand);
 	}
 
 	public void fold() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		int tempNth = youAreNth;
 		youAreNth = -1;
-		sendPlayerCommand(HoldemPlayerCommandType.FOLD, null, null, tempNth);
+		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
+		playerCommand.setUpFoldCommand(tempNth);
+		sendPlayerCommand(playerCommand);
 	}
 
 	public void quit() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
-		sendPlayerCommand(HoldemPlayerCommandType.QUIT, null, null, youAreNth);		
+		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
+		playerCommand.setUpQuitCommand(youAreNth);
+		sendPlayerCommand(playerCommand);		
 	}
 
 	public void receivedFoldPlayerCommand(HoldemPlayerCommand playerHoldemCommand) {
@@ -181,11 +190,10 @@ public class MainGameModel {
 	}
 	
 
-	private void sendPlayerCommand(HoldemPlayerCommandType type, BigDecimal callAmount, BigDecimal raiseAmount, Integer whosQuit) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	private void sendPlayerCommand(HoldemPlayerCommand holdemPlayerCommand) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		
-		HoldemPlayerCommand playerHoldemCommand = new HoldemPlayerCommand(type, callAmount, raiseAmount, whosQuit);
 		try {
-			sendCommandToTable(playerHoldemCommand);
+			sendCommandToTable(holdemPlayerCommand);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
