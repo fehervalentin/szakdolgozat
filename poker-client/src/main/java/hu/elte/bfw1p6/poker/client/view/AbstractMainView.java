@@ -50,10 +50,21 @@ public abstract class AbstractMainView {
 		this.mainGamePane = mainGamePane;
 		this.defaultValues = defaultValues;
 		this.myCards = new ArrayList<>();
+		for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
+			ImageView myCard = new ImageView();
+			int gap = 5;
+			myCard.setLayoutX(defaultValues.MY_CARDS_POSITION[0]);
+			myCard.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
+			myCard.setLayoutX(defaultValues.MY_CARDS_POSITION[0] + i * defaultValues.CARD_WIDTH + gap);
+			myCard.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
+			
+			myCards.add(myCard);
+			mainGamePane.getChildren().add(myCard);
+		}
 		this.winnerCards = new ArrayList<>();
 		for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
 			ImageView imageView = new ImageView();
-			this.winnerCards.add(imageView);
+			winnerCards.add(imageView);
 			mainGamePane.getChildren().add(imageView);
 		}
 		this.profileImages = new ArrayList<>();
@@ -62,6 +73,13 @@ public abstract class AbstractMainView {
 		this.chips = new ArrayList<>();
 		this.userNameLabels = new ArrayList<>();
 		this.random = new Random();
+
+		setDealerButton();
+		setProfileImages();
+		setDeck();
+		setCards();
+		setLabels();
+		hideAllProfiles();
 	}
 
 	protected void setDealerButton() {
@@ -185,10 +203,10 @@ public abstract class AbstractMainView {
 	}
 	
 	public void receivedBlindHouseCommand(HouseCommand houseCommand) {
-		hideAllProfiles();
 		clientsCount = houseCommand.getPlayers();
 		youAreNth = houseCommand.getNthPlayer();
 		DEALER_BUTTON_POSITION = (clientsCount + houseCommand.getDealer() - youAreNth) % clientsCount;
+		hideAllProfiles();
 		Platform.runLater(
 				new Runnable() {
 
@@ -228,9 +246,9 @@ public abstract class AbstractMainView {
 				for (int j = 0; j < defaultValues.MY_CARDS_COUNT; j++) {
 					int value = mapCard(cards[j]);
 					myCards.get(j).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
+//					myCards.get(j).setVisible(true);
 				}
-				//				KIKOVETKEZIK = (HOLVANADEALERGOMB + clientsCount + 1) % clientsCount;
-				// a dealertől balra ülő harmadik játékos kezdi a preflopot
+				//KIKOVETKEZIK = (HOLVANADEALERGOMB + clientsCount + 1) % clientsCount;
 				nextPlayer = ultimateFormula(houseCommand.getWhosOn());
 //				NEXT_PLAYER = (DEALER_BUTTON_POSITION + 3) % clientsCount;
 				System.out.println("Dealer gomb helye: " + DEALER_BUTTON_POSITION);
@@ -322,7 +340,7 @@ public abstract class AbstractMainView {
 					int value = mapCard(cards[i]);
 					winnerCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
 				}
-				int j = ultimateFormula(houseCommand.getWinner() - 1);// houseHoldemCommand.getWinner() + youWereNth;
+				int j = ultimateFormula(houseCommand.getWinner());// houseHoldemCommand.getWinner() + youWereNth;
 				System.out.println("You are nth: " + youAreNth);
 //				int j = (houseHoldemCommand.getWinner() + youAreNth) % clientsCount;
 				System.out.println("Ki nyer: " + houseCommand.getWinner());
@@ -331,7 +349,7 @@ public abstract class AbstractMainView {
 				if (j == youAreNth) {
 					
 				} else {
-//					--j;
+					--j;
 //					j+=youAreNth;
 //					j %= clientsCount;
 					System.out.println("A j erteke: " + j);

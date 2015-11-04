@@ -10,6 +10,8 @@ import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
 import hu.elte.bfw1p6.poker.command.classic.type.ClassicHouseCommandType;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
+import hu.elte.bfw1p6.poker.command.holdem.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
@@ -77,8 +79,49 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 
 	@Override
 	protected void nextRound() throws RemoteException {
-		// TODO Auto-generated method stub
-
+		// ha már kijött a river és az utolsó körben (rivernél) már mindenki nyilatkozott legalább egyszer, akkor új játszma kezdődik
+				System.out.println("VotedPlayers: " + votedPlayers);
+				System.out.println("Players in round: " + playersInRound);
+				if (playersInRound == 1 || (actualClassicHouseCommandType == ClassicHouseCommandType.BLIND && votedPlayers >= playersInRound)) {
+					//TODO: itt is kell értékelni, hogy ki nyert
+					startRound();
+				} else {
+					// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
+					if (votedPlayers >= playersInRound) {
+						ClassicHouseCommand classicHouseCommand = new ClassicHouseCommand();
+						// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
+						whosOn = (dealer + 1 + foldCounter) % playersInRound;
+						switch (actualClassicHouseCommandType) {
+						case BET: {
+							classicHouseCommand.setUpBetCommand(whosOn);
+							break;
+						}
+						case CHANGE: {
+							classicHouseCommand.setUpChangeCommand(whosOn);
+							break;
+						}
+						case DEAL2: {
+							//TODO: itt osztom ki az új lapokat a játékosokat, de ahhoz tudnom kell, hogy ki milyen lapot akar kicserélni...
+							//classicHouseCommand.setUpDeal2Command(cards, whosOn);
+							break;
+						}
+						case BET2: {
+							classicHouseCommand.setUpBet2Command(whosOn);
+							break;
+						}
+						case WINNER: {
+							winner(classicHouseCommand);
+							break;
+						}
+						default:
+							break;
+						}
+						System.out.println("Next round");
+						notifyClients(classicHouseCommand);
+						nextStep();
+						votedPlayers = 0;
+					}
+				}
 	}
 
 	@Override

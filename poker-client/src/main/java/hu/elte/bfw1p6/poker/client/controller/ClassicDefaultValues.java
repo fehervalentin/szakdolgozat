@@ -5,7 +5,7 @@ public class ClassicDefaultValues extends AbstractDefaultValues {
 	private static ClassicDefaultValues instance = null;
 
 	private ClassicDefaultValues() {
-		this.MY_CARDS_POSITION = new int[]{400, 430};
+		this.MY_CARDS_POSITION = new int[]{488, 430};
 		this.MY_CARDS_COUNT = 5;
 	}
 

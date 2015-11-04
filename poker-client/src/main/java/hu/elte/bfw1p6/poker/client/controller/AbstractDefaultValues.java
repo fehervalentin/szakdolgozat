@@ -4,10 +4,9 @@ public class AbstractDefaultValues {
 	
 	public int[] MY_CARDS_POSITION;
 	
-	public int[] DECK_POINT;
-	
 	public int MY_CARDS_COUNT;
 	
+	public int[] DECK_POINT = new int[]{430, 300};
 	
 	public final String CARD_IMAGE_PREFIX = "/images/cards/";
 	

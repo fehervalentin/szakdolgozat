@@ -22,27 +22,9 @@ public class HoldemMainView extends AbstractMainView {
 
 	public HoldemMainView(AnchorPane mainGamePane) {
 		super(mainGamePane, HoldemDefaultValues.getInstance());
-		this.houseCards = new ArrayList<>();
 		
-		for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
-			ImageView myCard = new ImageView();
-			int gap = 5;
-			myCard.setLayoutX(defaultValues.MY_CARDS_POSITION[0]);
-			myCard.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
-			myCard.setLayoutX(defaultValues.MY_CARDS_POSITION[0] + i * defaultValues.CARD_WIDTH + gap);
-			myCard.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
-			
-			myCards.add(myCard);
-			mainGamePane.getChildren().add(myCard);
-		}
-
-		setDealerButton();
-		setProfileImages();
-		setDeck();
-		setCards();
+		this.houseCards = new ArrayList<>();
 		setHouseCards();
-		setLabels();
-		hideAllProfiles();
 	}
 
 	private void setHouseCards() {
