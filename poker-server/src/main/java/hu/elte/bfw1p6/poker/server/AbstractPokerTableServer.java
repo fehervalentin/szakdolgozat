@@ -6,6 +6,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cantero.games.poker.texasholdem.Card;
+
 import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
 import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
@@ -75,6 +77,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Ki van soron éppen.
 	 */
 	protected int whosOn;
+	
+	protected int cardsToHand;
 
 	/**
 	 * Hány játékos adott már le voksot az adott körben (raise-nél = 1).
@@ -86,7 +90,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Asztaltól fogom lekérni.
 	 */
 	@Deprecated
-	protected int minPlayer = 3;
+	protected int minPlayer = 2;
 
 	/**
 	 * A játékosok száma, akik eldobták a lapjaikat.
@@ -101,6 +105,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		this.moneyStack = BigDecimal.ZERO;
 		this.players = new ArrayList<>();
 		this.clientsNames = new ArrayList<>();
+		this.cardsToHand = pokerTable.getPokerType().getCardsToPlayers();
 	}
 
 
@@ -128,6 +133,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	}
 
 	protected void preStartRound() {
+		//még senki sem dobta el a lapjait
 		foldCounter = 0;
 		// megnézem, hogy aktuális hány játékos van az asztalnál
 		playersInRound = clients.size();
@@ -266,17 +272,44 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		nextRound();
 	}
 
-	protected abstract void startRound();
+	protected void startRound() {
+		prepareNewRound();
+		collectBlinds();
+		dealCardsToPlayers();
+	}
+	
+	protected void dealCardsToPlayers() {
+		for (int i = 0; i < clients.size(); i++) {
+			Card[] cards = new Card[cardsToHand];
+			for (int j = 0; j < cardsToHand; j++) {
+				cards[j] = deck.popCard();
+			}
+			PokerPlayer pokerPlayer = new PokerPlayer();
+			pokerPlayer.setCards(cards);
+			players.add(pokerPlayer);
+			sendPokerCommand(i, houseDealCommandFactory(cards));
+		}
+		nextStep();
+	}
+
+	protected void collectBlinds() {
+		for (int i = 0; i < clients.size(); i++) {
+			sendPokerCommand(i, houseBlindCommandFactory(i, clients.size(), dealer, whosOn, clientsNames));
+		}
+		nextStep();
+	}
+	
+	protected abstract HouseCommand houseDealCommandFactory(Card[] cards);
+	
+	protected abstract HouseCommand houseBlindCommandFactory(int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames);
 
 	protected abstract void nextStep();
 
 	protected abstract void winner(HouseCommand houseCommand);
 
-	protected abstract void dealCardsToPlayers(int cardCount);
-
-	protected abstract void collectBlinds();
-
 	protected abstract void nextRound() throws RemoteException;
 
 	protected abstract void receivePlayerCommand(RemoteObserver client, PlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
+	
+	protected abstract void prepareNewRound();
 }

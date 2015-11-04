@@ -1,6 +1,7 @@
 package hu.elte.bfw1p6.poker.server;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
 
@@ -10,11 +11,8 @@ import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
 import hu.elte.bfw1p6.poker.command.classic.type.ClassicHouseCommandType;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
-import hu.elte.bfw1p6.poker.command.holdem.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
-import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 
 public class ClassicPokerTableServer extends AbstractPokerTableServer {
@@ -29,14 +27,10 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	protected ClassicPokerTableServer(PokerTable pokerTable) throws RemoteException {
 		super(pokerTable);
 	}
-
-
+	
 	@Override
-	protected void startRound() {
+	protected void prepareNewRound() {
 		actualClassicHouseCommandType = ClassicHouseCommandType.values()[0];
-		collectBlinds();
-		dealCardsToPlayers(5);
-
 	}
 
 	@Override
@@ -49,32 +43,19 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 		// TODO Auto-generated method stub
 
 	}
-
+	
 	@Override
-	protected void dealCardsToPlayers(int cardCount) {
-		for (int i = 0; i < clients.size(); i++) {
-			Card[] cards = new Card[cardCount];
-			for (int j = 0; j < cardCount; j++) {
-				cards[j] = deck.popCard();
-			}
-			PokerPlayer pokerPlayer = new PokerPlayer();
-			pokerPlayer.setCards(cards);
-			players.add(pokerPlayer);
-			ClassicHouseCommand classicHouseCommand = new ClassicHouseCommand();
-			classicHouseCommand.setUpDealCommand(cards, whosOn);
-			sendPokerCommand(i, classicHouseCommand);
-		}
-		nextStep();
+	protected HouseCommand houseDealCommandFactory(Card[] cards) {
+		ClassicHouseCommand classicHouseCommand = new ClassicHouseCommand();
+		classicHouseCommand.setUpDealCommand(cards, whosOn);
+		return classicHouseCommand;
 	}
-
+	
 	@Override
-	protected void collectBlinds() {
-		for (int i = 0; i < clients.size(); i++) {
-			ClassicHouseCommand classicHouseCommand = new ClassicHouseCommand();
-			classicHouseCommand.setUpBlindCommand(i, clients.size(), dealer, whosOn, clientsNames);
-			sendPokerCommand(i, classicHouseCommand);
-		}
-		nextStep();
+	protected HouseCommand houseBlindCommandFactory(int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
+		ClassicHouseCommand classicHouseCommand = new ClassicHouseCommand();
+		classicHouseCommand.setUpBlindCommand(nthPlayer, clients.size(), dealer, whosOn, clientsNames);
+		return classicHouseCommand;
 	}
 
 	@Override

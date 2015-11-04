@@ -16,7 +16,6 @@ import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
-import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 
 /**
@@ -42,43 +41,25 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 		super(pokerTable);
 		this.houseCards = new ArrayList<>();
 	}
-
+	
 	@Override
-	protected void startRound() {
-		//a vakokat kérem be legelőször
+	protected void prepareNewRound() {
 		actualHoldemHouseCommandType = HoldemHouseCommandType.values()[0];
 		houseCards.clear();
-		// be kell kérni a vakokat
-		collectBlinds();
-		// két lap kézbe
-		dealCardsToPlayers(2);
 	}
 
 	@Override
-	protected void collectBlinds() {
-		for (int i = 0; i < clients.size(); i++) {
-			HoldemHouseCommand houseHoldemCommand = new HoldemHouseCommand();
-			houseHoldemCommand.setUpBlindCommand(i, clients.size(), dealer, whosOn, clientsNames);
-			sendPokerCommand(i, houseHoldemCommand);
-		}
-		nextStep();
+	protected HouseCommand houseBlindCommandFactory(int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
+		HoldemHouseCommand holdemHouseCommand = new HoldemHouseCommand();
+		holdemHouseCommand.setUpBlindCommand(nthPlayer, clients.size(), dealer, whosOn, clientsNames);
+		return holdemHouseCommand;
 	}
-
+	
 	@Override
-	protected void dealCardsToPlayers(int cardCount) {
-		for (int i = 0; i < clients.size(); i++) {
-			Card[] cards = new Card[cardCount];
-			for (int j = 0; j < cardCount; j++) {
-				cards[j] = deck.popCard();
-			}
-			PokerPlayer pokerPlayer = new PokerPlayer();
-			pokerPlayer.setCards(cards);
-			players.add(pokerPlayer);
-			HoldemHouseCommand holdemHouseCommand = new HoldemHouseCommand();
-			holdemHouseCommand.setUpDealCommand(cards, whosOn);
-			sendPokerCommand(i, holdemHouseCommand);
-		}
-		nextStep();
+	protected HouseCommand houseDealCommandFactory(Card[] cards) {
+		HoldemHouseCommand holdemHouseCommand = new HoldemHouseCommand();
+		holdemHouseCommand.setUpDealCommand(cards, whosOn);
+		return holdemHouseCommand;
 	}
 
 	@Override
