@@ -49,6 +49,11 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	}
 
 	@Override
+	protected void nextStep() {
+		actualHoldemHouseCommandType = HoldemHouseCommandType.values()[(actualHoldemHouseCommandType.ordinal() + 1) % HoldemHouseCommandType.values().length];
+	}
+
+	@Override
 	protected HouseCommand houseBlindCommandFactory(int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
 		HoldemHouseCommand holdemHouseCommand = new HoldemHouseCommand();
 		holdemHouseCommand.setUpBlindCommand(nthPlayer, clients.size(), dealer, whosOn, clientsNames);
@@ -167,10 +172,5 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 		System.out.println("A győztes sorszáma: " + winner_);
 		System.out.println("A győztes kártyalapjai: " + Arrays.toString(cards));
 		holdemHouseCommand.setUpWinnerCommand(cards, winner_);
-	}
-
-	@Override
-	protected void nextStep() {
-		actualHoldemHouseCommandType = HoldemHouseCommandType.values()[(actualHoldemHouseCommandType.ordinal() + 1) % HoldemHouseCommandType.values().length];
 	}
 }

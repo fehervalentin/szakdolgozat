@@ -10,7 +10,6 @@ import hu.elte.bfw1p6.poker.client.model.ClassicMainGameModel;
 import hu.elte.bfw1p6.poker.client.view.ClassicMainView;
 import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import javafx.application.Platform;
@@ -40,48 +39,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 			frameController.setLoginFXML();
 		}
 		modifyButtonsDisability(true);
-//		lol();
 	}
-	
-	/*private void lol() {
-		int LAYOUT_X = 950;
-		int LAYOUT_Y = 400;
-		int CARD_WIDHT = 12;
-		int myCards_count = 5;
-		for (int i = 0; i < myCards_count - 1; i++) {
-			ImageView cardSide = new ImageView(new Image("/images/cards/b1pl.png"));
-			cardSide.setLayoutX(LAYOUT_X + i * CARD_WIDHT);
-			cardSide.setLayoutY(LAYOUT_Y);
-			cardSide.fitHeightProperty().set(96);
-			cardSide.fitWidthProperty().set(12);
-			mainGamePane.getChildren().add(cardSide);
-		}
-		ImageView backCard = new ImageView(new Image("/images/cards/b1fv.png"));
-		backCard.setLayoutX(LAYOUT_X + (myCards_count - 1) * CARD_WIDHT);
-		backCard.setLayoutY(LAYOUT_Y);
-		backCard.fitHeightProperty().set(96);
-		backCard.fitWidthProperty().set(71);
-		mainGamePane.getChildren().add(backCard);
-	}*/
-	
-//	for (int i = 0; i < defaultValues.PROFILE_COUNT * 2 - 2; i+=2) {
-//		ImageView card = new ImageView(new Image(defaultValues.CARD_BACKFACE_IMAGE));
-//		card.setLayoutX(defaultValues.CARD_B1FV_POINTS[i]);
-//		card.setLayoutY(defaultValues.CARD_B1FV_POINTS[i+1]);
-//		card.fitHeightProperty().set(defaultValues.CARD_HEIGHT);
-//		card.fitWidthProperty().set(defaultValues.CARD_WIDTH);
-//
-//		ImageView cardSide = new ImageView(new Image(defaultValues.CARD_SIDE_IMAGE_URL));
-//		cardSide.setLayoutX(defaultValues.CARD_B1FV_POINTS[i] - defaultValues.CARD_SIDE_WIDTH);
-//		cardSide.setLayoutY(defaultValues.CARD_B1FV_POINTS[i+1]);
-//		cardSide.fitHeightProperty().set(defaultValues.CARD_HEIGHT);
-//		cardSide.fitWidthProperty().set(defaultValues.CARD_SIDE_WIDTH);
-//
-//		opponentsCards.add(card);
-//		opponentsCardSides.add(cardSide);
-//		mainGamePane.getChildren().add(card);
-//		mainGamePane.getChildren().add(cardSide);
-//	}
 
 	@Override
 	public void updateMe(Object updateMsg) {
@@ -122,7 +80,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 				throw new IllegalArgumentException();
 			}
 			}
-		} else if (updateMsg instanceof HoldemPlayerCommand) {
+		} else if (updateMsg instanceof ClassicPlayerCommand) {
 			ClassicPlayerCommand playerHoldemCommand = (ClassicPlayerCommand)updateMsg;
 			//			System.out.println("Ki kuldte a player commandot: " + playerHoldemCommand.getSender() + "\nMilyen command: " + playerHoldemCommand.getPlayerCommandType());
 			//			System.out.println("You are nth: " + model.getYouAreNth() + " Whoson: " + playerHoldemCommand.getWhosOn());

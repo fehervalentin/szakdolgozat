@@ -37,12 +37,6 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	protected void nextStep() {
 		actualClassicHouseCommandType = ClassicHouseCommandType.values()[(actualClassicHouseCommandType.ordinal() + 1) % ClassicHouseCommandType.values().length];
 	}
-
-	@Override
-	protected void winner(HouseCommand houseCommand) {
-		// TODO Auto-generated method stub
-
-	}
 	
 	@Override
 	protected HouseCommand houseDealCommandFactory(Card[] cards) {
@@ -63,7 +57,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 		// ha már kijött a river és az utolsó körben (rivernél) már mindenki nyilatkozott legalább egyszer, akkor új játszma kezdődik
 				System.out.println("VotedPlayers: " + votedPlayers);
 				System.out.println("Players in round: " + playersInRound);
-				if (playersInRound == 1 || (actualClassicHouseCommandType == ClassicHouseCommandType.BLIND && votedPlayers >= playersInRound)) {
+				if (playersInRound == 1 || (actualClassicHouseCommandType == ClassicHouseCommandType.values()[0] && votedPlayers >= playersInRound)) {
 					//TODO: itt is kell értékelni, hogy ki nyert
 					startRound();
 				} else {
@@ -135,10 +129,23 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 				receivedQuitPlayerCommand(client, classicPlayerCommand);
 				break;
 			}
+			case CHANGE: {
+				receivedChangePlayerCommand(classicPlayerCommand);
+			}
 			default:
 				break;
 			}
 			endOfReceivePlayerCommand(classicPlayerCommand);
 		}
+	}
+	
+	private void receivedChangePlayerCommand(ClassicPlayerCommand classicPlayerCommand) {
+		
+	}
+
+	@Override
+	protected void winner(HouseCommand houseCommand) {
+		// TODO Auto-generated method stub
+
 	}
 }
