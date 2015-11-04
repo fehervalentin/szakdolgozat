@@ -6,6 +6,11 @@ public class AbstractDefaultValues {
 	
 	public int MY_CARDS_COUNT;
 	
+	/**
+	 * A lefordított kártyalapokat hova kell generálni.
+	 */
+	public int[] CARD_B1FV_POINTS;
+	
 	public int[] DECK_POINT = new int[]{430, 300};
 	
 	public final String CARD_IMAGE_PREFIX = "/images/cards/";
@@ -34,11 +39,6 @@ public class AbstractDefaultValues {
 	 */
 	public final String CARD_SIDE_IMAGE_URL = "/images/cards/b1pl.png";
 	public final String CARD_BACKFACE_IMAGE= "/images/cards/b1fv.png";
-	
-	/**
-	 * A lefordított kártyalapokat hova kell generálni.
-	 */
-	public final int[] CARD_B1FV_POINTS = new int[]{293, 400, 322, 200, 640, 155, 940, 180, 1000, 400};
 	
 	public final int[] DEALER_BUTTON_POSITIONS = new int[]{580, 530, 320, 500, 265, 240, 720, 160, 1020, 200, 970, 505};
 	

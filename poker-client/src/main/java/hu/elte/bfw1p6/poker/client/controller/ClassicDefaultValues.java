@@ -6,6 +6,7 @@ public class ClassicDefaultValues extends AbstractDefaultValues {
 
 	private ClassicDefaultValues() {
 		this.MY_CARDS_POSITION = new int[]{488, 430};
+		this.CARD_B1FV_POINTS = new int[]{285, 400, 315, 200, 605, 155, 895, 180, 950, 400};
 		this.MY_CARDS_COUNT = 5;
 	}
 

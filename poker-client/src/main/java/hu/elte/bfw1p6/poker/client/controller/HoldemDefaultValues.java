@@ -6,6 +6,7 @@ public class HoldemDefaultValues extends AbstractDefaultValues {
 
 	private HoldemDefaultValues() {
 		this.MY_CARDS_POSITION = new int[]{600, 430};
+		this.CARD_B1FV_POINTS = new int[]{283, 400, 312, 200, 630, 155, 930, 180, 990, 400};
 		this.MY_CARDS_COUNT = 2;
 	}
 
