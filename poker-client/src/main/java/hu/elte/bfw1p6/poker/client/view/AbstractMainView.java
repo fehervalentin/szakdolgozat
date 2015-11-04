@@ -50,23 +50,7 @@ public abstract class AbstractMainView {
 		this.mainGamePane = mainGamePane;
 		this.defaultValues = defaultValues;
 		this.myCards = new ArrayList<>();
-		for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
-			ImageView myCard = new ImageView();
-			int gap = 5;
-			myCard.setLayoutX(defaultValues.MY_CARDS_POSITION[0]);
-			myCard.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
-			myCard.setLayoutX(defaultValues.MY_CARDS_POSITION[0] + i * defaultValues.CARD_WIDTH + gap);
-			myCard.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
-
-			myCards.add(myCard);
-			mainGamePane.getChildren().add(myCard);
-		}
 		this.winnerCards = new ArrayList<>();
-		for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
-			ImageView imageView = new ImageView();
-			winnerCards.add(imageView);
-			mainGamePane.getChildren().add(imageView);
-		}
 		this.profileImages = new ArrayList<>();
 		this.opponentsCards = new ArrayList<>();
 		this.opponentsCardSides = new ArrayList<>();
@@ -91,8 +75,6 @@ public abstract class AbstractMainView {
 	}
 
 	protected void setProfileImages() {
-		// a saját profilképem is idemegy
-		// és mi van ha mindenkinek saját profile képet akarok betölteni...?
 		Image profileImage = new Image(defaultValues.PROFILE_IMAGE_URL);
 		// kettesével kell menni (x,y) párok miatt
 		for (int i = 0; i < defaultValues.PROFILE_COUNT * 2; i+=2) {
@@ -106,23 +88,18 @@ public abstract class AbstractMainView {
 		}
 	}
 
-	protected void setLabels() {
-		// kettesével kell menni (x,y) párok miatt
-		for (int i = 0; i < defaultValues.PROFILE_COUNT * 2; i+=2) {
-			Label label = new Label();
-			userNameLabels.add(label);
-			label.setLayoutX(defaultValues.PROFILE_POINTS[i]);
-			label.setLayoutY(defaultValues.PROFILE_POINTS[i+1]);
-			//			iv.fitHeightProperty().set(defaultValues.PROFILE_SIZE);
-			//			iv.fitWidthProperty().set(defaultValues.PROFILE_SIZE);
-			mainGamePane.getChildren().add(label);
-		}
+	protected void setDeck() {
+		ImageView deck = new ImageView(new Image(defaultValues.DECK_IMAGE_URL));
+		deck.setLayoutX(defaultValues.DECK_POINT[0]);
+		deck.setLayoutY(defaultValues.DECK_POINT[1]);
+		mainGamePane.getChildren().add(deck);
 	}
 
 	protected void setCards() {
 		// a saját kártyáim nem idemennek
 		// a 0. helyen az első hely lapjai vannak
 		// kettessével kell menni (x,y) párok miatt
+		//opponents cards
 		for (int i = 0; i < (defaultValues.PROFILE_COUNT) * 2; i+=2) {
 			for (int j = 0; j < defaultValues.MY_CARDS_COUNT - 1; j++) {
 				ImageView cardSide = new ImageView(new Image(defaultValues.CARD_SIDE_IMAGE_URL));
@@ -141,17 +118,46 @@ public abstract class AbstractMainView {
 			opponentsCards.add(backCard);
 			mainGamePane.getChildren().add(backCard);
 		}
+		
+		//winner cards
+		for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
+			ImageView imageView = new ImageView();
+			winnerCards.add(imageView);
+			mainGamePane.getChildren().add(imageView);
+		}
+		
+		//mycards
+		for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
+			ImageView myCard = new ImageView();
+			int gap = 5;
+			myCard.setLayoutX(defaultValues.MY_CARDS_POSITION[0]);
+			myCard.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
+			myCard.setLayoutX(defaultValues.MY_CARDS_POSITION[0] + i * defaultValues.CARD_WIDTH + gap);
+			myCard.setLayoutY(defaultValues.MY_CARDS_POSITION[1]);
+
+			myCards.add(myCard);
+			mainGamePane.getChildren().add(myCard);
+		}
+	}
+
+	protected void setLabels() {
+		// kettesével kell menni (x,y) párok miatt
+		for (int i = 0; i < defaultValues.PROFILE_COUNT * 2; i+=2) {
+			Label label = new Label();
+			label.setLayoutX(defaultValues.PROFILE_POINTS[i]);
+			label.setLayoutY(defaultValues.PROFILE_POINTS[i+1]);
+			//			iv.fitHeightProperty().set(defaultValues.PROFILE_SIZE);
+			//			iv.fitWidthProperty().set(defaultValues.PROFILE_SIZE);
+			userNameLabels.add(label);
+			mainGamePane.getChildren().add(label);
+		}
 	}
 
 	protected void setLabelUserNames(List<String> userNames) {
 		for (int i = 0; i < userNames.size(); i++) {
-			String username = userNames.get(i);
-			int value = (i - youAreNth) % clientsCount;
-			if (value < 0) {
-				value += clientsCount;
-			}
+			int value = ultimateFormula(i);
+			userNameLabels.get(value).setText(userNames.get(i));
 			userNameLabels.get(value).setVisible(true);
-			userNameLabels.get(value).setText(username);
 		}
 	}
 
@@ -183,22 +189,26 @@ public abstract class AbstractMainView {
 	}
 
 	protected void colorNextPlayer(PokerCommand pokerCommand) {
-		nextPlayer = ultimateFormula(pokerCommand.getWhosOn());
-		if (coloredPlayer >= 0) {
-			profileImages.get(coloredPlayer).getStyleClass().remove("glow");
-		}
-		if (nextPlayer >= 0) {
-			profileImages.get(nextPlayer).getStyleClass().add("glow");
-		}
-		coloredPlayer = nextPlayer;
-		nextPlayer = pokerCommand.getWhosOn();
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				nextPlayer = ultimateFormula(pokerCommand.getWhosOn());
+				if (coloredPlayer >= 0) {
+					profileImages.get(coloredPlayer).getStyleClass().remove("glow");
+				}
+				if (nextPlayer >= 0) {
+					profileImages.get(nextPlayer).getStyleClass().add("glow");
+				}
+				coloredPlayer = nextPlayer;
+				nextPlayer = pokerCommand.getWhosOn();
+			}
+		});
 	}
 
 	protected int ultimateFormula(int whosOn) {
 		int value = (whosOn - youAreNth) % clientsCount;
-		if (value < 0) {
-			value += clientsCount;
-		}
+		value += value < 0 ? clientsCount : 0;
 		return value;
 	}
 
@@ -212,9 +222,6 @@ public abstract class AbstractMainView {
 
 					@Override
 					public void run() {
-						for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
-							winnerCards.get(i).setVisible(false);
-						}
 						setLabelUserNames(houseCommand.getPlayersNames());
 						resetOpacity();
 						clearChips();
@@ -248,7 +255,6 @@ public abstract class AbstractMainView {
 				for (int j = 0; j < defaultValues.MY_CARDS_COUNT; j++) {
 					int value = mapCard(cards[j]);
 					myCards.get(j).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
-					//					myCards.get(j).setVisible(true);
 				}
 				//KIKOVETKEZIK = (HOLVANADEALERGOMB + clientsCount + 1) % clientsCount;
 				nextPlayer = ultimateFormula(houseCommand.getWhosOn());
@@ -262,47 +268,22 @@ public abstract class AbstractMainView {
 	}
 
 	public void receivedRaisePlayerCommand(PlayerCommand playerCommand) {
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				colorNextPlayer(playerCommand);
-				addChip();
-				addChip();
-			}
-		});
+		colorNextPlayer(playerCommand);
+		addChip();
+		addChip();
 	}
 
 	public void receivedBlindPlayerCommand(PlayerCommand playerCommand) {
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				addChip();
-			}
-		});
+		addChip();
 	}
 
 	public void receivedCallPlayerCommand(PlayerCommand playerCommand) {
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				colorNextPlayer(playerCommand);
-				addChip();
-			}
-		});
-
+		colorNextPlayer(playerCommand);
+		addChip();
 	}
 
 	public void receivedCheckPlayerCommand(PlayerCommand playerCommand) {
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				colorNextPlayer(playerCommand);
-			}
-		});
+		colorNextPlayer(playerCommand);
 	}
 
 	public void receivedFoldPlayerCommand(PlayerCommand playerCommand) {
@@ -373,9 +354,14 @@ public abstract class AbstractMainView {
 		for (ImageView imageView : myCards) {
 			imageView.setOpacity(1);
 		}
-		for (int i = 0; i < opponentsCards.size(); i++) {
-			opponentsCards.get(i).setOpacity(1);
-			opponentsCardSides.get(i).setOpacity(1);
+		for (ImageView imageView : opponentsCards) {
+			imageView.setOpacity(1);
+		}
+		for (ImageView imageView : opponentsCardSides) {
+			imageView.setOpacity(1);
+		}
+		for (ImageView imageView : winnerCards) {
+			imageView.setOpacity(0);
 		}
 	}
 
@@ -387,22 +373,21 @@ public abstract class AbstractMainView {
 	 * Random helyezek el chipeket az asztalon.
 	 */
 	protected void addChip() {
-		ImageView chip = new ImageView(new Image(defaultValues.CHIP_IMAGE_PREFIX + "black.png"));
-		int max = defaultValues.CHIPS_POINT[0] + 20;
-		int min = defaultValues.CHIPS_POINT[1] - 20;
-		chip.setLayoutX(random.nextInt(max - min) + min);
-		chip.setLayoutY(random.nextInt(max - min) + min);
-		chip.setFitHeight(defaultValues.CHIPS_SIZE);
-		chip.setFitWidth(defaultValues.CHIPS_SIZE);
-		chips.add(chip);
-		mainGamePane.getChildren().add(chip);
-	}
+		Platform.runLater(new Runnable() {
 
-	protected void setDeck() {
-		ImageView deck = new ImageView(new Image(defaultValues.DECK_IMAGE_URL));
-		deck.setLayoutX(defaultValues.DECK_POINT[0]);
-		deck.setLayoutY(defaultValues.DECK_POINT[1]);
-		mainGamePane.getChildren().add(deck);
+			@Override
+			public void run() {
+				ImageView chip = new ImageView(new Image(defaultValues.CHIP_IMAGE_PREFIX + "black.png"));
+				int max = defaultValues.CHIPS_POINT[0] + 20;
+				int min = defaultValues.CHIPS_POINT[1] - 20;
+				chip.setLayoutX(random.nextInt(max - min) + min);
+				chip.setLayoutY(random.nextInt(max - min) + min);
+				chip.setFitHeight(defaultValues.CHIPS_SIZE);
+				chip.setFitWidth(defaultValues.CHIPS_SIZE);
+				chips.add(chip);
+				mainGamePane.getChildren().add(chip);
+			}
+		});
 	}
 
 	public void receivedQuitPlayerCommand(PlayerCommand playerCommand) {
