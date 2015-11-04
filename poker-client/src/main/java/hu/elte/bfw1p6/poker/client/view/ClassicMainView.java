@@ -18,16 +18,6 @@ public class ClassicMainView extends AbstractMainView {
 	protected void hideHouseCards() {
 	}
 	
-	public void receivedBetHouseCommand(ClassicHouseCommand classicHouseCommand) {
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				colorNextPlayer(classicHouseCommand);
-			}
-		});
-	}
-	
 	public void receivedChangeHouseCommand(ClassicHouseCommand classicHouseCommand) {
 		Platform.runLater(new Runnable() {
 
@@ -62,15 +52,4 @@ public class ClassicMainView extends AbstractMainView {
 			}
 		});
 	}
-	
-	public void receivedBet2HouseCommand(ClassicHouseCommand classicHouseCommand) {
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				colorNextPlayer(classicHouseCommand);
-			}
-		});
-	}
-
 }

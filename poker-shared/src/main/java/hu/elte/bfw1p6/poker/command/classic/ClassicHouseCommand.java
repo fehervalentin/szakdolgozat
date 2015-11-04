@@ -45,17 +45,6 @@ public class ClassicHouseCommand extends HouseCommand {
 	}
 	
 	/**
-	 * Ha a classic szerver BET utasítást küld, akkor ezt a metódust kell használni.
-	 * @param card1 a playernek küldött első kártya
-	 * @param card2 a playernek küldött második kártya
-	 * @param whosOn az épppen következő (soron levő) játékos
-	 */
-	public void setUpBetCommand(int whosOn) {
-		this.houseCommandType = ClassicHouseCommandType.BET;
-		this.whosOn = whosOn;
-	}
-	
-	/**
 	 * Ha a classic szerver CHANGE utasítást küld, akkor ezt a metódust kell használni.
 	 * @param card1 a playernek küldött első kártya
 	 * @param card2 a playernek küldött második kártya
@@ -75,17 +64,6 @@ public class ClassicHouseCommand extends HouseCommand {
 	public void setUpDeal2Command(Card cards[], int whosOn) {
 		this.houseCommandType = ClassicHouseCommandType.DEAL2;
 		this.cards = cards;
-		this.whosOn = whosOn;
-	}
-	
-	/**
-	 * Ha a classic szerver BET2 utasítást küld, akkor ezt a metódust kell használni.
-	 * @param card1 a playernek küldött első kártya
-	 * @param card2 a playernek küldött második kártya
-	 * @param whosOn az épppen következő (soron levő) játékos
-	 */
-	public void setUpBet2Command(int whosOn) {
-		this.houseCommandType = ClassicHouseCommandType.BET2;
 		this.whosOn = whosOn;
 	}
 	

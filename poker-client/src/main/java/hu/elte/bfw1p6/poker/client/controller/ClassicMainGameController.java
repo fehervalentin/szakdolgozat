@@ -56,20 +56,12 @@ public class ClassicMainGameController extends AbstractMainGameController {
 				receivedDealHouseCommand(classicHouseCommand);
 				break;
 			}
-			case BET: {
-				receivedBetHouseCommand(classicHouseCommand);
-				break;
-			}
 			case CHANGE: {
 				receivedChangeHouseCommand(classicHouseCommand);
 				break;
 			}
 			case DEAL2: {
 				receivedDeal2HouseCommand(classicHouseCommand);
-				break;
-			}
-			case BET2: {
-				receivedBet2HouseCommand(classicHouseCommand);
 				break;
 			}
 			case WINNER: {
@@ -139,11 +131,6 @@ public class ClassicMainGameController extends AbstractMainGameController {
 		});
 	}
 
-	private void receivedBetHouseCommand(ClassicHouseCommand classicHouseCommand) {
-		modifyButtonVisibilities(classicHouseCommand);
-		((ClassicMainView)mainView).receivedBetHouseCommand(classicHouseCommand);
-	}
-
 	private void receivedChangeHouseCommand(ClassicHouseCommand classicHouseCommand) {
 		modifyButtonVisibilities(classicHouseCommand);
 		((ClassicMainView)mainView).receivedChangeHouseCommand(classicHouseCommand);
@@ -153,10 +140,4 @@ public class ClassicMainGameController extends AbstractMainGameController {
 		modifyButtonVisibilities(classicHouseCommand);
 		((ClassicMainView)mainView).receivedDeal2HouseCommand(classicHouseCommand);
 	}
-
-	private void receivedBet2HouseCommand(ClassicHouseCommand classicHouseCommand) {
-		modifyButtonVisibilities(classicHouseCommand);
-		((ClassicMainView)mainView).receivedBet2HouseCommand(classicHouseCommand);
-	}
-
 }

@@ -67,10 +67,6 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 						// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
 						whosOn = (dealer + 1 + foldCounter) % playersInRound;
 						switch (actualClassicHouseCommandType) {
-						case BET: {
-							classicHouseCommand.setUpBetCommand(whosOn);
-							break;
-						}
 						case CHANGE: {
 							classicHouseCommand.setUpChangeCommand(whosOn);
 							break;
@@ -78,10 +74,6 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 						case DEAL2: {
 							//TODO: itt osztom ki az új lapokat a játékosokat, de ahhoz tudnom kell, hogy ki milyen lapot akar kicserélni...
 							//classicHouseCommand.setUpDeal2Command(cards, whosOn);
-							break;
-						}
-						case BET2: {
-							classicHouseCommand.setUpBet2Command(whosOn);
 							break;
 						}
 						case WINNER: {
