@@ -216,12 +216,12 @@ public abstract class AbstractMainView {
 		clientsCount = houseCommand.getPlayers();
 		youAreNth = houseCommand.getNthPlayer();
 		DEALER_BUTTON_POSITION = (clientsCount + houseCommand.getDealer() - youAreNth) % clientsCount;
-		hideAllProfiles();
 		Platform.runLater(
 				new Runnable() {
 
 					@Override
 					public void run() {
+						hideAllProfiles();
 						setLabelUserNames(houseCommand.getPlayersNames());
 						resetOpacity();
 						clearChips();

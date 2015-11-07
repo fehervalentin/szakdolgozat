@@ -121,7 +121,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 				System.out.println("JOIN: " + client.toString());
 				//ha elegen vagyunk az asztalnál, akkor indulhat a játék
 				if (clients.size() >= minPlayer) {
-					preStartRound();
 					startRound();
 				}
 			}
@@ -212,6 +211,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	protected void receivedFoldPlayerCommand(PlayerCommand playerComand) {
 		//++votedPlayers;
 		--playersInRound;
+		//az ő lapjait már ne vegyük figyelembe winnerkor
 		players.remove(whosOn);
 		--whosOn;
 		++foldCounter;
@@ -242,6 +242,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	}
 
 	protected void startRound() {
+		preStartRound();
 		prepareNewRound();
 		collectBlinds();
 		dealCardsToPlayers();
