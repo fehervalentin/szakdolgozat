@@ -251,11 +251,7 @@ public abstract class AbstractMainView {
 			@Override
 			public void run() {
 				hideHouseCards();
-				Card[] cards = houseCommand.getCards();
-				for (int j = 0; j < defaultValues.MY_CARDS_COUNT; j++) {
-					int value = mapCard(cards[j]);
-					myCards.get(j).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
-				}
+				loadMyCards(houseCommand);
 				//KIKOVETKEZIK = (HOLVANADEALERGOMB + clientsCount + 1) % clientsCount;
 				nextPlayer = ultimateFormula(houseCommand.getWhosOn());
 				//				NEXT_PLAYER = (DEALER_BUTTON_POSITION + 3) % clientsCount;
@@ -265,6 +261,14 @@ public abstract class AbstractMainView {
 				colorNextPlayer(houseCommand);
 			}
 		});
+	}
+	
+	public void loadMyCards(HouseCommand houseCommand) {
+		Card[] cards = houseCommand.getCards();
+		for (int j = 0; j < defaultValues.MY_CARDS_COUNT; j++) {
+			int value = mapCard(cards[j]);
+			myCards.get(j).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
+		}
 	}
 
 	public void receivedRaisePlayerCommand(PlayerCommand playerCommand) {

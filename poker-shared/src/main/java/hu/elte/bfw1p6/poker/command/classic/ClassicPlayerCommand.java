@@ -1,6 +1,7 @@
 package hu.elte.bfw1p6.poker.command.classic;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
 
@@ -12,10 +13,18 @@ public class ClassicPlayerCommand extends PlayerCommand {
 	private static final long serialVersionUID = -3424914496460268663L;
 
 	private Card[] cards;
+	
+	private List<Integer> markedCards;
+	
 	/**
 	 * Az utasítás típusa.
 	 */
 	private ClassicPlayerCommandType playerCommandType;
+
+	@Override
+	public String getCommandType() {
+		return playerCommandType.name();
+	}
 	
 	public void setUpCallCommand(BigDecimal callAmount) {
 		this.playerCommandType = ClassicPlayerCommandType.CALL;
@@ -47,8 +56,8 @@ public class ClassicPlayerCommand extends PlayerCommand {
 		this.whosQuit = youAreNth;
 	}
 	
-	public void setUpChangeCommand(Card[] cards) {
-		this.cards = cards;
+	public void setUpChangeCommand(List<Integer> markedCards) {
+		this.markedCards = markedCards;
 		this.playerCommandType = ClassicPlayerCommandType.CHANGE;
 	}
 	
@@ -58,5 +67,9 @@ public class ClassicPlayerCommand extends PlayerCommand {
 	
 	public Card[] getCards() {
 		return cards;
+	}
+	
+	public List<Integer> getMarkedCards() {
+		return markedCards;
 	}
 }

@@ -1,7 +1,12 @@
 package hu.elte.bfw1p6.poker.client.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hu.elte.bfw1p6.poker.client.controller.ClassicDefaultValues;
+import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
+import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -37,19 +42,40 @@ public class ClassicMainView extends AbstractMainView {
 						}
 					});
 				}
-				//TODO: ráaggatni a listenereket a kártyalapokra
 			}
 		});
 	}
 	
-	public void receivedDeal2HouseCommand(ClassicHouseCommand classicHouseCommand) {
+	public void receivedDeal2HouseCommand(HouseCommand houseCommand) {
+		System.out.println("lol");
 		Platform.runLater(new Runnable() {
 
 			@Override
 			public void run() {
-				//TODO: ki kell cserélnem a kártyáimat!
-				colorNextPlayer(classicHouseCommand);
+				loadMyCards(houseCommand);
+				colorNextPlayer(houseCommand);
 			}
 		});
+	}
+	
+	public void receivedChangePlayerCommand(ClassicPlayerCommand classicplayerCommand) {
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				colorNextPlayer(classicplayerCommand);
+			}
+		});
+	}
+
+	public List<Integer> getMarkedCards() {
+		List<Integer> markedCards = new ArrayList<>();
+		for (int i = 0; i < myCards.size(); i++) {
+			if (myCards.get(i).getStyleClass().contains("glow")) {
+				markedCards.add(i);
+				myCards.get(i).getStyleClass().remove("glow");
+			}
+		}
+		return markedCards;
 	}
 }

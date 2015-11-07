@@ -18,6 +18,11 @@ public class HoldemPlayerCommand extends PlayerCommand {
 	 * Az utasítás típusa.
 	 */
 	private HoldemPlayerCommandType playerCommandType;
+	
+	@Override
+	public String getCommandType() {
+		return playerCommandType.name();
+	}
 
 	public void setUpCallCommand(BigDecimal callAmount) {
 		this.playerCommandType = HoldemPlayerCommandType.CALL;

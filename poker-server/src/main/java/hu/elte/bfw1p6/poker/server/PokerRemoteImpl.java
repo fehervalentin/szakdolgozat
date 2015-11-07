@@ -200,9 +200,8 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	@Override
 	public void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		if (sessionService.isAuthenticated(uuid)) {
-			pokerTableservers.get(t.getName()).receivePlayerCommand(client, playerCommand);
+			pokerTableservers.get(t.getName()).receivedPlayerCommand(client, playerCommand);
 		}
-
 	}
 
 	@Override

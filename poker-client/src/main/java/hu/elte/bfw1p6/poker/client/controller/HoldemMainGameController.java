@@ -40,7 +40,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 			showErrorAlert(e.getMessage());
 			frameController.setLoginFXML();
 		}
-		modifyButtonsDisability(true);
+		modifyButtonsDisability(null);
 	}
 
 	@Override
@@ -125,7 +125,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 				break;
 			}
 			}
-			modifyButtonVisibilities(playerHoldemCommand);
+			modifyButtonsDisability(playerHoldemCommand);
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -145,17 +145,17 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	}
 
 	private void receivedFlopHouseCommand(HoldemHouseCommand holdemHouseCommand) {
-		modifyButtonVisibilities(holdemHouseCommand);
+		modifyButtonsDisability(holdemHouseCommand);
 		((HoldemMainView)mainView).flop(holdemHouseCommand);
 	}
 
 	private void receivedTurnHouseCommand(HoldemHouseCommand houseHoldemCommand) {
-		modifyButtonVisibilities(houseHoldemCommand);
+		modifyButtonsDisability(houseHoldemCommand);
 		((HoldemMainView)mainView).turn(houseHoldemCommand);
 	}
 
 	private void receivedRiverHouseCommand(HoldemHouseCommand houseHoldemCommand) {
-		modifyButtonVisibilities(houseHoldemCommand);
+		modifyButtonsDisability(houseHoldemCommand);
 		((HoldemMainView)mainView).river(houseHoldemCommand);
 	}
 }

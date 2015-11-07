@@ -15,6 +15,11 @@ public class ClassicHouseCommand extends HouseCommand {
 	 * Az utasítás típusa.
 	 */
 	private ClassicHouseCommandType houseCommandType;
+
+	@Override
+	public String getCommandType() {
+		return houseCommandType.name();
+	}
 	
 	/**
 	 * Ha a classic szerver BLIND utasítást küld, akkor ezt a metódust kell használni.
@@ -82,5 +87,4 @@ public class ClassicHouseCommand extends HouseCommand {
 	public ClassicHouseCommandType getHouseCommandType() {
 		return houseCommandType;
 	}
-
 }

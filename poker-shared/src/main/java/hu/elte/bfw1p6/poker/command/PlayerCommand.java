@@ -2,7 +2,7 @@ package hu.elte.bfw1p6.poker.command;
 
 import java.math.BigDecimal;
 
-public class PlayerCommand implements PokerCommand {
+public abstract class PlayerCommand implements PokerCommand {
 
 	private static final long serialVersionUID = -6222563485679670229L;
 
@@ -31,6 +31,12 @@ public class PlayerCommand implements PokerCommand {
 	 */
 	protected int whosQuit;
 	
+	@Override
+	public int getWhosOn() {
+		return whosOn;
+	}
+	
+	public abstract String getCommandType();
 	
 	public String getSender() {
 		return sender;
@@ -40,10 +46,6 @@ public class PlayerCommand implements PokerCommand {
 		this.sender = sender;
 	}
 
-	@Override
-	public int getWhosOn() {
-		return whosOn;
-	}
 
 	public void setWhosOn(int whosOn) {
 		this.whosOn = whosOn;

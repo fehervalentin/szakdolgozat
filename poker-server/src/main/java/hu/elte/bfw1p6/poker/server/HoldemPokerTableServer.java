@@ -68,7 +68,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	}
 
 	@Override
-	protected synchronized void receivePlayerCommand(RemoteObserver client, PlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	protected synchronized void receivedPlayerCommand(RemoteObserver client, PlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		// ha valid klienstől érkezik üzenet, azt feldolgozzuk, körbeküldjük
 		if (clients.contains(client)) {
 			HoldemPlayerCommand holdemPlayerCommand = (HoldemPlayerCommand)playerCommand;
@@ -100,7 +100,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 			default:
 				break;
 			}
-			endOfReceivePlayerCommand(holdemPlayerCommand);
+			endOfReceivedPlayerCommand(holdemPlayerCommand);
 		}
 	}
 

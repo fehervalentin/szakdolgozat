@@ -1,8 +1,10 @@
 package hu.elte.bfw1p6.poker.client.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
+import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
@@ -60,6 +62,17 @@ public class ClassicMainGameModel extends AbstractMainGameModel {
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpQuitCommand(youAreNth);
 		sendPlayerCommand(playerCommand);	
+	}
+
+	public void change(List<Integer> markedCards) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
+		playerCommand.setUpChangeCommand(markedCards);
+		sendPlayerCommand(playerCommand);
+	}
+
+	public void receivedDeal2HouseCommand(ClassicHouseCommand classicHouseCommand) {
+		System.out.println("hanyszor hivom meg.................");
+		pokerSession.getPlayer().setCards(classicHouseCommand.getCards());
 	}
 
 }

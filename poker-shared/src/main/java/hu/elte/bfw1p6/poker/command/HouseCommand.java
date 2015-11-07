@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
 
-public class HouseCommand implements PokerCommand {
+public abstract class HouseCommand implements PokerCommand {
 
 	private static final long serialVersionUID = 1571742099156009456L;
 	
@@ -52,6 +52,8 @@ public class HouseCommand implements PokerCommand {
 	public int getWhosOn() {
 		return whosOn;
 	}
+	
+	public abstract String getCommandType();
 	
 	public List<String> getPlayersNames() {
 		return clientsNames;

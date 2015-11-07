@@ -29,7 +29,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 public abstract class AbstractMainGameController implements Initializable, PokerClientController, PokerObserverController{
-	
+
 	@FXML protected AnchorPane mainGamePane;
 
 	@FXML protected Label pokerLabel;
@@ -39,7 +39,7 @@ public abstract class AbstractMainGameController implements Initializable, Poker
 	@FXML protected Button raiseButton;
 	@FXML protected Button foldButton;
 	@FXML protected Button quitButton;
-	
+
 
 	protected AbstractMainView mainView;
 
@@ -58,11 +58,11 @@ public abstract class AbstractMainGameController implements Initializable, Poker
 		this.frameController = frameController;
 		this.scene = this.frameController.getScene();
 	}
-	
+
 	public abstract void initialize(URL location, ResourceBundle resources);
-	
+
 	public abstract void updateMe(Object updateMsg);
-	
+
 
 	protected void receivedBlindHouseCommand(HouseCommand houseCommand) {
 		try {
@@ -75,29 +75,19 @@ public abstract class AbstractMainGameController implements Initializable, Poker
 
 	protected void receivedDealHouseCommand(HouseCommand houseCommand) {
 		model.receivedDealHouseCommand(houseCommand);
-		modifyButtonVisibilities(houseCommand);
+		modifyButtonsDisability(houseCommand);
 		mainView.receivedDealHouseCommand(houseCommand);
 	}
 
 	protected void receivedWinnerHouseCommand(HouseCommand houseCommand) {
 		mainView.winner(houseCommand);
 	}
-	
 
-	protected void modifyButtonVisibilities(PokerCommand pokerCommand) {
-		if (pokerCommand instanceof HoldemHouseCommand) {
-			pokerCommand = (HoldemHouseCommand)pokerCommand;
-		} else if (pokerCommand instanceof HoldemPlayerCommand) {
-			pokerCommand = (HoldemPlayerCommand)pokerCommand;
-		}
-		boolean disable = model.getYouAreNth() == pokerCommand.getWhosOn() ? false : true;
-		System.out.println("Button disability: " + model.getYouAreNth() + " " + pokerCommand.getWhosOn());
-		modifyButtonsDisability(disable);
-	}
 
-	protected void modifyButtonsDisability(boolean disable) {
+	protected void modifyButtonsDisability(PokerCommand pokerCommand) {
+		boolean disable = (pokerCommand == null) ? true : model.getYouAreNth() == pokerCommand.getWhosOn() ? false : true;
 		Platform.runLater(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				callButton.setDisable(disable);
@@ -108,12 +98,15 @@ public abstract class AbstractMainGameController implements Initializable, Poker
 		});
 	}
 	
+	protected void modifyFoldButtonDisability(boolean disabled) {
+		foldButton.setDisable(disabled);
+	}
 
 	protected void showErrorAlert(String msg) {
 		errorAlert.setContentText(msg);
 		errorAlert.showAndWait();
 	}
-	
+
 	/**
 	 * A <b>CALL</b> gomb click handlerje
 	 * @param event az esemény
@@ -160,11 +153,11 @@ public abstract class AbstractMainGameController implements Initializable, Poker
 		frameController.setHoldemMainGameFXML();
 		//		frameController.setTableListerFXML();
 	}
-	
 
 
-	
-	
+
+
+
 
 	protected void receivedBlindPlayerCommand(PlayerCommand playerCommand) {
 		model.receivedBlindPlayerCommand(playerCommand);

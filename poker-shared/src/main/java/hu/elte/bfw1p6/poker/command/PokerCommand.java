@@ -9,4 +9,5 @@ import java.io.Serializable;
  */
 public interface PokerCommand extends Serializable {
 	int getWhosOn();
+	String getCommandType();
 }

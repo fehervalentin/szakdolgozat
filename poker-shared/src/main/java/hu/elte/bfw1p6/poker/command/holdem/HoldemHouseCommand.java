@@ -31,6 +31,11 @@ public class HoldemHouseCommand extends HouseCommand {
 	 * Az utasítás típusa.
 	 */
 	private HoldemHouseCommandType houseCommandType;
+
+	@Override
+	public String getCommandType() {
+		return houseCommandType.name();
+	}
 	
 	/**
 	 * Ha a holdem szerver BLIND utasítást küld, akkor ezt a metódust kell használni.
