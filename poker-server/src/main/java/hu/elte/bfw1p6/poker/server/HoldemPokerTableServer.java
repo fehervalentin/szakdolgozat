@@ -54,9 +54,9 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	}
 
 	@Override
-	protected HouseCommand houseBlindCommandFactory(int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
+	protected HouseCommand houseBlindCommandFactory(int fixSitPosition, int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
 		HoldemHouseCommand holdemHouseCommand = new HoldemHouseCommand();
-		holdemHouseCommand.setUpBlindCommand(nthPlayer, clients.size(), dealer, whosOn, clientsNames);
+		holdemHouseCommand.setUpBlindCommand(fixSitPosition, nthPlayer, clients.size(), dealer, whosOn, clientsNames);
 		return holdemHouseCommand;
 	}
 	

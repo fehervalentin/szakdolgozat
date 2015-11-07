@@ -264,14 +264,14 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 
 	protected void collectBlinds() {
 		for (int i = 0; i < clients.size(); i++) {
-			notifyNthClient(i, houseBlindCommandFactory(i, clients.size(), dealer, whosOn, clientsNames));
+			notifyNthClient(i, houseBlindCommandFactory(i, i, clients.size(), dealer, whosOn, clientsNames));
 		}
 		nextStep();
 	}
 	
 	protected abstract HouseCommand houseDealCommandFactory(Card[] cards);
 	
-	protected abstract HouseCommand houseBlindCommandFactory(int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames);
+	protected abstract HouseCommand houseBlindCommandFactory(int fixSitPosition, int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames);
 
 	protected abstract void nextStep();
 

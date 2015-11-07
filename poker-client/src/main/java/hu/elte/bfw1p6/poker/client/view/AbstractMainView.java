@@ -45,6 +45,8 @@ public abstract class AbstractMainView {
 	protected int nextPlayer = -1;
 
 	protected int youAreNth;
+	
+	protected int fixSitPosition;
 
 	public AbstractMainView(AnchorPane mainGamePane, AbstractDefaultValues defaultValues) {
 		this.mainGamePane = mainGamePane;
@@ -154,10 +156,18 @@ public abstract class AbstractMainView {
 	}
 
 	protected void setLabelUserNames(List<String> userNames) {
-		for (int i = 0; i < userNames.size(); i++) {
-			int value = ultimateFormula(i);
-			userNameLabels.get(value).setText(userNames.get(i));
-			userNameLabels.get(value).setVisible(true);
+		if (fixSitPosition == 0) {
+			for (int i = 0; i < userNames.size(); i++) {
+				userNameLabels.get(i).setText(userNames.get(i));
+				userNameLabels.get(i).setVisible(true);
+			}
+		} else {
+			int j = 0;
+			for (int i = userNames.size() - 1; i >= 0; i--) {
+				userNameLabels.get(i).setText(userNames.get(j));
+				userNameLabels.get(i).setVisible(true);
+				++j;
+			}
 		}
 	}
 
@@ -215,6 +225,7 @@ public abstract class AbstractMainView {
 	public void receivedBlindHouseCommand(HouseCommand houseCommand) {
 		clientsCount = houseCommand.getPlayers();
 		youAreNth = houseCommand.getNthPlayer();
+		fixSitPosition = houseCommand.getFixSitPosition();
 		DEALER_BUTTON_POSITION = (clientsCount + houseCommand.getDealer() - youAreNth) % clientsCount;
 		Platform.runLater(
 				new Runnable() {

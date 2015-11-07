@@ -47,6 +47,11 @@ public abstract class HouseCommand implements PokerCommand {
 	 * Hányan dobták be a lapjaikat.
 	 */
 	protected int foldCounter;
+	
+	/**
+	 * A fixen elfoglalt ülőhely az asztalnál.
+	 */
+	protected int fixSitPosition;
 
 	@Override
 	public int getWhosOn() {
@@ -80,5 +85,9 @@ public abstract class HouseCommand implements PokerCommand {
 	
 	public Card[] getCards() {
 		return cards;
+	}
+
+	public int getFixSitPosition() {
+		return fixSitPosition;
 	}
 }

@@ -44,8 +44,9 @@ public class HoldemHouseCommand extends HouseCommand {
 	 * @param dealer ki az aktuális osztó
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
-	public void setUpBlindCommand(int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
+	public void setUpBlindCommand(int fixSitPosition, int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
 		this.houseCommandType = HoldemHouseCommandType.BLIND;
+		this.fixSitPosition = fixSitPosition;
 		this.nthPlayer = nthPlayer;
 		this.players = players;
 		this.dealer = dealer;
