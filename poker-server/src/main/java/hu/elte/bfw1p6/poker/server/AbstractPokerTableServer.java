@@ -106,7 +106,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 
 
 	/**
-	 * Az asztalhoz való csatlakozás.
+	 * Asztalhoz való csatlakozás.
 	 * @param client a csatlakozni kívánó kliens
 	 * @param userName a csatlakozni kívánó játékos neve
 	 * @throws PokerTooMuchPlayerException
@@ -127,6 +127,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		}
 	}
 
+	/**
+	 * Inicializáció metódus új kör kezdés esetére.
+	 */
 	protected void preStartRound() {
 		//még senki sem dobta el a lapjait
 		foldCounter = 0;
@@ -146,6 +149,11 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		players.clear();
 	}
 
+	/**
+	 * Értesíti az i. klienst
+	 * @param i a kliens sorszáma
+	 * @param pokerCommand az utsítás
+	 */
 	protected void notifyNthClient(int i, PokerCommand pokerCommand) {
 		System.out.println("Ertesitem a " + i + ". klienst!");
 		System.out.println("Utasitas típusa: " + pokerCommand.getCommandType());
@@ -163,16 +171,30 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			}}.start();
 	}
 
+	/**
+	 * Az összes klienst értesíti.
+	 * @param pokerCommand az utasítás
+	 */
 	protected void notifyClients(PokerCommand pokerCommand) {
 		for (int i = 0; i < clients.size(); i++) {
 			notifyNthClient(i, pokerCommand);
 		}
 	}
 
+	/**
+	 * Lecsatlakozás a játéktábla szerverről.
+	 * @param client lecsatlakozandó kliens
+	 */
 	public synchronized void leave(PokerTableServerObserver client) {
 		clients.remove(client);
 	}
 
+	/**
+	 * Frissíti a kliens egyenlegét.
+	 * @param playerCommand az utasítás
+	 * @throws PokerUserBalanceException
+	 * @throws PokerDataBaseException
+	 */
 	protected void refreshBalance(PlayerCommand playerCommand) throws PokerUserBalanceException, PokerDataBaseException {
 		User u = UserRepository.getInstance().findByUserName(playerCommand.getSender());
 		if (isThereEnoughMoney(u, playerCommand)) {
@@ -181,6 +203,13 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		}
 	}
 
+	/**
+	 * Levizsgálja, hogy van-e elegendő zsetonja a felhasználónak.
+	 * @param u a felhasználó
+	 * @param playerCommand az utasítás
+	 * @return ha van elegendő zsetonja, akkor true, különben false.
+	 * @throws PokerUserBalanceException
+	 */
 	protected boolean isThereEnoughMoney(User u, PlayerCommand playerCommand) throws PokerUserBalanceException {
 		BigDecimal newBalance = u.getBalance().subtract(playerCommand.getCallAmount());
 		moneyStack = moneyStack.add(playerCommand.getCallAmount());
@@ -194,21 +223,39 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		return true;
 	}
 
+	/**
+	 * Blind utasítás érkezett egy klienstől.
+	 * @param playerComand az utasítás
+	 * @throws PokerUserBalanceException
+	 * @throws PokerDataBaseException
+	 */
 	protected void receivedBlindPlayerCommand(PlayerCommand playerComand) throws PokerUserBalanceException, PokerDataBaseException {
 		refreshBalance(playerComand);
 		--whosOn;
 	}
 
+	/**
+	 * Call utasítás érkezett egy klienstől.
+	 * @param playerComand az utasítás
+	 * @throws PokerUserBalanceException
+	 * @throws PokerDataBaseException
+	 */
 	protected void receivedCallPlayerCommand(PlayerCommand playerComand) throws PokerUserBalanceException, PokerDataBaseException {
 		refreshBalance(playerComand);
 		++votedPlayers;
 	}
 
-	protected void receivedCheckPlayerCommand(PlayerCommand playerComand) {
+	/**
+	 * Check utasítás érkezett egy klienstől.
+	 */
+	protected void receivedCheckPlayerCommand() {
 		++votedPlayers;
 	}
 
-	protected void receivedFoldPlayerCommand(PlayerCommand playerComand) {
+	/**
+	 * Fold utasítás érkezett egy klienstől.
+	 */
+	protected void receivedFoldPlayerCommand() {
 		//++votedPlayers;
 		--playersInRound;
 		//az ő lapjait már ne vegyük figyelembe winnerkor
@@ -218,6 +265,12 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		// mert aki nagyobb az ő sorszámánál, az lejjebb csúszik eggyel.
 	}
 	
+	/**
+	 * Raise utasítás érkezett egy klienstől.
+	 * @param playerComand az utasítás
+	 * @throws PokerUserBalanceException
+	 * @throws PokerDataBaseException
+	 */
 	protected void receivedRaisePlayerCommand(PlayerCommand playerComand) throws PokerUserBalanceException, PokerDataBaseException {
 		refreshBalance(playerComand);
 		votedPlayers = 1;

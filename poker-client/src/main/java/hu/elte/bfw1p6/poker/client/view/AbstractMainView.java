@@ -304,12 +304,14 @@ public abstract class AbstractMainView {
 			@Override
 			public void run() {
 				double opacity = 0.4;
-				int valami = ultimateFormula(playerCommand.getWhosQuit());
-				if (valami == 0) {
+				int convertedWhoFold = ultimateFormula(playerCommand.getWhosQuit());
+				if (convertedWhoFold == 0) {
 					hideMyCards(opacity);
 				} else {
-					opponentsCards.get(valami-1).setOpacity(opacity);
-					opponentsCardSides.get(valami-1).setOpacity(opacity);
+					opponentsCards.get(convertedWhoFold - 1).setOpacity(opacity);
+					for (int i = (convertedWhoFold - 1) * (defaultValues.MY_CARDS_COUNT - 1), counter = 0; counter < defaultValues.MY_CARDS_COUNT - 1; i++, counter++) {
+						opponentsCardSides.get(i).setOpacity(opacity);
+					}
 				}
 				colorNextPlayer(playerCommand);
 			}

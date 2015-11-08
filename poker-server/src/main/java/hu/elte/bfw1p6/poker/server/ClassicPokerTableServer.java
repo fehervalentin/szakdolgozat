@@ -114,11 +114,11 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 				break;
 			}
 			case CHECK: {
-				receivedCheckPlayerCommand(classicPlayerCommand);
+				receivedCheckPlayerCommand();
 				break;
 			}
 			case FOLD: {
-				receivedFoldPlayerCommand(classicPlayerCommand);
+				receivedFoldPlayerCommand();
 				break;
 			}
 			case RAISE: {

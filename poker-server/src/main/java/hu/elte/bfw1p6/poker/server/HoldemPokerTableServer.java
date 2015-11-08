@@ -82,11 +82,11 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 				break;
 			}
 			case CHECK: {
-				receivedCheckPlayerCommand(holdemPlayerCommand);
+				receivedCheckPlayerCommand();
 				break;
 			}
 			case FOLD: {
-				receivedFoldPlayerCommand(holdemPlayerCommand);
+				receivedFoldPlayerCommand();
 				break;
 			}
 			case RAISE: {
