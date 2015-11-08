@@ -5,9 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
+import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.DBManager;
 import hu.elte.bfw1p6.poker.persist.dao.SQLExceptionTranslator;
@@ -55,6 +58,31 @@ public class UserRepository {
 		} catch (SQLException e) {
 			throw sqlExceptionTranslator.interceptException(e);
 		}
+	}
+	
+	public synchronized List<PokerPlayer> findAll() throws PokerDataBaseException {
+		List<PokerPlayer> players = new ArrayList<>();
+
+		try {
+			String QRY = FIND_ALL;
+			Connection con = DBManager.getInstance().getConnection();
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(QRY);
+
+			while (rs.next()) {
+				User u = new User();
+				for (int i = 0; i < columns.length; i++) {
+					u.set(i, rs.getObject(columns[i]));
+				}
+				u.setId(rs.getInt("id"));
+				players.add(u);
+			}
+
+			stmt.close();
+		} catch (SQLException e) {
+			throw sqlExceptionTranslator.interceptException(e);
+		}
+		return players;
 	}
 
 	public User findByUserName(String username) throws PokerDataBaseException {

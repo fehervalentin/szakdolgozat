@@ -52,8 +52,6 @@ public class ProfileManagerController implements Initializable, PokerClientContr
 		Date date = new Date(model.getPlayer().getRegDate() * 1000);
 	    Format format = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
 		regDateLabel.setText(format.format(date).toString());
-		System.out.println(format.format(date).toString());
-		System.out.println(model.getPlayer().getRegDate() + "");
 	}
 
 	@Override

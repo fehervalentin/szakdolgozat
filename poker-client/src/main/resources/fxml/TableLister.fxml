@@ -16,48 +16,40 @@
 	<padding>
 		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 	</padding>
-	<Label style="-fx-font: NORMAL 20 Tahoma;" text="Poker tables"
+	<Label style="-fx-font: NORMAL 20 Tahoma;" text="Játékszerverek"
 		GridPane.columnIndex="0" GridPane.rowIndex="0">
 	</Label>
 	<TableView fx:id="tableView" GridPane.columnIndex="0"
 		GridPane.rowIndex="1">
 		<columns>
-			<TableColumn prefWidth="75.0" text="Table name" fx:id="tableName" />
-			<TableColumn prefWidth="75.0" text="Játék stílusa" fx:id="pokerType" />
-			<TableColumn prefWidth="75.0" text="Maximum gondolkodás idő"
+			<TableColumn prefWidth="100.0" text="Játékszerver neve"
+				fx:id="tableName" />
+			<TableColumn prefWidth="100.0" text="Játék stílusa"
+				fx:id="pokerType" />
+			<TableColumn prefWidth="100.0" text="Maximum gondolkodás idő"
 				fx:id="maxTime" />
-			<TableColumn prefWidth="75.0" text="Játékosok maximum száma"
+			<TableColumn prefWidth="100.0" text="Játékosok maximum száma"
 				fx:id="maxPlayers" />
-			<TableColumn prefWidth="75.0" text="Alaptét" fx:id="defaultPot" />
-			<TableColumn prefWidth="75.0" text="Limit" fx:id="maxBet" />
+			<TableColumn prefWidth="100.0" text="Alaptét" fx:id="defaultPot" />
+			<TableColumn prefWidth="100.0" text="Limit" fx:id="maxBet" />
 		</columns>
-		<!-- <items> -->
-		<!-- <FXCollections fx:factory="observableArrayList"> -->
-		<!-- <Person firstName="Jacob" lastName="Smith" email="jacob.smith@example.com" 
-			/> -->
-		<!-- <Person firstName="Isabella" lastName="Johnson" -->
-		<!-- email="isabella.johnson@example.com" /> -->
-		<!-- <Person firstName="Ethan" lastName="Williams" -->
-		<!-- email="ethan.williams@example.com" /> -->
-		<!-- <Person firstName="Emma" lastName="Jones" email="emma.jones@example.com" 
-			/> -->
-		<!-- <Person firstName="Michael" lastName="Brown" -->
-		<!-- email="michael.brown@example.com" /> -->
-		<!-- </FXCollections> -->
-		<!-- </items> -->
 	</TableView>
 	<Button fx:id="connectButton" text="Csatlakozás" onAction="#handleConnectToTable"
-		GridPane.columnIndex="0" GridPane.rowIndex="3" />
+		GridPane.columnIndex="1" GridPane.rowIndex="1" />
+	<Button fx:id="profileManagerButton" text="Profil megtekintése"
+		onAction="#handleProfile" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+	<Button fx:id="createTableButton" text="Kijelentkezés" onAction="#handleLogout"
+		GridPane.columnIndex="1" GridPane.rowIndex="3" />
 	<Button fx:id="createTableButton" text="Új tábla létrehozása"
 		onAction="#handleCreateTable" GridPane.columnIndex="1"
-		GridPane.rowIndex="3" />
-	<Button fx:id="modifyTableButton" text="Tábla módosítása" onAction="#handleModifyTable"
-		GridPane.columnIndex="2" GridPane.rowIndex="3" />
-		<Button fx:id="deleteTableButton" text="Asztal törlése" onAction="#handleDeleteTable"
-		GridPane.columnIndex="2" GridPane.rowIndex="4" />
-	<Button fx:id="createTableButton" text="Kijelentkezés" onAction="#handleLogout"
-		GridPane.columnIndex="2" GridPane.rowIndex="5" />
-	<Button fx:id="profileManagerButton" text="Profil megtekintése" onAction="#handleProfile"
-		GridPane.columnIndex="2" GridPane.rowIndex="6" />
+		GridPane.rowIndex="4" />
+	<Button fx:id="modifyTableButton" text="Tábla módosítása"
+		onAction="#handleModifyTable" GridPane.columnIndex="1"
+		GridPane.rowIndex="5" />
+	<Button fx:id="deleteTableButton" text="Asztal törlése"
+		onAction="#handleDeleteTable" GridPane.columnIndex="1"
+		GridPane.rowIndex="6" />
+		<Button fx:id="viewUsersbutton" text="Userek megtekintése"
+		onAction="#handleViewUsers" GridPane.columnIndex="1"
+		GridPane.rowIndex="7" />
 </GridPane>
-

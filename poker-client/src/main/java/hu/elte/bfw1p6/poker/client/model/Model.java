@@ -99,11 +99,19 @@ public class Model {
 		pokerRemote.modifyPassword(pokerSession.getId(), oldPassword, newPassword);
 	}
 	
+	public boolean isAdmin() throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException {
+		return pokerRemote.isAdmin(pokerSession.getId());
+	}
+	
 	public PokerPlayer getPlayer() {
 		return pokerSession.getPlayer();
 	}
 	
 	public PokerSession getPokerSession() {
 		return pokerSession;
+	}
+
+	public List<PokerPlayer> getUsers() throws PokerDataBaseException, RemoteException {
+		return pokerRemote.getUsers();
 	}
 }

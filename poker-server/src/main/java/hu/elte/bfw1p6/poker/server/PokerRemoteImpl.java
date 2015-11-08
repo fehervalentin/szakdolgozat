@@ -29,6 +29,7 @@ import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
+import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.repository.PokerTableRepository;
 import hu.elte.bfw1p6.poker.persist.repository.UserRepository;
@@ -63,9 +64,20 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		pokerTableservers.put(tables.get(0).getName(), new HoldemPokerTableServer(tables.get(0)));
-		pokerTableservers.put(tables.get(1).getName(), new ClassicPokerTableServer(tables.get(1)));
-
+		for (int i = 0; i < tables.size(); i++) {
+			AbstractPokerTableServer apts;
+			switch (tables.get(0).getPokerType()) {
+			case HOLDEM:
+				apts = new HoldemPokerTableServer(tables.get(i));
+				break;
+			case CLASSIC:
+				apts = new ClassicPokerTableServer(tables.get(i));
+				break;
+			default:
+				throw new IllegalArgumentException();
+			}
+			pokerTableservers.put(tables.get(0).getName(), apts);
+		}
 		try {
 			System.out.println("***POKER SZERVER***");
 			System.out.println(Integer.valueOf(pokerProperties.getProperty("rmiport")));
@@ -220,5 +232,10 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	@Override
 	public BigDecimal refreshBalance(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		return UserRepository.getInstance().findByUserName(sessionService.lookUpUserName(uuid)).getPlayer().getBalance();
+	}
+
+	@Override
+	public List<PokerPlayer> getUsers() throws RemoteException, PokerDataBaseException {
+		return UserRepository.getInstance().findAll();
 	}
 }

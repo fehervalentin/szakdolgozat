@@ -15,6 +15,7 @@ public class FrameController extends UnicastRemoteObject {
 	
 	private final String FXML_PREFIX = "/fxml/";
 	private final String LOGIN_FXML = "Login.fxml";
+	private final String USERS_FXML = "UserLister.fxml";
 	private final String CREATE_TABLE_FXML = "CreateTable.fxml";
 	private final String TABLE_LISTER_FXML = "TableLister.fxml";
 	private final String REGISTRATION_FXML = "Registration.fxml";
@@ -95,5 +96,9 @@ public class FrameController extends UnicastRemoteObject {
 	private void setStageSize(int width, int height) {
 		stage.setWidth(width);
 		stage.setHeight(height);
+	}
+
+	public void setUsersFXML() {
+		setFXML(FXML_PREFIX + USERS_FXML);
 	}
 }

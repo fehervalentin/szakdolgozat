@@ -130,4 +130,6 @@ public interface PokerRemote extends Remote {
 	void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
 	
 	void connectToTable(UUID uuid, PokerTable t, RemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException;
+
+	List<PokerPlayer> getUsers() throws RemoteException, PokerDataBaseException;
 }

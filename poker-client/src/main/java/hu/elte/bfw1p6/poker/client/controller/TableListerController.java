@@ -35,18 +35,21 @@ public class TableListerController implements PokerClientController, Initializab
 	private CommunicatorController commCont;
 
 	@FXML private TableView<PokerTable> tableView;
+
 	@FXML private TableColumn<PokerTable, String> tableName;
 	@FXML private TableColumn<PokerTable, PokerType> pokerType;
 	@FXML private TableColumn<PokerTable, Integer> maxTime;
 	@FXML private TableColumn<PokerTable, Integer> maxPlayers;
 	@FXML private TableColumn<PokerTable, BigDecimal> defaultPot;
 	@FXML private TableColumn<PokerTable, BigDecimal> maxBet;
+
 	@FXML private Button connectButton;
 	@FXML private Button createTableButton;
 	@FXML private Button logoutButton;
 	@FXML private Button modifyTableButton;
 	@FXML private Button deleteTableButton;
 	@FXML private Button profileManagerButton;
+	@FXML private Button viewUsersbutton;
 
 
 	private Alert alert;
@@ -70,10 +73,7 @@ public class TableListerController implements PokerClientController, Initializab
 		try {
 			List<PokerTable> tables = model.registerTableViewObserver(commCont);
 			tableView.getItems().setAll(tables);
-		} catch (RemoteException | PokerDataBaseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (PokerUnauthenticatedException e) {
+		} catch (RemoteException | PokerDataBaseException | PokerUnauthenticatedException e) {
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
 		}
@@ -87,6 +87,16 @@ public class TableListerController implements PokerClientController, Initializab
 		maxPlayers.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>("maxPlayers"));
 		defaultPot.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>("defaultPot"));
 		maxBet.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>("maxBet"));
+
+		try {
+			if(!model.isAdmin()) {
+				createTableButton.setVisible(false);
+				modifyTableButton.setVisible(false);
+				deleteTableButton.setVisible(false);
+			}
+		} catch (RemoteException | PokerUnauthenticatedException | PokerDataBaseException e) {
+			showAlert(e.getMessage());
+		}
 	}
 
 	@FXML
@@ -123,8 +133,7 @@ public class TableListerController implements PokerClientController, Initializab
 			model.setParameterPokerTable(selectedPokerTable);
 			frameController.setCreateTableFXML();
 		} else {
-			alert.setContentText(NO_TABLE_SELECTED_MESSAGE);
-			alert.showAndWait();
+			showAlert(NO_TABLE_SELECTED_MESSAGE);
 		}
 	}
 
@@ -142,12 +151,10 @@ public class TableListerController implements PokerClientController, Initializab
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (PokerUnauthenticatedException e) {
-				alert.setContentText(e.getMessage());
-				alert.showAndWait();
+				showAlert(e.getMessage());
 			}
 		} else {
-			alert.setContentText(NO_TABLE_SELECTED_MESSAGE);
-			alert.showAndWait();
+			showAlert(NO_TABLE_SELECTED_MESSAGE);
 		}
 	}
 
@@ -160,14 +167,18 @@ public class TableListerController implements PokerClientController, Initializab
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (PokerInvalidSession e) {
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
+			showAlert(e.getMessage());
 		}
 	}
 
 	@FXML
 	protected void handleProfile() {
 		frameController.setProfileManagerFXML();
+	}
+	
+	@FXML
+	protected void handleViewUsers() {
+		frameController.setUsersFXML();
 	}
 
 	@FXML
@@ -182,6 +193,11 @@ public class TableListerController implements PokerClientController, Initializab
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private void showAlert(String msg) {
+		alert.setContentText(msg);
+		alert.showAndWait();
 	}
 
 	@Override
