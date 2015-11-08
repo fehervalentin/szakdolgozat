@@ -87,9 +87,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 			}
 		} else if (updateMsg instanceof ClassicPlayerCommand) {
 			ClassicPlayerCommand playerHoldemCommand = (ClassicPlayerCommand)updateMsg;
-			//			System.out.println("Ki kuldte a player commandot: " + playerHoldemCommand.getSender() + "\nMilyen command: " + playerHoldemCommand.getPlayerCommandType());
-			//			System.out.println("You are nth: " + model.getYouAreNth() + " Whoson: " + playerHoldemCommand.getWhosOn());
-			System.out.println("A(z) " + playerHoldemCommand.getSender() + " játékos utasítást küldött: " + playerHoldemCommand.getPlayerCommandType());
+			System.out.println(playerHoldemCommand.getSender() + " játékos utasítást küldött: " + playerHoldemCommand.getPlayerCommandType());
 
 			switch (playerHoldemCommand.getPlayerCommandType()) {
 			case BLIND: {

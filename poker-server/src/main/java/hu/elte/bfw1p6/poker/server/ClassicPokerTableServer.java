@@ -75,7 +75,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 					break;
 				}
 				case DEAL2: {
-					for (int i = 0; i < clients.size(); i++) {
+					for (int i = 0; i < players.size(); i++) {
 						ClassicHouseCommand chc = new ClassicHouseCommand();
 						chc.setUpDeal2Command(players.get(i).getCards(), whosOn);
 						notifyNthClient(i, chc);

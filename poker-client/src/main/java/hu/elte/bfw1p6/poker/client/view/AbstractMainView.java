@@ -389,12 +389,8 @@ public abstract class AbstractMainView {
 			public void run() {
 				
 				int convertedWinnerIndex = ultimateFormula(houseCommand.getWinner());
-				System.out.println("CSESZETTÜL ITT: " + convertedWinnerIndex);
-				System.out.println("FixsitPos: " + fixSitPosition);
 				// ha nem én nyertem...
 				if (convertedWinnerIndex != 0) {
-					System.out.println("Nem én nyertem :(");
-					System.out.println("ConvertedIndex :" + convertedWinnerIndex);
 					Card[] cards = houseCommand.getCards();
 					for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
 						winnerCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(cards[i]) + ".png"));
@@ -418,9 +414,9 @@ public abstract class AbstractMainView {
 	 * @param convertedValue az i. ellenfél
 	 */
 	private void setNthPlayersCardsOpacity(double opacity, int convertedValue) {
-		opponentsCards.get(convertedValue - 1).setVisible(false);
+		opponentsCards.get(convertedValue - 1).setOpacity(opacity);
 		for (int i = (convertedValue - 1) * (defaultValues.MY_CARDS_COUNT - 1), counter = 0; counter < defaultValues.MY_CARDS_COUNT - 1; i++, counter++) {
-			opponentsCardSides.get(i).setVisible(false);
+			opponentsCardSides.get(i).setOpacity(opacity);
 		}
 	}
 
