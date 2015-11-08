@@ -163,8 +163,7 @@ public abstract class AbstractMainView {
 	}
 
 	protected void setLabelUserNames(List<String> userNames) {
-		int counter = 0;
-		for (int i = fixSitPosition; counter < clientsCount; counter++,i++) {
+		for (int i = fixSitPosition, counter = 0; counter < clientsCount; counter++,i++) {
 			userNameLabels.get(counter).setText(userNames.get(i % clientsCount));
 		}
 	}
@@ -215,8 +214,10 @@ public abstract class AbstractMainView {
 	}
 
 	protected int ultimateFormula(int whosOn) {
-		int value = (whosOn - youAreNth) % clientsCount;
+		System.out.println("Fixsit: " + fixSitPosition);
+		int value = (whosOn - fixSitPosition) % clientsCount;
 		value += value < 0 ? clientsCount : 0;
+		System.out.println("Value: " + value);
 		return value;
 	}
 
@@ -305,48 +306,13 @@ public abstract class AbstractMainView {
 			@Override
 			public void run() {
 				double opacity = 0.4;
-				/*
-				 * if (fixSitPosition == 0) {
-			for (int i = 0; i < userNames.size(); i++) {
-				userNameLabels.get(i).setText(userNames.get(i));
-				userNameLabels.get(i).setVisible(true);
-			}
-		} else {
-			int j = 0;
-			for (int i = userNames.size() - 1; i >= 0; i--) {
-				userNameLabels.get(i).setText(userNames.get(j));
-				userNameLabels.get(i).setVisible(true);
-				++j;
-			}
-		}
-				 */
-				if (fixSitPosition == playerCommand.getWhosQuit()) {
+				int valami = ultimateFormula(playerCommand.getWhosQuit());
+				if (valami == 0) {
 					hideMyCards(opacity);
 				} else {
-					if (fixSitPosition == 0) {
-						opponentsCards.get(playerCommand.getWhosQuit()).setOpacity(opacity);
-						opponentsCardSides.get(playerCommand.getWhosQuit()).setOpacity(opacity);
-					} else {
-						opponentsCards.get(clientsCount - playerCommand.getWhosQuit() - 2).setOpacity(opacity);
-						opponentsCardSides.get(clientsCount - playerCommand.getWhosQuit() - 2).setOpacity(opacity);
-					}
+					opponentsCards.get(valami-1).setOpacity(opacity);
+					opponentsCardSides.get(valami-1).setOpacity(opacity);
 				}
-				//				nextPlayer = ultimateFormula(playerHoldemCommand.getWhosOn());
-				/*int whosQuit = ultimateFormula(playerCommand.getWhosQuit() - 1);
-				System.out.println("NextPlayer foldban: " + whosQuit);
-				if (whosQuit == 0) {
-					for (ImageView imageView : myCards) {
-						imageView.setOpacity(opacity);
-					}
-				} else {
-					// ugye el van csúszva! (direkt!!!)
-					opponentsCards.get(whosQuit).setOpacity(opacity);
-					opponentsCardSides.get(whosQuit).setOpacity(opacity);
-				}*/
-				//				whosOut[NEXT_PLAYER] = true;
-				/*if (youAreNth > playerHoldemCommand.getWhosQuit()) {
-					--youAreNth;
-				}*/
 				colorNextPlayer(playerCommand);
 			}
 		});
