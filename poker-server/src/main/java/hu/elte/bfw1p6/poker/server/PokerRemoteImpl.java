@@ -66,7 +66,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 		}
 		for (int i = 0; i < tables.size(); i++) {
 			AbstractPokerTableServer apts;
-			switch (tables.get(0).getPokerType()) {
+			switch (tables.get(i).getPokerType()) {
 			case HOLDEM:
 				apts = new HoldemPokerTableServer(tables.get(i));
 				break;
@@ -76,7 +76,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 			default:
 				throw new IllegalArgumentException();
 			}
-			pokerTableservers.put(tables.get(0).getName(), apts);
+			pokerTableservers.put(tables.get(i).getName(), apts);
 		}
 		try {
 			System.out.println("***POKER SZERVER***");
@@ -95,6 +95,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	@Override
 	public synchronized void deleteTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		if (sessionService.isAuthenticated(uuid)) {
+			pokerTableservers.remove(t.getName());
 			PokerTableRepository.getInstance().deleteTable(t);
 			this.setChanged();
 			this.notifyObservers(getTables(uuid));
@@ -105,6 +106,20 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	public synchronized void createTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		if (sessionService.isAuthenticated(uuid)) {
 			PokerTableRepository.getInstance().save(t);
+			List<PokerTable> tables = PokerTableRepository.getInstance().findAll();
+			AbstractPokerTableServer apts;
+			int last = tables.size() - 1;
+			switch (tables.get(last).getPokerType()) {
+			case HOLDEM:
+				apts = new HoldemPokerTableServer(tables.get(last));
+				break;
+			case CLASSIC:
+				apts = new ClassicPokerTableServer(tables.get(last));
+				break;
+			default:
+				throw new IllegalArgumentException();
+			}
+			pokerTableservers.put(tables.get(last).getName(), apts);
 			this.setChanged();
 			this.notifyObservers(getTables(uuid));
 		}

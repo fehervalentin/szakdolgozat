@@ -93,6 +93,7 @@ public class TableListerController implements PokerClientController, Initializab
 				createTableButton.setVisible(false);
 				modifyTableButton.setVisible(false);
 				deleteTableButton.setVisible(false);
+				viewUsersbutton.setVisible(false);
 			}
 		} catch (RemoteException | PokerUnauthenticatedException | PokerDataBaseException e) {
 			showAlert(e.getMessage());
