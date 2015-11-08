@@ -238,16 +238,14 @@ public abstract class AbstractMainView {
 						for (int i = 0; i < houseCommand.getPlayers(); i++) {
 							userNameLabels.get(i).setVisible(true);
 							profileImages.get(i).setVisible(true);
-							opponentsCards.get(i).setVisible(true);
-							for (int j = i; j < defaultValues.MY_CARDS_COUNT - 1; j++) {
-								opponentsCardSides.get(j).setVisible(true);
-							}
+							
 						}
-						// ugye el van csúszva, mert a profilképeknél én is szerepel, de a kártyáknál nem
-						opponentsCards.get(houseCommand.getPlayers() - 1).setVisible(false);
-//						opponentsCardSides.get(houseCommand.getPlayers() - 1).setVisible(false);
-
-
+						for (int i = 0; i < houseCommand.getPlayers() - 1; i++) {
+							opponentsCards.get(i).setVisible(true);
+						}
+						for (int j = 0; j < (defaultValues.MY_CARDS_COUNT - 1) * (clientsCount - 1); j++) {
+							opponentsCardSides.get(j).setVisible(true);
+						}
 						dealerButtonImageView.setLayoutX(defaultValues.DEALER_BUTTON_POSITIONS[DEALER_BUTTON_POSITION * 2]);
 						dealerButtonImageView.setLayoutY(defaultValues.DEALER_BUTTON_POSITIONS[DEALER_BUTTON_POSITION * 2 + 1]);
 						dealerButtonImageView.setVisible(true);
