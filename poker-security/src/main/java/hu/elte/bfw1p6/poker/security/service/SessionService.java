@@ -32,6 +32,11 @@ public class SessionService {
 		if (u == null || !BCrypt.checkpw(password, u.getPassword())) {
 			throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
 		}
+//		if (authenticatedUsers.values().contains(username)) {
+//			throw new PokerAlreadyLoggedInError()
+//		}
+		//TODO: ne engedje be, de mi van, ha elfelejt kijelentkezni...?
+		//TODO: de amostani sem jó, mert játék közben kivágja, akkor mi van...?
 		invalidate(username);
 		UUID uuid = UUID.randomUUID();
 		authenticatedUsers.put(uuid, username);

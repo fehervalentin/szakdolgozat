@@ -28,6 +28,6 @@ public class PokerSession implements Serializable {
 	}
 
 	public void refreshBalance(BigDecimal refreshBalance) {
-//		player.set
+		player.setBalance(refreshBalance);
 	}
 }

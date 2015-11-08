@@ -18,9 +18,9 @@ import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 
 public class Model {
 	
-	private final String SESSION_ERR = "Hibás session!";
-
 	private static Model instance = null;
+	
+	private final String SESSION_ERR = "Hibás session!";
 	
 	private PokerTable paramPokerTable;
 

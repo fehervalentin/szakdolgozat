@@ -52,7 +52,7 @@ public abstract class AbstractMainGameController implements Initializable, Poker
 	protected Scene scene;
 
 	protected Alert errorAlert;
-
+	
 	@Override
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
@@ -62,7 +62,6 @@ public abstract class AbstractMainGameController implements Initializable, Poker
 	public abstract void initialize(URL location, ResourceBundle resources);
 
 	public abstract void updateMe(Object updateMsg);
-
 
 	protected void receivedBlindHouseCommand(HouseCommand houseCommand) {
 		try {
@@ -114,6 +113,7 @@ public abstract class AbstractMainGameController implements Initializable, Poker
 	@FXML protected void handleCall(ActionEvent event) {
 		try {
 			model.call();
+			mainView.setBalance(model.getBalance());
 		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
 		}
@@ -122,6 +122,7 @@ public abstract class AbstractMainGameController implements Initializable, Poker
 	@FXML protected void handleCheck(ActionEvent event) {
 		try {
 			model.check();
+			mainView.setBalance(model.getBalance());
 		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
 		}
@@ -130,6 +131,7 @@ public abstract class AbstractMainGameController implements Initializable, Poker
 	@FXML protected void handleRaise(ActionEvent event) {
 		try {
 			model.raise(new BigDecimal(6));
+			mainView.setBalance(model.getBalance());
 		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
 		}

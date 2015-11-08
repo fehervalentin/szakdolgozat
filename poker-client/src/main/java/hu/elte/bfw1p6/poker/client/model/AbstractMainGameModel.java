@@ -56,6 +56,10 @@ public abstract class AbstractMainGameModel {
 		return pokerSession.getPlayer().getUserName();
 	}
 	
+	public BigDecimal getBalance() {
+		return pokerSession.getPlayer().getBalance();
+	}
+	
 	public void connectToTable(RemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException {
 		pokerRemote.connectToTable(pokerSession.getId(), pokerTable, observer);
 	}
@@ -180,12 +184,4 @@ public abstract class AbstractMainGameModel {
 	public int getYouAreNth() {
 		return youAreNth;
 	}
-	
-//	public void setMyDebt(BigDecimal myDebt) {
-//		this.myDebt = myDebt;
-//	}
-//
-//	public PokerPlayer getPlayer() {
-//		return pokerSession.getPlayer();
-//	}
 }

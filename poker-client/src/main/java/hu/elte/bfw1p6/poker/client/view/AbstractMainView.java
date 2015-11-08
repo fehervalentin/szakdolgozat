@@ -1,5 +1,6 @@
 package hu.elte.bfw1p6.poker.client.view;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -29,6 +30,8 @@ public abstract class AbstractMainView {
 	protected List<ImageView> chips;
 
 	protected List<Label> userNameLabels;
+	
+	protected Label myBalance;
 
 	protected ImageView dealerButtonImageView;
 
@@ -58,6 +61,7 @@ public abstract class AbstractMainView {
 		this.opponentsCardSides = new ArrayList<>();
 		this.chips = new ArrayList<>();
 		this.userNameLabels = new ArrayList<>();
+		this.myBalance = new Label();
 		this.random = new Random();
 
 		setDealerButton();
@@ -153,21 +157,15 @@ public abstract class AbstractMainView {
 			userNameLabels.add(label);
 			mainGamePane.getChildren().add(label);
 		}
+		myBalance.setLayoutX(defaultValues.PROFILE_POINTS[0]);
+		myBalance.setLayoutY(defaultValues.PROFILE_POINTS[1]+20);
+		mainGamePane.getChildren().add(myBalance);
 	}
 
 	protected void setLabelUserNames(List<String> userNames) {
-		if (fixSitPosition == 0) {
-			for (int i = 0; i < userNames.size(); i++) {
-				userNameLabels.get(i).setText(userNames.get(i));
-				userNameLabels.get(i).setVisible(true);
-			}
-		} else {
-			int j = 0;
-			for (int i = userNames.size() - 1; i >= 0; i--) {
-				userNameLabels.get(i).setText(userNames.get(j));
-				userNameLabels.get(i).setVisible(true);
-				++j;
-			}
+		int counter = 0;
+		for (int i = fixSitPosition; counter < clientsCount; counter++,i++) {
+			userNameLabels.get(counter).setText(userNames.get(i % clientsCount));
 		}
 	}
 
@@ -307,8 +305,34 @@ public abstract class AbstractMainView {
 			@Override
 			public void run() {
 				double opacity = 0.4;
+				/*
+				 * if (fixSitPosition == 0) {
+			for (int i = 0; i < userNames.size(); i++) {
+				userNameLabels.get(i).setText(userNames.get(i));
+				userNameLabels.get(i).setVisible(true);
+			}
+		} else {
+			int j = 0;
+			for (int i = userNames.size() - 1; i >= 0; i--) {
+				userNameLabels.get(i).setText(userNames.get(j));
+				userNameLabels.get(i).setVisible(true);
+				++j;
+			}
+		}
+				 */
+				if (fixSitPosition == playerCommand.getWhosQuit()) {
+					hideMyCards(opacity);
+				} else {
+					if (fixSitPosition == 0) {
+						opponentsCards.get(playerCommand.getWhosQuit()).setOpacity(opacity);
+						opponentsCardSides.get(playerCommand.getWhosQuit()).setOpacity(opacity);
+					} else {
+						opponentsCards.get(clientsCount - playerCommand.getWhosQuit() - 2).setOpacity(opacity);
+						opponentsCardSides.get(clientsCount - playerCommand.getWhosQuit() - 2).setOpacity(opacity);
+					}
+				}
 				//				nextPlayer = ultimateFormula(playerHoldemCommand.getWhosOn());
-				int whosQuit = ultimateFormula(playerCommand.getWhosQuit() - 1);
+				/*int whosQuit = ultimateFormula(playerCommand.getWhosQuit() - 1);
 				System.out.println("NextPlayer foldban: " + whosQuit);
 				if (whosQuit == 0) {
 					for (ImageView imageView : myCards) {
@@ -318,7 +342,7 @@ public abstract class AbstractMainView {
 					// ugye el van csúszva! (direkt!!!)
 					opponentsCards.get(whosQuit).setOpacity(opacity);
 					opponentsCardSides.get(whosQuit).setOpacity(opacity);
-				}
+				}*/
 				//				whosOut[NEXT_PLAYER] = true;
 				/*if (youAreNth > playerHoldemCommand.getWhosQuit()) {
 					--youAreNth;
@@ -411,4 +435,18 @@ public abstract class AbstractMainView {
 	}
 
 	protected abstract void hideHouseCards();
+	
+	public void setBalance(BigDecimal balance) {
+		Platform.runLater(new Runnable() {
+			public void run() {
+				myBalance.setText(balance.toString());
+			}
+		});
+	}
+	
+	protected void hideMyCards(double opacity) {
+		for (ImageView imageView : myCards) {
+			imageView.setOpacity(opacity);
+		}
+	}
 }
