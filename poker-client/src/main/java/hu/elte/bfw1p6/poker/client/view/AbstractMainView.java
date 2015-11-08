@@ -30,7 +30,7 @@ public abstract class AbstractMainView {
 	protected List<ImageView> chips;
 
 	protected List<Label> userNameLabels;
-	
+
 	protected Label myBalance;
 
 	protected ImageView dealerButtonImageView;
@@ -48,7 +48,7 @@ public abstract class AbstractMainView {
 	protected int nextPlayer = -1;
 
 	protected int youAreNth;
-	
+
 	protected int fixSitPosition;
 
 	public AbstractMainView(AnchorPane mainGamePane, AbstractDefaultValues defaultValues) {
@@ -72,6 +72,9 @@ public abstract class AbstractMainView {
 		hideAllProfiles();
 	}
 
+	/**
+	 * Felhelyezi az asztalra a dealer gombot.
+	 */
 	protected void setDealerButton() {
 		dealerButtonImageView = new ImageView(new Image(defaultValues.DEALER_BUTTON_IMAGE_URL));
 		dealerButtonImageView.setFitHeight(defaultValues.DEALER_BUTTON_SIZE);
@@ -80,6 +83,9 @@ public abstract class AbstractMainView {
 		mainGamePane.getChildren().add(dealerButtonImageView);
 	}
 
+	/**
+	 * Legenerálja a profilképeket.
+	 */
 	protected void setProfileImages() {
 		Image profileImage = new Image(defaultValues.PROFILE_IMAGE_URL);
 		// kettesével kell menni (x,y) párok miatt
@@ -94,6 +100,9 @@ public abstract class AbstractMainView {
 		}
 	}
 
+	/**
+	 * Megjeleníti a kártyapaklit a GUI-n.
+	 */
 	protected void setDeck() {
 		ImageView deck = new ImageView(new Image(defaultValues.DECK_IMAGE_URL));
 		deck.setLayoutX(defaultValues.DECK_POINT[0]);
@@ -101,11 +110,11 @@ public abstract class AbstractMainView {
 		mainGamePane.getChildren().add(deck);
 	}
 
+	/**
+	 * A GUI-n megtalálható összes kártyalapot legenerálja.
+	 */
 	protected void setCards() {
-		// a saját kártyáim nem idemennek
-		// a 0. helyen az első hely lapjai vannak
-		// kettessével kell menni (x,y) párok miatt
-		//opponents cards
+		// opponents cards
 		for (int i = 0; i < (defaultValues.PROFILE_COUNT) * 2; i+=2) {
 			for (int j = 0; j < defaultValues.MY_CARDS_COUNT - 1; j++) {
 				ImageView cardSide = new ImageView(new Image(defaultValues.CARD_SIDE_IMAGE_URL));
@@ -124,14 +133,14 @@ public abstract class AbstractMainView {
 			opponentsCards.add(backCard);
 			mainGamePane.getChildren().add(backCard);
 		}
-		
+
 		//winner cards
 		for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
 			ImageView imageView = new ImageView();
 			winnerCards.add(imageView);
 			mainGamePane.getChildren().add(imageView);
 		}
-		
+
 		//mycards
 		for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
 			ImageView myCard = new ImageView();
@@ -146,6 +155,9 @@ public abstract class AbstractMainView {
 		}
 	}
 
+	/**
+	 * A userneveket címkéket generálja le.
+	 */
 	protected void setLabels() {
 		// kettesével kell menni (x,y) párok miatt
 		for (int i = 0; i < defaultValues.PROFILE_COUNT * 2; i+=2) {
@@ -162,16 +174,28 @@ public abstract class AbstractMainView {
 		mainGamePane.getChildren().add(myBalance);
 	}
 
+	/**
+	 * Megfelelő helyen jeleníti meg a beérkező userneveket.
+	 * @param userNames a megjelenítendő usernevek
+	 */
 	protected void setLabelUserNames(List<String> userNames) {
 		for (int i = fixSitPosition, counter = 0; counter < clientsCount; counter++,i++) {
 			userNameLabels.get(counter).setText(userNames.get(i % clientsCount));
 		}
 	}
 
+	/**
+	 * Egy kártyát feleltet meg egy képnek.
+	 * @param card a kártyalap
+	 * @return a megfeleltetett érték
+	 */
 	protected int mapCard(Card card) {
 		return 52 - (card.getRankToInt() * CardSuitEnum.values().length) - (CardSuitEnum.values().length - card.getSuit().ordinal() - 1);
 	}
 
+	/**
+	 * Elrejti az összes ellenfél profilképet és lefordított kártyalapokat.
+	 */
 	protected void hideAllProfiles() {
 		for (ImageView imageView : opponentsCards) {
 			imageView.setVisible(false);
@@ -195,6 +219,10 @@ public abstract class AbstractMainView {
 		chips.clear();
 	}
 
+	/**
+	 * A következő játékos profilját jelöli meg a GUI-n.
+	 * @param pokerCommand az utasítás
+	 */
 	protected void colorNextPlayer(PokerCommand pokerCommand) {
 		Platform.runLater(new Runnable() {
 
@@ -213,14 +241,21 @@ public abstract class AbstractMainView {
 		});
 	}
 
+	/**
+	 * A paramétert konvertálja a megfelelő játékos adott táblanézet szerint. (Mindegyik játékos máshigy látja a táblát.)
+	 * @param whosOn a paraméter
+	 * @return
+	 */
 	protected int ultimateFormula(int whosOn) {
-		System.out.println("Fixsit: " + fixSitPosition);
 		int value = (whosOn - fixSitPosition) % clientsCount;
 		value += value < 0 ? clientsCount : 0;
-		System.out.println("Value: " + value);
 		return value;
 	}
 
+	/**
+	 * A szerver BLIND utasítást küldött.
+	 * @param houseCommand az utasítás
+	 */
 	public void receivedBlindHouseCommand(HouseCommand houseCommand) {
 		clientsCount = houseCommand.getPlayers();
 		youAreNth = houseCommand.getNthPlayer();
@@ -238,7 +273,7 @@ public abstract class AbstractMainView {
 						for (int i = 0; i < houseCommand.getPlayers(); i++) {
 							userNameLabels.get(i).setVisible(true);
 							profileImages.get(i).setVisible(true);
-							
+
 						}
 						for (int i = 0; i < houseCommand.getPlayers() - 1; i++) {
 							opponentsCards.get(i).setVisible(true);
@@ -253,6 +288,10 @@ public abstract class AbstractMainView {
 				});
 	}
 
+	/**
+	 * A szerver DEAL utasítást küldött.
+	 * @param houseCommand az utasítás
+	 */
 	public void receivedDealHouseCommand(HouseCommand houseCommand) {
 		Platform.runLater(new Runnable() {
 
@@ -270,7 +309,11 @@ public abstract class AbstractMainView {
 			}
 		});
 	}
-	
+
+	/**
+	 * Megjeleníti a saját kártyalapjaimat.
+	 * @param houseCommand az utasítás
+	 */
 	public void loadMyCards(HouseCommand houseCommand) {
 		Card[] cards = houseCommand.getCards();
 		for (int j = 0; j < defaultValues.MY_CARDS_COUNT; j++) {
@@ -279,25 +322,45 @@ public abstract class AbstractMainView {
 		}
 	}
 
+	/**
+	 * Egy kliens RAISE utasítást küldött.
+	 * @param playerCommand az utasítés
+	 */
 	public void receivedRaisePlayerCommand(PlayerCommand playerCommand) {
 		colorNextPlayer(playerCommand);
 		addChip();
 		addChip();
 	}
 
+	/**
+	 * Egy kliens BLIND utasítást küldött.
+	 * @param playerCommand az utasítás
+	 */
 	public void receivedBlindPlayerCommand(PlayerCommand playerCommand) {
 		addChip();
 	}
 
+	/**
+	 * Egy kliens CALL utasítást küldött.
+	 * @param playerCommand az utasítás
+	 */
 	public void receivedCallPlayerCommand(PlayerCommand playerCommand) {
 		colorNextPlayer(playerCommand);
 		addChip();
 	}
 
+	/**
+	 * Egy kliens CHECK utasítást küldött.
+	 * @param playerCommand az utasítás
+	 */
 	public void receivedCheckPlayerCommand(PlayerCommand playerCommand) {
 		colorNextPlayer(playerCommand);
 	}
 
+	/**
+	 * Egy kliens FOLD utasítást küldött.
+	 * @param playerCommand az utasítás
+	 */
 	public void receivedFoldPlayerCommand(PlayerCommand playerCommand) {
 		Platform.runLater(new Runnable() {
 
@@ -308,53 +371,62 @@ public abstract class AbstractMainView {
 				if (convertedWhoFold == 0) {
 					hideMyCards(opacity);
 				} else {
-					opponentsCards.get(convertedWhoFold - 1).setOpacity(opacity);
-					for (int i = (convertedWhoFold - 1) * (defaultValues.MY_CARDS_COUNT - 1), counter = 0; counter < defaultValues.MY_CARDS_COUNT - 1; i++, counter++) {
-						opponentsCardSides.get(i).setOpacity(opacity);
-					}
+					setNthPlayersCardsOpacity(opacity, convertedWhoFold);
 				}
 				colorNextPlayer(playerCommand);
 			}
 		});
 	}
 
+	/**
+	 * A szerver WINNER utasítást küldött.
+	 * @param houseCommand az utasítás
+	 */
 	public void winner(HouseCommand houseCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
 			public void run() {
-				Card[] cards = houseCommand.getCards();
-				for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
-					int value = mapCard(cards[i]);
-					winnerCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
-				}
-				int j = ultimateFormula(houseCommand.getWinner());// houseHoldemCommand.getWinner() + youWereNth;
-				System.out.println("You are nth: " + youAreNth);
-				//				int j = (houseHoldemCommand.getWinner() + youAreNth) % clientsCount;
-				System.out.println("Ki nyer: " + houseCommand.getWinner());
-				System.out.println("A j erteke mindenek elott: " + j);
-				// én nyertem...
-				if (j == youAreNth) {
-
-				} else {
-					--j;
-					//					j+=youAreNth;
-					//					j %= clientsCount;
-					System.out.println("A j erteke: " + j);
-					opponentsCards.get(j).setVisible(false);
-					opponentsCardSides.get(j).setVisible(false);
+				
+				int convertedWinnerIndex = ultimateFormula(houseCommand.getWinner());
+				System.out.println("CSESZETTÜL ITT: " + convertedWinnerIndex);
+				System.out.println("FixsitPos: " + fixSitPosition);
+				// ha nem én nyertem...
+				if (convertedWinnerIndex != 0) {
+					System.out.println("Nem én nyertem :(");
+					System.out.println("ConvertedIndex :" + convertedWinnerIndex);
+					Card[] cards = houseCommand.getCards();
+					for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
+						winnerCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(cards[i]) + ".png"));
+					}
+					setNthPlayersCardsOpacity(0, convertedWinnerIndex);
 					int gap = 5;
 					for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
-						winnerCards.get(i).setLayoutX(defaultValues.CARD_B1FV_POINTS[j * 2] + i * defaultValues.CARD_WIDTH);
-						winnerCards.get(i).setLayoutY(defaultValues.CARD_B1FV_POINTS[j * 2 + 1]);
+						winnerCards.get(i).setLayoutX(defaultValues.CARD_B1FV_POINTS[(convertedWinnerIndex-1) * 2] + i * defaultValues.CARD_WIDTH);
+						winnerCards.get(i).setLayoutY(defaultValues.CARD_B1FV_POINTS[(convertedWinnerIndex-1) * 2 + 1]);
 						winnerCards.get(i).setVisible(true);
+						winnerCards.get(i).setOpacity(1);
 					}
-
 				}
 			}
 		});
 	}
+	
+	/**
+	 * i. ellenfél kártyalapjainak az áttetszőgését módosítja.
+	 * @param opacity az áttettszőség mértéke
+	 * @param convertedValue az i. ellenfél
+	 */
+	private void setNthPlayersCardsOpacity(double opacity, int convertedValue) {
+		opponentsCards.get(convertedValue - 1).setVisible(false);
+		for (int i = (convertedValue - 1) * (defaultValues.MY_CARDS_COUNT - 1), counter = 0; counter < defaultValues.MY_CARDS_COUNT - 1; i++, counter++) {
+			opponentsCardSides.get(i).setVisible(false);
+		}
+	}
 
+	/**
+	 * Visszaállítja az áttettszőség értékeket.
+	 */
 	protected void resetOpacity() {
 		for (ImageView imageView : myCards) {
 			imageView.setOpacity(1);
@@ -395,13 +467,24 @@ public abstract class AbstractMainView {
 		});
 	}
 
+	/**
+	 * Ha egy felhasználó kilépett.
+	 * @param playerCommand az utasítás
+	 */
 	public void receivedQuitPlayerCommand(PlayerCommand playerCommand) {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * A ház lapjait rejti el a GUI-ról.
+	 */
 	protected abstract void hideHouseCards();
-	
+
+	/**
+	 * Frissíti a GUI-n lévő egyenleget.
+	 * @param balance az új egyenleg
+	 */
 	public void setBalance(BigDecimal balance) {
 		Platform.runLater(new Runnable() {
 			public void run() {
@@ -409,7 +492,11 @@ public abstract class AbstractMainView {
 			}
 		});
 	}
-	
+
+	/**
+	 * Elrejti a saját kártyáimat a GUI-ról.
+	 * @param opacity
+	 */
 	protected void hideMyCards(double opacity) {
 		for (ImageView imageView : myCards) {
 			imageView.setOpacity(opacity);

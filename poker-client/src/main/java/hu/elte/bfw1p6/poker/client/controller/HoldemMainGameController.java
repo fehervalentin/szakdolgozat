@@ -80,7 +80,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 			}
 			case WINNER: {
 				Card[] cards = houseHoldemCommand.getCards();
-				System.out.println("Flop: " + cards[0] + " " + cards[1]);
+				System.out.println("Winner: " + cards[0] + " " + cards[1]);
 				receivedWinnerHouseCommand(houseHoldemCommand);
 				break;
 			}

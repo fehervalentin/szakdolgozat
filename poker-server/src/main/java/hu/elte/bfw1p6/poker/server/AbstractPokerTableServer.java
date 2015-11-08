@@ -86,7 +86,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Asztaltól fogom lekérni.
 	 */
 	@Deprecated
-	protected int minPlayer = 3;
+	protected int minPlayer = 2;
 
 	/**
 	 * A játékosok száma, akik eldobták a lapjaikat.
