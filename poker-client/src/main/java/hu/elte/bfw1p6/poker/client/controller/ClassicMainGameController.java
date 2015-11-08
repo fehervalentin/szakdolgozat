@@ -163,6 +163,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 
 	private void receivedDeal2HouseCommand(ClassicHouseCommand classicHouseCommand) {
 		modifyButtonsDisability(classicHouseCommand);
+		changeButton.setDisable(true);
 		((ClassicMainGameModel)model).receivedDeal2HouseCommand(classicHouseCommand);
 		((ClassicMainView)mainView).receivedDeal2HouseCommand(classicHouseCommand);
 	}
