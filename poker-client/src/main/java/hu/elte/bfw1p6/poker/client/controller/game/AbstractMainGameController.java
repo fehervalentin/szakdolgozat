@@ -6,6 +6,8 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.cantero.games.poker.texasholdem.Card;
+
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
@@ -32,8 +34,10 @@ import javafx.scene.layout.AnchorPane;
  * @author feher
  *
  */
-public abstract class AbstractMainGameController implements PokerClientController, PokerObserverController{
+public abstract class AbstractMainGameController implements PokerClientController, PokerObserverController {
 
+	protected final String ERR_CONN = "A megszakadt a kommunikáció a szerverrel!";
+	
 	@FXML protected AnchorPane mainGamePane;
 
 	@FXML protected Label pokerLabel;
@@ -89,6 +93,10 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	@Deprecated
 	protected long delay = 5000;
 	
+	//TODO: játékszerver specifikus
+	@Deprecated
+	private double raiseAmount = 6;
+	
 	@Override
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
@@ -116,8 +124,10 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 		try {
 			mainView.receivedBlindHouseCommand(houseCommand);
 			model.receivedBlindHouseCommand(houseCommand);
-		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
+		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
+		} catch (PokerUnauthenticatedException e) {
+			remoteExceptionHandler();
 		}
 	}
 
@@ -136,6 +146,11 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param houseCommand az utasítás
 	 */
 	protected void receivedWinnerHouseCommand(HouseCommand houseCommand) {
+		Card[] cards = houseCommand.getCards();
+		System.out.println("Winner:");
+		for (int i = 0; i < cards.length; i++) {
+			System.out.println(" " + cards[i]);
+		}
 		modifyButtonsDisability(null);
 		checkButton.setDisable(false);
 		mainView.winner(houseCommand);
@@ -147,11 +162,11 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param pokerCommand az utasítás
 	 */
 	protected void modifyButtonsDisability(PokerCommand pokerCommand) {
-		boolean disable = (pokerCommand == null || model.getYouAreNth() != pokerCommand.getWhosOn()) ? true : false;
 		Platform.runLater(new Runnable() {
 
 			@Override
 			public void run() {
+				boolean disable = (pokerCommand == null || model.getYouAreNth() != pokerCommand.getWhosOn()) ? true : false;
 				callButton.setDisable(disable);
 				checkButton.setDisable(disable);
 				foldButton.setDisable(disable);
@@ -173,7 +188,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param disabled
 	 */
 	protected void modifyCheckButtonDisability(boolean disabled) {
-		foldButton.setDisable(disabled);
+		checkButton.setDisable(disabled);
 	}
 
 	/**
@@ -208,8 +223,10 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			timerTask.cancel();
 			model.check();
 			mainView.setBalance(model.getBalance());
-		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
+		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
+		} catch (PokerUnauthenticatedException e ) {
+			remoteExceptionHandler();
 		}
 	}
 
@@ -220,10 +237,12 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	@FXML protected void handleRaise(ActionEvent event) {
 		try {
 			timerTask.cancel();
-			model.raise(new BigDecimal(6));
+			model.raise(new BigDecimal(raiseAmount));
 			mainView.setBalance(model.getBalance());
-		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
+		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
+		} catch (PokerUnauthenticatedException e) {
+			remoteExceptionHandler();
 		}
 	}
 
@@ -236,8 +255,10 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			timerTask.cancel();
 			model.fold();
 			mainView.fold();
-		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
+		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
+		} catch (PokerUnauthenticatedException e) {
+			remoteExceptionHandler();
 		}
 	}
 
@@ -266,7 +287,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param playerCommand az utasítás
 	 */
 	protected void receivedBlindPlayerCommand(PlayerCommand playerCommand) {
-		model.receivedBlindPlayerCommand(playerCommand);
 		mainView.receivedBlindPlayerCommand(playerCommand);
 	}
 
@@ -275,7 +295,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param playerCommand az utasítás
 	 */
 	protected void receivedCallPlayerCommand(PlayerCommand playerCommand) {
-		model.receivedCallPlayerCommand(playerCommand);
 		mainView.receivedCallPlayerCommand(playerCommand);
 	}
 
@@ -284,7 +303,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param playerCommand az utasítás
 	 */
 	protected void receivedCheckPlayerCommand(PlayerCommand playerCommand) {
-		model.receivedCheckPlayerCommand(playerCommand);
 		mainView.receivedCheckPlayerCommand(playerCommand);
 	}
 
@@ -302,6 +320,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param playerCommand az utasítás
 	 */
 	protected void receivedRaisePlayerCommand(PlayerCommand playerCommand) {
+		System.out.println("A RAISE mértéke: " + playerCommand.getRaiseAmount());
 		model.receivedRaisePlayerCommand(playerCommand);
 		mainView.receivedRaisePlayerCommand(playerCommand);
 		checkButton.setDisable(true);
@@ -314,5 +333,30 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	protected void receivedQuitPlayerCommand(PlayerCommand playerCommand) {
 		model.receivedQuitPlayerCommand(playerCommand);
 		mainView.receivedQuitPlayerCommand(playerCommand);
+	}
+	
+	/**
+	 * Hibás szerver-kliens kommunikációt kezelő eljárás.
+	 */
+	public void remoteExceptionHandler() {
+		showErrorAlert(ERR_CONN);
+		frameController.setLoginFXML();
+	}
+	
+	/**
+	 * Ellenőrzi, hogy van-e addósságom, és ennek megfelelően állítja be a gombok disable tulajdonsgát.
+	 */
+	protected void debtChecker() {
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				if (model.getMyDebt().compareTo(BigDecimal.ZERO) > 0) {
+					checkButton.setDisable(true);
+				} else {
+					callButton.setDisable(true);
+				}
+			}
+		});
 	}
 }

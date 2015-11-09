@@ -9,9 +9,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * A kliens ezen controller segítségével tud az FXML-ek között váltani.
+ * @author feher
+ *
+ */
 public class FrameController extends UnicastRemoteObject {
 	
-	private static final long serialVersionUID = 5840336279442691891L;
+	private static final long serialVersionUID = 4102088160605201971L;
 	
 	private final String FXML_PREFIX = "/fxml/";
 	private final String LOGIN_FXML = "Login.fxml";
@@ -44,18 +49,30 @@ public class FrameController extends UnicastRemoteObject {
 		
 	}
 
+	/**
+	 * A regisztráció FXML-t jeleníti meg.
+	 */
 	public void setRegistrationFXML() {
 		setFXML(FXML_PREFIX + REGISTRATION_FXML);
 	}
 	
+	/**
+	 * A bejelentkező FXML-t jeleníti meg.
+	 */
 	public void setLoginFXML() {
 		setFXML(FXML_PREFIX + LOGIN_FXML);
 	}
 	
+	/**
+	 * A tábla listázó FXML-t jeleníti meg.
+	 */
 	public void setTableListerFXML() {
 		setFXML(FXML_PREFIX + TABLE_LISTER_FXML);
 	}
 	
+	/**
+	 * A tábla létrehozó FXML-t jeleníti meg.
+	 */
 	public void setCreateTableFXML() {
 		setFXML(FXML_PREFIX + CREATE_TABLE_FXML);
 	}
@@ -70,10 +87,16 @@ public class FrameController extends UnicastRemoteObject {
 		setFXML(FXML_PREFIX + CLASSIC_MAIN_GAME_FXML);
 	}
 	
+	/**
+	 * A profil menedzselő FXML-t jeleníti meg.
+	 */
 	public void setProfileManagerFXML() {
 		setFXML(FXML_PREFIX + PROFILE_MANAGER_FXML);
 	}
 	
+	/**
+	 * A póker játék fő-FXML-t jeleníti meg.
+	 */
 	public void setMainGameFXML(PokerType pokerType) {
 		switch (pokerType) {
 		case HOLDEM:
@@ -85,6 +108,13 @@ public class FrameController extends UnicastRemoteObject {
 		default:
 			throw new IllegalArgumentException();
 		}
+	}
+	
+	/**
+	 * A felhasználó listázó FXML-t jeleníti meg.
+	 */
+	public void setUsersFXML() {
+		setFXML(FXML_PREFIX + USERS_FXML);
 	}
 	
 	private void setFXML(String resource) {
@@ -109,9 +139,5 @@ public class FrameController extends UnicastRemoteObject {
 	private void setStageSize(int width, int height) {
 		stage.setWidth(width);
 		stage.setHeight(height);
-	}
-
-	public void setUsersFXML() {
-		setFXML(FXML_PREFIX + USERS_FXML);
 	}
 }

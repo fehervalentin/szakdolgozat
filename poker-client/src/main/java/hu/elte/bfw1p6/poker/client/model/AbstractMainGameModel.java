@@ -141,24 +141,9 @@ public abstract class AbstractMainGameModel {
 	public abstract void fold() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
 	
 	public abstract void quit() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
-	
-	public void receivedBlindPlayerCommand(PlayerCommand playerCommand) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public void receivedDealHouseCommand(HouseCommand houseCommand) {
 		pokerSession.getPlayer().setCards(houseCommand.getCards());
-	}
-
-	public void receivedCallPlayerCommand(PlayerCommand playerCommand) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void receivedCheckPlayerCommand(PlayerCommand playerCommand) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	public void receivedRaisePlayerCommand(PlayerCommand playerCommand) {

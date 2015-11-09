@@ -1,6 +1,5 @@
 package hu.elte.bfw1p6.poker.client.controller.game;
 
-import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -18,28 +17,22 @@ import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 
 /**
- * A classic játékmód controllere.
+ * A classic játékmód kliens oldali controllere.
  * @author feher
  *
  */
 public class ClassicMainGameController extends AbstractMainGameController {
 	
-	private final String ERR_CONN = "A szerverre való kommunikáció megszakadt!";
-
 	@FXML protected Button changeButton;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		errorAlert = new Alert(AlertType.ERROR);
-		mainView = new ClassicMainView(mainGamePane);
+		this.mainView = new ClassicMainView(mainGamePane);
 		this.automateExecution = new Timer();
 
 		try {
@@ -47,15 +40,11 @@ public class ClassicMainGameController extends AbstractMainGameController {
 			model = new ClassicMainGameModel(commController);
 			model.connectToTable(commController);
 			pokerLabel.setText(model.getUserName());
-		} catch (RemoteException e) {
-			showErrorAlert(ERR_CONN);
-			frameController.setLoginFXML();
+		} catch (RemoteException | PokerUnauthenticatedException e) {
+			remoteExceptionHandler();
 		} catch (PokerTooMuchPlayerException e) {
 			showErrorAlert(e.getMessage());
 			frameController.setTableListerFXML();
-		} catch (PokerUnauthenticatedException e) {
-			showErrorAlert(e.getMessage());
-			frameController.setLoginFXML();
 		}
 		modifyButtonsDisability(null);
 		modifyChangeButtonDisability(true);
@@ -139,7 +128,6 @@ public class ClassicMainGameController extends AbstractMainGameController {
 				break;
 			}
 			case RAISE: {
-				System.out.println("A RAISE mértéke: " + classicPlayerCommand.getRaiseAmount());
 				receivedRaisePlayerCommand(classicPlayerCommand);
 				break;
 			}
@@ -166,19 +154,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 		} else {
 			throw new IllegalArgumentException();
 		}
-		//		System.out.println("Adósságom: " + model.getMyDebt());
-		// ha van adósságom
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				if (model.getMyDebt().compareTo(BigDecimal.ZERO) > 0) {
-					checkButton.setDisable(true);
-				} else {
-					callButton.setDisable(true);
-				}
-			}
-		});
+		debtChecker();
 	}
 
 	/**
@@ -191,8 +167,10 @@ public class ClassicMainGameController extends AbstractMainGameController {
 		try {
 			modifyChangeButtonDisability(true);
 			((ClassicMainGameModel)model).change(markedCards);
-		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
+		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
+		} catch (PokerUnauthenticatedException e) {
+			remoteExceptionHandler();
 		}
 	}
 
