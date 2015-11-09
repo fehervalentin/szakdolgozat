@@ -8,29 +8,32 @@ import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
-import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerObserverController;
-import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
-import hu.elte.bfw1p6.poker.exception.PokerInvalidSession;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class TableListerController implements PokerClientController, PokerObserverController {
+/**
+ * Tábla listázó controller.
+ * @author feher
+ *
+ */
+public class TableListerController extends AbstractPokerClientController implements PokerObserverController {
 
 	private final String NO_TABLE_SELECTED_MESSAGE = "Nem választottál ki egy táblát sem!";
 	private final String SUCC_TABLE_DELETE_MSG = "Sikeresen kitörölted a táblát!";
 
-	private FrameController frameController;
+	/**
+	 * Hálózati kommunikációért felelős controller.
+	 */
 	private CommunicatorController commCont;
 
 	@FXML private TableView<PokerTable> tableView;
@@ -51,19 +54,12 @@ public class TableListerController implements PokerClientController, PokerObserv
 	@FXML private Button viewUsersbutton;
 
 
-	private Alert alert;
-
-	private Model model;
-
 	public TableListerController() {
 		try {
 			commCont = new CommunicatorController(this);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			remoteExceptionHandler();
 		}
-		model = Model.getInstance();
-		alert = new Alert(AlertType.ERROR);
 	}
 
 	@Override
@@ -72,9 +68,10 @@ public class TableListerController implements PokerClientController, PokerObserv
 		try {
 			List<PokerTable> tables = model.registerTableViewObserver(commCont);
 			tableView.getItems().setAll(tables);
-		} catch (RemoteException | PokerDataBaseException | PokerUnauthenticatedException e) {
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
+		} catch (PokerDataBaseException e) {
+			showErrorAlert(e.getMessage());
+		} catch (RemoteException | PokerUnauthenticatedException e ) {
+			remoteExceptionHandler();
 		}
 	}
 
@@ -94,25 +91,24 @@ public class TableListerController implements PokerClientController, PokerObserv
 				deleteTableButton.setVisible(false);
 				viewUsersbutton.setVisible(false);
 			}
-		} catch (RemoteException | PokerUnauthenticatedException | PokerDataBaseException e) {
-			showAlert(e.getMessage());
+		} catch (PokerDataBaseException e) {
+			showErrorAlert(e.getMessage());
+		} catch (RemoteException | PokerUnauthenticatedException e) {
+			remoteExceptionHandler();
 		}
 	}
-
-	@FXML
-	protected void handleConnectToTable() {
+	/**
+	 * A CONNECT TO TABLE gomb click handlerje.
+	 * @param event az esemény
+	 */
+	@FXML protected void handleConnectToTable() {
 		PokerTable table = getSelectedPokerTable();
 		if (table == null) {
-			alert.setContentText(NO_TABLE_SELECTED_MESSAGE);
-			alert.showAndWait();
+			showErrorAlert(NO_TABLE_SELECTED_MESSAGE);
 		} else {
 			ConnectTableHelper.getInstance().setPokerTable(table);
 			removeObserver();
-			if(table.getPokerType() == PokerType.HOLDEM) {
-				frameController.setHoldemMainGameFXML();
-			} else if (table.getPokerType() == PokerType.CLASSIC) {
-				frameController.setClassicMainGameFXML();
-			}
+			frameController.setMainGameFXML(table.getPokerType());
 		}
 	}
 
@@ -120,69 +116,75 @@ public class TableListerController implements PokerClientController, PokerObserv
 		return tableView.getSelectionModel().getSelectedItem();
 	}
 
-	@FXML
-	protected void handleCreateTable() {
+	/**
+	 * A CREATE TABLE gomb click handlerje.
+	 * @param event az esemény
+	 */
+	@FXML protected void handleCreateTable(ActionEvent event) {
 		removeObserver();
 		frameController.setCreateTableFXML();
 	}
 
-	@FXML
-	protected void handleModifyTable() {
+	/**
+	 * A MODIFY TABLE gomb click handlerje.
+	 * @param event az esemény
+	 */
+	@FXML protected void handleModifyTable(ActionEvent event) {
 		PokerTable selectedPokerTable = getSelectedPokerTable();
 		if (selectedPokerTable != null) {
 			model.setParameterPokerTable(selectedPokerTable);
 			frameController.setCreateTableFXML();
 		} else {
-			showAlert(NO_TABLE_SELECTED_MESSAGE);
+			showErrorAlert(NO_TABLE_SELECTED_MESSAGE);
 		}
 	}
 
-	@FXML
-	protected void handleDeleteTable() {
+	/**
+	 * A DELETE TABLE gomb click handlerje.
+	 * @param event az esemény
+	 */
+	@FXML protected void handleDeleteTable(ActionEvent event) {
 		PokerTable selectedPokerTable = getSelectedPokerTable();
 		if (selectedPokerTable != null) {
 			try {
 				model.deleteTable(selectedPokerTable);
-				alert.setAlertType(AlertType.INFORMATION);
-				alert.setContentText(SUCC_TABLE_DELETE_MSG);
-				alert.showAndWait();
-				alert.setAlertType(AlertType.ERROR);
-			} catch (RemoteException | PokerDataBaseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (PokerUnauthenticatedException e) {
-				showAlert(e.getMessage());
+				showSuccessAlert(SUCC_TABLE_DELETE_MSG);
+			} catch (PokerDataBaseException e) {
+				showErrorAlert(e.getMessage());
+			} catch (RemoteException | PokerUnauthenticatedException e) {
+				remoteExceptionHandler();
 			}
 		} else {
-			showAlert(NO_TABLE_SELECTED_MESSAGE);
+			showErrorAlert(NO_TABLE_SELECTED_MESSAGE);
 		}
 	}
 
-	@FXML
-	protected void handleLogout() {
+	/**
+	 * A LOGOUT gomb click handlerje.
+	 * @param event az esemény
+	 */
+	@FXML protected void handleLogout(ActionEvent event) {
 		try {
 			model.logout();
 			frameController.setLoginFXML();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (PokerInvalidSession e) {
-			showAlert(e.getMessage());
+			remoteExceptionHandler();
 		}
 	}
 
-	@FXML
-	protected void handleProfile() {
-		frameController.setProfileManagerFXML();
-	}
-	
-	@FXML
-	protected void handleViewUsers() {
+	/**
+	 * A VIEW USERS gomb click handlerje.
+	 * @param event az esemény
+	 */
+	@FXML protected void handleViewUsers(ActionEvent event) {
 		frameController.setUsersFXML();
 	}
 
-	@FXML
-	protected void handleProfileManager() {
+	/**
+	 * A PROFILE MANAGER gomb click handlerje.
+	 * @param event az esemény
+	 */
+	@FXML protected void handleProfileManager(ActionEvent event) {
 		frameController.setProfileManagerFXML();
 	}
 
@@ -190,14 +192,8 @@ public class TableListerController implements PokerClientController, PokerObserv
 		try {
 			model.removeTableViewObserver(commCont);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			remoteExceptionHandler();
 		}
-	}
-
-	private void showAlert(String msg) {
-		alert.setContentText(msg);
-		alert.showAndWait();
 	}
 
 	@Override

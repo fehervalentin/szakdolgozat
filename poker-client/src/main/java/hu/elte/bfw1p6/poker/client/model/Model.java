@@ -7,7 +7,6 @@ import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
-import hu.elte.bfw1p6.poker.exception.PokerInvalidSession;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
@@ -71,10 +70,7 @@ public class Model {
 		pokerRemote.removeTableViewObserver(observer);
 	}
 
-	public void logout() throws RemoteException, PokerInvalidSession {
-		if (pokerSession == null) {
-			throw new PokerInvalidSession(SESSION_ERR);
-		}
+	public void logout() throws RemoteException {
 		pokerRemote.logout(pokerSession.getId());
 		pokerSession = null;
 	}

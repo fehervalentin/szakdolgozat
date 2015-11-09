@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
-import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
-import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
@@ -17,12 +14,9 @@ import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 
 /**
  * Új poker asztal entitást létrehozó controller.
@@ -36,8 +30,6 @@ public class CreateTableController extends AbstractPokerClientController {
 	private final String ERR_TEXTFIELD_TEXT = "Hibás szám formátum a %s mezőben!";
 	private final String ERR_STYLECLASS = "hiba";
 
-	@FXML private AnchorPane rootPane;
-	
 	@FXML private ComboBox<String> gameTypeComboBox;
 
 	@FXML private TextField tableNameTextField;
@@ -56,13 +48,14 @@ public class CreateTableController extends AbstractPokerClientController {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
-		model = Model.getInstance();
 		fillPokerTypes();
 		dummyData();
 		setParamPokerTable();
 	}
 
+	/**
+	 * Játékstílusokkal tölti fel a legördülő listát.
+	 */
 	private void fillPokerTypes() {
 		List<String> pokerTypes = new ArrayList<>();
 		for (int i = 0; i < PokerType.values().length; i++) {
@@ -81,6 +74,9 @@ public class CreateTableController extends AbstractPokerClientController {
 		maxBetTextField.setText("100");
 	}
 
+	/**
+	 * Ha a TableLister controllernél tábla módosításra kattintottam, akkor kiveszem a paramétert. (A kiválasztott táblát, amolyan ThreadContext...)
+	 */
 	private void setParamPokerTable() {
 		PokerTable pokerTable = model.getParamPokerTable();
 		if (pokerTable != null) {
@@ -93,8 +89,11 @@ public class CreateTableController extends AbstractPokerClientController {
 		}
 	}
 
-	@FXML
-	protected void createTableHandler(ActionEvent event) {
+	/**
+	 * A CREATE TABLE gomb click handlerje.
+	 * @param event az esemény
+	 */
+	@FXML protected void createTableHandler(ActionEvent event) {
 		maxTimeField.getStyleClass().remove(ERR_STYLECLASS);
 		maxPlayerTextField.getStyleClass().remove(ERR_STYLECLASS);
 		defaultPotField.getStyleClass().remove(ERR_STYLECLASS);
@@ -110,35 +109,35 @@ public class CreateTableController extends AbstractPokerClientController {
 		try {
 			pokerType = PokerType.valueOf(gameTypeComboBox.getSelectionModel().getSelectedItem());
 		} catch (IllegalArgumentException ex) {
-			showErrorAlertBox("Hibás játék mód!");
+			showErrorAlert("Hibás játék mód!");
 			return;
 		}
 		try {
 			maxTime = new Integer(maxTimeField.getText());
 		} catch (NumberFormatException ex) {
 			maxTimeField.getStyleClass().add(ERR_STYLECLASS);
-			showErrorAlertBox(String.format(ERR_TEXTFIELD_TEXT, "gondolkodási idő"));
+			showErrorAlert(String.format(ERR_TEXTFIELD_TEXT, "gondolkodási idő"));
 			return;
 		}
 		try {
 			maxPlayers = Integer.valueOf(maxPlayerTextField.getText());
 		} catch (NumberFormatException ex) {
 			maxPlayerTextField.getStyleClass().add(ERR_STYLECLASS);
-			showErrorAlertBox(String.format(ERR_TEXTFIELD_TEXT, "maximum játékos"));
+			showErrorAlert(String.format(ERR_TEXTFIELD_TEXT, "maximum játékos"));
 			return;
 		}
 		try {
 			defaultPot = BigDecimal.valueOf(Double.valueOf(defaultPotField.getText()));
 		} catch (NumberFormatException ex) {
 			defaultPotField.getStyleClass().add(ERR_STYLECLASS);
-			showErrorAlertBox(String.format(ERR_TEXTFIELD_TEXT, "alaptét"));
+			showErrorAlert(String.format(ERR_TEXTFIELD_TEXT, "alaptét"));
 			return;
 		}
 		try {
 			maxBet = BigDecimal.valueOf(Double.valueOf(maxBetTextField.getText()));
 		} catch (NumberFormatException ex) {
 			maxBetTextField.getStyleClass().add(ERR_STYLECLASS);
-			showErrorAlertBox(String.format(ERR_TEXTFIELD_TEXT, "maximum tét"));
+			showErrorAlert(String.format(ERR_TEXTFIELD_TEXT, "maximum tét"));
 			return;
 		}
 		
@@ -148,13 +147,12 @@ public class CreateTableController extends AbstractPokerClientController {
 			try {
 				PokerTable t = new PokerTable(tableName, maxTime, maxPlayers, maxBet, defaultPot, pokerType);
 				model.createTable(t);
-				showSuccessAlertBox(SUCC_CREATE_TABLE_MSG);
+				showSuccessAlert(SUCC_CREATE_TABLE_MSG);
 				frameController.setTableListerFXML();
-			} catch (RemoteException | PokerDataBaseException e) {
-				showErrorAlertBox(e.getMessage());
-			} catch (PokerUnauthenticatedException e) {
-				showErrorAlertBox(e.getMessage());
-				frameController.setLoginFXML();
+			} catch (PokerDataBaseException e) {
+				showErrorAlert(e.getMessage());
+			} catch (RemoteException | PokerUnauthenticatedException e) {
+				remoteExceptionHandler();
 			}
 		} else {
 			// különben pedig volt paraméter => módosítunk
@@ -168,33 +166,22 @@ public class CreateTableController extends AbstractPokerClientController {
 				t.setDefaultPot(defaultPot);
 				t.setPokerType(pokerType);
 				model.modifyTable(t);
-				showSuccessAlertBox(SUCC_MODIFY_TABLE_MSG);
+				showSuccessAlert(SUCC_MODIFY_TABLE_MSG);
 				frameController.setTableListerFXML();
-			} catch (RemoteException | PokerDataBaseException e) {
-				showErrorAlertBox(e.getMessage());
-			} catch (PokerUnauthenticatedException e) {
-				showErrorAlertBox(e.getMessage());
+			} catch (PokerDataBaseException e) {
+				showErrorAlert(e.getMessage());
+			} catch (RemoteException | PokerUnauthenticatedException e) {
+				remoteExceptionHandler();
 			}
+			model.setParameterPokerTable(null);
 		}
-		model.setParameterPokerTable(null);
 	}
 
-	@FXML
-	protected void backHandler(ActionEvent event) {
+	/**
+	 * A BACK gomb click handlerje.
+	 * @param event az esemény
+	 */
+	@FXML protected void backHandler(ActionEvent event) {
 		frameController.setTableListerFXML();
-	}
-
-	public void setDelegateController(FrameController fc) {
-		this.frameController = fc;
-	}
-	
-	private void showErrorAlertBox(String msg) {
-		errorAlert.setContentText(msg);
-		errorAlert.showAndWait();
-	}
-	
-	private void showSuccessAlertBox(String msg) {
-		successAlert.setContentText(msg);
-		successAlert.showAndWait();
 	}
 }

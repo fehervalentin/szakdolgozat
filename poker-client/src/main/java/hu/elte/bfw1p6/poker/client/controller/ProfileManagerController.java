@@ -7,26 +7,24 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 
-import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
-import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
-import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 
-public class ProfileManagerController implements PokerClientController {
+/**
+ * Felhasználói fiók menedzselő controller.
+ * @author feher
+ *
+ */
+public class ProfileManagerController extends AbstractPokerClientController {
 
-	private final String DIFF_PW_MSG = "A két jelszó nem egyezik!";
-	private final String CHANGED_PW_MSG = "Sikeresen megváltoztattad a jelszavadat!";
-
-	private FrameController frameController;
+	private final String ERR_DIFF_PW_MSG = "A két jelszó nem egyezik!";
+	private final String OK_CHANGED_PW_MSG = "Sikeresen megváltoztattad a jelszavadat!";
 
 	@FXML private Label usernameLabel;
 	@FXML private Label regDateLabel;
@@ -39,25 +37,18 @@ public class ProfileManagerController implements PokerClientController {
 	@FXML private Button modifyButton;
 	@FXML private Button backButton;
 
-	private Model model;
-
-	private Alert alert;
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		this.model = Model.getInstance();
-		alert = new Alert(null);
 		usernameLabel.setText(model.getPlayer().getUserName() + " profilja");
 		Date date = new Date(model.getPlayer().getRegDate() * 1000);
 	    Format format = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
 		regDateLabel.setText(format.format(date).toString());
 	}
 
-	@Override
-	public void setDelegateController(FrameController frameController) {
-		this.frameController = frameController;
-	}
-
+	/**
+	 * A MODIFY gomb click handlerje.
+	 * @param event az esemény
+	 */
 	@FXML protected void handleModify(ActionEvent event) {
 		String newPassword = newPasswordField.getText();
 		String rePassword = rePasswordField.getText();
@@ -66,26 +57,24 @@ public class ProfileManagerController implements PokerClientController {
 				rePassword == null ||
 				newPassword.equals("") ||
 				rePassword.equals("")) {
-			alert.setAlertType(AlertType.ERROR);
-			alert.setContentText(DIFF_PW_MSG);
-			alert.showAndWait();
+			showErrorAlert(ERR_DIFF_PW_MSG);
 		} else {
 			try {
 				model.modifyPassword(oldPasswordField.getText(), newPasswordField.getText());
-				alert.setAlertType(AlertType.INFORMATION);
-				alert.setContentText(CHANGED_PW_MSG);
-				alert.showAndWait();
-			} catch (RemoteException | PokerDataBaseException | PokerInvalidPassword
-					| PokerUnauthenticatedException e) {
-				alert.setAlertType(AlertType.ERROR);
-				alert.setContentText(e.getMessage());
-				alert.showAndWait();
+				showErrorAlert(OK_CHANGED_PW_MSG);
+			} catch (PokerDataBaseException | PokerInvalidPassword e) {
+				showErrorAlert(e.getMessage());
+			} catch (RemoteException | PokerUnauthenticatedException e) {
+				remoteExceptionHandler();
 			}
 		}
 	}
 
+	/**
+	 * A BACK gomb click handlerje.
+	 * @param event az esemény
+	 */
 	@FXML protected void handleBack(ActionEvent event) {
 		frameController.setTableListerFXML();
 	}
-
 }

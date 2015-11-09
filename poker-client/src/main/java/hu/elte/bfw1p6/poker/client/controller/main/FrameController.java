@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
+import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -60,18 +60,31 @@ public class FrameController extends UnicastRemoteObject {
 		setFXML(FXML_PREFIX + CREATE_TABLE_FXML);
 	}
 	
-	public void setHoldemMainGameFXML() {
+	private void setHoldemMainGameFXML() {
 		setStageSize(MAIN_GAME_WIDHT, MAIN_GAME_HEIGHT);
 		setFXML(FXML_PREFIX + HOLDEM_MAIN_GAME_FXML);
 	}
 	
-	public void setClassicMainGameFXML() {
+	private void setClassicMainGameFXML() {
 		setStageSize(MAIN_GAME_WIDHT, MAIN_GAME_HEIGHT);
 		setFXML(FXML_PREFIX + CLASSIC_MAIN_GAME_FXML);
 	}
 	
 	public void setProfileManagerFXML() {
 		setFXML(FXML_PREFIX + PROFILE_MANAGER_FXML);
+	}
+	
+	public void setMainGameFXML(PokerType pokerType) {
+		switch (pokerType) {
+		case HOLDEM:
+			setHoldemMainGameFXML();
+			break;
+		case CLASSIC:
+			setClassicMainGameFXML();
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
 	}
 	
 	private void setFXML(String resource) {

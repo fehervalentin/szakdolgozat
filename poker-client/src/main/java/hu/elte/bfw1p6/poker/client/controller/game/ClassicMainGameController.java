@@ -1,4 +1,4 @@
-package hu.elte.bfw1p6.poker.client.controller;
+package hu.elte.bfw1p6.poker.client.controller.game;
 
 import java.math.BigDecimal;
 import java.net.URL;

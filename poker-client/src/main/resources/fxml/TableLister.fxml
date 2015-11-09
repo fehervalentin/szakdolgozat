@@ -37,7 +37,7 @@
 	<Button fx:id="connectButton" text="Csatlakozás" onAction="#handleConnectToTable"
 		GridPane.columnIndex="1" GridPane.rowIndex="1" />
 	<Button fx:id="profileManagerButton" text="Profil megtekintése"
-		onAction="#handleProfile" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+		onAction="#handleProfileManager" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 	<Button fx:id="createTableButton" text="Kijelentkezés" onAction="#handleLogout"
 		GridPane.columnIndex="1" GridPane.rowIndex="3" />
 	<Button fx:id="createTableButton" text="Új tábla létrehozása"

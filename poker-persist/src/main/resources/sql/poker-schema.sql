@@ -25,8 +25,8 @@ CREATE TABLE pokerdb.poker_tables (
     poker_type_id INTEGER,
     max_time INTEGER NOT NULL,
     max_players INTEGER NOT NULL,
-    default_pot DECIMAL(19 , 2 ) NOT NULL,
-    max_bet DECIMAL(19 , 2 ) NOT NULL,
+    default_pot DECIMAL(19,2) NOT NULL,
+    max_bet DECIMAL(19,2) NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT UQ_poker_table_name UNIQUE (name),
     FOREIGN KEY (poker_type_id) REFERENCES pokerdb.poker_types(id) ON DELETE CASCADE

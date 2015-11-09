@@ -7,20 +7,21 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
-import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
-import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class UserListerController implements PokerClientController {
+/**
+ * Regisztrált felhasználókat listázó controller.
+ * @author feher
+ *
+ */
+public class UserListerController extends AbstractPokerClientController {
 	
 	@FXML private Button backButton;
 	
@@ -30,17 +31,8 @@ public class UserListerController implements PokerClientController {
 	
 	@FXML private TableView<PokerPlayer> userView;
 	
-	private FrameController frameController;
-	
-	private Model model;
-	
-	private Alert alert;
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		this.model = Model.getInstance();
-		this.alert = new Alert(AlertType.ERROR);
-		
 		userName.setCellValueFactory(new PropertyValueFactory<PokerPlayer, String>("userName"));
 		regDate.setCellValueFactory(new PropertyValueFactory<PokerPlayer, Long>("regDate"));
 		balance.setCellValueFactory(new PropertyValueFactory<PokerPlayer, BigDecimal>("balance"));
@@ -55,15 +47,17 @@ public class UserListerController implements PokerClientController {
 			tables = model.getUsers();
 			userView.getItems().setAll(tables);
 		} catch (PokerDataBaseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			showErrorAlert(e.getMessage());
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			remoteExceptionHandler();
 		}
 		
 	}
 	
+	/**
+	 * A BACK gomb click handlerje.
+	 * @param event az esemény
+	 */
 	@FXML protected void handleBack(ActionEvent event) {
 		frameController.setTableListerFXML();
 	}
