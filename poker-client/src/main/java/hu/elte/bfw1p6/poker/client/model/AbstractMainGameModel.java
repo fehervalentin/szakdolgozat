@@ -5,7 +5,6 @@ import java.rmi.RemoteException;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
-import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
@@ -59,10 +58,10 @@ public abstract class AbstractMainGameModel {
 	protected BigDecimal myDebt;
 	
 	public AbstractMainGameModel(CommunicatorController communicatorController) {
-		this.pokerSession = RMIRepository.getInstance().getPokerSession();
-		this.pokerRemote = RMIRepository.getInstance().getPokerRemote();
+		this.pokerSession = Model.getPokerSession();
+		this.pokerRemote = Model.getPokerRemote();
 		this.youAreNth = -1;
-		this.pokerTable = Model.getInstance().getParamPokerTable();
+		this.pokerTable = Model.getParamPokerTable();
 		this.myDebt = pokerTable.getDefaultPot();
 		this.communicatorController = communicatorController;
 
@@ -77,6 +76,13 @@ public abstract class AbstractMainGameModel {
 		return pokerSession.getPlayer().getBalance();
 	}
 	
+	/**
+	 * Csatlakozás a kijelölt asztalhoz.
+	 * @param observer a csatlakozni kívánó kliens
+	 * @throws RemoteException
+	 * @throws PokerTooMuchPlayerException
+	 * @throws PokerUnauthenticatedException
+	 */
 	public void connectToTable(PokerRemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException {
 		pokerRemote.connectToTable(pokerSession.getId(), pokerTable, observer);
 	}
@@ -97,45 +103,38 @@ public abstract class AbstractMainGameModel {
 		return youAreNth == ((houseCommand.getDealer() + 2) % players);
 	}
 	
-	public void sendCommandToTable(PlayerCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
-		playerCommand.setSender(pokerSession.getPlayer().getUserName());
-		pokerRemote.sendPlayerCommand(pokerSession.getId(), pokerTable, communicatorController, playerCommand);
-		pokerSession.refreshBalance(pokerRemote.refreshBalance(pokerSession.getId()));
-//		System.out.println("uj balance: " + pokerSession.getPlayer().getBalance());
-	}
-	
 	/**
 	 * Ha BLIND utasítás jött a szervertől
 	 * @param houseHoldemCommand a szerver utasítás
 	 * @throws PokerUserBalanceException 
 	 * @throws PokerDataBaseException 
 	 * @throws PokerUnauthenticatedException 
+	 * @throws RemoteException 
 	 */
-	public void receivedBlindHouseCommand(HouseCommand houseCommand) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void receivedBlindHouseCommand(HouseCommand houseCommand) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		myDebt = pokerTable.getDefaultPot();
 		youAreNth = houseCommand.getNthPlayer();
 		players = houseCommand.getPlayers();
-		// első körben az a dealer, aki elsőként csatlakozott, roundonként +1
-//		System.out.println("Hanyadik játékos vagy a szerveren: " + youAreNth);
-//		System.out.println("Aktuális dealer: " + houseHoldemCommand.getDealer());
 		if (areYouTheSmallBlind(houseCommand)) {
-//			System.out.println("Betettem a kis vakot");
 			tossBlind(false);
 		} else if (areYouTheBigBlind(houseCommand)) {
-//			System.out.println("Betettem a nagy vakot");
 			tossBlind(true);
 		}
-		// nagyvaktól eggyel balra ülő kezd
-//		System.out.println("Az éppen soron levő játékos: " + houseHoldemCommand.getWhosOn());
 	}
 
-	protected void sendPlayerCommand(PlayerCommand playerCommand) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
-		try {
-			sendCommandToTable(playerCommand);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	/**
+	 * Utasítás küldése a játéktábla szervernek.
+	 * @param playerCommand az utasítás
+	 * @throws PokerUnauthenticatedException
+	 * @throws PokerDataBaseException
+	 * @throws PokerUserBalanceException
+	 * @throws RemoteException
+	 */
+	protected void sendCommandToTable(PlayerCommand playerCommand) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+		playerCommand.setSender(pokerSession.getPlayer().getUserName());
+		pokerRemote.sendPlayerCommand(pokerSession.getId(), pokerTable, communicatorController, playerCommand);
+		pokerSession.refreshBalance(pokerRemote.refreshBalance(pokerSession.getId()));
+//		System.out.println("uj balance: " + pokerSession.getPlayer().getBalance());
 	}
 	
 	/**
@@ -144,35 +143,88 @@ public abstract class AbstractMainGameModel {
 	 * @throws PokerUserBalanceException 
 	 * @throws PokerDataBaseException 
 	 * @throws PokerUnauthenticatedException 
+	 * @throws RemoteException 
 	 */
-	protected abstract void tossBlind(Boolean bigBlind) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
+	protected abstract void tossBlind(Boolean bigBlind) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException;
 	
-	public abstract void call() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
+	/**
+	 * CALL típusú utasítás küldése a szervernek.
+	 * @throws PokerUnauthenticatedException
+	 * @throws PokerDataBaseException
+	 * @throws PokerUserBalanceException
+	 * @throws RemoteException
+	 */
+	public abstract void sendCallCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException;
 	
-	public abstract void check() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
+	/**
+	 * CHECK típusú utasítás küldése a szervernek.
+	 * @throws PokerUnauthenticatedException
+	 * @throws PokerDataBaseException
+	 * @throws PokerUserBalanceException
+	 * @throws RemoteException
+	 */
+	public abstract void sendCheckCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException;
 	
-	public abstract void raise(BigDecimal amount) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
+	/**
+	 * RAISE típusú utasítás küldése a szervernek.
+	 * @param amount az emelendő összeg
+	 * @throws PokerUnauthenticatedException
+	 * @throws PokerDataBaseException
+	 * @throws PokerUserBalanceException
+	 * @throws RemoteException
+	 */
+	public abstract void sendRaiseCommand(BigDecimal amount) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException;
 	
-	public abstract void fold() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
+	/**
+	 * FOLD típusú utasítás küldése a szervenek.
+	 * @throws PokerUnauthenticatedException
+	 * @throws PokerDataBaseException
+	 * @throws PokerUserBalanceException
+	 * @throws RemoteException
+	 */
+	public abstract void sendFoldCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException;
 	
-	public abstract void quit() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
+	/**
+	 * QUIT típusú utasítás küldése a szervernek.
+	 * @throws PokerUnauthenticatedException
+	 * @throws PokerDataBaseException
+	 * @throws PokerUserBalanceException
+	 * @throws RemoteException
+	 */
+	public abstract void sendQuitCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException;
 
+	/**
+	 * DEAL típusú utasítás érkezett a szervertől.
+	 * @param houseCommand az utasítás
+	 */
 	public void receivedDealHouseCommand(HouseCommand houseCommand) {
 		pokerSession.getPlayer().setCards(houseCommand.getCards());
 	}
 	
+	/**
+	 * RAISE típusú utasítás érkezett egy játékostól.
+	 * @param playerCommand az utasítás
+	 */
 	public void receivedRaisePlayerCommand(PlayerCommand playerCommand) {
 		// és mi van ha én magam emeltem...
 		// ha én magam emeltem, akkor a szerver elszámolta a teljes adósságom
 		myDebt = playerCommand.getSender().equals(getUserName()) ? BigDecimal.ZERO : myDebt.add(playerCommand.getRaiseAmount());
 	}
 
+	/**
+	 * FOLD típusú utasítás érkezett egy játékostól.
+	 * @param playerCommand az utasítás
+	 */
 	public void receivedFoldPlayerCommand(PlayerCommand playerCommand) {
 		if (youAreNth > playerCommand.getWhosQuit()) {
 			--youAreNth;
 		}
 	}
 	
+	/**
+	 * QUIT típusú utasítás érkezett egy játékostól.
+	 * @param playerCommand az utasítás
+	 */
 	public void receivedQuitPlayerCommand(PlayerCommand playerCommand) {
 		if (youAreNth > playerCommand.getWhosQuit()) {
 			--youAreNth;

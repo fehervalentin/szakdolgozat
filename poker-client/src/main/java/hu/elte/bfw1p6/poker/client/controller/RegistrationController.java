@@ -36,7 +36,6 @@ public class RegistrationController extends AbstractPokerClientController {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		//		model = Model.getInstance();
 	}
 
 	/**

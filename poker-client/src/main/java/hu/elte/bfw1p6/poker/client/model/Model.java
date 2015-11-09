@@ -1,10 +1,12 @@
 package hu.elte.bfw1p6.poker.client.model;
 
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
 
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
-import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
@@ -12,45 +14,83 @@ import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
+import hu.elte.bfw1p6.poker.properties.PokerProperties;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 
-
+/**
+ * Kliens oldali model, amely a kisebb műveletek hívásáért felelős.
+ * @author feher
+ *
+ */
 public class Model {
 	
 	private static Model instance = null;
 	
-	private final String SESSION_ERR = "Hibás session!";
+	private static PokerTable paramPokerTable;
+
+	private static PokerRemote pokerRemote;
+
+	private static PokerSession pokerSession;
 	
-	private PokerTable paramPokerTable;
+	private final String SVNAME;
+	private final String PORT;
 
-	private PokerRemote pokerRemote;
+	private PokerProperties pokerProperties;
 
-	private PokerSession pokerSession;
-
-	private Model() {
-		pokerRemote = RMIRepository.getInstance().getPokerRemote();
+	private Model() throws MalformedURLException, RemoteException, NotBoundException {
+		pokerProperties = PokerProperties.getInstance();
+		SVNAME =  pokerProperties.getProperty("name");
+		PORT = pokerProperties.getProperty("rmiport");
+		pokerRemote = (PokerRemote) Naming.lookup("//localhost:" + PORT + "/" + SVNAME);
 	}
-
-	public static Model getInstance() {
-		if(instance == null) {
+	
+	public static Model getInstance() throws MalformedURLException, RemoteException, NotBoundException {
+		if (instance == null) {
 			instance = new Model();
 		}
 		return instance;
 	}
 
+	/**
+	 * Bejelentkezés a pókerjátékba.
+	 * @param username a felhasználónév
+	 * @param password a jelszó (plain textben)
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 * @throws PokerInvalidUserException
+	 */
 	public void login(String username, String password) throws RemoteException, PokerDataBaseException, PokerInvalidUserException {
 		pokerSession = pokerRemote.login(username, password);
-		RMIRepository.getInstance().setPokerSession(pokerSession);
 	}
 
+	/**
+	 * Regisztráció a pókerjátékba.
+	 * @param username a felhasználónév
+	 * @param password a jelszó (plain textben)
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 */
 	public void registration(String username, String password) throws RemoteException, PokerDataBaseException {
 		pokerRemote.registration(username, password);
 	}
 
+	/**
+	 * Új játéktábla létrehozása.
+	 * @param t a létrehozandó játéktábla szerver
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 * @throws PokerUnauthenticatedException
+	 */
 	public void createTable(PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		pokerRemote.createTable(pokerSession.getId(), t);
 	}
 
+	/**
+	 * A letárolt összes játéktábla lekérdezése.
+	 * @return a letárolt játéktáblák
+	 * @throws PokerDataBaseException
+	 * @throws PokerUnauthenticatedException
+	 */
 	public List<PokerTable> getTables() throws PokerDataBaseException, PokerUnauthenticatedException {
 		List<PokerTable> tables = null;
 		try {
@@ -76,13 +116,21 @@ public class Model {
 	}
 	
 	public void setParameterPokerTable(PokerTable paramPokerTable) {
-		this.paramPokerTable = paramPokerTable;
+		Model.paramPokerTable = paramPokerTable;
 	}
 	
-	public PokerTable getParamPokerTable() {
+	public static PokerTable getParamPokerTable() {
 		return paramPokerTable;
 	}
+	
+	public static PokerSession getPokerSession() {
+		return pokerSession;
+	}
 
+	public static PokerRemote getPokerRemote() {
+		return pokerRemote;
+	}
+	
 	public void modifyTable(PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		pokerRemote.modifyTable(pokerSession.getId(), t);
 	}

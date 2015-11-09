@@ -2,6 +2,7 @@ package hu.elte.bfw1p6.poker.client.controller.game;
 
 import java.math.BigDecimal;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -121,7 +122,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			model.receivedBlindHouseCommand(houseCommand);
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
-		} catch (PokerUnauthenticatedException e) {
+		} catch (PokerUnauthenticatedException | RemoteException e) {
 			remoteExceptionHandler();
 		}
 	}
@@ -202,10 +203,12 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	@FXML protected void handleCall(ActionEvent event) {
 		try {
 			timerTask.cancel();
-			model.call();
+			model.sendCallCommand();
 			mainView.setBalance(model.getBalance());
-		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
+		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
+		} catch (RemoteException | PokerUnauthenticatedException e) {
+			remoteExceptionHandler();
 		}
 	}
 
@@ -216,11 +219,11 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	@FXML protected void handleCheck(ActionEvent event) {
 		try {
 			timerTask.cancel();
-			model.check();
+			model.sendCheckCommand();
 			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
-		} catch (PokerUnauthenticatedException e ) {
+		} catch (PokerUnauthenticatedException | RemoteException e ) {
 			remoteExceptionHandler();
 		}
 	}
@@ -232,11 +235,11 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	@FXML protected void handleRaise(ActionEvent event) {
 		try {
 			timerTask.cancel();
-			model.raise(new BigDecimal(raiseAmount));
+			model.sendRaiseCommand(new BigDecimal(raiseAmount));
 			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
-		} catch (PokerUnauthenticatedException e) {
+		} catch (PokerUnauthenticatedException | RemoteException e) {
 			remoteExceptionHandler();
 		}
 	}
@@ -248,11 +251,11 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	@FXML protected void handleFold(ActionEvent event) {
 		try {
 			timerTask.cancel();
-			model.fold();
+			model.sendFoldCommand();
 			mainView.fold();
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
-		} catch (PokerUnauthenticatedException e) {
+		} catch (PokerUnauthenticatedException | RemoteException e) {
 			remoteExceptionHandler();
 		}
 	}
@@ -262,7 +265,10 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param event az esemény
 	 */
 	@FXML protected void handleQuit(ActionEvent event) {
-		timerTask.cancel();
+		if (timerTask != null) {
+			timerTask.cancel();
+		}
+		frameController.setTableListerFXML();
 		/*try {
 			model.quit();
 		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {

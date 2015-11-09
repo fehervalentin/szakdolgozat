@@ -1,6 +1,7 @@
 package hu.elte.bfw1p6.poker.client.model;
 
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.List;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
@@ -10,6 +11,11 @@ import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 
+/**
+ * A póker játék kliens oldali játék közbeni classic modelje.
+ * @author feher
+ *
+ */
 public class ClassicMainGameModel extends AbstractMainGameModel {
 
 	public ClassicMainGameModel(CommunicatorController communicatorController) {
@@ -17,62 +23,73 @@ public class ClassicMainGameModel extends AbstractMainGameModel {
 	}
 	
 	@Override
-	protected void tossBlind(Boolean bigBlind) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	protected void tossBlind(Boolean bigBlind) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		BigDecimal amount = pokerTable.getDefaultPot().divide(new BigDecimal(bigBlind ? 1 : 2));
 		myDebt = myDebt.subtract(amount);
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpBlindCommand(amount);
-		sendPlayerCommand(playerCommand);
+		sendCommandToTable(playerCommand);
 	}
 
 	@Override
-	public void call() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void sendCallCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		BigDecimal amount = BigDecimal.ZERO.add(myDebt);
 		myDebt = myDebt.subtract(amount);
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpCallCommand(amount);
-		sendPlayerCommand(playerCommand);
+		sendCommandToTable(playerCommand);
 	}
 
 	@Override
-	public void check() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void sendCheckCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpCheckCommand();
-		sendPlayerCommand(playerCommand);
+		sendCommandToTable(playerCommand);
 	}
 
 	@Override
-	public void raise(BigDecimal amount) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void sendRaiseCommand(BigDecimal amount) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpRaiseCommand(myDebt, amount);
-		sendPlayerCommand(playerCommand);
+		sendCommandToTable(playerCommand);
 	}
 
 	@Override
-	public void fold() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void sendFoldCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		int tempNth = youAreNth;
 		youAreNth = -1;
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpFoldCommand(tempNth);
-		sendPlayerCommand(playerCommand);
+		sendCommandToTable(playerCommand);
 	}
 
 	@Override
-	public void quit() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void sendQuitCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpQuitCommand(youAreNth);
-		sendPlayerCommand(playerCommand);	
+		sendCommandToTable(playerCommand);	
 	}
 
-	public void change(List<Integer> markedCards) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	/**
+	 * CHANGE típusú utasítás küldése a szervernek.
+	 * @param markedCards a cserélendő kártyák sorszámai
+	 * @throws PokerUnauthenticatedException
+	 * @throws PokerDataBaseException
+	 * @throws PokerUserBalanceException
+	 * @throws RemoteException
+	 */
+	public void sendChangeCommand(List<Integer> markedCards) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpChangeCommand(markedCards);
-		sendPlayerCommand(playerCommand);
+		sendCommandToTable(playerCommand);
 	}
 
+	/**
+	 * DEAL2 típusú utasítás érkezett a szervertől.
+	 * @param classicHouseCommand az utasítás
+	 */
 	public void receivedDeal2HouseCommand(ClassicHouseCommand classicHouseCommand) {
 		System.out.println("hanyszor hivom meg.................");
 		pokerSession.getPlayer().setCards(classicHouseCommand.getCards());
 	}
-
 }

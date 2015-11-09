@@ -166,10 +166,10 @@ public class ClassicMainGameController extends AbstractMainGameController {
 		List<Integer> markedCards = ((ClassicMainView)mainView).getMarkedCards();
 		try {
 			modifyChangeButtonDisability(true);
-			((ClassicMainGameModel)model).change(markedCards);
+			((ClassicMainGameModel)model).sendChangeCommand(markedCards);
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
-		} catch (PokerUnauthenticatedException e) {
+		} catch (PokerUnauthenticatedException | RemoteException e) {
 			remoteExceptionHandler();
 		}
 	}

@@ -1,6 +1,9 @@
 package hu.elte.bfw1p6.poker.client.controller;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
@@ -18,7 +21,7 @@ import javafx.scene.layout.AnchorPane;
  */
 public abstract class AbstractPokerClientController implements PokerClientController {
 	
-	private final String ERR_CONN = "A megszakadt a kommunikáció a szerverrel!";
+	private final String ERR_CONN = "A kommunikáció megszakadt a szerverrel!";
 	
 	@FXML private AnchorPane rootPane;
 
@@ -45,7 +48,11 @@ public abstract class AbstractPokerClientController implements PokerClientContro
 	public AbstractPokerClientController() {
 		errorAlert = new Alert(AlertType.ERROR);
 		successAlert = new Alert(AlertType.INFORMATION);
-		model = Model.getInstance();
+		try {
+			model = Model.getInstance();
+		} catch (MalformedURLException | RemoteException | NotBoundException e) {
+			remoteExceptionHandler();
+		}
 	}
 
 	public abstract void initialize(URL location, ResourceBundle resources);
