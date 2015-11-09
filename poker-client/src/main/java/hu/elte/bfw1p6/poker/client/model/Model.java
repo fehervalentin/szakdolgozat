@@ -102,10 +102,6 @@ public class Model {
 	public PokerPlayer getPlayer() {
 		return pokerSession.getPlayer();
 	}
-	
-	public PokerSession getPokerSession() {
-		return pokerSession;
-	}
 
 	public List<PokerPlayer> getUsers() throws PokerDataBaseException, RemoteException {
 		return pokerRemote.getUsers();

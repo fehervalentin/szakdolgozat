@@ -1,5 +1,9 @@
 package hu.elte.bfw1p6.poker.client.main;
 
+import java.rmi.NoSuchObjectException;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -8,6 +12,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+/**
+ * A kliens elindításáért felelős osztály.
+ * @author feher
+ *
+ */
 public class ClientMain extends Application {
 
 	private final String TITLE = "Poker";
@@ -29,15 +38,25 @@ public class ClientMain extends Application {
         stage.show();
     }
 
+    /**
+     * A kliens belépési pontja.
+     * @param args parancssori paraméterek
+     */
     public static void main(String[] args) {
         launch(args);
     }
     
-    private static EventHandler<WindowEvent> getFormCloseEvent() {
+    private EventHandler<WindowEvent> getFormCloseEvent() {
     	EventHandler<WindowEvent> closeEvent = new EventHandler<WindowEvent>() {
 
     		@Override
 			public void handle(WindowEvent event) {
+    			try {
+					UnicastRemoteObject.unexportObject(frameController, true);
+				} catch (NoSuchObjectException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				Platform.exit();
 			}
     		

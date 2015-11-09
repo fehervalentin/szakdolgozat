@@ -1,9 +1,20 @@
 package hu.elte.bfw1p6.poker.client.defaultvalues;
 
+/**
+ * A kliens oldali megjelenítéshez szükséges beégetett alapértékek.
+ * @author feher
+ *
+ */
 public class AbstractDefaultValues {
 	
+	/**
+	 * A kártyalapjaim pozíciói.
+	 */
 	public int[] MY_CARDS_POSITION;
 	
+	/**
+	 * A kártyalapjaim darabszáma.
+	 */
 	public int MY_CARDS_COUNT;
 	
 	/**
@@ -11,10 +22,19 @@ public class AbstractDefaultValues {
 	 */
 	public int[] CARD_B1FV_POINTS;
 	
+	/**
+	 * A kártyapakli helye.
+	 */
 	public int[] DECK_POINT = new int[]{430, 300};
 	
+	/**
+	 * A kártyák elérési útvonala.
+	 */
 	public final String CARD_IMAGE_PREFIX = "/images/cards/";
 	
+	/**
+	 * A chipek elérési útvonala.
+	 */
 	public final String CHIP_IMAGE_PREFIX = "/images/chips/";
 
 	/**
@@ -23,32 +43,49 @@ public class AbstractDefaultValues {
 	public final String DEALER_BUTTON_IMAGE_URL = "/images/dealer.png";
 
 	/**
-	 * Az alapprofilképek URL-je
+	 * Az alapprofilképek URL-je.
 	 */
 	public final String PROFILE_IMAGE_URL = "/images/profile.png";
 
 	/**
-	 * A kártyapakli kép URL-je
+	 * A kártyapakli kép URL-je.
 	 */
 	public final String DECK_IMAGE_URL = "/images/cards/deck.png";
 	
 
 	/**
-	 * Lefele fordított kártyaszél
-	 * <img src="../../../../../../../resources/images/cards/b1pl.png" />
+	 * Lefele fordított kártyaszél kép URL-je.
 	 */
 	public final String CARD_SIDE_IMAGE_URL = "/images/cards/b1pl.png";
+	
+	/**
+	 * Lefelé fordított egész kártya kép URL-je.
+	 */
 	public final String CARD_BACKFACE_IMAGE= "/images/cards/b1fv.png";
 	
+	/**
+	 * A dealer gomb helyei.
+	 */
 	public final int[] DEALER_BUTTON_POSITIONS = new int[]{580, 530, 320, 500, 265, 240, 720, 160, 1020, 200, 970, 505};
 	
+	/**
+	 * A zsetonok generálási középpontja.
+	 */
 	public final int[] CHIPS_POINT = new int[]{485, 465};
 	
+	/**
+	 * A zsetonok random "szórása".
+	 */
 	public final int CHIPS_EPSILON = 20;
 	
+	/**
+	 * A zsetonok mérete.
+	 */
 	public final int CHIPS_SIZE = 20;
 	
-	/* A többi profilkép helye. */
+	/**
+	 * A profilképek helyei.
+	 */
 	public final int[] PROFILE_POINTS = new int[]{628, 540, 188, 485, 232, 40, 631, 0, 1031, 45, 1084, 485};
 	
 	/**
@@ -76,6 +113,8 @@ public class AbstractDefaultValues {
 	 */
 	public final int CARD_SIDE_WIDTH = 12;
 	
+	/**
+	 * A dealer gomb mérete.
+	 */
 	public final int DEALER_BUTTON_SIZE = 40;
-	
 }

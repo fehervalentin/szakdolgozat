@@ -2,11 +2,8 @@ package hu.elte.bfw1p6.poker.client.model;
 
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
-import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
@@ -19,13 +16,31 @@ import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 
+/**
+ * A póker játék kliens oldali játék közbeni absztrakt modelje.
+ * @author feher
+ *
+ */
 public abstract class AbstractMainGameModel {
 
+	/**
+	 * A kliens sessionje.
+	 */
 	protected PokerSession pokerSession;
+	
+	/**
+	 * A szerver kliens oldali csonkja.
+	 */
 	protected PokerRemote pokerRemote;
 
+	/**
+	 * Pókertábla entitás.
+	 */
 	protected PokerTable pokerTable;
 	
+	/**
+	 * A szerver-kliens komminukációért felelős objektum.
+	 */
 	protected CommunicatorController communicatorController;
 
 	/**
@@ -39,15 +54,15 @@ public abstract class AbstractMainGameModel {
 	protected int players;
 
 	/**
-	 * A tartozásom az asztal felé, amit <b>CALL</b> vagy <b>RAISE</b> esetén meg kell adnom.
+	 * A tartozásom az asztal felé, amit CALL vagy RAISE esetén meg kell adnom.
 	 */
 	protected BigDecimal myDebt;
 	
 	public AbstractMainGameModel(CommunicatorController communicatorController) {
-		this.pokerSession = Model.getInstance().getPokerSession();
+		this.pokerSession = RMIRepository.getInstance().getPokerSession();
 		this.pokerRemote = RMIRepository.getInstance().getPokerRemote();
 		this.youAreNth = -1;
-		this.pokerTable = ConnectTableHelper.getInstance().getPokerTable();
+		this.pokerTable = Model.getInstance().getParamPokerTable();
 		this.myDebt = pokerTable.getDefaultPot();
 		this.communicatorController = communicatorController;
 

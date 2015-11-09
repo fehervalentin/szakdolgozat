@@ -8,7 +8,6 @@ import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
-import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
@@ -106,7 +105,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 		if (table == null) {
 			showErrorAlert(NO_TABLE_SELECTED_MESSAGE);
 		} else {
-			ConnectTableHelper.getInstance().setPokerTable(table);
+			model.setParameterPokerTable(table);
 			removeObserver();
 			frameController.setMainGameFXML(table.getPokerType());
 		}
