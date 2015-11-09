@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
 
-import hu.elte.bfw1p6.poker.client.controller.HoldemDefaultValues;
+import hu.elte.bfw1p6.poker.client.defaultvalues.HoldemDefaultValues;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import javafx.application.Platform;

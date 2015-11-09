@@ -15,14 +15,13 @@ import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 
-public class ProfileManagerController implements Initializable, PokerClientController {
+public class ProfileManagerController implements PokerClientController {
 
 	private final String DIFF_PW_MSG = "A két jelszó nem egyezik!";
 	private final String CHANGED_PW_MSG = "Sikeresen megváltoztattad a jelszavadat!";

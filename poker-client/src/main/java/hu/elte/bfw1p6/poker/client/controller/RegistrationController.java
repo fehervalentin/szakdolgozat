@@ -10,7 +10,6 @@ import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -20,7 +19,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class RegistrationController implements Initializable, PokerClientController {
+public class RegistrationController implements PokerClientController {
 	
 	private final String REG_OK_MSG = "Sikeresen regisztráltál!";
 	private final String REG_ERR_DIFF_PW = "A két jelszó nem egyezik!";

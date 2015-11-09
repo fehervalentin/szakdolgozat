@@ -8,7 +8,7 @@ import java.util.Random;
 import com.cantero.games.poker.texasholdem.Card;
 import com.cantero.games.poker.texasholdem.CardSuitEnum;
 
-import hu.elte.bfw1p6.poker.client.controller.AbstractDefaultValues;
+import hu.elte.bfw1p6.poker.client.defaultvalues.AbstractDefaultValues;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
@@ -299,9 +299,7 @@ public abstract class AbstractMainView {
 			public void run() {
 				hideHouseCards();
 				loadMyCards(houseCommand);
-				//KIKOVETKEZIK = (HOLVANADEALERGOMB + clientsCount + 1) % clientsCount;
 				nextPlayer = ultimateFormula(houseCommand.getWhosOn());
-				//				NEXT_PLAYER = (DEALER_BUTTON_POSITION + 3) % clientsCount;
 				System.out.println("Dealer gomb helye: " + DEALER_BUTTON_POSITION);
 				System.out.println("Hanyan vagyunk: " + clientsCount);
 				System.out.println("Ki a következő játékos (ki lett beszinezve): " + nextPlayer);
@@ -497,5 +495,9 @@ public abstract class AbstractMainView {
 		for (ImageView imageView : myCards) {
 			imageView.setOpacity(opacity);
 		}
+	}
+
+	public int getYouAreNth() {
+		return youAreNth;
 	}
 }

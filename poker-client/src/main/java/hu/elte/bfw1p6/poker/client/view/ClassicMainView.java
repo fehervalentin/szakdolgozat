@@ -3,7 +3,7 @@ package hu.elte.bfw1p6.poker.client.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import hu.elte.bfw1p6.poker.client.controller.ClassicDefaultValues;
+import hu.elte.bfw1p6.poker.client.defaultvalues.ClassicDefaultValues;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.cantero.games.poker.texasholdem.Card;
 
@@ -12,6 +14,8 @@ import hu.elte.bfw1p6.poker.client.model.HoldemMainGameModel;
 import hu.elte.bfw1p6.poker.client.view.HoldemMainView;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
+import hu.elte.bfw1p6.poker.command.holdem.type.HoldemHouseCommandType;
+import hu.elte.bfw1p6.poker.command.holdem.type.HoldemPlayerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import javafx.application.Platform;
@@ -24,6 +28,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	public void initialize(URL location, ResourceBundle resources) {
 		errorAlert = new Alert(AlertType.ERROR);
 		mainView = new HoldemMainView(mainGamePane);
+		this.automateExecution = new Timer();
 
 		try {
 			commController = new CommunicatorController(this);
@@ -88,42 +93,56 @@ public class HoldemMainGameController extends AbstractMainGameController {
 				throw new IllegalArgumentException();
 			}
 			}
+			if (houseHoldemCommand.getHouseCommandType() != HoldemHouseCommandType.BLIND) {
+				if(houseHoldemCommand.getWhosOn() == mainView.getYouAreNth()) {
+					timerTask = createTimerTask();
+					automateExecution.schedule(timerTask, delay);
+				}
+			}
 		} else if (updateMsg instanceof HoldemPlayerCommand) {
-			HoldemPlayerCommand playerHoldemCommand = (HoldemPlayerCommand)updateMsg;
-			System.out.println(playerHoldemCommand.getSender() + " játékos utasítást küldött: " + playerHoldemCommand.getPlayerCommandType());
+			HoldemPlayerCommand holdemPlayerCommand = (HoldemPlayerCommand)updateMsg;
+			System.out.println(holdemPlayerCommand.getSender() + " játékos utasítást küldött: " + holdemPlayerCommand.getPlayerCommandType());
 			
-			switch (playerHoldemCommand.getPlayerCommandType()) {
+			switch (holdemPlayerCommand.getPlayerCommandType()) {
 			case BLIND: {
-				receivedBlindPlayerCommand(playerHoldemCommand);
+				receivedBlindPlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			case CALL: {
-				receivedCallPlayerCommand(playerHoldemCommand);
+				receivedCallPlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			case CHECK: {
-				receivedCheckPlayerCommand(playerHoldemCommand);
+				receivedCheckPlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			case FOLD: {
-				receivedFoldPlayerCommand(playerHoldemCommand);
+				receivedFoldPlayerCommand(holdemPlayerCommand);
 //				modifyButtonVisibilities(playerHoldemCommand);
 				break;
 			}
 			case RAISE: {
-				System.out.println("A RAISE mértéke: " + playerHoldemCommand.getRaiseAmount());
-				receivedRaisePlayerCommand(playerHoldemCommand);
+				System.out.println("A RAISE mértéke: " + holdemPlayerCommand.getRaiseAmount());
+				receivedRaisePlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			case QUIT: {
-				receivedQuitPlayerCommand(playerHoldemCommand);
+				receivedQuitPlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			default: {
 				break;
 			}
 			}
-			modifyButtonsDisability(playerHoldemCommand);
+			if (holdemPlayerCommand.getPlayerCommandType() != HoldemPlayerCommandType.BLIND && holdemPlayerCommand.getPlayerCommandType() != HoldemPlayerCommandType.FOLD) {
+				System.out.println("Sajatom: " + holdemPlayerCommand.getWhosOn() + " " + mainView.getYouAreNth());
+				if(holdemPlayerCommand.getWhosOn() == mainView.getYouAreNth()) {
+					System.out.println("Új taszkot hoztam létre!");
+					timerTask = createTimerTask();
+					automateExecution.schedule(timerTask, delay);
+				}
+			}
+			modifyButtonsDisability(holdemPlayerCommand);
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -140,6 +159,21 @@ public class HoldemMainGameController extends AbstractMainGameController {
 				}
 			}
 		});
+	}
+	
+	@Override
+	protected TimerTask createTimerTask() {
+		return new TimerTask() {
+			
+			@Override
+			public void run() {
+				if (!checkButton.isDisable()) {
+					checkButton.fire();
+				} else {
+					foldButton.fire();
+				}
+			}
+		};
 	}
 
 	private void receivedFlopHouseCommand(HoldemHouseCommand holdemHouseCommand) {

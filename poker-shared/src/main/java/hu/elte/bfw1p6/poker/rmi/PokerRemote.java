@@ -41,14 +41,21 @@ public interface PokerRemote extends Remote {
 
 	/**
 	 * Adott felhasználói fiókhoz tartozó jelszó cseréje
-	 * @param a kliens egyedi session azonosítója
-	 * @param username a felhasználói név
+	 * @param uuid a kliens egyedi session azonosítója
 	 * @param oldPassword a régi jelszó
 	 * @param newPassword az új jelszó
 	 * @throws RemoteException
 	 */
 	void modifyPassword(UUID uuid, String oldPassword, String newPassword) throws RemoteException, PokerDataBaseException, PokerInvalidPassword, PokerUnauthenticatedException;
 	
+	/**
+	 * Lekérdezi a kliens egyenlegét.
+	 * @param uuid a kliens egyedi session azonosítója
+	 * @return a kliens egyenlege
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 * @throws PokerUnauthenticatedException
+	 */
 	BigDecimal refreshBalance(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
 	
 	
@@ -114,15 +121,32 @@ public interface PokerRemote extends Remote {
 
 	/**
 	 * Kijelentkezés a póker játékból
-	 * @param a kliens egyedi session azonosítója
+	 * @param uuid a kliens egyedi session azonosítója
 	 * @throws RemoteException
 	 */
 	void logout(UUID uuid) throws RemoteException;
 
 	boolean shutDown(UUID uuid) throws RemoteException, PokerInvalidUserException;
 
+	/**
+	 * Lekérdezheti, hogy az adott felhasználó admin jogkörrel rendelkezik-e.
+	 * @param uuid a kliens egyedi session azonosítója
+	 * @return ha a felhasználó admin jogokkal rendelkezik, akkor true, különben false
+	 * @throws RemoteException
+	 * @throws PokerUnauthenticatedException
+	 * @throws PokerDataBaseException
+	 */
 	boolean isAdmin(UUID uuid) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException;
 
+	/**
+	 * Az összes játéktáblát adja vissza.
+	 * @param uuid a kliens egyedi session azonosítója
+	 * @param observer a beregisztrálandó kliens
+	 * @return az adatbázisban megtalálható összes játéktábla
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 * @throws PokerUnauthenticatedException
+	 */
 	List<PokerTable> registerTableViewObserver(UUID uuid, RemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
 
 	void removeTableViewObserver(RemoteObserver observer) throws RemoteException;
@@ -131,5 +155,11 @@ public interface PokerRemote extends Remote {
 	
 	void connectToTable(UUID uuid, PokerTable t, RemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException;
 
+	/**
+	 * Az összes regisztrált felhasználót kérdezi le.
+	 * @return az összes regiszrált felhasználó
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 */
 	List<PokerPlayer> getUsers() throws RemoteException, PokerDataBaseException;
 }

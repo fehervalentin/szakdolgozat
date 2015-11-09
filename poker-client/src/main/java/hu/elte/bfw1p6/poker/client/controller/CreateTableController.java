@@ -17,7 +17,6 @@ import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -25,51 +24,38 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class CreateTableController implements Initializable, PokerClientController {
+/**
+ * Új poker asztal entitást létrehozó controller.
+ * @author feher
+ *
+ */
+public class CreateTableController extends AbstractPokerClientController {
 
 	private final String SUCC_CREATE_TABLE_MSG = "A táblát sikeresen létrehoztad!";
 	private final String SUCC_MODIFY_TABLE_MSG = "A táblát sikeresen modosítottad!";
 	private final String ERR_TEXTFIELD_TEXT = "Hibás szám formátum a %s mezőben!";
 	private final String ERR_STYLECLASS = "hiba";
 
-	@FXML
-	private AnchorPane rootPane;
+	@FXML private AnchorPane rootPane;
+	
+	@FXML private ComboBox<String> gameTypeComboBox;
 
-	@FXML
-	private TextField tableNameTextField;
+	@FXML private TextField tableNameTextField;
 
-	@FXML ComboBox<String> gameTypeComboBox;
+	@FXML private TextField maxTimeField;
 
-	@FXML
-	private TextField maxTimeField;
+	@FXML private TextField maxPlayerTextField;
 
-	@FXML
-	private TextField maxPlayerTextField;
+	@FXML private TextField defaultPotField;
 
-	@FXML
-	private TextField defaultPotField;
+	@FXML private TextField maxBetTextField;
 
-	@FXML
-	private TextField maxBetTextField;
+	@FXML private Button createTableButton;
 
-	@FXML
-	private Button createTableButton;
-
-	@FXML
-	private Button backButton;
-
-	private Model model;
-
-	private FrameController frameController;
-
-	private Alert errorAlert;
-
-	private Alert successAlert;
+	@FXML private Button backButton;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		errorAlert = new Alert(AlertType.ERROR);
-		successAlert = new Alert(AlertType.INFORMATION);
 
 		model = Model.getInstance();
 		fillPokerTypes();

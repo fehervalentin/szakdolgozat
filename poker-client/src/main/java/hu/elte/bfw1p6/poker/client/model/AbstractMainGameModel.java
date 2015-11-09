@@ -2,6 +2,8 @@ package hu.elte.bfw1p6.poker.client.model;
 
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
