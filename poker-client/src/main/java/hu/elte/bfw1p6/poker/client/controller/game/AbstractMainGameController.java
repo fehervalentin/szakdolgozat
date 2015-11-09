@@ -11,8 +11,8 @@ import com.cantero.games.poker.texasholdem.Card;
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
-import hu.elte.bfw1p6.poker.client.controller.main.PokerObserverController;
 import hu.elte.bfw1p6.poker.client.model.AbstractMainGameModel;
+import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.client.view.AbstractMainView;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
@@ -34,7 +34,7 @@ import javafx.scene.layout.AnchorPane;
  * @author feher
  *
  */
-public abstract class AbstractMainGameController implements PokerClientController, PokerObserverController {
+public abstract class AbstractMainGameController implements PokerClientController, PokerRemoteObserver {
 
 	protected final String ERR_CONN = "A megszakadt a kommunikáció a szerverrel!";
 	
@@ -110,11 +110,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	protected abstract TimerTask createTimerTask();
 
 	public abstract void initialize(URL location, ResourceBundle resources);
-
-	/**
-	 * A CommunicationController hívja, ha hálózati kommunikáció történt.
-	 */
-	public abstract void updateMe(Object updateMsg);
 
 	/**
 	 * A szerver BLIND típusú utasítást küldött.

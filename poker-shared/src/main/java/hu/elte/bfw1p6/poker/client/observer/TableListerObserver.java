@@ -12,9 +12,9 @@ public class TableListerObserver implements Observer, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private RemoteObserver ro = null;
+	private PokerRemoteObserver ro = null;
 
-	public TableListerObserver(RemoteObserver ro) {
+	public TableListerObserver(PokerRemoteObserver ro) {
 		this.ro = ro;
 	}
 
@@ -35,7 +35,7 @@ public class TableListerObserver implements Observer, Serializable {
 		}
 	}
 	
-	public RemoteObserver getRo() {
+	public PokerRemoteObserver getRo() {
 		return ro;
 	}
 

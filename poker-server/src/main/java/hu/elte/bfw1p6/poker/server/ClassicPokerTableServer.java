@@ -8,7 +8,7 @@ import java.util.List;
 import com.cantero.games.poker.texasholdem.Card;
 import com.cantero.games.poker.texasholdem.IPlayer;
 
-import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
+import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
@@ -100,7 +100,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	}
 
 	@Override
-	protected void receivedPlayerCommand(RemoteObserver client, PlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	protected void receivedPlayerCommand(PokerRemoteObserver client, PlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		// ha valid klienstől érkezik üzenet, azt feldolgozzuk, körbeküldjük
 		if (clients.contains(client)) {
 			ClassicPlayerCommand classicPlayerCommand = (ClassicPlayerCommand)playerCommand;

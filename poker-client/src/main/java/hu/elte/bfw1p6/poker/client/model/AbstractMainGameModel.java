@@ -7,7 +7,7 @@ import java.util.TimerTask;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
-import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
+import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
@@ -62,7 +62,7 @@ public abstract class AbstractMainGameModel {
 		return pokerSession.getPlayer().getBalance();
 	}
 	
-	public void connectToTable(RemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException {
+	public void connectToTable(PokerRemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException {
 		pokerRemote.connectToTable(pokerSession.getId(), pokerTable, observer);
 	}
 

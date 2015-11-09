@@ -16,7 +16,7 @@ import java.util.UUID;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
+import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableListerObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
@@ -201,13 +201,13 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public List<PokerTable> registerTableViewObserver(UUID uuid, RemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+	public List<PokerTable> registerTableViewObserver(UUID uuid, PokerRemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		TableListerObserver tvo = new TableListerObserver(observer);
 		this.addObserver(tvo);
 		return getTables(uuid);
 	}
 
-	private TableListerObserver removeTVO(RemoteObserver observer) {
+	private TableListerObserver removeTVO(PokerRemoteObserver observer) {
 		for (TableListerObserver tableListerObserver : tlos) {
 			if (tableListerObserver.getRo().equals(observer)) {
 				return tableListerObserver;
@@ -217,7 +217,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public void removeTableViewObserver(RemoteObserver observer) {
+	public void removeTableViewObserver(PokerRemoteObserver observer) {
 		//TableListerObserver wp = tlos.get(tlos.indexOf((TableListerObserver)observer));
 		TableListerObserver tlo = removeTVO(observer);
 		tlos.remove(tlo);
@@ -225,14 +225,14 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	}
 
 	@Override
-	public void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void sendPlayerCommand(UUID uuid, PokerTable t, PokerRemoteObserver client, PlayerCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
 		if (sessionService.isAuthenticated(uuid)) {
 			pokerTableservers.get(t.getName()).receivedPlayerCommand(client, playerCommand);
 		}
 	}
 
 	@Override
-	public void connectToTable(UUID uuid, PokerTable t, RemoteObserver client) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException {
+	public void connectToTable(UUID uuid, PokerTable t, PokerRemoteObserver client) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException {
 		if (sessionService.isAuthenticated(uuid)) {
 			AbstractPokerTableServer pts = pokerTableservers.get(t.getName());
 			pts.join(client, sessionService.lookUpUserName(uuid));

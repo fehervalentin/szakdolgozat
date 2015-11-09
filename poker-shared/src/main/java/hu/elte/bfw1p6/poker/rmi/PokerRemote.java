@@ -6,7 +6,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.UUID;
 
-import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
+import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
@@ -147,13 +147,13 @@ public interface PokerRemote extends Remote {
 	 * @throws PokerDataBaseException
 	 * @throws PokerUnauthenticatedException
 	 */
-	List<PokerTable> registerTableViewObserver(UUID uuid, RemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
+	List<PokerTable> registerTableViewObserver(UUID uuid, PokerRemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
 
-	void removeTableViewObserver(RemoteObserver observer) throws RemoteException;
+	void removeTableViewObserver(PokerRemoteObserver observer) throws RemoteException;
 	
-	void sendPlayerCommand(UUID uuid, PokerTable t, RemoteObserver client, PlayerCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
+	void sendPlayerCommand(UUID uuid, PokerTable t, PokerRemoteObserver client, PlayerCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
 	
-	void connectToTable(UUID uuid, PokerTable t, RemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException;
+	void connectToTable(UUID uuid, PokerTable t, PokerRemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException;
 
 	/**
 	 * Az összes regisztrált felhasználót kérdezi le.

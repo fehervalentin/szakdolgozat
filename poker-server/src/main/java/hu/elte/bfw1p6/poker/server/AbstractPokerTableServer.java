@@ -9,7 +9,7 @@ import java.util.List;
 import com.cantero.games.poker.texasholdem.Card;
 
 import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
-import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
+import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
@@ -42,7 +42,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	/**
 	 * Kliensek (observerek).
 	 */
-	protected List<RemoteObserver> clients;
+	protected List<PokerRemoteObserver> clients;
 
 	/**
 	 * Kártyapakli.
@@ -111,7 +111,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * @param userName a csatlakozni kívánó játékos neve
 	 * @throws PokerTooMuchPlayerException
 	 */
-	public synchronized void join(RemoteObserver client, String userName) throws PokerTooMuchPlayerException {
+	public synchronized void join(PokerRemoteObserver client, String userName) throws PokerTooMuchPlayerException {
 		if (!clients.contains(client)) {
 			if (clients.size() >= pokerTable.getMaxPlayers()) {
 				throw new PokerTooMuchPlayerException(ERR_TABLE_FULL);
@@ -276,7 +276,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		votedPlayers = 1;
 	}
 	
-	protected void receivedQuitPlayerCommand(RemoteObserver client, PlayerCommand playerComand) {
+	protected void receivedQuitPlayerCommand(PokerRemoteObserver client, PlayerCommand playerComand) {
 		System.out.println("WhosQuit param: " + playerComand.getWhosQuit());
 		System.out.println("Kliens visszakeresve: " + clients.indexOf(client));
 		clients.remove(client);
@@ -332,7 +332,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 
 	protected abstract void nextRound() throws RemoteException;
 
-	protected abstract void receivedPlayerCommand(RemoteObserver client, PlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
+	protected abstract void receivedPlayerCommand(PokerRemoteObserver client, PlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
 	
 	protected abstract void prepareNewRound();
 }

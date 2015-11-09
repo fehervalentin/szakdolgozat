@@ -76,7 +76,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	}
 
 	@Override
-	public void updateMe(Object updateMsg) {
+	public void update(Object updateMsg) {
 		if (updateMsg instanceof ClassicHouseCommand) {
 			ClassicHouseCommand classicHouseCommand = (ClassicHouseCommand)updateMsg;
 			System.out.println("A ház utasítást küldött: " + classicHouseCommand.getHouseCommandType());

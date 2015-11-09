@@ -3,7 +3,7 @@ package hu.elte.bfw1p6.poker.client.model;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import hu.elte.bfw1p6.poker.client.observer.RemoteObserver;
+import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.client.repository.RMIRepository;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
@@ -62,11 +62,11 @@ public class Model {
 		return tables;
 	}
 
-	public List<PokerTable> registerTableViewObserver(RemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+	public List<PokerTable> registerTableViewObserver(PokerRemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		return pokerRemote.registerTableViewObserver(pokerSession.getId(), observer);
 	}
 
-	public void removeTableViewObserver(RemoteObserver observer) throws RemoteException {
+	public void removeTableViewObserver(PokerRemoteObserver observer) throws RemoteException {
 		pokerRemote.removeTableViewObserver(observer);
 	}
 

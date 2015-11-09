@@ -8,8 +8,8 @@ import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
-import hu.elte.bfw1p6.poker.client.controller.main.PokerObserverController;
 import hu.elte.bfw1p6.poker.client.model.helper.ConnectTableHelper;
+import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
@@ -26,7 +26,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
  * @author feher
  *
  */
-public class TableListerController extends AbstractPokerClientController implements PokerObserverController {
+public class TableListerController extends AbstractPokerClientController implements PokerRemoteObserver {
 
 	private final String NO_TABLE_SELECTED_MESSAGE = "Nem választottál ki egy táblát sem!";
 	private final String SUCC_TABLE_DELETE_MSG = "Sikeresen kitörölted a táblát!";
@@ -196,9 +196,9 @@ public class TableListerController extends AbstractPokerClientController impleme
 		}
 	}
 
-	@Override
 	@SuppressWarnings("unchecked")
-	public void updateMe(Object updateMsg) {
+	@Override
+	public void update(Object updateMsg) throws RemoteException {
 		List<PokerTable> tables = (List<PokerTable>)updateMsg;
 		tableView.getItems().setAll(tables);
 		System.out.println("MEGKAPTAM A TÁBLÁKAT");

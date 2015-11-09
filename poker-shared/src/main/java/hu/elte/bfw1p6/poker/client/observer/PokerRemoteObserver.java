@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
  * @author feher
  *
  */
-public interface RemoteObserver extends Remote {
+public interface PokerRemoteObserver extends Remote {
 
 	/**
 	 * A szerver ezen metódus hívásán keresztül tud a kliensekkel kommunikálni.
