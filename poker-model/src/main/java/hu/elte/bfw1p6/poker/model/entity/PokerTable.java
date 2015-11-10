@@ -1,12 +1,16 @@
 package hu.elte.bfw1p6.poker.model.entity;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class PokerTable implements EntityWithId, Serializable {
+/**
+ * A póker asztalokat reprezentáló entitás.
+ * @author feher
+ *
+ */
+public class PokerTable implements EntityWithId {
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = -4600266588149030979L;
+	
 	private Integer id;
 	private String name;
 	private PokerType pokerType;

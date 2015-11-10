@@ -1,11 +1,15 @@
 package hu.elte.bfw1p6.poker.model.entity;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 import com.cantero.games.poker.texasholdem.Player;
 
-public class PokerPlayer extends Player implements Serializable {
+/**
+ * Olyan speciális objektum, amelyet leküldhetünk a kliensnek, amely egy User entitást reprezentál.
+ * @author feher
+ *
+ */
+public class PokerPlayer extends Player {
 
 	private static final long serialVersionUID = -7074017817656740948L;
 

@@ -2,9 +2,14 @@ package hu.elte.bfw1p6.poker.model.entity;
 
 import java.math.BigDecimal;
 
+/**
+ * A ténylegesen letárolandó felhasználói fiók.
+ * @author feher
+ *
+ */
 public class User extends PokerPlayer implements EntityWithId {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 8433545627454578662L;
 
 	private Integer id;
 
@@ -12,7 +17,7 @@ public class User extends PokerPlayer implements EntityWithId {
 	 * A felhasználó hashelt jelszava.
 	 */
 	private String password;
-	
+
 	/**
 	 * A felhasználó admin-e.
 	 */
@@ -21,19 +26,19 @@ public class User extends PokerPlayer implements EntityWithId {
 	public User(String username) {
 		super(username);
 	}
-	
+
 	public User() {
-		
+
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public void setRegDate(long regDate) {
 		this.regDate = regDate;
 	}
-	
+
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
@@ -45,15 +50,15 @@ public class User extends PokerPlayer implements EntityWithId {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
 	}
-	
+
 	public Boolean getAdmin() {
 		return admin;
 	}
-	
+
 	public PokerPlayer getPlayer() {
 		PokerPlayer p = new PokerPlayer();
 		p.userName = this.userName;
