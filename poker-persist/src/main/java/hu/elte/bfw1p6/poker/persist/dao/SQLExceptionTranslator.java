@@ -6,10 +6,14 @@ import java.util.Iterator;
 
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 
+/**
+ * Az adatbázisból érkező egyedi megszorítások megsértéséből fakadó hibákat fordítja át.
+ * @author feher
+ *
+ */
 public class SQLExceptionTranslator {
-	private static SQLExceptionTranslator instance = null;
 	
-	private final int IGNORE_ERR_CODE = 45000;
+	private static SQLExceptionTranslator instance = null;
 	
 	private HashMap<String, String> mappings;
 
@@ -39,11 +43,8 @@ public class SQLExceptionTranslator {
 		mappings.put("UQ_POKER_TYPES_NAME", "Ilyen nevű játéktípus már létezik az adatbázisban!");
 	}
 	
-	public PokerDataBaseException interceptException(SQLException ex) {
-		/*if (ex.getErrorCode() == IGNORE_ERR_CODE) {
-			return new PokerDataBaseException(ex.getMessage());
-		}*/
-		String sqlMsg = ex.getMessage();
+	public PokerDataBaseException interceptException(SQLException e) {
+		String sqlMsg = e.getMessage();
 		String pokerMsg = lookUpMsg(sqlMsg);
 		return new PokerDataBaseException(pokerMsg);
 	}

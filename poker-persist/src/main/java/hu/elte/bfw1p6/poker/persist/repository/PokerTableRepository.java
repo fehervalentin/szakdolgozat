@@ -13,6 +13,11 @@ import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.persist.dao.DBManager;
 import hu.elte.bfw1p6.poker.persist.dao.SQLExceptionTranslator;
 
+/**
+ * A póker játék táblák letárolásáért felelős osztály.
+ * @author feher
+ *
+ */
 public class PokerTableRepository {
 	private static final String TABLE_NAME = "poker_tables";
 

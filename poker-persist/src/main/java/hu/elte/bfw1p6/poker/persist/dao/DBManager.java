@@ -2,10 +2,22 @@ package hu.elte.bfw1p6.poker.persist.dao;
 
 import java.sql.*;
 
+/**
+ * Az adatbázishoz való csatlakozást biztosító osztály.
+ * @author feher
+ *
+ */
 public final class DBManager {
 
 	private static DBManager instance = null;
 	private Connection con = null;
+	
+	private static final String IP = "127.0.0.1";
+	private static final String DATABASE_NAME = "pokerdb";
+	private static final String USERNAME="root";
+	private static final String PASSWORD="1234";
+	
+	private static final String strCon = "jdbc:mysql://" + IP + "/" + DATABASE_NAME + "?user=" + USERNAME + "&password=" + PASSWORD;
 
 	public DBManager() {
 		con = getMySQLConnection();
@@ -29,11 +41,9 @@ public final class DBManager {
 		Connection con = null;
 
 		try {
-
-			String strCon = "jdbc:mysql://127.0.0.1/pokerdb?user=root&password=1234";
 			con = DriverManager.getConnection(strCon);
-		} catch (SQLException se) {
-			System.out.println(se);
+		} catch (SQLException e) {
+			System.err.println(e);
 		}
 		return con;
 	}
