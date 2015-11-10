@@ -18,37 +18,101 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * A kliens játék közbeni absztrakt megjelenítését reprezentáló osztály.
+ * @author feher
+ *
+ */
 public abstract class AbstractMainView {
 
+	/**
+	 * Beégetett, alapértékek, amelyek a megjelenítéshez kellenek.
+	 */
 	protected AbstractDefaultValues defaultValues;
 
+	/**
+	 * A saját kártyalapjaim.
+	 */
 	protected List<ImageView> myCards;
+
+	/**
+	 * A nyertes kártyalapok.
+	 */
 	protected List<ImageView> winnerCards;
+
+	/**
+	 * Profilképek.
+	 */
 	protected List<ImageView> profileImages;
+
+	/**
+	 * Az ellenfelek lefordított egész kártyái.
+	 */
 	protected List<ImageView> opponentsCards;
+
+	/**
+	 * Az ellenfelek lefordított kártyaszélei.
+	 */
 	protected List<ImageView> opponentsCardSides;
+
+	/**
+	 * A zsetonok.
+	 */
 	protected List<ImageView> chips;
 
+	/**
+	 * A játékosok nevei.
+	 */
 	protected List<Label> userNameLabels;
 
+	/**
+	 * Az egyenlegem.
+	 */
 	protected Label myBalance;
 
+	/**
+	 * Az osztó gomb.
+	 */
 	protected ImageView dealerButtonImageView;
 
+	/**
+	 * A színtérgráf gyökere.
+	 */
 	protected AnchorPane mainGamePane;
 
+	/**
+	 * Hány játékossal játszom egy asztalnál.
+	 */
 	protected int clientsCount;
 
+	/**
+	 * Random objektum.
+	 */
 	protected Random random;
 
+	/**
+	 * Az osztó gomb elhelyezkedése az asztalon.
+	 */
 	protected int DEALER_BUTTON_POSITION;
 
+	/**
+	 * A beszínezett játékos.
+	 */
 	protected int coloredPlayer = -1;
 
+	/**
+	 * A következő játékos.
+	 */
 	protected int nextPlayer = -1;
 
+	/**
+	 * Hanyadik vagy a körben.
+	 */
 	protected int youAreNth;
 
+	/**
+	 * Fixen hanyadik játékosként vagy beülve az asztalhoz.
+	 */
 	protected int fixSitPosition;
 
 	public AbstractMainView(AnchorPane mainGamePane, AbstractDefaultValues defaultValues) {
@@ -88,7 +152,6 @@ public abstract class AbstractMainView {
 	 */
 	protected void setProfileImages() {
 		Image profileImage = new Image(defaultValues.PROFILE_IMAGE_URL);
-		// kettesével kell menni (x,y) párok miatt
 		for (int i = 0; i < defaultValues.PROFILE_COUNT * 2; i+=2) {
 			ImageView iv = new ImageView(profileImage);
 			iv.setLayoutX(defaultValues.PROFILE_POINTS[i]);
@@ -156,16 +219,13 @@ public abstract class AbstractMainView {
 	}
 
 	/**
-	 * A userneveket címkéket generálja le.
+	 * A usernevek címkéit generálja le.
 	 */
 	protected void setLabels() {
-		// kettesével kell menni (x,y) párok miatt
 		for (int i = 0; i < defaultValues.PROFILE_COUNT * 2; i+=2) {
 			Label label = new Label();
 			label.setLayoutX(defaultValues.PROFILE_POINTS[i]);
 			label.setLayoutY(defaultValues.PROFILE_POINTS[i+1]);
-			//			iv.fitHeightProperty().set(defaultValues.PROFILE_SIZE);
-			//			iv.fitWidthProperty().set(defaultValues.PROFILE_SIZE);
 			userNameLabels.add(label);
 			mainGamePane.getChildren().add(label);
 		}
@@ -190,7 +250,7 @@ public abstract class AbstractMainView {
 	 * @return a megfeleltetett érték
 	 */
 	protected int mapCard(Card card) {
-		return 52 - (card.getRankToInt() * CardSuitEnum.values().length) - (CardSuitEnum.values().length - card.getSuit().ordinal() - 1);
+		return defaultValues.CARDS_COUNT - (card.getRankToInt() * CardSuitEnum.values().length) - (CardSuitEnum.values().length - card.getSuit().ordinal() - 1);
 	}
 
 	/**
@@ -242,7 +302,7 @@ public abstract class AbstractMainView {
 	}
 
 	/**
-	 * A paramétert konvertálja a megfelelő játékos adott táblanézet szerint. (Mindegyik játékos máshigy látja a táblát.)
+	 * A paramétert konvertálja a megfelelő játékos adott táblanézet szerint. (Mindegyik játékos máshogy látja a táblát.)
 	 * @param whosOn a paraméter
 	 * @return
 	 */
@@ -253,7 +313,7 @@ public abstract class AbstractMainView {
 	}
 
 	/**
-	 * A szerver BLIND utasítást küldött.
+	 * BLIND típusú utasítás érkezett a szervertől.
 	 * @param houseCommand az utasítás
 	 */
 	public void receivedBlindHouseCommand(HouseCommand houseCommand) {
@@ -289,7 +349,7 @@ public abstract class AbstractMainView {
 	}
 
 	/**
-	 * A szerver DEAL utasítást küldött.
+	 * DEAL típusú utasítás érkezett a szervertől.
 	 * @param houseCommand az utasítás
 	 */
 	public void receivedDealHouseCommand(HouseCommand houseCommand) {
@@ -321,7 +381,7 @@ public abstract class AbstractMainView {
 	}
 
 	/**
-	 * Egy kliens RAISE utasítást küldött.
+	 * RAISE típusú utasítás érkezett egy játékostól.
 	 * @param playerCommand az utasítés
 	 */
 	public void receivedRaisePlayerCommand(PlayerCommand playerCommand) {
@@ -331,7 +391,7 @@ public abstract class AbstractMainView {
 	}
 
 	/**
-	 * Egy kliens BLIND utasítást küldött.
+	 * BLIND típusú utasítás érkezett egy játékostól.
 	 * @param playerCommand az utasítás
 	 */
 	public void receivedBlindPlayerCommand(PlayerCommand playerCommand) {
@@ -339,7 +399,7 @@ public abstract class AbstractMainView {
 	}
 
 	/**
-	 * Egy kliens CALL utasítást küldött.
+	 * CALL típusú utasítás érkezett egy játékostól.
 	 * @param playerCommand az utasítás
 	 */
 	public void receivedCallPlayerCommand(PlayerCommand playerCommand) {
@@ -348,7 +408,7 @@ public abstract class AbstractMainView {
 	}
 
 	/**
-	 * Egy kliens CHECK utasítást küldött.
+	 * CHECK típusú utasítás érkezett egy játékostól.
 	 * @param playerCommand az utasítás
 	 */
 	public void receivedCheckPlayerCommand(PlayerCommand playerCommand) {
@@ -356,7 +416,7 @@ public abstract class AbstractMainView {
 	}
 
 	/**
-	 * Egy kliens FOLD utasítást küldött.
+	 * FOLD típusú utasítás érkezett egy játékostól.
 	 * @param playerCommand az utasítás
 	 */
 	public void receivedFoldPlayerCommand(PlayerCommand playerCommand) {
@@ -367,6 +427,7 @@ public abstract class AbstractMainView {
 				double opacity = 0.4;
 				int convertedWhoFold = ultimateFormula(playerCommand.getWhosQuit());
 				if (convertedWhoFold == 0) {
+					youAreNth = -1;
 					hideMyCards(opacity);
 				} else {
 					setNthPlayersCardsOpacity(opacity, convertedWhoFold);
@@ -377,15 +438,24 @@ public abstract class AbstractMainView {
 	}
 
 	/**
-	 * A szerver WINNER utasítást küldött.
+	 * QUIT típusú utasítás érkezett egy játékostól.
+	 * @param playerCommand az utasítás
+	 */
+	public void receivedQuitPlayerCommand(PlayerCommand playerCommand) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * A szerver WINNER típusú utasítást küldött.
 	 * @param houseCommand az utasítás
 	 */
-	public void winner(HouseCommand houseCommand) {
+	public void receivedWinnerHouseCommand(HouseCommand houseCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
 			public void run() {
-				
+
 				int convertedWinnerIndex = ultimateFormula(houseCommand.getWinner());
 				// ha nem én nyertem...
 				if (convertedWinnerIndex != 0) {
@@ -405,7 +475,7 @@ public abstract class AbstractMainView {
 			}
 		});
 	}
-	
+
 	/**
 	 * i. ellenfél kártyalapjainak az áttetszőgését módosítja.
 	 * @param opacity az áttettszőség mértéke
@@ -436,10 +506,6 @@ public abstract class AbstractMainView {
 		}
 	}
 
-	public void fold() {
-		youAreNth = -1;
-	}
-
 	/**
 	 * Random helyezek el chipeket az asztalon.
 	 */
@@ -448,9 +514,31 @@ public abstract class AbstractMainView {
 
 			@Override
 			public void run() {
-				ImageView chip = new ImageView(new Image(defaultValues.CHIP_IMAGE_PREFIX + "black.png"));
-				int max = defaultValues.CHIPS_POINT[0] + 20;
-				int min = defaultValues.CHIPS_POINT[1] - 20;
+				int chipsCount = 5;
+				int spread = 20;
+				String chipColor = "black";
+				switch (random.nextInt(chipsCount)) {
+				case 0:
+					chipColor = "white";
+					break;
+				case 1:
+					chipColor = "green";
+					break;
+				case 2:
+					chipColor = "blue";
+					break;
+				case 3:
+					chipColor = "black";
+					break;
+				case 4:
+					chipColor = "red";
+					break;
+				default:
+					break;
+				}
+				ImageView chip = new ImageView(new Image(defaultValues.CHIP_IMAGE_PREFIX + chipColor + ".png"));
+				int max = defaultValues.CHIPS_POINT[0] + spread;
+				int min = defaultValues.CHIPS_POINT[1] - spread;
 				chip.setLayoutX(random.nextInt(max - min) + min);
 				chip.setLayoutY(random.nextInt(max - min) + min);
 				chip.setFitHeight(defaultValues.CHIPS_SIZE);
@@ -462,21 +550,12 @@ public abstract class AbstractMainView {
 	}
 
 	/**
-	 * Ha egy felhasználó kilépett.
-	 * @param playerCommand az utasítás
-	 */
-	public void receivedQuitPlayerCommand(PlayerCommand playerCommand) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * A ház lapjait rejti el a GUI-ról.
+	 * A ház lapjait rejti el.
 	 */
 	protected abstract void hideHouseCards();
 
 	/**
-	 * Frissíti a GUI-n lévő egyenleget.
+	 * Frissíti a felhasználó egyenlegét.
 	 * @param balance az új egyenleg
 	 */
 	public void setBalance(BigDecimal balance) {

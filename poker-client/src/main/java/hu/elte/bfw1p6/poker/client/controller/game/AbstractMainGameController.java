@@ -149,7 +149,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 		}
 		modifyButtonsDisability(null);
 		checkButton.setDisable(false);
-		mainView.winner(houseCommand);
+		mainView.receivedWinnerHouseCommand(houseCommand);
 	}
 
 
@@ -252,7 +252,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 		try {
 			timerTask.cancel();
 			model.sendFoldCommand();
-			mainView.fold();
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
 		} catch (PokerUnauthenticatedException | RemoteException e) {

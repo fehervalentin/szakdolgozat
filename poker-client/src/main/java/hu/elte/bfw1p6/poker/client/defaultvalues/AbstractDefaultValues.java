@@ -18,6 +18,11 @@ public class AbstractDefaultValues {
 	public int MY_CARDS_COUNT;
 	
 	/**
+	 * Az összes kártyalap darabszáma.
+	 */
+	public int CARDS_COUNT = 52;
+	
+	/**
 	 * A lefordított kártyalapokat hova kell generálni.
 	 */
 	public int[] CARD_B1FV_POINTS;

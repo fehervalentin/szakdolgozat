@@ -13,6 +13,11 @@ import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * A kliens játék közbeni classic játékstílus megjelenítéséért felelős osztály.
+ * @author feher
+ *
+ */
 public class ClassicMainView extends AbstractMainView {
 
 	public ClassicMainView(AnchorPane mainGamePane) {
@@ -23,6 +28,10 @@ public class ClassicMainView extends AbstractMainView {
 	protected void hideHouseCards() {
 	}
 	
+	/**
+	 * CHANGE típusú utasítás érkezett egy játékostól.
+	 * @param classicHouseCommand az utasítás
+	 */
 	public void receivedChangeHouseCommand(ClassicHouseCommand classicHouseCommand) {
 		Platform.runLater(new Runnable() {
 
@@ -46,6 +55,10 @@ public class ClassicMainView extends AbstractMainView {
 		});
 	}
 	
+	/**
+	 * DEAL2 típusú utasítás érkezett a szervertől.
+	 * @param houseCommand az utasítás
+	 */
 	public void receivedDeal2HouseCommand(HouseCommand houseCommand) {
 		System.out.println("lol");
 		Platform.runLater(new Runnable() {
@@ -58,16 +71,24 @@ public class ClassicMainView extends AbstractMainView {
 		});
 	}
 	
-	public void receivedChangePlayerCommand(ClassicPlayerCommand classicplayerCommand) {
+	/**
+	 * CHANGE típusú utasítás érkezett egy játékostól.
+	 * @param classicPlayerCommand az utasítás
+	 */
+	public void receivedChangePlayerCommand(ClassicPlayerCommand classicPlayerCommand) {
 		Platform.runLater(new Runnable() {
 
 			@Override
 			public void run() {
-				colorNextPlayer(classicplayerCommand);
+				colorNextPlayer(classicPlayerCommand);
 			}
 		});
 	}
 
+	/**
+	 * Összegyűjti a cserélendő lapokat.
+	 * @return a cserélendő lapok sorszámai
+	 */
 	public List<Integer> getMarkedCards() {
 		List<Integer> markedCards = new ArrayList<>();
 		for (int i = 0; i < myCards.size(); i++) {

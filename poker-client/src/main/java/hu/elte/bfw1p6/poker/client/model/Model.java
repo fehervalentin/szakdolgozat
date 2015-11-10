@@ -26,10 +26,19 @@ public class Model {
 	
 	private static Model instance = null;
 	
+	/**
+	 * A kliens oldali controllerek közötti paraméter. Táblaszerkesztés és táblához való csatlakozáskor.
+	 */
 	private static PokerTable paramPokerTable;
 
+	/**
+	 * A szerver kliens oldali csonkja.
+	 */
 	private static PokerRemote pokerRemote;
 
+	/**
+	 * A kliens sessionje.
+	 */
 	private static PokerSession pokerSession;
 	
 	private final String SVNAME;
@@ -102,21 +111,88 @@ public class Model {
 		return tables;
 	}
 
+	/**
+	 * A kliens beregisztrálása, hogy a szerver tábla firssítéseket tudjun leküldeni.
+	 * @param observer a kliens (TableListerController)
+	 * @return az adatbázisban letárolt játéktáblák
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 * @throws PokerUnauthenticatedException
+	 */
 	public List<PokerTable> registerTableViewObserver(PokerRemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
 		return pokerRemote.registerTableViewObserver(pokerSession.getId(), observer);
 	}
 
+	/**
+	 * A kliens lecsatlakozik a szerverről.
+	 * @param observer
+	 * @throws RemoteException
+	 */
 	public void removeTableViewObserver(PokerRemoteObserver observer) throws RemoteException {
 		pokerRemote.removeTableViewObserver(observer);
 	}
 
+	/**
+	 * Kijelentkezés.
+	 * @throws RemoteException
+	 */
 	public void logout() throws RemoteException {
 		pokerRemote.logout(pokerSession.getId());
 		pokerSession = null;
 	}
 	
-	public void setParameterPokerTable(PokerTable paramPokerTable) {
-		Model.paramPokerTable = paramPokerTable;
+	/**
+	 * Létező tábla entitás módosítása.
+	 * @param t a létező, módosított tábla entitás
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 * @throws PokerUnauthenticatedException
+	 */
+	public void modifyTable(PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+		pokerRemote.modifyTable(pokerSession.getId(), t);
+	}
+
+	/**
+	 * Tábla entitást töröl.
+	 * @param t a tábla entitás
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 * @throws PokerUnauthenticatedException
+	 */
+	public void deleteTable(PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+		pokerRemote.deleteTable(pokerSession.getId(), t);
+	}
+
+	/**
+	 * A felhasználó jelszó cseréje.
+	 * @param oldPassword a régi jelszó
+	 * @param newPassword az új jelszó
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 * @throws PokerInvalidPassword
+	 * @throws PokerUnauthenticatedException
+	 */
+	public void modifyPassword(String oldPassword, String newPassword) throws RemoteException, PokerDataBaseException, PokerInvalidPassword, PokerUnauthenticatedException {
+		pokerRemote.modifyPassword(pokerSession.getId(), oldPassword, newPassword);
+	}
+	
+	/**
+	 * A bejelentkezett felhasználó admin jogkörrel rendelekezik-e.
+	 * @return ha a bejelentkezett felhasználó admin jogkörrel rendelkezik, akkor true, különben false
+	 * @throws RemoteException
+	 * @throws PokerUnauthenticatedException
+	 * @throws PokerDataBaseException
+	 */
+	public boolean isAdmin() throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException {
+		return pokerRemote.isAdmin(pokerSession.getId());
+	}
+	
+	public PokerPlayer getPlayer() {
+		return pokerSession.getPlayer();
+	}
+
+	public List<PokerPlayer> getUsers() throws PokerDataBaseException, RemoteException {
+		return pokerRemote.getUsers();
 	}
 	
 	public static PokerTable getParamPokerTable() {
@@ -131,27 +207,7 @@ public class Model {
 		return pokerRemote;
 	}
 	
-	public void modifyTable(PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
-		pokerRemote.modifyTable(pokerSession.getId(), t);
-	}
-
-	public void deleteTable(PokerTable pokerTable) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
-		pokerRemote.deleteTable(pokerSession.getId(), pokerTable);
-	}
-
-	public void modifyPassword(String oldPassword, String newPassword) throws RemoteException, PokerDataBaseException, PokerInvalidPassword, PokerUnauthenticatedException {
-		pokerRemote.modifyPassword(pokerSession.getId(), oldPassword, newPassword);
-	}
-	
-	public boolean isAdmin() throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException {
-		return pokerRemote.isAdmin(pokerSession.getId());
-	}
-	
-	public PokerPlayer getPlayer() {
-		return pokerSession.getPlayer();
-	}
-
-	public List<PokerPlayer> getUsers() throws PokerDataBaseException, RemoteException {
-		return pokerRemote.getUsers();
+	public void setParameterPokerTable(PokerTable paramPokerTable) {
+		Model.paramPokerTable = paramPokerTable;
 	}
 }

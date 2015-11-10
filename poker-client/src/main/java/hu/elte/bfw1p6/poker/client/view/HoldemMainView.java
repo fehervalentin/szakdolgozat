@@ -13,6 +13,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * A kliens játék közbeni holdem játékstílus megjelenítéséért felelős osztály.
+ * @author feher
+ *
+ */
 public class HoldemMainView extends AbstractMainView {
 
 	/**
