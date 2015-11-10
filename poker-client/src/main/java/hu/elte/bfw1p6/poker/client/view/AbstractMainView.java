@@ -257,25 +257,17 @@ public abstract class AbstractMainView {
 	 * Elrejti az összes ellenfél profilképet és lefordított kártyalapokat.
 	 */
 	protected void hideAllProfiles() {
-		for (ImageView imageView : opponentsCards) {
-			imageView.setVisible(false);
-		}
-		for (ImageView imageView : opponentsCardSides) {
-			imageView.setVisible(false);
-		}
-		for (int i = 1; i < profileImages.size(); i++) {
-			profileImages.get(i).setVisible(false);
-			userNameLabels.get(i).setVisible(false);
-		}
+		opponentsCards.forEach(card -> card.setVisible(false));
+		opponentsCardSides.forEach(card -> card.setVisible(false));
+		profileImages.subList(1, profileImages.size()).forEach(card -> card.setVisible(false));
+		userNameLabels.subList(1, userNameLabels.size()).forEach(card -> card.setVisible(false));
 	}
 
 	/**
 	 * Kitörlöm a chipeket.
 	 */
 	protected void clearChips() {
-		for (ImageView imageView : chips) {
-			mainGamePane.getChildren().remove(imageView);
-		}
+		chips.forEach(chip -> mainGamePane.getChildren().remove(chip));
 		chips.clear();
 	}
 
@@ -290,10 +282,10 @@ public abstract class AbstractMainView {
 			public void run() {
 				nextPlayer = ultimateFormula(pokerCommand.getWhosOn());
 				if (coloredPlayer >= 0) {
-					profileImages.get(coloredPlayer).getStyleClass().remove("glow");
+					profileImages.get(coloredPlayer).getStyleClass().remove(defaultValues.MARKER_STYLECLASS);
 				}
 				if (nextPlayer >= 0) {
-					profileImages.get(nextPlayer).getStyleClass().add("glow");
+					profileImages.get(nextPlayer).getStyleClass().add(defaultValues.MARKER_STYLECLASS);
 				}
 				coloredPlayer = nextPlayer;
 				nextPlayer = pokerCommand.getWhosOn();
@@ -330,14 +322,9 @@ public abstract class AbstractMainView {
 						setLabelUserNames(houseCommand.getPlayersNames());
 						resetOpacity();
 						clearChips();
-						for (int i = 0; i < houseCommand.getPlayers(); i++) {
-							userNameLabels.get(i).setVisible(true);
-							profileImages.get(i).setVisible(true);
-
-						}
-						for (int i = 0; i < houseCommand.getPlayers() - 1; i++) {
-							opponentsCards.get(i).setVisible(true);
-						}
+						userNameLabels.forEach(label -> label.setVisible(false));
+						profileImages.forEach(label -> label.setVisible(false));
+						opponentsCards.subList(0, clientsCount - 1).forEach(card -> card.setVisible(true));
 						for (int j = 0; j < (defaultValues.MY_CARDS_COUNT - 1) * (clientsCount - 1); j++) {
 							opponentsCardSides.get(j).setVisible(true);
 						}
@@ -428,7 +415,7 @@ public abstract class AbstractMainView {
 				int convertedWhoFold = ultimateFormula(playerCommand.getWhosQuit());
 				if (convertedWhoFold == 0) {
 					youAreNth = -1;
-					hideMyCards(opacity);
+					myCards.forEach(card -> card.setOpacity(opacity));
 				} else {
 					setNthPlayersCardsOpacity(opacity, convertedWhoFold);
 				}
@@ -492,18 +479,10 @@ public abstract class AbstractMainView {
 	 * Visszaállítja az áttettszőség értékeket.
 	 */
 	protected void resetOpacity() {
-		for (ImageView imageView : myCards) {
-			imageView.setOpacity(1);
-		}
-		for (ImageView imageView : opponentsCards) {
-			imageView.setOpacity(1);
-		}
-		for (ImageView imageView : opponentsCardSides) {
-			imageView.setOpacity(1);
-		}
-		for (ImageView imageView : winnerCards) {
-			imageView.setOpacity(0);
-		}
+		myCards.forEach(card -> card.setOpacity(1));
+		opponentsCards.forEach(card -> card.setOpacity(1));
+		opponentsCardSides.forEach(card -> card.setOpacity(1));
+		winnerCards.forEach(card -> card.setOpacity(0));
 	}
 
 	/**
@@ -564,16 +543,6 @@ public abstract class AbstractMainView {
 				myBalance.setText(balance.toString());
 			}
 		});
-	}
-
-	/**
-	 * Elrejti a saját kártyáimat a GUI-ról.
-	 * @param opacity
-	 */
-	protected void hideMyCards(double opacity) {
-		for (ImageView imageView : myCards) {
-			imageView.setOpacity(opacity);
-		}
 	}
 
 	public int getYouAreNth() {

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
@@ -78,7 +79,7 @@ public class CreateTableController extends AbstractPokerClientController {
 	 * Ha a TableLister controllernél tábla módosításra kattintottam, akkor kiveszem a paramétert. (A kiválasztott táblát, amolyan ThreadContext...)
 	 */
 	private void setParamPokerTable() {
-		PokerTable pokerTable = model.getParamPokerTable();
+		PokerTable pokerTable = Model.getParamPokerTable();
 		if (pokerTable != null) {
 			tableNameTextField.setText(pokerTable.getName());
 			gameTypeComboBox.getSelectionModel().select(pokerTable.getPokerType().getName());
@@ -142,7 +143,7 @@ public class CreateTableController extends AbstractPokerClientController {
 		}
 		
 		// nincs/nem volt átadandó paraméter, tehát új táblát kell létrehoznom
-		if (model.getParamPokerTable() == null) {
+		if (Model.getParamPokerTable() == null) {
 			// ekkor új táblát hozunk létre
 			try {
 				PokerTable t = new PokerTable(tableName, maxTime, maxPlayers, maxBet, defaultPot, pokerType);
@@ -157,7 +158,7 @@ public class CreateTableController extends AbstractPokerClientController {
 		} else {
 			// különben pedig volt paraméter => módosítunk
 			try {
-				PokerTable t = model.getParamPokerTable();
+				PokerTable t = Model.getParamPokerTable();
 				t.setName(tableName);
 				t.setMaxTime(maxTime);
 				t.setMaxPlayers(maxPlayers);

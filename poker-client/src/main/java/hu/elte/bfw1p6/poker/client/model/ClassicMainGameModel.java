@@ -89,7 +89,6 @@ public class ClassicMainGameModel extends AbstractMainGameModel {
 	 * @param classicHouseCommand az utasítás
 	 */
 	public void receivedDeal2HouseCommand(ClassicHouseCommand classicHouseCommand) {
-		System.out.println("hanyszor hivom meg.................");
 		pokerSession.getPlayer().setCards(classicHouseCommand.getCards());
 	}
 }

@@ -99,16 +99,10 @@ public class Model {
 	 * @return a letárolt játéktáblák
 	 * @throws PokerDataBaseException
 	 * @throws PokerUnauthenticatedException
+	 * @throws RemoteException 
 	 */
-	public List<PokerTable> getTables() throws PokerDataBaseException, PokerUnauthenticatedException {
-		List<PokerTable> tables = null;
-		try {
-			tables = pokerRemote.getTables(pokerSession.getId());
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return tables;
+	public List<PokerTable> getTables() throws PokerDataBaseException, PokerUnauthenticatedException, RemoteException {
+		return pokerRemote.getTables(pokerSession.getId());
 	}
 
 	/**

@@ -151,35 +151,35 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	}
 
 	/**
-	 * A szerver FLOP utasítás küldött.
+	 * A szerver FLOP típusú utasítás küldött.
 	 * @param houseHoldemCommand az utasítás
 	 */
 	private void receivedFlopHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		Card[] cards = houseHoldemCommand.getCards();
 		System.out.println("Flop: " + cards[0] + " " + cards[1] + " " + cards[2]);
 		modifyButtonsDisability(houseHoldemCommand);
-		((HoldemMainView)mainView).flop(houseHoldemCommand);
+		((HoldemMainView)mainView).receivedFlopHouseCommand(houseHoldemCommand);
 	}
 
 	/**
-	 * A szerver TURN utasítás küldött.
+	 * A szerver TURN típusú utasítás küldött.
 	 * @param houseHoldemCommand az utasítás
 	 */
 	private void receivedTurnHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		Card[] cards = houseHoldemCommand.getCards();
 		System.out.println("Turn: " + cards[0]);
 		modifyButtonsDisability(houseHoldemCommand);
-		((HoldemMainView)mainView).turn(houseHoldemCommand);
+		((HoldemMainView)mainView).receivedTurnHouseCommand(houseHoldemCommand);
 	}
 
 	/**
-	 * A szerver RIVER utasítás küldött.
+	 * A szerver RIVER típusú utasítás küldött.
 	 * @param houseHoldemCommand az utasítás
 	 */
 	private void receivedRiverHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		Card[] cards = houseHoldemCommand.getCards();
 		System.out.println("River: " + cards[0]);
 		modifyButtonsDisability(houseHoldemCommand);
-		((HoldemMainView)mainView).river(houseHoldemCommand);
+		((HoldemMainView)mainView).receivedRiverHouseCommand(houseHoldemCommand);
 	}
 }

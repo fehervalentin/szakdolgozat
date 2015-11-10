@@ -10,7 +10,6 @@ import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -38,19 +37,17 @@ public class ClassicMainView extends AbstractMainView {
 			@Override
 			public void run() {
 				colorNextPlayer(classicHouseCommand);
-				for (ImageView imageView : myCards) {
-					imageView.setOnMouseClicked(new EventHandler<Event>() {
+				myCards.forEach(card -> card.setOnMouseClicked(new EventHandler<Event>() {
 
-						@Override
-						public void handle(Event event) {
-							if (imageView.getStyleClass().contains("glow")) {
-								imageView.getStyleClass().remove("glow");
-							} else {
-								imageView.getStyleClass().add("glow");
-							}
+					@Override
+					public void handle(Event event) {
+						if (card.getStyleClass().contains(defaultValues.MARKER_STYLECLASS)) {
+							card.getStyleClass().remove(defaultValues.MARKER_STYLECLASS);
+						} else {
+							card.getStyleClass().add(defaultValues.MARKER_STYLECLASS);
 						}
-					});
-				}
+					}
+				}));
 			}
 		});
 	}
@@ -60,7 +57,6 @@ public class ClassicMainView extends AbstractMainView {
 	 * @param houseCommand az utasítás
 	 */
 	public void receivedDeal2HouseCommand(HouseCommand houseCommand) {
-		System.out.println("lol");
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -92,9 +88,9 @@ public class ClassicMainView extends AbstractMainView {
 	public List<Integer> getMarkedCards() {
 		List<Integer> markedCards = new ArrayList<>();
 		for (int i = 0; i < myCards.size(); i++) {
-			if (myCards.get(i).getStyleClass().contains("glow")) {
+			if (myCards.get(i).getStyleClass().contains(defaultValues.MARKER_STYLECLASS)) {
 				markedCards.add(i);
-				myCards.get(i).getStyleClass().remove("glow");
+				myCards.get(i).getStyleClass().remove(defaultValues.MARKER_STYLECLASS);
 			}
 		}
 		return markedCards;

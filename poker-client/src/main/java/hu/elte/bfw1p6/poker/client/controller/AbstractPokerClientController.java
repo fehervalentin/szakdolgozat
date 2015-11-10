@@ -86,5 +86,4 @@ public abstract class AbstractPokerClientController implements PokerClientContro
 		successAlert.setContentText(msg);
 		successAlert.showAndWait();
 	}
-
 }

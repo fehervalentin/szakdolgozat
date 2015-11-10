@@ -7,6 +7,8 @@ package hu.elte.bfw1p6.poker.client.defaultvalues;
  */
 public class AbstractDefaultValues {
 	
+	public String MARKER_STYLECLASS = "glow";
+	
 	/**
 	 * A kártyalapjaim pozíciói.
 	 */
