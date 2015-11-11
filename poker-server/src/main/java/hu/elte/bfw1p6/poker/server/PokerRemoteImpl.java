@@ -16,8 +16,6 @@ import java.util.UUID;
 import org.mindrot.jbcrypt.BCrypt;
 
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
-import hu.elte.bfw1p6.poker.client.observer.TableListerObserver;
-import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
@@ -50,7 +48,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 
 	private SessionService sessionService;
 
-	private List<TableListerObserver> tlos;
+	private List<PokerRemoteObserver> clients;
 
 	private Hashtable<String, AbstractPokerTableServer> pokerTableservers;
 	
@@ -65,7 +63,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 		this.pokerTableDAO = new PokerTableDAO();
 		this.userDAO = new UserDAO();
 		this.sessionService = new SessionService(userDAO);
-		this.tlos = new ArrayList<>();
+		this.clients = new ArrayList<>();
 		this.pokerTableservers = new Hashtable<>();
 		List<PokerTable> tables = pokerTableDAO.findAll();
 		
@@ -161,12 +159,6 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public void unRegisterObserver(UUID uuid, TableViewObserver pcc) throws RemoteException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public PokerSession login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException, PokerDataBaseException {
 		PokerSession pokerSession = sessionService.authenticate(username, password);
 		return pokerSession;
@@ -209,26 +201,13 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 
 	@Override
 	public List<PokerTable> registerTableViewObserver(UUID uuid, PokerRemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
-		TableListerObserver tvo = new TableListerObserver(observer);
-		this.addObserver(tvo);
+		clients.add(observer);
 		return getTables(uuid);
-	}
-
-	private TableListerObserver removeTVO(PokerRemoteObserver observer) {
-		for (TableListerObserver tableListerObserver : tlos) {
-			if (tableListerObserver.getRo().equals(observer)) {
-				return tableListerObserver;
-			}
-		}
-		return null;
 	}
 
 	@Override
 	public void removeTableViewObserver(PokerRemoteObserver observer) {
-		//TableListerObserver wp = tlos.get(tlos.indexOf((TableListerObserver)observer));
-		TableListerObserver tlo = removeTVO(observer);
-		tlos.remove(tlo);
-		this.deleteObserver(tlo); //TODO NEM BIZTOS...
+		clients.remove(observer);
 	}
 
 	@Override

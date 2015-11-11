@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
-import hu.elte.bfw1p6.poker.client.observer.TableViewObserver;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
@@ -102,9 +101,6 @@ public interface PokerRemote extends Remote, Serializable {
 	List<PokerTable> getTables(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
 	
 	
-	void unRegisterObserver(UUID uuid, TableViewObserver proc) throws RemoteException;
-
-
 
 
 	/**

@@ -10,7 +10,6 @@ import java.util.stream.IntStream;
 import com.cantero.games.poker.texasholdem.Card;
 
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
-import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
@@ -197,7 +196,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Lecsatlakozás a játéktábla szerverről.
 	 * @param client lecsatlakozandó kliens
 	 */
-	public synchronized void leave(PokerTableServerObserver client) {
+	public synchronized void leave(PokerRemoteObserver client) {
 		clients.remove(client);
 	}
 
