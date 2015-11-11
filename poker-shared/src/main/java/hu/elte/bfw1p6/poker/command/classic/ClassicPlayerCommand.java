@@ -8,6 +8,11 @@ import com.cantero.games.poker.texasholdem.Card;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.classic.type.ClassicPlayerCommandType;
 
+/**
+ * A játékosok utasításai classic játékstílus esetén.
+ * @author feher
+ *
+ */
 public class ClassicPlayerCommand extends PlayerCommand {
 
 	private static final long serialVersionUID = -3424914496460268663L;
@@ -26,36 +31,64 @@ public class ClassicPlayerCommand extends PlayerCommand {
 		return playerCommandType.name();
 	}
 	
+	/**
+	 * Ha egy játékos CALL típusú utasítást küld, akkor ezt a metódust kell használni.
+	 * @param callAmount a megadandó tét
+	 */
 	public void setUpCallCommand(BigDecimal callAmount) {
 		this.playerCommandType = ClassicPlayerCommandType.CALL;
 		this.callAmount = callAmount;
 	}
 
+	/**
+	 * Ha egy játékos BLIND típusú utasítást küld, akkor ezt a metódust kell használni.
+	 * @param callAmount a vak mértéke
+	 */
 	public void setUpBlindCommand(BigDecimal callAmount) {
 		this.playerCommandType = ClassicPlayerCommandType.BLIND;
 		this.callAmount = callAmount;
 	}
 
+	/**
+	 * Ha egy játékos CHECK típusú utasítást küld, akkor ezt a metódust kell használni.
+	 */
 	public void setUpCheckCommand() {
 		this.playerCommandType = ClassicPlayerCommandType.CHECK;
 	}
 
+	/**
+	 * Ha egy játékos RAISE típusú utasítást küld, akkor ezt a metódust kell használni.
+	 * @param callAmount a megadandó tét
+	 * @param raiseAmount az emelendő tét
+	 */
 	public void setUpRaiseCommand(BigDecimal callAmount, BigDecimal raiseAmount) {
 		this.playerCommandType = ClassicPlayerCommandType.RAISE;
 		this.callAmount = callAmount;
 		this.raiseAmount = raiseAmount;
 	}
 
-	public void setUpFoldCommand(int tempNth) {
+	/**
+	 * Ha egy játékos FOLD típusú utasítást küld, akkor ezt a metódust kell használni.
+	 * @param youAreNth a játékos sorszáma
+	 */
+	public void setUpFoldCommand(int youAreNth) {
 		this.playerCommandType = ClassicPlayerCommandType.FOLD;
-		this.whosQuit = tempNth;
+		this.whosQuit = youAreNth;
 	}
 
+	/**
+	 * Ha egy játékos QUIT típusú utasítást küld, akkor ezt a metódust kell használni.
+	 * @param tempNth a játékos sorszáma
+	 */
 	public void setUpQuitCommand(int youAreNth) {
 		this.playerCommandType = ClassicPlayerCommandType.QUIT;
 		this.whosQuit = youAreNth;
 	}
 	
+	/**
+	 * Ha egy játékos CHANGE típusú utasítást küld, akkor ezt a metódust kell használni.
+	 * @param tempNth a játékos sorszáma
+	 */
 	public void setUpChangeCommand(List<Integer> markedCards) {
 		this.markedCards = markedCards;
 		this.playerCommandType = ClassicPlayerCommandType.CHANGE;

@@ -19,6 +19,11 @@ import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 
+/**
+ * A szerver publikus interface-e.
+ * @author feher
+ *
+ */
 public interface PokerRemote extends Remote, Serializable {
 
 	/**
@@ -146,10 +151,35 @@ public interface PokerRemote extends Remote, Serializable {
 	 */
 	List<PokerTable> registerTableViewObserver(UUID uuid, PokerRemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException;
 
+	/**
+	 * A pókerjáték szerver listázó megfigyelő objektumát csatlakoztatja.
+	 * @param observer a megfigyelő objektum
+	 * @throws RemoteException
+	 */
 	void removeTableViewObserver(PokerRemoteObserver observer) throws RemoteException;
 	
+	/**
+	 * Utasítás küldése játékszervernek.
+	 * @param uuid a kliens egyedi session azonosítója
+	 * @param t a játéktábla, aminek utasítást szeretnénk küldeni
+	 * @param client maga a kliens
+	 * @param playerCommand az utasítás
+	 * @throws RemoteException
+	 * @throws PokerUnauthenticatedException
+	 * @throws PokerDataBaseException
+	 * @throws PokerUserBalanceException
+	 */
 	void sendPlayerCommand(UUID uuid, PokerTable t, PokerRemoteObserver client, PlayerCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException;
 	
+	/**
+	 * Asztalhoz való csatlakozási kérelem
+	 * @param uuid a kliens egyedi session azonosítója
+	 * @param t az asztal amihez csatlakozni szeretne a kliens
+	 * @param observer a kliens
+	 * @throws RemoteException
+	 * @throws PokerTooMuchPlayerException
+	 * @throws PokerUnauthenticatedException
+	 */
 	void connectToTable(UUID uuid, PokerTable t, PokerRemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException;
 
 	/**

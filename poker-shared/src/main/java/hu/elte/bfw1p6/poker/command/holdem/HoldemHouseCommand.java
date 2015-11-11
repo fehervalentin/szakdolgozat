@@ -11,7 +11,7 @@ import hu.elte.bfw1p6.poker.command.holdem.type.HoldemHouseCommandType;
 
 
 /**
- * Az osztály valósítja meg a póker szerver által küldött üzeneteket HOLDEM játék stílusban.
+ * A ház utasításai holdem játékstílus esetén.
  * @author feher
  *
  */

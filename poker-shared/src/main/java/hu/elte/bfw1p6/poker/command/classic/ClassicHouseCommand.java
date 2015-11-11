@@ -7,6 +7,11 @@ import com.cantero.games.poker.texasholdem.Card;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.type.ClassicHouseCommandType;
 
+/**
+ * A ház utasításai classic játéksítlus esetén.
+ * @author feher
+ *
+ */
 public class ClassicHouseCommand extends HouseCommand {
 
 	private static final long serialVersionUID = 1378309116747181470L;
@@ -22,7 +27,7 @@ public class ClassicHouseCommand extends HouseCommand {
 	}
 	
 	/**
-	 * Ha a classic szerver BLIND utasítást küld, akkor ezt a metódust kell használni.
+	 * Ha a classic szerver BLIND típusú utasítást küld, akkor ezt a metódust kell használni.
 	 * @param nthPlayer hanyadik játékos vagy a körben
 	 * @param players hány játékos van összesen a körben
 	 * @param dealer ki az aktuális osztó
@@ -40,7 +45,7 @@ public class ClassicHouseCommand extends HouseCommand {
 	}
 	
 	/**
-	 * Ha a classic szerver DEAL utasítást küld, akkor ezt a metódust kell használni.
+	 * Ha a classic szerver DEAL típusú utasítást küld, akkor ezt a metódust kell használni.
 	 * @param card1 a playernek küldött első kártya
 	 * @param card2 a playernek küldött második kártya
 	 * @param whosOn az épppen következő (soron levő) játékos
@@ -54,7 +59,7 @@ public class ClassicHouseCommand extends HouseCommand {
 	}
 	
 	/**
-	 * Ha a classic szerver CHANGE utasítást küld, akkor ezt a metódust kell használni.
+	 * Ha a classic szerver CHANGE típusú utasítást küld, akkor ezt a metódust kell használni.
 	 * @param card1 a playernek küldött első kártya
 	 * @param card2 a playernek küldött második kártya
 	 * @param whosOn az épppen következő (soron levő) játékos
@@ -67,7 +72,7 @@ public class ClassicHouseCommand extends HouseCommand {
 	}
 	
 	/**
-	 * Ha a classic szerver DEAL2 utasítást küld, akkor ezt a metódust kell használni.
+	 * Ha a classic szerver DEAL2 típusú utasítást küld, akkor ezt a metódust kell használni.
 	 * @param card1 a playernek küldött első kártya
 	 * @param card2 a playernek küldött második kártya
 	 * @param whosOn az épppen következő (soron levő) játékos
@@ -81,7 +86,7 @@ public class ClassicHouseCommand extends HouseCommand {
 	}
 	
 	/**
-	 * Ha a classic szerver WINNER utasítást küld, akkor ezt a metódust kell használni.
+	 * Ha a classic szerver WINNER típusú utasítást küld, akkor ezt a metódust kell használni.
 	 * @param card1 a nyertes első lapja
 	 * @param card2 a nyertes második lapja
 	 * @param winnerUserName a nyertes neve

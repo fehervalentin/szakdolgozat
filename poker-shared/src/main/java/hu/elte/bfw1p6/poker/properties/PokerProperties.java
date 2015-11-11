@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * A kliens és a szerver által közösen használt property értékek.
+ * @author feher
+ *
+ */
 public class PokerProperties {
 	private final static String svPropFile = "server.properties";
 	

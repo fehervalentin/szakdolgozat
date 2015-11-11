@@ -4,6 +4,11 @@ import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
 
+/**
+ * Olyan utasítások, amelyeket a kommunikáció során a szerverek (házak) küldenek.
+ * @author feher
+ *
+ */
 public abstract class HouseCommand implements PokerCommand {
 
 	private static final long serialVersionUID = 1571742099156009456L;

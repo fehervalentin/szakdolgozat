@@ -2,6 +2,11 @@ package hu.elte.bfw1p6.poker.command;
 
 import java.math.BigDecimal;
 
+/**
+ * Olyan utasítások, amelyeket a kommunikáció során a kliensek (játékosok) küldenek. 
+ * @author feher
+ *
+ */
 public abstract class PlayerCommand implements PokerCommand {
 
 	private static final long serialVersionUID = -6222563485679670229L;
