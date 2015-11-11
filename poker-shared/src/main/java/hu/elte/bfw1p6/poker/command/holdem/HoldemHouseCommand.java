@@ -43,8 +43,9 @@ public class HoldemHouseCommand extends HouseCommand {
 	 * @param players hány játékos van összesen a körben
 	 * @param dealer ki az aktuális osztó
 	 * @param whosOn az épppen következő (soron levő) játékos
+	 * @return a beállított utasítás
 	 */
-	public void setUpBlindCommand(int fixSitPosition, int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
+	public HoldemHouseCommand setUpBlindCommand(int fixSitPosition, int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
 		this.houseCommandType = HoldemHouseCommandType.BLIND;
 		this.fixSitPosition = fixSitPosition;
 		this.nthPlayer = nthPlayer;
@@ -52,6 +53,7 @@ public class HoldemHouseCommand extends HouseCommand {
 		this.dealer = dealer;
 		this.whosOn = whosOn;
 		this.clientsNames = clientsNames;
+		return this;
 	}
 	
 	/**
@@ -59,11 +61,13 @@ public class HoldemHouseCommand extends HouseCommand {
 	 * @param card1 a playernek küldött első kártya
 	 * @param card2 a playernek küldött második kártya
 	 * @param whosOn az épppen következő (soron levő) játékos
+	 * @return a beállított utasítás
 	 */
-	public void setUpDealCommand(Card cards[], int whosOn) {
+	public HoldemHouseCommand setUpDealCommand(Card cards[], int whosOn) {
 		this.houseCommandType = HoldemHouseCommandType.DEAL;
 		this.cards = cards;
 		this.whosOn = whosOn;
+		return this;
 	}
 	
 	/**
@@ -71,8 +75,9 @@ public class HoldemHouseCommand extends HouseCommand {
 	 * @param houseCommandType FLOP vagy TURN vagy RIVER
 	 * @param cards a ház lapjai
 	 * @param whosOn az épppen következő (soron levő) játékos
+	 * @return a beállított utasítás
 	 */
-	public void setUpFlopTurnRiverCommand(HoldemHouseCommandType type, Card[] cards, int whosOn, int foldCounter) {
+	public HoldemHouseCommand setUpFlopTurnRiverCommand(HoldemHouseCommandType type, Card[] cards, int whosOn, int foldCounter) {
 		if (!acceptedTypes.contains(type)) {
 			throw new IllegalArgumentException("Nem megfelelő utasítás típus!");
 //			throw new IllegalArgumentException("Nem megfelelő utasítás típus! Az alkalmazható típusok: " + acceptedTypes.stream().toArray(String[]::new));
@@ -81,6 +86,7 @@ public class HoldemHouseCommand extends HouseCommand {
 		this.cards = cards;
 		this.whosOn = whosOn;
 		this.foldCounter = foldCounter;
+		return this;
 	}
 	
 	/**
@@ -88,11 +94,13 @@ public class HoldemHouseCommand extends HouseCommand {
 	 * @param card1 a nyertes első lapja
 	 * @param card2 a nyertes második lapja
 	 * @param winnerUserName a nyertes neve
+	 * @return a beállított utasítás
 	 */
-	public void setUpWinnerCommand(Card[] cards, int winner) {
+	public HoldemHouseCommand setUpWinnerCommand(Card[] cards, int winner) {
 		this.houseCommandType = HoldemHouseCommandType.WINNER;
 		this.cards = cards;
 		this.winner = winner;
+		return this;
 	}
 	
 	public HoldemHouseCommandType getHouseCommandType() {

@@ -1,4 +1,4 @@
-package hu.elte.bfw1p6.poker.server;
+package hu.elte.bfw1p6.poker.server.logic;
 
 import java.util.ArrayList;
 import java.util.Collections;

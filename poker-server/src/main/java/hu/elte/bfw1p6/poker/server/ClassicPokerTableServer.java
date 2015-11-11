@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import com.cantero.games.poker.texasholdem.Card;
 import com.cantero.games.poker.texasholdem.IPlayer;
@@ -18,7 +19,13 @@ import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
+import hu.elte.bfw1p6.poker.server.logic.HoldemHandEvaluator;
 
+/**
+ * Póker játékasztal-szerver classic játékhoz.
+ * @author feher
+ *
+ */
 public class ClassicPokerTableServer extends AbstractPokerTableServer {
 
 	private static final long serialVersionUID = 3009724030721806069L;
@@ -44,16 +51,12 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 
 	@Override
 	protected HouseCommand houseDealCommandFactory(Card[] cards) {
-		ClassicHouseCommand classicHouseCommand = new ClassicHouseCommand();
-		classicHouseCommand.setUpDealCommand(cards, whosOn);
-		return classicHouseCommand;
+		return new ClassicHouseCommand().setUpDealCommand(cards, whosOn);
 	}
 
 	@Override
 	protected HouseCommand houseBlindCommandFactory(int fixSitPosition, int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
-		ClassicHouseCommand classicHouseCommand = new ClassicHouseCommand();
-		classicHouseCommand.setUpBlindCommand(fixSitPosition, nthPlayer, clients.size(), dealer, whosOn, clientsNames);
-		return classicHouseCommand;
+		return new ClassicHouseCommand().setUpBlindCommand(fixSitPosition, nthPlayer, clients.size(), dealer, whosOn, clientsNames);
 	}
 
 	@Override
@@ -61,7 +64,6 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 //		System.out.println("VotedPlayers: " + votedPlayers);
 //		System.out.println("Players in round: " + playersInRound);
 		if (playersInRound == 1 || (actualClassicHouseCommandType == ClassicHouseCommandType.values()[0] && votedPlayers >= playersInRound)) {
-			//TODO: itt is kell értékelni, hogy ki nyert
 			startRound();
 		} else {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
@@ -75,11 +77,9 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 					break;
 				}
 				case DEAL2: {
-					for (int i = 0; i < players.size(); i++) {
-						ClassicHouseCommand chc = new ClassicHouseCommand();
-						chc.setUpDeal2Command(players.get(i).getCards(), whosOn);
-						notifyNthClient(i, chc);
-					}
+					IntStream.range(0, players.size()).forEach(i ->
+						notifyNthClient(i, new ClassicHouseCommand().setUpDeal2Command(players.get(i).getCards(), whosOn))
+					);
 					break;
 				}
 				case WINNER: {
@@ -156,7 +156,6 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	@Override
 	protected void winner(HouseCommand houseCommand) {
 		ClassicHouseCommand holdemHouseCommand = (ClassicHouseCommand)houseCommand;
-		//TODO: aki foldolt annak ne vegyük figyelembe a lapjait lehet hogy már kész...
 		List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(new ArrayList<>(), players);
 		Card[] cards = winner.get(0).getCards();
 		// TODO: és mi van ha döntetlen?

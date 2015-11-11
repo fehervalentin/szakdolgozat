@@ -17,9 +17,10 @@ import hu.elte.bfw1p6.poker.command.holdem.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
+import hu.elte.bfw1p6.poker.server.logic.HoldemHandEvaluator;
 
 /**
- * Maga a póker asztal megvalósítása
+ * Póker játékasztal-szerver holdem játékhoz.
  * @author feher
  *
  */
@@ -55,16 +56,12 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 
 	@Override
 	protected HouseCommand houseBlindCommandFactory(int fixSitPosition, int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
-		HoldemHouseCommand holdemHouseCommand = new HoldemHouseCommand();
-		holdemHouseCommand.setUpBlindCommand(fixSitPosition, nthPlayer, clients.size(), dealer, whosOn, clientsNames);
-		return holdemHouseCommand;
+		return new HoldemHouseCommand().setUpBlindCommand(fixSitPosition, nthPlayer, clients.size(), dealer, whosOn, clientsNames);
 	}
 	
 	@Override
 	protected HouseCommand houseDealCommandFactory(Card[] cards) {
-		HoldemHouseCommand holdemHouseCommand = new HoldemHouseCommand();
-		holdemHouseCommand.setUpDealCommand(cards, whosOn);
-		return holdemHouseCommand;
+		return new HoldemHouseCommand().setUpDealCommand(cards, whosOn);
 	}
 
 	@Override
@@ -110,7 +107,6 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 		System.out.println("VotedPlayers: " + votedPlayers);
 		System.out.println("Players in round: " + playersInRound);
 		if (playersInRound == 1 || (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && votedPlayers >= playersInRound)) {
-			//TODO: itt is kell értékelni, hogy ki nyert
 			startRound();
 		} else {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
@@ -156,10 +152,10 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	@Override
 	protected void winner(HouseCommand houseCommand) {
 		HoldemHouseCommand holdemHouseCommand = (HoldemHouseCommand)houseCommand;
-		//TODO: aki foldolt annak ne vegyük figyelembe a lapjait lehet hogy már kész...
 		List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(houseCards, players);
 		Card[] cards = winner.get(0).getCards();
 		// TODO: és mi van ha döntetlen?
+		//TODO: aki nyert, annak el kell számolni a moneystacket
 		int winner_ = -1;
 		System.out.println("Players size: " + players.size());
 		for (int i = 0; i < players.size(); i++) {

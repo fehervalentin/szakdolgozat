@@ -1,6 +1,5 @@
 package hu.elte.bfw1p6.poker.server;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NoSuchObjectException;
@@ -34,9 +33,14 @@ import hu.elte.bfw1p6.poker.persist.dao.PokerTableDAO;
 import hu.elte.bfw1p6.poker.persist.dao.UserDAO;
 import hu.elte.bfw1p6.poker.properties.PokerProperties;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
-import hu.elte.bfw1p6.poker.security.service.SessionService;
+import hu.elte.bfw1p6.poker.server.security.SessionService;
 
-public class PokerRemoteImpl extends Observable implements PokerRemote, Serializable {
+/**
+ * A pókerszerver megvalósítása.
+ * @author feher
+ *
+ */
+public class PokerRemoteImpl extends Observable implements PokerRemote {
 
 	private static final long serialVersionUID = -4495230178265270679L;
 
@@ -53,6 +57,8 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	private PokerTableDAO pokerTableDAO;
 	
 	private UserDAO userDAO;
+	
+	private String initialBalance = "1000.00";
 
 	public PokerRemoteImpl() throws RemoteException, PokerDataBaseException {
 		this.pokerProperties = PokerProperties.getInstance();
@@ -196,7 +202,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote, Serializ
 	public void registration(String username, String password) throws RemoteException, PokerDataBaseException {
 		User u = new User(username);
 		u.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-		u.setBalance(new BigDecimal(10000.00));
+		u.setBalance(new BigDecimal(initialBalance));
 		u.setAdmin(false);
 		userDAO.save(u);
 	}

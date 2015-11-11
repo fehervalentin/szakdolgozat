@@ -28,7 +28,7 @@ public class ClassicHouseCommand extends HouseCommand {
 	 * @param dealer ki az aktuális osztó
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 */
-	public void setUpBlindCommand(int fixSitPosition, int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
+	public ClassicHouseCommand setUpBlindCommand(int fixSitPosition, int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
 		this.houseCommandType = ClassicHouseCommandType.BLIND;
 		this.fixSitPosition = fixSitPosition;
 		this.nthPlayer = nthPlayer;
@@ -36,6 +36,7 @@ public class ClassicHouseCommand extends HouseCommand {
 		this.dealer = dealer;
 		this.whosOn = whosOn;
 		this.clientsNames = clientsNames;
+		return this;
 	}
 	
 	/**
@@ -43,11 +44,13 @@ public class ClassicHouseCommand extends HouseCommand {
 	 * @param card1 a playernek küldött első kártya
 	 * @param card2 a playernek küldött második kártya
 	 * @param whosOn az épppen következő (soron levő) játékos
+	 * @return a beállítot utasítás
 	 */
-	public void setUpDealCommand(Card cards[], int whosOn) {
+	public ClassicHouseCommand setUpDealCommand(Card cards[], int whosOn) {
 		this.houseCommandType = ClassicHouseCommandType.DEAL;
 		this.cards = cards;
 		this.whosOn = whosOn;
+		return this;
 	}
 	
 	/**
@@ -55,10 +58,12 @@ public class ClassicHouseCommand extends HouseCommand {
 	 * @param card1 a playernek küldött első kártya
 	 * @param card2 a playernek küldött második kártya
 	 * @param whosOn az épppen következő (soron levő) játékos
+	 * @return a beállítot utasítás
 	 */
-	public void setUpChangeCommand(int whosOn) {
+	public ClassicHouseCommand setUpChangeCommand(int whosOn) {
 		this.houseCommandType = ClassicHouseCommandType.CHANGE;
 		this.whosOn = whosOn;
+		return this;
 	}
 	
 	/**
@@ -66,11 +71,13 @@ public class ClassicHouseCommand extends HouseCommand {
 	 * @param card1 a playernek küldött első kártya
 	 * @param card2 a playernek küldött második kártya
 	 * @param whosOn az épppen következő (soron levő) játékos
+	 * @return a beállítot utasítás
 	 */
-	public void setUpDeal2Command(Card cards[], int whosOn) {
+	public ClassicHouseCommand setUpDeal2Command(Card cards[], int whosOn) {
 		this.houseCommandType = ClassicHouseCommandType.DEAL2;
 		this.cards = cards;
 		this.whosOn = whosOn;
+		return this;
 	}
 	
 	/**
@@ -78,11 +85,13 @@ public class ClassicHouseCommand extends HouseCommand {
 	 * @param card1 a nyertes első lapja
 	 * @param card2 a nyertes második lapja
 	 * @param winnerUserName a nyertes neve
+	 * @return a beállított utasítás
 	 */
-	public void setUpWinnerCommand(Card[] cards, int winner) {
+	public ClassicHouseCommand setUpWinnerCommand(Card[] cards, int winner) {
 		this.houseCommandType = ClassicHouseCommandType.WINNER;
 		this.cards = cards;
 		this.winner = winner;
+		return this;
 	}
 	
 	public ClassicHouseCommandType getHouseCommandType() {

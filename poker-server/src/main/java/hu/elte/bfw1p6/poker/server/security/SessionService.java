@@ -1,4 +1,4 @@
-package hu.elte.bfw1p6.poker.security.service;
+package hu.elte.bfw1p6.poker.server.security;
 
 import java.util.HashMap;
 import java.util.Map;
