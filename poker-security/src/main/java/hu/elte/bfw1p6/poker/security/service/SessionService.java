@@ -11,15 +11,16 @@ import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.model.entity.User;
-import hu.elte.bfw1p6.poker.persist.repository.UserRepository;
+import hu.elte.bfw1p6.poker.persist.dao.UserDAO;
 
 public class SessionService {
 	
-	private final String UNAUTH_ERR_MSG = "Nem vagy autentikálva!";
-	
 	private Map<UUID, String> authenticatedUsers;
 	
-	public SessionService() {
+	private UserDAO userDAO;
+	
+	public SessionService(UserDAO userDAO) {
+		this.userDAO = userDAO;
 		this.authenticatedUsers = new HashMap<>();
 	}
 	
@@ -28,7 +29,7 @@ public class SessionService {
 	}
 	
 	public PokerSession authenticate(String username, String password) throws PokerInvalidUserException, PokerDataBaseException {
-		User u = UserRepository.getInstance().findByUserName(username);
+		User u = userDAO.findByUserName(username);
 		if (u == null || !BCrypt.checkpw(password, u.getPassword())) {
 			throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
 		}

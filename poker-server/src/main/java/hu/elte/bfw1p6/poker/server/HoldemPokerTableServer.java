@@ -37,7 +37,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	 */
 	private List<Card> houseCards;
 
-	public HoldemPokerTableServer(PokerTable pokerTable) throws RemoteException {
+	public HoldemPokerTableServer(PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
 		super(pokerTable);
 		this.houseCards = new ArrayList<>();
 	}

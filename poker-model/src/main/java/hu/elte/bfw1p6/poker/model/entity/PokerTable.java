@@ -11,6 +11,8 @@ public class PokerTable implements EntityWithId {
 
 	private static final long serialVersionUID = -4600266588149030979L;
 	
+	public static final String TABLE_NAME = "poker_tables";
+	
 	private Integer id;
 	private String name;
 	private PokerType pokerType;

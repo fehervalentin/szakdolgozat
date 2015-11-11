@@ -1,4 +1,4 @@
-package hu.elte.bfw1p6.poker.persist.dao;
+package hu.elte.bfw1p6.poker.persist.helper;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -13,22 +13,19 @@ import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
  */
 public class SQLExceptionTranslator {
 	
-	private static SQLExceptionTranslator instance = null;
-	
+	/**
+	 * Az adatbázisból jövő egyéni megszorításokat és az azokhoz tartozó nyelvi átfordításokat tartalmazza.
+	 */
 	private HashMap<String, String> mappings;
 
-	private SQLExceptionTranslator() {
+	public SQLExceptionTranslator() {
 		mappings = new HashMap<>();
 		fillMapper();
 	}
-
-	public static synchronized SQLExceptionTranslator getInstance() {
-		if (instance == null) {
-			instance = new SQLExceptionTranslator();
-		}
-		return instance;
-	}
 	
+	/**
+	 * Feltölti a mappert.
+	 */
 	private void fillMapper() {
 		mappings.put("UQ_users_username", "Ilyen felhasználónévvel már regisztráltak!");
 		mappings.put("CONSTRAINT_USERS_USERNAME_LENGHT", "A felhasznalonev hossza nem esik bele a [3-20] intervallumba!");
@@ -43,12 +40,24 @@ public class SQLExceptionTranslator {
 		mappings.put("UQ_POKER_TYPES_NAME", "Ilyen nevű játéktípus már létezik az adatbázisban!");
 	}
 	
+	/**
+	 * Átfordítja az SQLException paramétert.
+	 * @param e az átofrdítandó SQLException objektum
+	 * @return
+	 */
 	public PokerDataBaseException interceptException(SQLException e) {
 		String sqlMsg = e.getMessage();
 		String pokerMsg = lookUpMsg(sqlMsg);
 		return new PokerDataBaseException(pokerMsg);
 	}
 	
+	/**
+	 * Megkeresi a mapperben, hogy át tudja-e fordítani az adatbázisból érkező egyéni megszorítások neveit,
+	 * ha nem, akkor az eredeti üzenetet továbbítja,
+	 * ha igen, akkor az átfordított üzenetet küldi tovább
+	 * @param msg az sql hiba leírása
+	 * @return az átfordított üzenet
+	 */
 	private String lookUpMsg(String msg) {
 		Iterator<String> iter = mappings.keySet().iterator();
 		while (iter.hasNext()) {

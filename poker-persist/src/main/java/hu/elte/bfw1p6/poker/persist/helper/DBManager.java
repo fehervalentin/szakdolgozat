@@ -1,4 +1,4 @@
-package hu.elte.bfw1p6.poker.persist.dao;
+package hu.elte.bfw1p6.poker.persist.helper;
 
 import java.sql.*;
 
@@ -9,7 +9,6 @@ import java.sql.*;
  */
 public final class DBManager {
 
-	private static DBManager instance = null;
 	private Connection con = null;
 	
 	private static final String IP = "127.0.0.1";
@@ -20,31 +19,14 @@ public final class DBManager {
 	private static final String strCon = "jdbc:mysql://" + IP + "/" + DATABASE_NAME + "?user=" + USERNAME + "&password=" + PASSWORD;
 
 	public DBManager() {
-		con = getMySQLConnection();
-	}
-
-	public static synchronized DBManager getInstance() {
-		if (instance == null) {
-			instance = new DBManager();
-		}
-		return instance;
-	}
-
-	public Connection getConnection() {
-		return con;
-	}
-
-	/**
-	 * Connection to MySQL Database
-	 */
-	private static Connection getMySQLConnection() {
-		Connection con = null;
-
 		try {
 			con = DriverManager.getConnection(strCon);
 		} catch (SQLException e) {
 			System.err.println(e);
 		}
+	}
+
+	public Connection getConnection() {
 		return con;
 	}
 }

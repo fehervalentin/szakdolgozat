@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 public class User extends PokerPlayer implements EntityWithId {
 
 	private static final long serialVersionUID = 8433545627454578662L;
+	
+	public static final String TABLE_NAME = "users";
 
 	private Integer id;
 

@@ -28,7 +28,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	 */
 	private ClassicHouseCommandType actualClassicHouseCommandType;
 
-	protected ClassicPokerTableServer(PokerTable pokerTable) throws RemoteException {
+	protected ClassicPokerTableServer(PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
 		super(pokerTable);
 	}
 

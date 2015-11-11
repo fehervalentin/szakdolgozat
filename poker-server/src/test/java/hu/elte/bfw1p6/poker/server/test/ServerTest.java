@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
+import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.server.HoldemPokerTableServer;
@@ -24,7 +25,13 @@ public class ServerTest {
 		int maxPlayers = 2;
 		List<PokerRemoteObserver> clients = new ArrayList<>();
 		PokerTable pokerTable = mock(PokerTable.class);
-		HoldemPokerTableServer sv = new HoldemPokerTableServer(pokerTable);
+		HoldemPokerTableServer sv = null;
+		try {
+			sv = new HoldemPokerTableServer(pokerTable);
+		} catch (PokerDataBaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		when(pokerTable.getMaxPlayers()).thenReturn(maxPlayers);
 		
@@ -38,7 +45,12 @@ public class ServerTest {
 	public void CommandTest() throws RemoteException, PokerTooMuchPlayerException {
 		int maxPlayers = 2;
 		PokerTable pokerTable = mock(PokerTable.class);
-		HoldemPokerTableServer sv = new HoldemPokerTableServer(pokerTable);
+		try {
+			HoldemPokerTableServer sv = new HoldemPokerTableServer(pokerTable);
+		} catch (PokerDataBaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		when(pokerTable.getMaxPlayers()).thenReturn(maxPlayers);
 		

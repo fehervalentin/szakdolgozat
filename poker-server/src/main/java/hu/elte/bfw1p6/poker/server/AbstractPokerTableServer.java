@@ -8,8 +8,8 @@ import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
 
-import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
+import hu.elte.bfw1p6.poker.client.observer.PokerTableServerObserver;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
@@ -19,7 +19,7 @@ import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
-import hu.elte.bfw1p6.poker.persist.repository.UserRepository;
+import hu.elte.bfw1p6.poker.persist.dao.UserDAO;
 import hu.elte.bfw1p6.poker.server.logic.Deck;
 
 public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
@@ -92,8 +92,10 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * A játékosok száma, akik eldobták a lapjaikat.
 	 */
 	protected int foldCounter;
+	
+	protected UserDAO userDAO;
 
-	protected AbstractPokerTableServer(PokerTable pokerTable) throws RemoteException {
+	protected AbstractPokerTableServer(PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
 		super();
 		this.pokerTable = pokerTable;
 		this.deck = new Deck();
@@ -102,6 +104,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		this.players = new ArrayList<>();
 		this.clientsNames = new ArrayList<>();
 		this.cardsToHand = pokerTable.getPokerType().getCardsToPlayers();
+		this.userDAO = new UserDAO();
 	}
 
 
@@ -196,10 +199,10 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * @throws PokerDataBaseException
 	 */
 	protected void refreshBalance(PlayerCommand playerCommand) throws PokerUserBalanceException, PokerDataBaseException {
-		User u = UserRepository.getInstance().findByUserName(playerCommand.getSender());
+		User u = userDAO.findByUserName(playerCommand.getSender());
 		if (isThereEnoughMoney(u, playerCommand)) {
 			u.setBalance(u.getBalance().subtract(playerCommand.getCallAmount()));
-			UserRepository.getInstance().modify(u);
+			userDAO.modify(u);
 		}
 	}
 
