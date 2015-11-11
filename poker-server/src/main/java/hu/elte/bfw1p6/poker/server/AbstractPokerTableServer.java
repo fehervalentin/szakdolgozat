@@ -347,7 +347,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Bekéri a vakokat a játékosoktól.
 	 */
 	protected void collectBlinds() {
-		IntStream.range(0, clients.size()).forEach(i -> houseBlindCommandFactory(i, i, clients.size(), dealer, whosOn, clientsNames));
+		IntStream.range(0, clients.size()).forEach(i -> notifyNthClient(i, houseBlindCommandFactory(i, i, clients.size(), dealer, whosOn, clientsNames)));
 		nextStep();
 	}
 	

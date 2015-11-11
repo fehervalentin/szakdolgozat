@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 import com.cantero.games.poker.texasholdem.Card;
 import com.cantero.games.poker.texasholdem.CardSuitEnum;
@@ -12,6 +13,7 @@ import hu.elte.bfw1p6.poker.client.defaultvalues.AbstractDefaultValues;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -322,8 +324,8 @@ public abstract class AbstractMainView {
 						setLabelUserNames(houseCommand.getPlayersNames());
 						resetOpacity();
 						clearChips();
-						userNameLabels.forEach(label -> label.setVisible(false));
-						profileImages.forEach(label -> label.setVisible(false));
+						userNameLabels.subList(0, clientsCount).forEach(label -> label.setVisible(true));
+						profileImages.subList(0, clientsCount).forEach(label -> label.setVisible(true));
 						opponentsCards.subList(0, clientsCount - 1).forEach(card -> card.setVisible(true));
 						for (int j = 0; j < (defaultValues.MY_CARDS_COUNT - 1) * (clientsCount - 1); j++) {
 							opponentsCardSides.get(j).setVisible(true);
@@ -447,14 +449,14 @@ public abstract class AbstractMainView {
 				// ha nem én nyertem...
 				if (convertedWinnerIndex != 0) {
 					Card[] cards = houseCommand.getCards();
-					for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
-						winnerCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(cards[i]) + ".png"));
-					}
+					IntStream.range(0, defaultValues.MY_CARDS_COUNT).forEach(i -> 
+						winnerCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(cards[i]) + ".png"))
+					);
 					setNthPlayersCardsOpacity(0, convertedWinnerIndex);
-					int gap = 5;
+					int[] winnerCardsPos = houseCommand instanceof HoldemHouseCommand ? defaultValues.CARD_B1FV_POINTS : defaultValues.MIDDLE_CARD_POINT;
 					for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
-						winnerCards.get(i).setLayoutX(defaultValues.CARD_B1FV_POINTS[(convertedWinnerIndex-1) * 2] + i * defaultValues.CARD_WIDTH);
-						winnerCards.get(i).setLayoutY(defaultValues.CARD_B1FV_POINTS[(convertedWinnerIndex-1) * 2 + 1]);
+						winnerCards.get(i).setLayoutX(winnerCardsPos[(convertedWinnerIndex-1) * 2] + i * defaultValues.CARD_WIDTH);
+						winnerCards.get(i).setLayoutY(winnerCardsPos[(convertedWinnerIndex-1) * 2 + 1]);
 						winnerCards.get(i).setVisible(true);
 						winnerCards.get(i).setOpacity(1);
 					}

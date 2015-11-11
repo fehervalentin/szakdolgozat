@@ -7,6 +7,7 @@ import com.cantero.games.poker.texasholdem.Card;
 
 import hu.elte.bfw1p6.poker.client.defaultvalues.HoldemDefaultValues;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
+import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -33,19 +34,14 @@ public class HoldemMainView extends AbstractMainView {
 	 * A ház lapjait állítja be.
 	 */
 	private void setHouseCards() {
-		int gap = 5;
 		this.houseCards = new ArrayList<>();
-		ImageView previous = new ImageView(new Image(defaultValues.DECK_IMAGE_URL));
-		previous.setLayoutX(defaultValues.DECK_POINT[0] + 20);
-		previous.setLayoutY(defaultValues.DECK_POINT[1]);
-		for (int i = 0; i < defaultValues.PROFILE_COUNT; i++) {
+		for (int i = 0; i < PokerType.HOLDEM.getCardsToHouse(); i++) {
 			ImageView card = new ImageView();
-			card.setLayoutX(previous.getLayoutX() + defaultValues.CARD_WIDTH + gap);
-			card.setLayoutY(previous.getLayoutY());
+			card.setLayoutX(defaultValues.MIDDLE_CARD_POINT[i * 2]);
+			card.setLayoutY(defaultValues.MIDDLE_CARD_POINT[i * 2 + 1]);
 			card.setVisible(false);
 			houseCards.add(card);
 			mainGamePane.getChildren().add(card);
-			previous = card;
 		}
 	}
 

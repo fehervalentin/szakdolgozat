@@ -28,7 +28,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.mainView = new HoldemMainView(mainGamePane);
-		this.automateExecution = new Timer();
+//		this.automateExecution = new Timer();
 
 		try {
 			commController = new CommunicatorController(this);
@@ -80,12 +80,12 @@ public class HoldemMainGameController extends AbstractMainGameController {
 				throw new IllegalArgumentException();
 			}
 			}
-			if (houseHoldemCommand.getHouseCommandType() != HoldemHouseCommandType.BLIND) {
-				if(houseHoldemCommand.getWhosOn() == mainView.getYouAreNth()) {
-					timerTask = createTimerTask();
-					automateExecution.schedule(timerTask, delay);
-				}
-			}
+//			if (houseHoldemCommand.getHouseCommandType() != HoldemHouseCommandType.BLIND) {
+//				if(houseHoldemCommand.getWhosOn() == mainView.getYouAreNth()) {
+//					timerTask = createTimerTask();
+//					automateExecution.schedule(timerTask, delay);
+//				}
+//			}
 		} else if (updateMsg instanceof HoldemPlayerCommand) {
 			HoldemPlayerCommand holdemPlayerCommand = (HoldemPlayerCommand)updateMsg;
 			System.out.println(holdemPlayerCommand.getSender() + " játékos utasítást küldött: " + holdemPlayerCommand.getPlayerCommandType());
@@ -120,14 +120,14 @@ public class HoldemMainGameController extends AbstractMainGameController {
 				break;
 			}
 			}
-			if (holdemPlayerCommand.getPlayerCommandType() != HoldemPlayerCommandType.BLIND && holdemPlayerCommand.getPlayerCommandType() != HoldemPlayerCommandType.FOLD) {
-				System.out.println("Sajatom: " + holdemPlayerCommand.getWhosOn() + " " + mainView.getYouAreNth());
-				if(holdemPlayerCommand.getWhosOn() == mainView.getYouAreNth()) {
-					System.out.println("Új taszkot hoztam létre!");
-					timerTask = createTimerTask();
-					automateExecution.schedule(timerTask, delay);
-				}
-			}
+//			if (holdemPlayerCommand.getPlayerCommandType() != HoldemPlayerCommandType.BLIND && holdemPlayerCommand.getPlayerCommandType() != HoldemPlayerCommandType.FOLD) {
+//				System.out.println("Sajatom: " + holdemPlayerCommand.getWhosOn() + " " + mainView.getYouAreNth());
+//				if(holdemPlayerCommand.getWhosOn() == mainView.getYouAreNth()) {
+//					System.out.println("Új taszkot hoztam létre!");
+//					timerTask = createTimerTask();
+//					automateExecution.schedule(timerTask, delay);
+//				}
+//			}
 			modifyButtonsDisability(holdemPlayerCommand);
 		} else {
 			throw new IllegalArgumentException();

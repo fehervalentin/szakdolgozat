@@ -7,6 +7,8 @@ package hu.elte.bfw1p6.poker.client.defaultvalues;
  */
 public class AbstractDefaultValues {
 	
+	public final int[] MIDDLE_CARD_POINT = {525, 300, 601, 300, 677, 300, 753, 300, 829, 300};
+	
 	public String MARKER_STYLECLASS = "glow";
 	
 	/**

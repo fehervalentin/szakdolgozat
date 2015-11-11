@@ -33,7 +33,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.mainView = new ClassicMainView(mainGamePane);
-		this.automateExecution = new Timer();
+//		this.automateExecution = new Timer();
 
 		try {
 			commController = new CommunicatorController(this);
@@ -143,13 +143,13 @@ public class ClassicMainGameController extends AbstractMainGameController {
 				break;
 			}
 			}
-			if (classicPlayerCommand.getPlayerCommandType() != ClassicPlayerCommandType.BLIND) {
-				if(classicPlayerCommand.getWhosOn() == mainView.getYouAreNth()) {
-					automateExecution.purge();
-					timerTask = createTimerTask();
-					automateExecution.schedule(timerTask, delay);
-				}
-			}
+//			if (classicPlayerCommand.getPlayerCommandType() != ClassicPlayerCommandType.BLIND) {
+//				if(classicPlayerCommand.getWhosOn() == mainView.getYouAreNth()) {
+//					automateExecution.purge();
+//					timerTask = createTimerTask();
+//					automateExecution.schedule(timerTask, delay);
+//				}
+//			}
 			modifyButtonsDisability(classicPlayerCommand);
 		} else {
 			throw new IllegalArgumentException();
@@ -162,7 +162,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	 * @param event az esemény
 	 */
 	@FXML protected void handleChange(ActionEvent event) {
-		timerTask.cancel();
+//		timerTask.cancel();
 		List<Integer> markedCards = ((ClassicMainView)mainView).getMarkedCards();
 		try {
 			modifyChangeButtonDisability(true);

@@ -83,12 +83,12 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	/**
 	 * Időzített feladatokat végrehajtó objektum.
 	 */
-	protected Timer automateExecution;
+//	protected Timer automateExecution;
 	
 	/**
 	 * Az időzítendő feladat.
 	 */
-	protected TimerTask timerTask;
+//	protected TimerTask timerTask;
 	
 	//TODO: játékszerver specifikus
 	@Deprecated
@@ -148,7 +148,15 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			System.out.println(" " + cards[i]);
 		}
 		modifyButtonsDisability(null);
-		checkButton.setDisable(false);
+		if (houseCommand.getWhosOn() == model.getYouAreNth()) {
+			Platform.runLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					checkButton.setDisable(false);
+				}
+			});
+		}
 		mainView.receivedWinnerHouseCommand(houseCommand);
 	}
 
@@ -202,7 +210,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	@FXML protected void handleCall(ActionEvent event) {
 		try {
-			timerTask.cancel();
+//			timerTask.cancel();
 			model.sendCallCommand();
 			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
@@ -218,7 +226,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	@FXML protected void handleCheck(ActionEvent event) {
 		try {
-			timerTask.cancel();
+//			timerTask.cancel();
 			model.sendCheckCommand();
 			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
@@ -234,7 +242,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	@FXML protected void handleRaise(ActionEvent event) {
 		try {
-			timerTask.cancel();
+//			timerTask.cancel();
 			model.sendRaiseCommand(new BigDecimal(raiseAmount));
 			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
@@ -250,7 +258,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	@FXML protected void handleFold(ActionEvent event) {
 		try {
-			timerTask.cancel();
+//			timerTask.cancel();
 			model.sendFoldCommand();
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
@@ -264,9 +272,9 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param event az esemény
 	 */
 	@FXML protected void handleQuit(ActionEvent event) {
-		if (timerTask != null) {
-			timerTask.cancel();
-		}
+//		if (timerTask != null) {
+//			timerTask.cancel();
+//		}
 		frameController.setTableListerFXML();
 		/*try {
 			model.quit();
