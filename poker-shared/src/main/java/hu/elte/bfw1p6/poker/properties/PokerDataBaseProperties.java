@@ -5,20 +5,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-/**
- * A kliens és a szerver által közösen használt property értékek.
- * @author feher
- *
- */
-public class PokerProperties extends Properties {
+public class PokerDataBaseProperties extends Properties {
 
-	private static final long serialVersionUID = 3063357583007464160L;
+	private static final long serialVersionUID = 2655325382237474795L;
 
-	private final static String svPropFile = "server.properties";
+	private final static String svPropFile = "database.properties";
 
-	private static PokerProperties instance = null;
+	private static PokerDataBaseProperties instance = null;
 
-	private PokerProperties() throws IOException {
+	private PokerDataBaseProperties() throws IOException {
 		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(svPropFile);
 
 		if (inputStream == null) {
@@ -28,10 +23,10 @@ public class PokerProperties extends Properties {
 		}
 	}
 
-	public static PokerProperties getInstance() {
+	public static PokerDataBaseProperties getInstance() {
 		if (instance == null) {
 			try {
-				instance = new PokerProperties();
+				instance = new PokerDataBaseProperties();
 			} catch(IOException ex) {
 				ex.printStackTrace();
 			}

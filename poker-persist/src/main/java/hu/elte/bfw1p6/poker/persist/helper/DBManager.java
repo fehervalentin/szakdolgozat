@@ -2,6 +2,9 @@ package hu.elte.bfw1p6.poker.persist.helper;
 
 import java.sql.*;
 
+import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
+import hu.elte.bfw1p6.poker.properties.PokerDataBaseProperties;
+
 /**
  * Az adatbázishoz való csatlakozást biztosító osztály.
  * @author feher
@@ -11,14 +14,24 @@ public final class DBManager {
 
 	private Connection con = null;
 	
-	private static final String IP = "127.0.0.1";
-	private static final String DATABASE_NAME = "pokerdb";
-	private static final String USERNAME="root";
-	private static final String PASSWORD="1234";
+	private PokerDataBaseProperties properties;
 	
-	private static final String strCon = "jdbc:mysql://" + IP + "/" + DATABASE_NAME + "?user=" + USERNAME + "&password=" + PASSWORD;
+	private static String IP;
+	private static String DATABASE_NAME;
+	private static String USERNAME;
+	private static String PASSWORD;
+	
+	private static String strCon = "jdbc:mysql://" + IP + "/" + DATABASE_NAME + "?user=" + USERNAME + "&password=" + PASSWORD;
 
 	public DBManager() {
+		properties = PokerDataBaseProperties.getInstance();
+		IP = properties.getProperty("ip");
+		DATABASE_NAME = properties.getProperty("dbname");
+		USERNAME = properties.getProperty("username");
+		PASSWORD = properties.getProperty("password");
+		
+		strCon = "jdbc:mysql://" + IP + "/" + DATABASE_NAME + "?user=" + USERNAME + "&password=" + PASSWORD;
+		
 		try {
 			con = DriverManager.getConnection(strCon);
 		} catch (SQLException e) {
