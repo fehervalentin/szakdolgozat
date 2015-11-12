@@ -51,7 +51,6 @@ public abstract class PlayerCommand implements PokerCommand {
 		this.sender = sender;
 	}
 
-
 	public void setWhosOn(int whosOn) {
 		this.whosOn = whosOn;
 	}

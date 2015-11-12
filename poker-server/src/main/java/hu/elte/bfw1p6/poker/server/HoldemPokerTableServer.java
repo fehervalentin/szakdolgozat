@@ -3,6 +3,7 @@ package hu.elte.bfw1p6.poker.server;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.cantero.games.poker.texasholdem.Card;
@@ -117,9 +118,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 				switch (actualHoldemHouseCommandType) {
 				case FLOP: {
 					Card[] cards = new Card[]{deck.popCard(), deck.popCard(), deck.popCard()};
-					houseCards.add(cards[0]);
-					houseCards.add(cards[1]);
-					houseCards.add(cards[2]);
+					Collections.addAll(houseCards, cards);
 					houseHoldemCommand.setUpFlopTurnRiverCommand(HoldemHouseCommandType.FLOP, cards, whosOn, foldCounter);
 					break;
 				}
@@ -152,21 +151,27 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	@Override
 	protected void winner(HouseCommand houseCommand) {
 		HoldemHouseCommand holdemHouseCommand = (HoldemHouseCommand)houseCommand;
-		List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(houseCards, players);
-		Card[] cards = winner.get(0).getCards();
+		List<IPlayer> winnerList = HoldemHandEvaluator.getInstance().getWinner(houseCards, players);
+		Card[] cards = winnerList.get(0).getCards();
 		// TODO: és mi van ha döntetlen?
 		//TODO: aki nyert, annak el kell számolni a moneystacket
-		int winner_ = -1;
+		int winner = -1;
 		System.out.println("Players size: " + players.size());
 		for (int i = 0; i < players.size(); i++) {
-			if (players.get(i).getCards()[0].equals(cards[0]) && players.get(i).getCards()[1].equals(cards[1])) {
-				//winner_ = (i - foldCounter) % playersInRound;
-				winner_ = i;
+			boolean gotIt = true;
+			for (int j = 0; j < cards.length; j++) {
+				if (!players.get(i).getCards()[j].equals(cards[j])) {
+					gotIt = false;
+					break;
+				}
+			}
+			if (gotIt) {
+				winner = i;
 				break;
 			}
 		}
-		System.out.println("A győztes sorszáma: " + winner_);
+		System.out.println("A győztes sorszáma: " + winner);
 		System.out.println("A győztes kártyalapjai: " + Arrays.toString(cards));
-		holdemHouseCommand.setUpWinnerCommand(cards, winner_);
+		holdemHouseCommand.setUpWinnerCommand(cards, winner, whosOn);
 	}
 }

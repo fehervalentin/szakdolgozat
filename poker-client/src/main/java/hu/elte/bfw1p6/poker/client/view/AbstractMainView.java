@@ -327,9 +327,8 @@ public abstract class AbstractMainView {
 						userNameLabels.subList(0, clientsCount).forEach(label -> label.setVisible(true));
 						profileImages.subList(0, clientsCount).forEach(label -> label.setVisible(true));
 						opponentsCards.subList(0, clientsCount - 1).forEach(card -> card.setVisible(true));
-						for (int j = 0; j < (defaultValues.MY_CARDS_COUNT - 1) * (clientsCount - 1); j++) {
-							opponentsCardSides.get(j).setVisible(true);
-						}
+						opponentsCardSides.subList(0, (clientsCount - 1) * (defaultValues.MY_CARDS_COUNT - 1)).forEach(card -> card.setVisible(true));
+
 						dealerButtonImageView.setLayoutX(defaultValues.DEALER_BUTTON_POSITIONS[DEALER_BUTTON_POSITION * 2]);
 						dealerButtonImageView.setLayoutY(defaultValues.DEALER_BUTTON_POSITIONS[DEALER_BUTTON_POSITION * 2 + 1]);
 						dealerButtonImageView.setVisible(true);
@@ -364,8 +363,7 @@ public abstract class AbstractMainView {
 	public void loadMyCards(HouseCommand houseCommand) {
 		Card[] cards = houseCommand.getCards();
 		for (int j = 0; j < defaultValues.MY_CARDS_COUNT; j++) {
-			int value = mapCard(cards[j]);
-			myCards.get(j).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
+			myCards.get(j).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(cards[j]) + ".png"));
 		}
 	}
 

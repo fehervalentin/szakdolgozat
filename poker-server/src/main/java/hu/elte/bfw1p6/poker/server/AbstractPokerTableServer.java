@@ -310,9 +310,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	protected void endOfReceivedPlayerCommand(PlayerCommand playerComand) throws RemoteException {
 		++whosOn;
 		whosOn %= playersInRound;
+		System.out.println("WhosOn:            g " + whosOn);
 		playerComand.setWhosOn(whosOn);
 		notifyClients(playerComand);
-
 		nextRound();
 	}
 
@@ -332,9 +332,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	protected void dealCardsToPlayers() {
 		for (int i = 0; i < clients.size(); i++) {
 			Card[] cards = new Card[cardsToHand];
-			for (int j = 0; j < cardsToHand; j++) {
-				cards[j] = deck.popCard();
-			}
+			IntStream.range(0, cardsToHand).forEach(j -> cards[j] = deck.popCard());
 			PokerPlayer pokerPlayer = new PokerPlayer(clientsNames.get(i));
 			pokerPlayer.setCards(cards);
 			players.add(pokerPlayer);

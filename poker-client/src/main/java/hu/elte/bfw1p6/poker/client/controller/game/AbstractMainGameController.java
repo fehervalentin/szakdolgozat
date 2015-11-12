@@ -3,9 +3,11 @@ package hu.elte.bfw1p6.poker.client.controller.game;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.IntStream;
 
 import com.cantero.games.poker.texasholdem.Card;
 
@@ -143,11 +145,9 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	protected void receivedWinnerHouseCommand(HouseCommand houseCommand) {
 		Card[] cards = houseCommand.getCards();
-		System.out.println("Winner:");
-		for (int i = 0; i < cards.length; i++) {
-			System.out.println(" " + cards[i]);
-		}
+		System.out.println("Winner cards: " + Arrays.toString(cards));
 		modifyButtonsDisability(null);
+		System.out.println("WhosOn: " + houseCommand.getWhosOn() + " YouAreNth: " + model.getYouAreNth());
 		if (houseCommand.getWhosOn() == model.getYouAreNth()) {
 			Platform.runLater(new Runnable() {
 				
@@ -311,6 +311,17 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param playerCommand az utasítás
 	 */
 	protected void receivedCheckPlayerCommand(PlayerCommand playerCommand) {
+		modifyButtonsDisability(null);
+		System.out.println("WhosOn: " + playerCommand.getWhosOn() + " YouAreNth: " + model.getYouAreNth());
+		if (playerCommand.getWhosOn() == model.getYouAreNth()) {
+			Platform.runLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					checkButton.setDisable(false);
+				}
+			});
+		}
 		mainView.receivedCheckPlayerCommand(playerCommand);
 	}
 
