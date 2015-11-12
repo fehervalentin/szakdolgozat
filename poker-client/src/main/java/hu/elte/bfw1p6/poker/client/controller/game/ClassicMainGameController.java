@@ -12,7 +12,6 @@ import hu.elte.bfw1p6.poker.client.model.ClassicMainGameModel;
 import hu.elte.bfw1p6.poker.client.view.ClassicMainView;
 import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
-import hu.elte.bfw1p6.poker.command.classic.type.ClassicPlayerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
@@ -150,7 +149,9 @@ public class ClassicMainGameController extends AbstractMainGameController {
 //					automateExecution.schedule(timerTask, delay);
 //				}
 //			}
-			modifyButtonsDisability(classicPlayerCommand);
+			if (!classicPlayerCommand.isWinnerCommand()) {
+				modifyButtonsDisability(classicPlayerCommand);
+			}
 		} else {
 			throw new IllegalArgumentException();
 		}

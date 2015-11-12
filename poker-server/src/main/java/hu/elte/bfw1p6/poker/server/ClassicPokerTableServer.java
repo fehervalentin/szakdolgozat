@@ -114,7 +114,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 				break;
 			}
 			case CHECK: {
-				receivedCheckPlayerCommand();
+				receivedCheckPlayerCommand(classicPlayerCommand);
 				break;
 			}
 			case FOLD: {
@@ -136,6 +136,17 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 				break;
 			}
 			endOfReceivedPlayerCommand(classicPlayerCommand);
+		}
+	}
+	
+	/**
+	 * CHECK típusú utasítás érkezett egy klienstől.
+	 */
+	@Override
+	protected void receivedCheckPlayerCommand(PlayerCommand playerComand) {
+		++votedPlayers;
+		if (actualClassicHouseCommandType == ClassicHouseCommandType.WINNER) {
+			playerComand.setWinnerCommand(true);
 		}
 	}
 

@@ -255,13 +255,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		refreshBalance(playerComand);
 		++votedPlayers;
 	}
-
-	/**
-	 * CHECK típusú utasítás érkezett egy klienstől.
-	 */
-	protected void receivedCheckPlayerCommand() {
-		++votedPlayers;
-	}
+	
+	protected abstract void receivedCheckPlayerCommand(PlayerCommand playerComand);
 
 	/**
 	 * FOLD típusú utasítás érkezett egy klienstől.

@@ -57,7 +57,7 @@ public abstract class HouseCommand implements PokerCommand {
 	 * A fixen elfoglalt ülőhely az asztalnál.
 	 */
 	protected int fixSitPosition;
-
+	
 	@Override
 	public int getWhosOn() {
 		return whosOn;

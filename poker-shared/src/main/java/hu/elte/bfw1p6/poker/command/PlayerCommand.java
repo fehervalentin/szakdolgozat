@@ -36,6 +36,8 @@ public abstract class PlayerCommand implements PokerCommand {
 	 */
 	protected int whosQuit;
 	
+	protected boolean winnerCommand;
+	
 	@Override
 	public int getWhosOn() {
 		return whosOn;
@@ -65,5 +67,13 @@ public abstract class PlayerCommand implements PokerCommand {
 
 	public BigDecimal getRaiseAmount() {
 		return raiseAmount;
+	}
+	
+	public void setWinnerCommand(boolean winnerCommand) {
+		this.winnerCommand = winnerCommand;
+	}
+	
+	public boolean isWinnerCommand() {
+		return winnerCommand;
 	}
 }

@@ -311,9 +311,11 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param playerCommand az utasítás
 	 */
 	protected void receivedCheckPlayerCommand(PlayerCommand playerCommand) {
-		modifyButtonsDisability(null);
-		System.out.println("WhosOn: " + playerCommand.getWhosOn() + " YouAreNth: " + model.getYouAreNth());
-		if (playerCommand.getWhosOn() == model.getYouAreNth()) {
+		if (playerCommand.isWinnerCommand()) {
+			modifyButtonsDisability(null);
+		}
+		System.out.println("AZENYÉMBAZDMEGWhosOn: " + playerCommand.getWhosOn() + " YouAreNth: " + model.getYouAreNth() + " ISWINNER: " + playerCommand.isWinnerCommand());
+		if (playerCommand.getWhosOn() == model.getYouAreNth() && playerCommand.isWinnerCommand()) {
 			Platform.runLater(new Runnable() {
 				
 				@Override

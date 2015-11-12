@@ -12,6 +12,7 @@ import com.cantero.games.poker.texasholdem.IPlayer;
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
+import hu.elte.bfw1p6.poker.command.classic.type.ClassicHouseCommandType;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.type.HoldemHouseCommandType;
@@ -80,7 +81,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 				break;
 			}
 			case CHECK: {
-				receivedCheckPlayerCommand();
+				receivedCheckPlayerCommand(holdemPlayerCommand);
 				break;
 			}
 			case FOLD: {
@@ -99,6 +100,18 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 				break;
 			}
 			endOfReceivedPlayerCommand(holdemPlayerCommand);
+		}
+	}
+	
+	/**
+	 * CHECK típusú utasítás érkezett egy klienstől.
+	 */
+	@Override
+	protected void receivedCheckPlayerCommand(PlayerCommand playerComand) {
+		++votedPlayers;
+		System.out.println("KURVÁRA ITT VAGYOK BAZDMEG                     .....: " + actualHoldemHouseCommandType);
+		if (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND) {
+			playerComand.setWinnerCommand(true);
 		}
 	}
 
