@@ -13,8 +13,6 @@ import hu.elte.bfw1p6.poker.client.model.HoldemMainGameModel;
 import hu.elte.bfw1p6.poker.client.view.HoldemMainView;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
-import hu.elte.bfw1p6.poker.command.holdem.type.HoldemHouseCommandType;
-import hu.elte.bfw1p6.poker.command.holdem.type.HoldemPlayerCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 
@@ -105,7 +103,6 @@ public class HoldemMainGameController extends AbstractMainGameController {
 			}
 			case FOLD: {
 				receivedFoldPlayerCommand(holdemPlayerCommand);
-//				modifyButtonVisibilities(playerHoldemCommand);
 				break;
 			}
 			case RAISE: {

@@ -21,7 +21,7 @@ import javafx.scene.layout.AnchorPane;
  */
 public abstract class AbstractPokerClientController implements PokerClientController {
 	
-	private final String ERR_CONN = "A kommunikáció megszakadt a szerverrel!";
+	private final String ERR_CONN = "Kommunikációs hiba a szerverrel!";
 	
 	@FXML private AnchorPane rootPane;
 
@@ -57,6 +57,7 @@ public abstract class AbstractPokerClientController implements PokerClientContro
 
 	public abstract void initialize(URL location, ResourceBundle resources);
 
+	@Override
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
 	}
@@ -66,7 +67,9 @@ public abstract class AbstractPokerClientController implements PokerClientContro
 	 */
 	public void remoteExceptionHandler() {
 		showErrorAlert(ERR_CONN);
-		frameController.setLoginFXML();
+		if (!(this instanceof ConnectorController)) {
+			frameController.setConnectorFXML();
+		}
 	}
 	
 	/**

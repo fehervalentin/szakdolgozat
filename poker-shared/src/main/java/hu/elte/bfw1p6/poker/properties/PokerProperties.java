@@ -11,6 +11,7 @@ import java.util.Properties;
  *
  */
 public class PokerProperties {
+
 	private final static String svPropFile = "server.properties";
 	
 	private Properties properties;

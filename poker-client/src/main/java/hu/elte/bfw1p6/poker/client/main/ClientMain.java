@@ -58,9 +58,7 @@ public class ClientMain extends Application {
 				}
 				Platform.exit();
 			}
-    		
     	};
     	return closeEvent;
     }
-
 }
