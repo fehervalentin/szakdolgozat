@@ -1,8 +1,9 @@
 package hu.elte.bfw1p6.poker.persist.helper;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.properties.PokerDataBaseProperties;
 
 /**

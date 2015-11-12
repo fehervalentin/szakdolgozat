@@ -1,6 +1,8 @@
 package hu.elte.bfw1p6.poker.client.controller;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
@@ -46,7 +48,7 @@ public class LoginController extends AbstractPokerClientController {
 			frameController.setTableListerFXML();
 		} catch (PokerInvalidUserException | PokerDataBaseException e) {
 			showErrorAlert(e.getMessage());
-		} catch (RemoteException e) {
+		} catch (RemoteException | MalformedURLException | NotBoundException e) {
 			remoteExceptionHandler();
 		}
 	}

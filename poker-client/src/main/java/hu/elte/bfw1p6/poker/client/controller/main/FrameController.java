@@ -76,6 +76,7 @@ public class FrameController extends UnicastRemoteObject {
 	 * A tábla listázó FXML-t jeleníti meg.
 	 */
 	public void setTableListerFXML() {
+		setStageSize(MENU_GAME_WIDHT, MENU_GAME_HEIGHT);
 		setFXML(TABLE_LISTER_FXML);
 	}
 	
@@ -137,7 +138,6 @@ public class FrameController extends UnicastRemoteObject {
 			PokerClientController controller = loader.<PokerClientController>getController();
 			controller.setDelegateController(this);
 		} catch (IOException e) {
-			System.out.println("lollllll");
 			e.printStackTrace();
 		}
 	}

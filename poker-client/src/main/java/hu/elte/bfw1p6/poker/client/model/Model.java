@@ -1,6 +1,7 @@
 package hu.elte.bfw1p6.poker.client.model;
 
 import java.net.MalformedURLException;
+import java.nio.file.WatchService;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -41,16 +42,20 @@ public class Model {
 	 */
 	private static PokerSession pokerSession;
 	
-	private final String SVNAME;
-	private final String PORT;
+	private static String IP;
+	private static String SVNAME;
+	private static String PORT;
+	
+	private static boolean wasError = false;
 
 	private PokerProperties pokerProperties;
 
 	private Model() throws MalformedURLException, RemoteException, NotBoundException {
 		pokerProperties = PokerProperties.getInstance();
+		IP = pokerProperties.getProperty("ip");
 		SVNAME =  pokerProperties.getProperty("name");
 		PORT = pokerProperties.getProperty("rmiport");
-		pokerRemote = (PokerRemote) Naming.lookup("//localhost:" + PORT + "/" + SVNAME);
+		connect();
 	}
 	
 	public static Model getInstance() throws MalformedURLException, RemoteException, NotBoundException {
@@ -58,6 +63,10 @@ public class Model {
 			instance = new Model();
 		}
 		return instance;
+	}
+	
+	private static void connect() throws MalformedURLException, RemoteException, NotBoundException {
+		pokerRemote = (PokerRemote) Naming.lookup("//" + IP + ":" + PORT + "/" + SVNAME);
 	}
 
 	/**
@@ -67,8 +76,11 @@ public class Model {
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
 	 * @throws PokerInvalidUserException
+	 * @throws NotBoundException 
+	 * @throws MalformedURLException 
 	 */
-	public void login(String username, String password) throws RemoteException, PokerDataBaseException, PokerInvalidUserException {
+	public void login(String username, String password) throws RemoteException, PokerDataBaseException, PokerInvalidUserException, MalformedURLException, NotBoundException {
+		connect();
 		pokerSession = pokerRemote.login(username, password);
 	}
 
@@ -203,5 +215,13 @@ public class Model {
 	
 	public void setParameterPokerTable(PokerTable paramPokerTable) {
 		Model.paramPokerTable = paramPokerTable;
+	}
+	
+	public void setWasError(boolean wasError) {
+		this.wasError = wasError;
+	}
+	
+	public boolean isWasError() {
+		return wasError;
 	}
 }

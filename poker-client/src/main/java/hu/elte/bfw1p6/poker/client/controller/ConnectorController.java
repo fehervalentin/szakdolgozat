@@ -38,7 +38,7 @@ public class ConnectorController extends AbstractPokerClientController {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.properties = PokerProperties.getInstance();
-		this.SVIP = "127.0.0.1";
+		this.SVIP = properties.getProperty("ip");
 		this.PORT = properties.getProperty("rmiport");
 		this.SVNAME = properties.getProperty("name");
 		serverIPField.setText(this.SVIP);
@@ -52,7 +52,6 @@ public class ConnectorController extends AbstractPokerClientController {
 	 */
 	@FXML protected void connectHandler(ActionEvent event) {
 		try {
-			System.out.println("próbálok!");
 			Naming.lookup("//" + SVIP + ":" + PORT + "/" + SVNAME);
 			frameController.setLoginFXML();
 		} catch (NotBoundException | MalformedURLException | RemoteException e) {

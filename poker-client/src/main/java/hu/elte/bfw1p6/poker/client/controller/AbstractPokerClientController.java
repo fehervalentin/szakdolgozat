@@ -49,7 +49,9 @@ public abstract class AbstractPokerClientController implements PokerClientContro
 		errorAlert = new Alert(AlertType.ERROR);
 		successAlert = new Alert(AlertType.INFORMATION);
 		try {
-			model = Model.getInstance();
+			if (!(this instanceof ConnectorController)) {
+				model = Model.getInstance();
+			}
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			remoteExceptionHandler();
 		}
@@ -66,6 +68,12 @@ public abstract class AbstractPokerClientController implements PokerClientContro
 	 * Hibás szerver-kliens kommunikációt kezelő eljárás.
 	 */
 	public void remoteExceptionHandler() {
+//		try {
+//			Model.getInstance().setWasError(true);
+//		} catch (MalformedURLException | RemoteException | NotBoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		showErrorAlert(ERR_CONN);
 		if (!(this instanceof ConnectorController)) {
 			frameController.setConnectorFXML();
