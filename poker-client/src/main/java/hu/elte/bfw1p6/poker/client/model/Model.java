@@ -42,12 +42,10 @@ public class Model {
 	 */
 	private static PokerSession pokerSession;
 	
-	private static String IP;
-	private static String SVNAME;
-	private static String PORT;
+	private final String IP;
+	private final String SVNAME;
+	private final String PORT;
 	
-	private static boolean wasError = false;
-
 	private PokerProperties pokerProperties;
 
 	private Model() throws MalformedURLException, RemoteException, NotBoundException {
@@ -65,7 +63,7 @@ public class Model {
 		return instance;
 	}
 	
-	private static void connect() throws MalformedURLException, RemoteException, NotBoundException {
+	private void connect() throws MalformedURLException, RemoteException, NotBoundException {
 		pokerRemote = (PokerRemote) Naming.lookup("//" + IP + ":" + PORT + "/" + SVNAME);
 	}
 
@@ -215,13 +213,5 @@ public class Model {
 	
 	public void setParameterPokerTable(PokerTable paramPokerTable) {
 		Model.paramPokerTable = paramPokerTable;
-	}
-	
-	public void setWasError(boolean wasError) {
-		this.wasError = wasError;
-	}
-	
-	public boolean isWasError() {
-		return wasError;
 	}
 }

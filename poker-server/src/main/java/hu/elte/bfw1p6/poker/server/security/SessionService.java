@@ -30,15 +30,11 @@ public class SessionService {
 	
 	public PokerSession authenticate(String username, String password) throws PokerInvalidUserException, PokerDataBaseException {
 		User u = userDAO.findByUserName(username);
-		if (u == null || !BCrypt.checkpw(password, u.getPassword())) {
+		if (u == null || !BCrypt.checkpw(password, u.getPassword()) || authenticatedUsers.values().contains(username)) {
 			throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
 		}
-//		if (authenticatedUsers.values().contains(username)) {
-//			throw new PokerAlreadyLoggedInError()
-//		}
 		//TODO: ne engedje be, de mi van, ha elfelejt kijelentkezni...?
 		//TODO: de amostani sem jó, mert játék közben kivágja, akkor mi van...?
-		invalidate(username);
 		UUID uuid = UUID.randomUUID();
 		authenticatedUsers.put(uuid, username);
 		PokerSession pokerSession = new PokerSession(uuid, u.getPlayer());
@@ -47,10 +43,6 @@ public class SessionService {
 	
 	public void invalidate(UUID uuid) {
 		authenticatedUsers.remove(uuid);
-	}
-	
-	private void invalidate(String username) {
-		authenticatedUsers.values().remove(username);
 	}
 	
 	public String lookUpUserName(UUID uuid) {

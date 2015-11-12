@@ -22,7 +22,7 @@ public final class DBManager {
 	private static String USERNAME;
 	private static String PASSWORD;
 	
-	private static String strCon = "jdbc:mysql://" + IP + "/" + DATABASE_NAME + "?user=" + USERNAME + "&password=" + PASSWORD;
+	private static String strCon;
 
 	public DBManager() {
 		properties = PokerDataBaseProperties.getInstance();
