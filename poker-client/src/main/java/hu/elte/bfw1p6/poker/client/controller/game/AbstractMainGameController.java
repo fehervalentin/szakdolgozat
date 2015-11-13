@@ -38,8 +38,8 @@ import javafx.scene.layout.AnchorPane;
  */
 public abstract class AbstractMainGameController implements PokerClientController, PokerRemoteObserver {
 
-	protected final String ERR_CONN = "A megszakadt a kommunikáció a szerverrel!";
-	
+	protected final String ERR_CONN = "Megszakadt a kommunikáció a szerverrel!";
+
 	@FXML protected AnchorPane mainGamePane;
 
 	@FXML protected Label pokerLabel;
@@ -80,31 +80,31 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * Hibát jelző felugró ablak.
 	 */
 	protected Alert errorAlert;
-	
+
 	/**
 	 * Időzített feladatokat végrehajtó objektum.
 	 */
-//	protected Timer automateExecution;
-	
+	//	protected Timer automateExecution;
+
 	/**
 	 * Az időzítendő feladat.
 	 */
-//	protected TimerTask timerTask;
-	
+	//	protected TimerTask timerTask;
+
 	//TODO: játékszerver specifikus
 	@Deprecated
 	protected long delay = 5000;
-	
+
 	//TODO: játékszerver specifikus
 	@Deprecated
 	private double raiseAmount = 6;
-	
+
 	@Override
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
 		this.scene = this.frameController.getScene();
 	}
-	
+
 	/**
 	 * Új időzített feladatot hoz létre az automatikus cselekedéshez. (Check, change, fold gombok fire metódusának hívására.)
 	 * @return az új időzített feladat
@@ -149,7 +149,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 		System.out.println("WhosOn: " + houseCommand.getWhosOn() + " YouAreNth: " + model.getYouAreNth());
 		if (houseCommand.getWhosOn() == model.getYouAreNth()) {
 			Platform.runLater(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					checkButton.setDisable(false);
@@ -177,7 +177,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			}
 		});
 	}
-	
+
 	/**
 	 * Módosítja a FOLD button disable tulajdonságát.
 	 * @param disabled
@@ -185,7 +185,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	protected void modifyFoldButtonDisability(boolean disabled) {
 		foldButton.setDisable(disabled);
 	}
-	
+
 	/**
 	 * Módosítja a CHECK button disable tulajdonságát.
 	 * @param disabled
@@ -209,7 +209,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	@FXML protected void handleCall(ActionEvent event) {
 		try {
-//			timerTask.cancel();
+			//			timerTask.cancel();
 			model.sendCallCommand();
 			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
@@ -225,7 +225,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	@FXML protected void handleCheck(ActionEvent event) {
 		try {
-//			timerTask.cancel();
+			//			timerTask.cancel();
 			model.sendCheckCommand();
 			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
@@ -241,7 +241,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	@FXML protected void handleRaise(ActionEvent event) {
 		try {
-//			timerTask.cancel();
+			//			timerTask.cancel();
 			model.sendRaiseCommand(new BigDecimal(raiseAmount));
 			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
@@ -257,7 +257,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	@FXML protected void handleFold(ActionEvent event) {
 		try {
-//			timerTask.cancel();
+			//			timerTask.cancel();
 			model.sendFoldCommand();
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
@@ -271,23 +271,19 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param event az esemény
 	 */
 	@FXML protected void handleQuit(ActionEvent event) {
-//		if (timerTask != null) {
-//			timerTask.cancel();
-//		}
-		frameController.setTableListerFXML();
-		/*try {
-			model.quit();
+		//		if (timerTask != null) {
+		//			timerTask.cancel();
+		//		}
+		try {
+			model.sendQuitCommand();
+			frameController.setTableListerFXML();
 		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
-		}*/
-//		frameController.setHoldemMainGameFXML();
-		//		frameController.setTableListerFXML();
+		}
+		catch (RemoteException e) {
+			remoteExceptionHandler();
+		}
 	}
-
-
-
-
-
 
 	/**
 	 * BLIND típusú utasítás érkezett egy játékostól.
@@ -316,7 +312,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 		System.out.println("AZENYÉMBAZDMEGWhosOn: " + playerCommand.getWhosOn() + " YouAreNth: " + model.getYouAreNth() + " ISWINNER: " + playerCommand.isWinnerCommand());
 		if (playerCommand.getWhosOn() == model.getYouAreNth() && playerCommand.isWinnerCommand()) {
 			Platform.runLater(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					checkButton.setDisable(false);
@@ -354,7 +350,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 		model.receivedQuitPlayerCommand(playerCommand);
 		mainView.receivedQuitPlayerCommand(playerCommand);
 	}
-	
+
 	/**
 	 * Hibás szerver-kliens kommunikációt kezelő eljárás.
 	 */
@@ -362,7 +358,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 		showErrorAlert(ERR_CONN);
 		frameController.setLoginFXML();
 	}
-	
+
 	/**
 	 * Ellenőrzi, hogy van-e addósságom, és ennek megfelelően állítja be a gombok disable tulajdonsgát.
 	 */

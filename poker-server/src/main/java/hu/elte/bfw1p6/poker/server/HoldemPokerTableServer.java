@@ -17,6 +17,7 @@ import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
+import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.server.logic.HoldemHandEvaluator;
 
@@ -108,7 +109,6 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	@Override
 	protected void receivedCheckPlayerCommand(PlayerCommand playerComand) {
 		++votedPlayers;
-		System.out.println("KURVÁRA ITT VAGYOK BAZDMEG                     .....: " + actualHoldemHouseCommandType);
 		if (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND) {
 			playerComand.setWinnerCommand(true);
 		}
@@ -119,7 +119,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 		// ha már kijött a river és az utolsó körben (rivernél) már mindenki nyilatkozott legalább egyszer, akkor új játszma kezdődik
 		System.out.println("VotedPlayers: " + votedPlayers);
 		System.out.println("Players in round: " + playersInRound);
-		if (playersInRound == 1 || (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && votedPlayers >= playersInRound)) {
+		if (playersInRound <= 1 || (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && votedPlayers >= playersInRound)) {
 			startRound();
 		} else {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
