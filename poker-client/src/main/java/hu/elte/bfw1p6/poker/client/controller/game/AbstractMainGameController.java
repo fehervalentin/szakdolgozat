@@ -174,6 +174,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 				checkButton.setDisable(disable);
 				foldButton.setDisable(disable);
 				raiseButton.setDisable(disable);
+				quitButton.setDisable(disable);
 			}
 		});
 	}

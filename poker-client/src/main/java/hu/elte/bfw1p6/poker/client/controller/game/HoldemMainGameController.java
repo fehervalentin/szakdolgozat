@@ -126,7 +126,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 //					automateExecution.schedule(timerTask, delay);
 //				}
 //			}
-			if (!holdemPlayerCommand.isWinnerCommand() && !holdemPlayerCommand.getCommandType().equals("QUIT")) {
+			if (!holdemPlayerCommand.isWinnerCommand() && !holdemPlayerCommand.getCommandType().equals("QUIT") || holdemPlayerCommand.getCommandType().equals("QUIT") && holdemPlayerCommand.getClientsCount() >=2) {
 				modifyButtonsDisability(holdemPlayerCommand);
 			}
 		} else {
