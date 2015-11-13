@@ -38,6 +38,8 @@ public abstract class PlayerCommand implements PokerCommand {
 	
 	protected boolean winnerCommand;
 	
+	protected int clientsCount;
+	
 	@Override
 	public int getWhosOn() {
 		return whosOn;
@@ -75,5 +77,13 @@ public abstract class PlayerCommand implements PokerCommand {
 	
 	public boolean isWinnerCommand() {
 		return winnerCommand;
+	}
+
+	public int getClientsCount() {
+		return clientsCount;
+	}
+
+	public void setClientsCount(int clientsCount) {
+		this.clientsCount = clientsCount;
 	}
 }

@@ -173,7 +173,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		playersInRound = clients.size();
 		//következő játékos a dealer
 		++dealer;
-		System.out.println("dealert emelek!!!!!!!444444444444444");
 		//a kártyapaklit megkeverjük
 		deck.reset();
 		//senki sem beszélt még
@@ -310,6 +309,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		if (playersInRound > 0)
 			whosOn %= playersInRound;
 		playerComand.setWhosOn(whosOn);
+		playerComand.setClientsCount(clients.size());
 		notifyClients(playerComand);
 		nextRound();
 	}

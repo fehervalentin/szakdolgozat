@@ -2,6 +2,7 @@ package hu.elte.bfw1p6.poker.client.view;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -234,6 +235,11 @@ public abstract class AbstractMainView {
 		myBalance.setLayoutX(defaultValues.PROFILE_POINTS[0]);
 		myBalance.setLayoutY(defaultValues.PROFILE_POINTS[1]+20);
 		mainGamePane.getChildren().add(myBalance);
+		
+	}
+	
+	public void setUserName(String userName) {
+		userNameLabels.get(0).setText(userName);
 	}
 
 	/**
@@ -429,8 +435,40 @@ public abstract class AbstractMainView {
 	 * @param playerCommand az utasítás
 	 */
 	public void receivedQuitPlayerCommand(PlayerCommand playerCommand) {
-		// TODO Auto-generated method stub
+		// TODO itt kurva sok mindent kell csinálni
+		Platform.runLater(new Runnable() {
 
+			@Override
+			public void run() {
+				double opacity = 0.4;
+				int convertedWhoFold = ultimateFormula(playerCommand.getWhosQuit());
+				--clientsCount;
+				if (convertedWhoFold == 0) {
+					youAreNth = -1;
+					myCards.forEach(card -> card.setOpacity(opacity));
+				} else {
+					reArrangeTable(convertedWhoFold, playerCommand);
+					//TODO: aki fölötte van az lejjebb csúszik a GUI-n is.
+//					setNthPlayersCardsOpacity(opacity, convertedWhoFold);
+				}
+				//TODO: ilyenkor lehet nem kell next player color
+//				colorNextPlayer(playerCommand);
+			}
+		});
+	}
+	
+	private void reArrangeTable(int convertedWhoFold, PlayerCommand playerCommand) {
+		int cc = clientsCount;
+		profileImages.subList(cc, profileImages.size()).forEach(profile -> profile.setVisible(false));
+		opponentsCards.subList(cc - 1, opponentsCards.size()).forEach(card -> card.setVisible(false));
+		opponentsCardSides.subList((cc - 1) * (defaultValues.MY_CARDS_COUNT - 1), opponentsCardSides.size()).forEach(card -> card.setVisible(false));
+		userNameLabels.subList(cc, userNameLabels.size()).forEach(label -> label.setVisible(false));
+		myCards.forEach(card -> card.setVisible(false));
+		chips.forEach(chip -> chip.setVisible(false));
+		dealerButtonImageView.setVisible(false);
+		if (clientsCount < 2) {
+			hideHouseCards();
+		}
 	}
 
 	/**

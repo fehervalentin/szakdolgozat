@@ -29,10 +29,11 @@ public class HoldemMainGameController extends AbstractMainGameController {
 //		this.automateExecution = new Timer();
 
 		try {
-			commController = new CommunicatorController(this);
-			model = new HoldemMainGameModel(commController);
-			model.connectToTable(commController);
-			pokerLabel.setText(model.getUserName());
+			this.commController = new CommunicatorController(this);
+			this.model = new HoldemMainGameModel(commController);
+			this.model.connectToTable(commController);
+			this.mainView.setUserName(model.getUserName());
+			this.pokerLabel.setText(model.getUserName());
 		} catch (PokerTooMuchPlayerException e) {
 			showErrorAlert(e.getMessage());
 			frameController.setTableListerFXML();
@@ -125,7 +126,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 //					automateExecution.schedule(timerTask, delay);
 //				}
 //			}
-			if (!holdemPlayerCommand.isWinnerCommand()) {
+			if (!holdemPlayerCommand.isWinnerCommand() && !holdemPlayerCommand.getCommandType().equals("QUIT")) {
 				modifyButtonsDisability(holdemPlayerCommand);
 			}
 		} else {

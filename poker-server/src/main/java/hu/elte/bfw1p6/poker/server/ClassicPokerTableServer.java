@@ -63,7 +63,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	protected void nextRound() throws RemoteException {
 //		System.out.println("VotedPlayers: " + votedPlayers);
 //		System.out.println("Players in round: " + playersInRound);
-		if (playersInRound == 1 || (actualClassicHouseCommandType == ClassicHouseCommandType.values()[0] && votedPlayers >= playersInRound)) {
+		if (playersInRound <= 1 || (actualClassicHouseCommandType == ClassicHouseCommandType.values()[0] && votedPlayers >= playersInRound)) {
 			startRound();
 		} else {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
