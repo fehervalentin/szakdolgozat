@@ -97,8 +97,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 */
 	protected UserDAO userDAO;
 	
-	protected boolean[] foldMask;
-	protected boolean[] quitMask;
+	protected boolean[] foldMask = new boolean[6];
+	protected boolean[] quitMask = new boolean[6];
 
 	protected AbstractPokerTableServer(PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
 		super();

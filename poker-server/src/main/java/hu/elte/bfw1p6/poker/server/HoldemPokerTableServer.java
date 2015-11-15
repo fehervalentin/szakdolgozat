@@ -184,7 +184,8 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 			}
 		}
 		long count = IntStream.range(0, foldMask.length).filter(i -> foldMask[i]).count();
-		winner += count;
+		long count2 = IntStream.range(0, quitMask.length).filter(i -> foldMask[i]).count();
+		winner += (count + count2);
 		winner %= foldMask.length;
 		System.out.println("Hányan dobták a lapjaikat: " + count);
 		System.out.println("A győztes sorszáma: " + winner);
