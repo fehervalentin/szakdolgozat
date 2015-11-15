@@ -70,8 +70,8 @@ public class TableListerController extends AbstractPokerClientController impleme
 			List<PokerTable> tables = model.registerTableViewObserver(commCont);
 			tableView.getItems().setAll(tables);
 			//TODO: ezt kitörölni
-//			tableView.getSelectionModel().select(0);
-//			connectButton.fire();
+			tableView.getSelectionModel().select(0);
+			connectButton.fire();
 		} catch (PokerDataBaseException e) {
 			showErrorAlert(e.getMessage());
 		} catch (RemoteException | PokerUnauthenticatedException e ) {

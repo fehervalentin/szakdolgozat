@@ -216,9 +216,7 @@ public abstract class AbstractMainGameModel {
 	 * @param playerCommand az utasítás
 	 */
 	public void receivedFoldPlayerCommand(PlayerCommand playerCommand) {
-		if (youAreNth > playerCommand.getWhosQuit()) {
-			--youAreNth;
-		}
+		
 	}
 	
 	/**
@@ -226,9 +224,7 @@ public abstract class AbstractMainGameModel {
 	 * @param playerCommand az utasítás
 	 */
 	public void receivedQuitPlayerCommand(PlayerCommand playerCommand) {
-		if (youAreNth > playerCommand.getWhosQuit()) {
-			--youAreNth;
-		}
+		
 	}
 
 	public BigDecimal getMyDebt() {

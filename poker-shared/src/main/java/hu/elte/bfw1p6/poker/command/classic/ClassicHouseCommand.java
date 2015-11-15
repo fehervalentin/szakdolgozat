@@ -92,11 +92,10 @@ public class ClassicHouseCommand extends HouseCommand {
 	 * @param winnerUserName a nyertes neve
 	 * @return a beállított utasítás
 	 */
-	public ClassicHouseCommand setUpWinnerCommand(Card[] cards, int winner, int foldCounter) {
+	public ClassicHouseCommand setUpWinnerCommand(Card[] cards, int winner) {
 		this.houseCommandType = ClassicHouseCommandType.WINNER;
 		this.cards = cards;
 		this.winner = winner;
-		this.foldCounter = foldCounter;
 		return this;
 	}
 	

@@ -55,10 +55,8 @@ public class HoldemMainGameModel extends AbstractMainGameModel {
 
 	@Override
 	public void sendFoldCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
-		int tempNth = youAreNth;
-		youAreNth = -1;
 		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
-		playerCommand.setUpFoldCommand(tempNth);
+		playerCommand.setUpFoldCommand(youAreNth);
 		sendCommandToTable(playerCommand);
 	}
 

@@ -70,7 +70,8 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 			if (votedPlayers >= playersInRound) {
 				ClassicHouseCommand classicHouseCommand = new ClassicHouseCommand();
 				// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
-				whosOn = (dealer + 1 + foldCounter) % playersInRound;
+				whosOn = (dealer + 1) % playersInRound;
+				whosOn = findNextValidClient(whosOn);
 				switch (actualClassicHouseCommandType) {
 				case CHANGE: {
 					classicHouseCommand.setUpChangeCommand(whosOn);
@@ -181,6 +182,6 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 		}
 		System.out.println("A győztes sorszáma: " + winner_);
 		System.out.println("A győztes kártyalapjai: " + Arrays.toString(cards));
-		holdemHouseCommand.setUpWinnerCommand(cards, winner_, foldCounter);
+		holdemHouseCommand.setUpWinnerCommand(cards, winner_);
 	}
 }

@@ -112,8 +112,6 @@ public abstract class AbstractMainView {
 	 */
 	protected int fixSitPosition;
 	
-	protected boolean[] whoFoldMask;
-
 	public AbstractMainView(AnchorPane mainGamePane, AbstractDefaultValues defaultValues) {
 		this.mainGamePane = mainGamePane;
 		this.defaultValues = defaultValues;
@@ -285,10 +283,6 @@ public abstract class AbstractMainView {
 			@Override
 			public void run() {
 				nextPlayer = ultimateFormula(pokerCommand.getWhosOn());
-				while (whoFoldMask[nextPlayer]) {
-					++nextPlayer;
-					nextPlayer %= clientsCount;
-				}
 				profileImages.forEach(profile -> profile.getStyleClass().remove(defaultValues.MARKER_STYLECLASS));
 				if (nextPlayer >= 0) {
 					profileImages.get(nextPlayer).getStyleClass().add(defaultValues.MARKER_STYLECLASS);
@@ -315,7 +309,6 @@ public abstract class AbstractMainView {
 	 */
 	public void receivedBlindHouseCommand(HouseCommand houseCommand) {
 		clientsCount = houseCommand.getPlayers();
-		whoFoldMask = new boolean[clientsCount];
 		youAreNth = houseCommand.getNthPlayer();
 		fixSitPosition = houseCommand.getFixSitPosition();
 		DEALER_BUTTON_POSITION = (clientsCount + houseCommand.getDealer() - youAreNth) % clientsCount;
@@ -418,7 +411,6 @@ public abstract class AbstractMainView {
 			public void run() {
 				double opacity = 0.4;
 				int convertedWhoFold = ultimateFormula(playerCommand.getWhosQuit());
-				whoFoldMask[convertedWhoFold] = true;
 				if (convertedWhoFold == 0) {
 					youAreNth = -1;
 					myCards.forEach(card -> card.setOpacity(opacity));
@@ -485,8 +477,8 @@ public abstract class AbstractMainView {
 			public void run() {
 
 				int convertedWinnerIndex = ultimateFormula(houseCommand.getWinner());
-				convertedWinnerIndex += houseCommand.getFoldCounter();
-				convertedWinnerIndex %= clientsCount;
+//				++convertedWinnerIndex;
+//				convertedWinnerIndex %= clientsCount;
 				// ha nem én nyertem...
 				if (convertedWinnerIndex != 0) {
 					Card[] cards = houseCommand.getCards();

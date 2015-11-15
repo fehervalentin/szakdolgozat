@@ -93,11 +93,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	protected int minPlayer = 3;
 
 	/**
-	 * A játékosok száma, akik eldobták a lapjaikat.
-	 */
-	protected int foldCounter;
-
-	/**
 	 * A felhasználók adatainak módosítására szolgáló objektum.
 	 */
 	protected UserDAO userDAO;
@@ -120,10 +115,10 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	protected int findNextValidClient(int whosOn) {
 		int start = whosOn;
 		//TODO: ha körbeértünk, vagy már csak 1 kliens van, akkor reset game...
-		whosOn %= playersInRound;
+		whosOn %= foldMask.length;
 		while (foldMask[whosOn] || quitMask[whosOn]) {
 			++whosOn;
-			whosOn %= playersInRound;
+			whosOn %= foldMask.length;
 		}
 		return whosOn;
 	}
@@ -166,21 +161,31 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			players.remove(index);
 		}
 		clientsNames.remove(index);
-		//				++votedPlayers;
+//		++votedPlayers;
 //		if (playersInRound > 0) {
-//			--playersInRound;
+		--playersInRound;
 //		}
 		--whosOn;
+	}
+
+	/**
+	 * FOLD típusú utasítás érkezett egy klienstől.
+	 */
+	protected void receivedFoldPlayerCommand() {
+		foldMask[whosOn] = true;
+//		++votedPlayers;
+		--playersInRound;
+		players.remove(whosOn);
 	}
 
 	/**
 	 * Inicializáció metódus új kör kezdés esetére.
 	 */
 	protected void preStartRound() {
-		//még senki sem dobta el a lapjait
-		foldCounter = 0;
 		// megnézem, hogy aktuálisan hány játékos van az asztalnál
 		playersInRound = clients.size();
+		foldMask = new boolean[playersInRound];
+		quitMask = new boolean[playersInRound];
 		//következő játékos a dealer
 		++dealer;
 		//a kártyapaklit megkeverjük
@@ -189,16 +194,12 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		votedPlayers = 0;
 		if (playersInRound > 0) {
 			//nem baj, ha körbeértünk...
-			dealer %= playersInRound;
+			dealer %= foldMask.length;
 			//a dealertől balra ülő harmadik játékos kezd
 			whosOn = (dealer + 3) % playersInRound;
 		}
 		//törlöm a játékosokat
 		players.clear();
-		
-		foldMask = new boolean[playersInRound];
-		quitMask = new boolean[playersInRound];
-
 	}
 
 	/**
@@ -291,17 +292,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	protected abstract void receivedCheckPlayerCommand(PlayerCommand playerComand);
 
 	/**
-	 * FOLD típusú utasítás érkezett egy klienstől.
-	 */
-	protected void receivedFoldPlayerCommand() {
-		foldMask[whosOn] = true;
-//		--playersInRound;
-		players.remove(whosOn);
-		--whosOn;
-		++foldCounter;
-	}
-
-	/**
 	 * RAISE típusú utasítás érkezett egy klienstől.
 	 * @param playerComand az utasítás
 	 * @throws PokerUserBalanceException
@@ -323,7 +313,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		++whosOn;
 		whosOn = findNextValidClient(whosOn);
 		if (playersInRound > 0)
-			whosOn %= playersInRound;
+			whosOn %= foldMask.length;
 		playerComand.setWhosOn(whosOn);
 		playerComand.setClientsCount(clients.size());
 		notifyClients(playerComand);

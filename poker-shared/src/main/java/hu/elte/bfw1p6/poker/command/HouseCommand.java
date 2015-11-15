@@ -49,11 +49,6 @@ public abstract class HouseCommand implements PokerCommand {
 	protected int winner;
 
 	/**
-	 * Hányan dobták be a lapjaikat.
-	 */
-	protected int foldCounter;
-	
-	/**
 	 * A fixen elfoglalt ülőhely az asztalnál.
 	 */
 	protected int fixSitPosition;
@@ -71,10 +66,6 @@ public abstract class HouseCommand implements PokerCommand {
 	
 	public int getWinner() {
 		return winner;
-	}
-	
-	public int getFoldCounter() {
-		return foldCounter;
 	}
 	
 	public int getNthPlayer() {

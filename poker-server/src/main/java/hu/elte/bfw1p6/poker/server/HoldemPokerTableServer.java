@@ -124,26 +124,26 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
 			if (votedPlayers >= playersInRound) {
 				// flopnál, turnnél, rivernél, winnernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
-				whosOn = (dealer + 1 + foldCounter) % playersInRound;
+				whosOn = (dealer + 1) % foldMask.length;
 				whosOn = findNextValidClient(whosOn);
 				HoldemHouseCommand houseHoldemCommand = new HoldemHouseCommand();
 				switch (actualHoldemHouseCommandType) {
 				case FLOP: {
 					Card[] cards = new Card[]{deck.popCard(), deck.popCard(), deck.popCard()};
 					Collections.addAll(houseCards, cards);
-					houseHoldemCommand.setUpFlopTurnRiverCommand(HoldemHouseCommandType.FLOP, cards, whosOn, foldCounter);
+					houseHoldemCommand.setUpFlopTurnRiverCommand(HoldemHouseCommandType.FLOP, cards, whosOn);
 					break;
 				}
 				case TURN: {
 					Card[] cards = new Card[]{deck.popCard()};
 					houseCards.add(cards[0]);
-					houseHoldemCommand.setUpFlopTurnRiverCommand(actualHoldemHouseCommandType, cards, whosOn, foldCounter);
+					houseHoldemCommand.setUpFlopTurnRiverCommand(actualHoldemHouseCommandType, cards, whosOn);
 					break;
 				}
 				case RIVER: {
 					Card[] cards = new Card[]{deck.popCard()};
 					houseCards.add(cards[0]);
-					houseHoldemCommand.setUpFlopTurnRiverCommand(actualHoldemHouseCommandType, cards, whosOn, foldCounter);
+					houseHoldemCommand.setUpFlopTurnRiverCommand(actualHoldemHouseCommandType, cards, whosOn);
 					break;
 				}
 				case WINNER: {
@@ -184,6 +184,6 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 		}
 		System.out.println("A győztes sorszáma: " + winner);
 		System.out.println("A győztes kártyalapjai: " + Arrays.toString(cards));
-		holdemHouseCommand.setUpWinnerCommand(cards, winner, whosOn, foldCounter);
+		holdemHouseCommand.setUpWinnerCommand(cards, winner, whosOn);
 	}
 }
