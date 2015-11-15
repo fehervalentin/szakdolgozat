@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.control.cell.*?> 
 <?import javafx.collections.*?>
 <?import javafx.scene.control.TableView?>
@@ -10,46 +11,55 @@
 <?import hu.elte.bfw1p6.poker.model.entity.PokerTable?>
 <?import javafx.scene.control.Button?>
 
-
-<GridPane alignment="CENTER" hgap="10.0" vgap="10.0"
-	xmlns:fx="http://javafx.com/fxml" fx:controller="hu.elte.bfw1p6.poker.client.controller.TableListerController">
-	<padding>
-		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-	</padding>
-	<Label style="-fx-font: NORMAL 20 Tahoma;" text="Játékszerverek"
-		GridPane.columnIndex="0" GridPane.rowIndex="0">
-	</Label>
-	<TableView fx:id="tableView" GridPane.columnIndex="0"
-		GridPane.rowIndex="1">
-		<columns>
-			<TableColumn prefWidth="100.0" text="Játékszerver neve"
-				fx:id="tableName" />
-			<TableColumn prefWidth="100.0" text="Játék stílusa"
-				fx:id="pokerType" />
-			<TableColumn prefWidth="100.0" text="Maximum gondolkodás idő"
-				fx:id="maxTime" />
-			<TableColumn prefWidth="100.0" text="Játékosok maximum száma"
-				fx:id="maxPlayers" />
-			<TableColumn prefWidth="100.0" text="Alaptét" fx:id="defaultPot" />
-			<TableColumn prefWidth="100.0" text="Limit" fx:id="maxBet" />
-		</columns>
-	</TableView>
-	<Button fx:id="connectButton" text="Csatlakozás" onAction="#handleConnectToTable"
-		GridPane.columnIndex="1" GridPane.rowIndex="1" />
-	<Button fx:id="profileManagerButton" text="Profil megtekintése"
-		onAction="#handleProfileManager" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-	<Button fx:id="createTableButton" text="Kijelentkezés" onAction="#handleLogout"
-		GridPane.columnIndex="1" GridPane.rowIndex="3" />
-	<Button fx:id="createTableButton" text="Új tábla létrehozása"
-		onAction="#handleCreateTable" GridPane.columnIndex="1"
-		GridPane.rowIndex="4" />
-	<Button fx:id="modifyTableButton" text="Tábla módosítása"
-		onAction="#handleModifyTable" GridPane.columnIndex="1"
-		GridPane.rowIndex="5" />
-	<Button fx:id="deleteTableButton" text="Asztal törlése"
-		onAction="#handleDeleteTable" GridPane.columnIndex="1"
-		GridPane.rowIndex="6" />
-		<Button fx:id="viewUsersbutton" text="Userek megtekintése"
-		onAction="#handleViewUsers" GridPane.columnIndex="1"
-		GridPane.rowIndex="7" />
-</GridPane>
+<AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="hu.elte.bfw1p6.poker.client.controller.TableListerController">
+	<children>
+		<GridPane alignment="CENTER" hgap="10.0" vgap="10.0"
+			xmlns:fx="http://javafx.com/fxml">
+			<padding>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			</padding>
+			<Label style="-fx-font: NORMAL 20 Tahoma;" text="Játékszerverek"
+				GridPane.columnIndex="0" GridPane.rowIndex="0">
+			</Label>
+			<TableView fx:id="tableView" GridPane.columnIndex="0"
+				GridPane.rowIndex="1">
+				<columns>
+					<TableColumn prefWidth="100.0" text="Játékszerver neve"
+						fx:id="tableName" />
+					<TableColumn prefWidth="100.0" text="Játék stílusa"
+						fx:id="pokerType" />
+					<TableColumn prefWidth="100.0" text="Maximum gondolkodás idő"
+						fx:id="maxTime" />
+					<TableColumn prefWidth="100.0" text="Játékosok maximum száma"
+						fx:id="maxPlayers" />
+					<TableColumn prefWidth="100.0" text="Alaptét" fx:id="defaultPot" />
+					<TableColumn prefWidth="100.0" text="Limit" fx:id="maxBet" />
+				</columns>
+			</TableView>
+			<GridPane alignment="CENTER" hgap="10.0" vgap="10.0"
+				GridPane.columnIndex="1" GridPane.rowIndex="1">
+				<Button fx:id="connectButton" text="Csatlakozás" onAction="#handleConnectToTable" styleClass="rich-blue"
+					GridPane.columnIndex="1" GridPane.rowIndex="1" />
+				<Button fx:id="profileManagerButton" text="Profil megtekintése" styleClass="rich-blue"
+					onAction="#handleProfileManager" GridPane.columnIndex="1"
+					GridPane.rowIndex="2" />
+				<Button fx:id="createTableButton" text="Kijelentkezés" styleClass="rich-blue"
+					onAction="#handleLogout" GridPane.columnIndex="1"
+					GridPane.rowIndex="3" />
+				<Button fx:id="createTableButton" text="Új tábla létrehozása" styleClass="rich-blue"
+					onAction="#handleCreateTable" GridPane.columnIndex="1"
+					GridPane.rowIndex="4" />
+				<Button fx:id="modifyTableButton" text="Tábla módosítása" styleClass="rich-blue"
+					onAction="#handleModifyTable" GridPane.columnIndex="1"
+					GridPane.rowIndex="5" />
+				<Button fx:id="deleteTableButton" text="Asztal törlése" styleClass="rich-blue"
+					onAction="#handleDeleteTable" GridPane.columnIndex="1"
+					GridPane.rowIndex="6" />
+				<Button fx:id="viewUsersbutton" text="Userek megtekintése" styleClass="rich-blue"
+					onAction="#handleViewUsers" GridPane.columnIndex="1"
+					GridPane.rowIndex="7" />
+			</GridPane>
+		</GridPane>
+	</children>
+</AnchorPane>

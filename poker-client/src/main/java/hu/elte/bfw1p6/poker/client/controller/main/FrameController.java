@@ -19,6 +19,7 @@ public class FrameController extends UnicastRemoteObject {
 	private static final long serialVersionUID = 4102088160605201971L;
 	
 	private final String FXML_PREFIX = "/fxml/";
+	
 	private final String LOGIN_FXML = "Login.fxml";
 	private final String USERS_FXML = "UserLister.fxml";
 	private final String CONNECTOR_FXML = "Connector.fxml";
@@ -28,8 +29,6 @@ public class FrameController extends UnicastRemoteObject {
 	private final String PROFILE_MANAGER_FXML = "ProfileManager.fxml";
 	private final String HOLDEM_MAIN_GAME_FXML = "HoldemMainGame.fxml";
 	private final String CLASSIC_MAIN_GAME_FXML = "ClassicMainGame.fxml";
-	
-	
 	
 	private final int MENU_GAME_WIDHT = 900;
 	private final int MENU_GAME_HEIGHT = 500;
