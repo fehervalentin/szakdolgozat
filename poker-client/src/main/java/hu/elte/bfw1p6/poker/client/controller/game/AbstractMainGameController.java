@@ -93,10 +93,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	@Deprecated
 	protected long delay = 5000;
 
-	//TODO: játékszerver specifikus
-	@Deprecated
-	private double raiseAmount = 6;
-
 	@Override
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
@@ -247,7 +243,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	@FXML protected void handleRaise(ActionEvent event) {
 		try {
 			//			timerTask.cancel();
-			model.sendRaiseCommand(new BigDecimal(raiseAmount));
+			model.sendRaiseCommand();
 			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());

@@ -47,9 +47,9 @@ public class HoldemMainGameModel extends AbstractMainGameModel {
 	}
 
 	@Override
-	public void sendRaiseCommand(BigDecimal amount) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public void sendRaiseCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
-		playerCommand.setUpRaiseCommand(myDebt, amount);
+		playerCommand.setUpRaiseCommand(myDebt, pokerTable.getDefaultPot());
 		sendCommandToTable(playerCommand);
 	}
 

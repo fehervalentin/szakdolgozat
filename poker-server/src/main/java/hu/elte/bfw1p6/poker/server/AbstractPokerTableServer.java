@@ -90,7 +90,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Asztaltól fogom lekérni.
 	 */
 	@Deprecated
-	protected int minPlayer = 3;
+	protected int minPlayer = 2;
 
 	/**
 	 * A felhasználók adatainak módosítására szolgáló objektum.
@@ -387,8 +387,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	/**
 	 * A nyertes megkeresése, és kihirdetése.
 	 * @param houseCommand az utasítás
+	 * @throws PokerDataBaseException 
 	 */
-	protected abstract void winner(HouseCommand houseCommand);
+	protected abstract void winner(HouseCommand houseCommand) throws PokerDataBaseException;
 
 	/**
 	 * Következő kör a szerveren.

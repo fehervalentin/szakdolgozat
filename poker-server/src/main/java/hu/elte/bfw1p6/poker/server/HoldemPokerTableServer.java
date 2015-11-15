@@ -1,5 +1,6 @@
 package hu.elte.bfw1p6.poker.server;
 
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +19,9 @@ import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
+import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
+import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.server.logic.HoldemHandEvaluator;
 
 /**
@@ -183,6 +186,16 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 				break;
 			}
 		}
+		PokerPlayer winnerPlayer = players.get(winner);
+		try {
+			User u = userDAO.findByUserName(winnerPlayer.getUserName());
+			u.setBalance(u.getBalance().add(moneyStack));
+			userDAO.modify(u);
+		} catch (PokerDataBaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		moneyStack = BigDecimal.ZERO;
 		long count = IntStream.range(0, foldMask.length).filter(i -> foldMask[i]).count();
 		long count2 = IntStream.range(0, quitMask.length).filter(i -> foldMask[i]).count();
 		winner += (count + count2);

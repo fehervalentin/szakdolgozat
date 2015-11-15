@@ -173,7 +173,7 @@ public abstract class AbstractMainGameModel {
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException
 	 */
-	public abstract void sendRaiseCommand(BigDecimal amount) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException;
+	public abstract void sendRaiseCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException;
 	
 	/**
 	 * FOLD típusú utasítás küldése a szervenek.
