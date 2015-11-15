@@ -1,13 +1,12 @@
 package hu.elte.bfw1p6.poker.server;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.IntStream;
 
 import com.cantero.games.poker.texasholdem.Card;
-import com.cantero.games.poker.texasholdem.IPlayer;
 
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
@@ -19,7 +18,6 @@ import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
-import hu.elte.bfw1p6.poker.server.logic.HoldemHandEvaluator;
 
 /**
  * Póker játékasztal-szerver classic játékhoz.
@@ -64,6 +62,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 //		System.out.println("VotedPlayers: " + votedPlayers);
 //		System.out.println("Players in round: " + playersInRound);
 		if (playersInRound <= 1 || (actualClassicHouseCommandType == ClassicHouseCommandType.values()[0] && votedPlayers >= playersInRound)) {
+			bookMoneyStack(null);
 			startRound();
 		} else {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
@@ -167,21 +166,16 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 
 	@Override
 	protected void winner(HouseCommand houseCommand) {
-		ClassicHouseCommand holdemHouseCommand = (ClassicHouseCommand)houseCommand;
-		List<IPlayer> winner = HoldemHandEvaluator.getInstance().getWinner(new ArrayList<>(), players);
-		Card[] cards = winner.get(0).getCards();
-		// TODO: és mi van ha döntetlen?
-		int winner_ = -1;
-		System.out.println("Players size: " + players.size());
-		for (int i = 0; i < players.size(); i++) {
-			if (players.get(i).getCards()[0].equals(cards[0]) && players.get(i).getCards()[1].equals(cards[1])) {
-				//winner_ = (i - foldCounter) % playersInRound;
-				winner_ = i;
-				break;
-			}
-		}
-		System.out.println("A győztes sorszáma: " + winner_);
-		System.out.println("A győztes kártyalapjai: " + Arrays.toString(cards));
-		holdemHouseCommand.setUpWinnerCommand(cards, winner_);
+		ClassicHouseCommand classicHouseCommand = (ClassicHouseCommand)houseCommand;
+		HashMap<Integer, Card[]> winner = getWinner(null);
+		int winnerIndex = winner.keySet().iterator().next();
+		long count = IntStream.range(0, foldMask.length).filter(i -> foldMask[i]).count();
+		long count2 = IntStream.range(0, quitMask.length).filter(i -> foldMask[i]).count();
+		winnerIndex += (count + count2);
+		winnerIndex %= foldMask.length;
+		System.out.println("Hányan dobták a lapjaikat: " + count);
+		System.out.println("A győztes sorszáma: " + winnerIndex);
+		System.out.println("A győztes kártyalapjai: " + Arrays.toString(winner.values().iterator().next()));
+		classicHouseCommand.setUpWinnerCommand(winner.get(winnerIndex), winnerIndex, whosOn);
 	}
 }

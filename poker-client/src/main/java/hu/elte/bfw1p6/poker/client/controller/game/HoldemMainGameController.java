@@ -52,6 +52,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 			whosOn = houseHoldemCommand.getWhosOn();
 			System.out.println("A haz utasítást küldött: " + houseHoldemCommand.getHouseCommandType());
 			setButtonsDisability(model.getYouAreNth() != houseHoldemCommand.getWhosOn());
+			
 			switch (houseHoldemCommand.getHouseCommandType()) {
 			case BLIND: {
 				receivedBlindHouseCommand(houseHoldemCommand);
@@ -92,6 +93,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 			whosOn = holdemPlayerCommand.getWhosOn();
 			System.out.println(holdemPlayerCommand.getSender() + " játékos utasítást küldött: " + holdemPlayerCommand.getPlayerCommandType());
 			setButtonsDisability(model.getYouAreNth() !=  holdemPlayerCommand.getWhosOn());
+			
 			switch (holdemPlayerCommand.getPlayerCommandType()) {
 			case BLIND: {
 				receivedBlindPlayerCommand(holdemPlayerCommand);
@@ -135,15 +137,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 		} else {
 			throw new IllegalArgumentException();
 		}
-//		Platform.runLater(new Runnable() {
-//			public void run() {
-//				checkButton.setDisable(true);
-//			}
-//		});
 		debtChecker(whosOn);
-//		if (model.getYouAreNth() != whosOn) {
-//			setButtonsDisability(true);
-//		}
 	}
 	
 	@Override

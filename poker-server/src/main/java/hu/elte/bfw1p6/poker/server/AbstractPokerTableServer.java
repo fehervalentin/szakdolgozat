@@ -4,11 +4,13 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.cantero.games.poker.texasholdem.Card;
+import com.cantero.games.poker.texasholdem.IPlayer;
 
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
@@ -22,6 +24,7 @@ import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.UserDAO;
 import hu.elte.bfw1p6.poker.server.logic.Deck;
+import hu.elte.bfw1p6.poker.server.logic.HoldemHandEvaluator;
 
 /**
  * A póker játékasztal-szerverek absztrakciója.
@@ -243,6 +246,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		User u = userDAO.findByUserName(playerCommand.getSender());
 		if (isThereEnoughMoney(u, playerCommand)) {
 			u.setBalance(u.getBalance().subtract(playerCommand.getCallAmount()));
+			if (playerCommand.getRaiseAmount() != null) {
+				u.setBalance(u.getBalance().subtract(playerCommand.getRaiseAmount()));
+			}
 			userDAO.modify(u);
 		}
 	}
@@ -358,6 +364,46 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			notifyNthClient(i, houseBlindCommandFactory(i, i, clients.size(), dealer, whosOn, players.stream().map(PokerPlayer::getUserName).collect(Collectors.toList()))
 		));
 		nextStep();
+	}
+	
+	protected void bookMoneyStack(List<Card> houseCards) {
+		int winnerIndex = getWinner(houseCards).keySet().iterator().next();
+		PokerPlayer winnerPlayer = players.get(winnerIndex);
+		try {
+			User u = userDAO.findByUserName(winnerPlayer.getUserName());
+			u.setBalance(u.getBalance().add(moneyStack));
+			userDAO.modify(u);
+		} catch (PokerDataBaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		moneyStack = BigDecimal.ZERO;
+	}
+	
+	protected HashMap<Integer, Card[]> getWinner(List<Card> houseCards) {
+		if (houseCards == null) {
+			houseCards = new ArrayList<>();
+		}
+		HashMap<Integer, Card[]> values = new HashMap<>();
+		int winner = -1;
+		List<IPlayer> winnerList = HoldemHandEvaluator.getInstance().getWinner(houseCards, players);
+		Card[] cards = winnerList.get(0).getCards();
+		System.out.println("Players size: " + players.size());
+		for (int i = 0; i < players.size(); i++) {
+			boolean gotIt = true;
+			for (int j = 0; j < cards.length; j++) {
+				if (!players.get(i).getCards()[j].equals(cards[j])) {
+					gotIt = false;
+					break;
+				}
+			}
+			if (gotIt) {
+				winner = i;
+				break;
+			}
+		}
+		values.put(winner, cards);
+		return values;
 	}
 
 	/**

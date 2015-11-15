@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.model.ClassicMainGameModel;
 import hu.elte.bfw1p6.poker.client.view.ClassicMainView;
+import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
@@ -81,6 +82,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 			ClassicHouseCommand classicHouseCommand = (ClassicHouseCommand)updateMsg;
 			whosOn = classicHouseCommand.getWhosOn();
 			System.out.println("A ház utasítást küldött: " + classicHouseCommand.getHouseCommandType());
+			setButtonsDisability(model.getYouAreNth() != classicHouseCommand.getWhosOn());
 
 			switch (classicHouseCommand.getHouseCommandType()) {
 			case BLIND: {
@@ -111,6 +113,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 			ClassicPlayerCommand classicPlayerCommand = (ClassicPlayerCommand)updateMsg;
 			whosOn = classicPlayerCommand.getWhosOn();
 			System.out.println(classicPlayerCommand.getSender() + " játékos utasítást küldött: " + classicPlayerCommand.getPlayerCommandType());
+			setButtonsDisability(model.getYouAreNth() !=  classicPlayerCommand.getWhosOn());
 
 			switch (classicPlayerCommand.getPlayerCommandType()) {
 			case BLIND: {
@@ -184,9 +187,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	 */
 	private void receivedChangeHouseCommand(ClassicHouseCommand classicHouseCommand) {
 		((ClassicMainView)mainView).receivedChangeHouseCommand(classicHouseCommand);
-//		setButtonsDisability(false);
-		//TODO: EZ ELVILEG KELL IDE
-		setChangeButtonDisability(false);
+		changeState(classicHouseCommand);
 	}
 
 	/**
@@ -205,6 +206,14 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	 */
 	private void receivedChangePlayerCommand(ClassicPlayerCommand playerHoldemCommand) {
 		((ClassicMainView)mainView).receivedChangePlayerCommand(playerHoldemCommand);
-		modifyFoldButtonDisability(true);
+		changeState(playerHoldemCommand);
+	}
+	
+	private void changeState(PokerCommand pokerCommand) {
+		if (model.getYouAreNth() == pokerCommand.getWhosOn()) {
+			setButtonsDisability(true);
+			setChangeButtonDisability(false);
+			setQuitButtonDisability(false);
+		}
 	}
 }
