@@ -332,6 +332,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	protected void receivedFoldPlayerCommand(PlayerCommand playerCommand) {
 		model.receivedFoldPlayerCommand(playerCommand);
+		setButtonsDisability(model.getYouAreNth() !=  playerCommand.getWhosOn());
 		mainView.receivedFoldPlayerCommand(playerCommand);
 	}
 
@@ -350,11 +351,11 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param playerCommand az utasítás
 	 */
 	protected void receivedQuitPlayerCommand(PlayerCommand playerCommand) {
-		//TODO: playerCommandban jöjjön le a kliensek száma 
 		if (playerCommand.getClientsCount() < 2) {
 			setButtonsDisability(false);
 		}
 		model.receivedQuitPlayerCommand(playerCommand);
+		setButtonsDisability(model.getYouAreNth() !=  playerCommand.getWhosOn());
 		mainView.receivedQuitPlayerCommand(playerCommand);
 	}
 

@@ -96,11 +96,12 @@ public class HoldemHouseCommand extends HouseCommand {
 	 * @param winnerUserName a nyertes neve
 	 * @return a beállított utasítás
 	 */
-	public HoldemHouseCommand setUpWinnerCommand(Card[] cards, int winner, int whosOn) {
+	public HoldemHouseCommand setUpWinnerCommand(Card[] cards, int winner, int whosOn, int foldCounter) {
 		this.houseCommandType = HoldemHouseCommandType.WINNER;
 		this.cards = cards;
 		this.winner = winner;
 		this.whosOn = whosOn;
+		this.foldCounter = foldCounter;
 		return this;
 	}
 	

@@ -181,6 +181,6 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 		}
 		System.out.println("A győztes sorszáma: " + winner_);
 		System.out.println("A győztes kártyalapjai: " + Arrays.toString(cards));
-		holdemHouseCommand.setUpWinnerCommand(cards, winner_);
+		holdemHouseCommand.setUpWinnerCommand(cards, winner_, foldCounter);
 	}
 }

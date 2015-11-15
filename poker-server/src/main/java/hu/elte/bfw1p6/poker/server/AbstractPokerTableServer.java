@@ -90,7 +90,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Asztaltól fogom lekérni.
 	 */
 	@Deprecated
-	protected int minPlayer = 2;
+	protected int minPlayer = 3;
 
 	/**
 	 * A játékosok száma, akik eldobták a lapjaikat.
@@ -101,6 +101,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * A felhasználók adatainak módosítására szolgáló objektum.
 	 */
 	protected UserDAO userDAO;
+	
+	protected boolean[] foldMask;
+	protected boolean[] quitMask;
 
 	protected AbstractPokerTableServer(PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
 		super();
@@ -112,6 +115,18 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		this.clientsNames = new ArrayList<>();
 		this.userDAO = new UserDAO();
 	}
+	
+	
+	protected int findNextValidClient(int whosOn) {
+		int start = whosOn;
+		//TODO: ha körbeértünk, vagy már csak 1 kliens van, akkor reset game...
+		whosOn %= playersInRound;
+		while (foldMask[whosOn] || quitMask[whosOn]) {
+			++whosOn;
+			whosOn %= playersInRound;
+		}
+		return whosOn;
+	}
 
 
 	/**
@@ -122,7 +137,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 */
 	public synchronized void join(PokerRemoteObserver client, String userName) throws PokerTooMuchPlayerException {
 		if (!clients.contains(client)) {
-			if (clients.size() >= pokerTable.getMaxPlayers()) {
+			if (clients.size() >= minPlayer) {
 				throw new PokerTooMuchPlayerException(ERR_TABLE_FULL);
 			}
 			clients.add(client);
@@ -143,6 +158,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		// TODO: lehet, hogy itt a client paraméter lehagyható, elég ha nevet küld, vagy sorszámot...
 		//TODO: lapjait is szedjük ki
 		int index = clients.indexOf(client);
+		quitMask[index] = true;
 		System.out.println("WhosQuit param: " + playerComand.getWhosQuit());
 		System.out.println("Kliens visszakeresve: " + clients.indexOf(client));
 		clients.remove(index);
@@ -151,9 +167,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		}
 		clientsNames.remove(index);
 		//				++votedPlayers;
-		if (playersInRound > 0) {
-			--playersInRound;
-		}
+//		if (playersInRound > 0) {
+//			--playersInRound;
+//		}
 		--whosOn;
 	}
 
@@ -179,6 +195,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		}
 		//törlöm a játékosokat
 		players.clear();
+		
+		foldMask = new boolean[playersInRound];
+		quitMask = new boolean[playersInRound];
 
 	}
 
@@ -275,9 +294,10 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * FOLD típusú utasítás érkezett egy klienstől.
 	 */
 	protected void receivedFoldPlayerCommand() {
-		--playersInRound;
+		foldMask[whosOn] = true;
+//		--playersInRound;
 		players.remove(whosOn);
-//		--whosOn;
+		--whosOn;
 		++foldCounter;
 	}
 
@@ -301,6 +321,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	protected void endOfReceivedPlayerCommand(PlayerCommand playerComand) throws RemoteException {
 		System.out.println(whosOn);
 		++whosOn;
+		whosOn = findNextValidClient(whosOn);
 		if (playersInRound > 0)
 			whosOn %= playersInRound;
 		playerComand.setWhosOn(whosOn);

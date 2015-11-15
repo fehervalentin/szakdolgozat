@@ -125,6 +125,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 			if (votedPlayers >= playersInRound) {
 				// flopnál, turnnél, rivernél, winnernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
 				whosOn = (dealer + 1 + foldCounter) % playersInRound;
+				whosOn = findNextValidClient(whosOn);
 				HoldemHouseCommand houseHoldemCommand = new HoldemHouseCommand();
 				switch (actualHoldemHouseCommandType) {
 				case FLOP: {
@@ -183,6 +184,6 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 		}
 		System.out.println("A győztes sorszáma: " + winner);
 		System.out.println("A győztes kártyalapjai: " + Arrays.toString(cards));
-		holdemHouseCommand.setUpWinnerCommand(cards, winner, whosOn);
+		holdemHouseCommand.setUpWinnerCommand(cards, winner, whosOn, foldCounter);
 	}
 }

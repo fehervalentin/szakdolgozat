@@ -98,11 +98,6 @@ public abstract class AbstractMainView {
 	protected int DEALER_BUTTON_POSITION;
 
 	/**
-	 * A beszínezett játékos.
-	 */
-	protected int coloredPlayer = -1;
-
-	/**
 	 * A következő játékos.
 	 */
 	protected int nextPlayer = -1;
@@ -116,6 +111,8 @@ public abstract class AbstractMainView {
 	 * Fixen hanyadik játékosként vagy beülve az asztalhoz.
 	 */
 	protected int fixSitPosition;
+	
+	protected boolean[] whoFoldMask;
 
 	public AbstractMainView(AnchorPane mainGamePane, AbstractDefaultValues defaultValues) {
 		this.mainGamePane = mainGamePane;
@@ -288,13 +285,14 @@ public abstract class AbstractMainView {
 			@Override
 			public void run() {
 				nextPlayer = ultimateFormula(pokerCommand.getWhosOn());
-				if (coloredPlayer >= 0) {
-					profileImages.get(coloredPlayer).getStyleClass().remove(defaultValues.MARKER_STYLECLASS);
+				while (whoFoldMask[nextPlayer]) {
+					++nextPlayer;
+					nextPlayer %= clientsCount;
 				}
+				profileImages.forEach(profile -> profile.getStyleClass().remove(defaultValues.MARKER_STYLECLASS));
 				if (nextPlayer >= 0) {
 					profileImages.get(nextPlayer).getStyleClass().add(defaultValues.MARKER_STYLECLASS);
 				}
-				coloredPlayer = nextPlayer;
 				nextPlayer = pokerCommand.getWhosOn();
 			}
 		});
@@ -317,6 +315,7 @@ public abstract class AbstractMainView {
 	 */
 	public void receivedBlindHouseCommand(HouseCommand houseCommand) {
 		clientsCount = houseCommand.getPlayers();
+		whoFoldMask = new boolean[clientsCount];
 		youAreNth = houseCommand.getNthPlayer();
 		fixSitPosition = houseCommand.getFixSitPosition();
 		DEALER_BUTTON_POSITION = (clientsCount + houseCommand.getDealer() - youAreNth) % clientsCount;
@@ -419,6 +418,7 @@ public abstract class AbstractMainView {
 			public void run() {
 				double opacity = 0.4;
 				int convertedWhoFold = ultimateFormula(playerCommand.getWhosQuit());
+				whoFoldMask[convertedWhoFold] = true;
 				if (convertedWhoFold == 0) {
 					youAreNth = -1;
 					myCards.forEach(card -> card.setOpacity(opacity));
@@ -440,15 +440,17 @@ public abstract class AbstractMainView {
 
 			@Override
 			public void run() {
-				double opacity = 0.4;
-				int convertedWhoFold = ultimateFormula(playerCommand.getWhosQuit());
-				--clientsCount;
-				if (convertedWhoFold == 0) {
-					youAreNth = -1;
-					myCards.forEach(card -> card.setOpacity(opacity));
+				double opacity = 0.0;
+				int convertedWhoQuit = ultimateFormula(playerCommand.getWhosQuit());
+//				--clientsCount;
+				if (convertedWhoQuit != 0) {
+					setNthPlayersCardsOpacity(opacity, convertedWhoQuit);
+					profileImages.get(convertedWhoQuit).setOpacity(opacity);
+					userNameLabels.get(convertedWhoQuit).setOpacity(opacity);
 				} else {
-					reArrangeTable(convertedWhoFold, playerCommand);
+//					reArrangeTable(convertedWhoFold, playerCommand);
 					//TODO: aki fölötte van az lejjebb csúszik a GUI-n is.
+					//TODO: dehogyis, csak setopacity, aztán majd új körnél újra az egész....
 //					setNthPlayersCardsOpacity(opacity, convertedWhoFold);
 				}
 				//TODO: ilyenkor lehet nem kell next player color
@@ -458,6 +460,7 @@ public abstract class AbstractMainView {
 	}
 	
 	private void reArrangeTable(int convertedWhoFold, PlayerCommand playerCommand) {
+		//TODO: NEM KELL, csak setopacity nulla, és mintha foldolt volna :)
 		int cc = clientsCount;
 		profileImages.subList(cc, profileImages.size()).forEach(profile -> profile.setVisible(false));
 		opponentsCards.subList(cc - 1, opponentsCards.size()).forEach(card -> card.setVisible(false));
@@ -482,6 +485,8 @@ public abstract class AbstractMainView {
 			public void run() {
 
 				int convertedWinnerIndex = ultimateFormula(houseCommand.getWinner());
+				convertedWinnerIndex += houseCommand.getFoldCounter();
+				convertedWinnerIndex %= clientsCount;
 				// ha nem én nyertem...
 				if (convertedWinnerIndex != 0) {
 					Card[] cards = houseCommand.getCards();
