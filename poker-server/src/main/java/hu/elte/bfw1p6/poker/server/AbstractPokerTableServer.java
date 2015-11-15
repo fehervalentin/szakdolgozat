@@ -81,11 +81,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	protected int whosOn;
 
 	/**
-	 * Hány darab kártyát kapnak kézbe a játékosok.
-	 */
-	protected int cardsToHand;
-
-	/**
 	 * Hány játékos adott már le voksot az adott körben (raise-nél = 1).
 	 */
 	protected int votedPlayers;
@@ -95,7 +90,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Asztaltól fogom lekérni.
 	 */
 	@Deprecated
-	protected int minPlayer = 3;
+	protected int minPlayer = 2;
 
 	/**
 	 * A játékosok száma, akik eldobták a lapjaikat.
@@ -115,7 +110,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		this.moneyStack = BigDecimal.ZERO;
 		this.players = new ArrayList<>();
 		this.clientsNames = new ArrayList<>();
-		this.cardsToHand = pokerTable.getPokerType().getCardsToPlayers();
 		this.userDAO = new UserDAO();
 	}
 
@@ -283,7 +277,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	protected void receivedFoldPlayerCommand() {
 		--playersInRound;
 		players.remove(whosOn);
-		--whosOn;
+//		--whosOn;
 		++foldCounter;
 	}
 
@@ -333,6 +327,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Kártyalapokat oszt a játékosoknak.
 	 */
 	protected void dealCardsToPlayers() {
+		int cardsToHand = pokerTable.getPokerType().getCardsToPlayers();
 		for (int i = 0; i < clients.size(); i++) {
 			Card[] cards = new Card[cardsToHand];
 			IntStream.range(0, cardsToHand).forEach(j -> cards[j] = deck.popCard());

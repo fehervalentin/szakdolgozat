@@ -45,15 +45,16 @@ public class ClassicMainGameController extends AbstractMainGameController {
 			showErrorAlert(e.getMessage());
 			frameController.setTableListerFXML();
 		}
-		modifyButtonsDisability(null);
-		modifyChangeButtonDisability(true);
+		setButtonsDisability(true);
+		setChangeButtonDisability(true);
+		setQuitButtonDisability(false);
 	}
 
 	/**
 	 * Módosítja a CHANGE button disable tulajdonságát.
 	 * @param disabled
 	 */
-	private void modifyChangeButtonDisability(boolean enabled) {
+	private void setChangeButtonDisability(boolean enabled) {
 		changeButton.setDisable(enabled);
 	}
 
@@ -76,8 +77,10 @@ public class ClassicMainGameController extends AbstractMainGameController {
 
 	@Override
 	public void update(Object updateMsg) {
+		int whosOn = -1;
 		if (updateMsg instanceof ClassicHouseCommand) {
 			ClassicHouseCommand classicHouseCommand = (ClassicHouseCommand)updateMsg;
+			whosOn = classicHouseCommand.getWhosOn();
 			System.out.println("A ház utasítást küldött: " + classicHouseCommand.getHouseCommandType());
 
 			switch (classicHouseCommand.getHouseCommandType()) {
@@ -107,6 +110,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 			}
 		} else if (updateMsg instanceof ClassicPlayerCommand) {
 			ClassicPlayerCommand classicPlayerCommand = (ClassicPlayerCommand)updateMsg;
+			whosOn = classicPlayerCommand.getWhosOn();
 			System.out.println(classicPlayerCommand.getSender() + " játékos utasítást küldött: " + classicPlayerCommand.getPlayerCommandType());
 
 			switch (classicPlayerCommand.getPlayerCommandType()) {
@@ -149,13 +153,13 @@ public class ClassicMainGameController extends AbstractMainGameController {
 //					automateExecution.schedule(timerTask, delay);
 //				}
 //			}
-			if (!classicPlayerCommand.isWinnerCommand()) {
+			/*if (!classicPlayerCommand.isWinnerCommand()  && !classicPlayerCommand.getCommandType().equals("QUIT") || classicPlayerCommand.getCommandType().equals("QUIT") && classicPlayerCommand.getClientsCount() >=2) {
 				modifyButtonsDisability(classicPlayerCommand);
-			}
+			}*/
 		} else {
 			throw new IllegalArgumentException();
 		}
-		debtChecker();
+		debtChecker(whosOn);
 	}
 
 	/**
@@ -166,7 +170,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 //		timerTask.cancel();
 		List<Integer> markedCards = ((ClassicMainView)mainView).getMarkedCards();
 		try {
-			modifyChangeButtonDisability(true);
+			setChangeButtonDisability(true);
 			((ClassicMainGameModel)model).sendChangeCommand(markedCards);
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
@@ -180,11 +184,10 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	 * @param houseCommand az utasítás
 	 */
 	private void receivedChangeHouseCommand(ClassicHouseCommand classicHouseCommand) {
-		modifyButtonsDisability(classicHouseCommand);
 		((ClassicMainView)mainView).receivedChangeHouseCommand(classicHouseCommand);
-		modifyButtonsDisability(null);
-		modifyChangeButtonDisability(model.getYouAreNth() != classicHouseCommand.getWhosOn());
-		modifyFoldButtonDisability(true);
+//		setButtonsDisability(false);
+		//TODO: EZ ELVILEG KELL IDE
+		setChangeButtonDisability(false);
 	}
 
 	/**
@@ -192,10 +195,9 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	 * @param houseCommand az utasítás
 	 */
 	private void receivedDeal2HouseCommand(ClassicHouseCommand classicHouseCommand) {
-		modifyButtonsDisability(classicHouseCommand);
-		changeButton.setDisable(true);
 		((ClassicMainGameModel)model).receivedDeal2HouseCommand(classicHouseCommand);
 		((ClassicMainView)mainView).receivedDeal2HouseCommand(classicHouseCommand);
+		changeButton.setDisable(true);
 	}
 
 	/**
@@ -203,10 +205,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	 * @param houseCommand az utasítás
 	 */
 	private void receivedChangePlayerCommand(ClassicPlayerCommand playerHoldemCommand) {
-		modifyButtonsDisability(playerHoldemCommand);
-		modifyButtonsDisability(null);
-		modifyChangeButtonDisability(model.getYouAreNth() != playerHoldemCommand.getWhosOn());
-		modifyFoldButtonDisability(true);
 		((ClassicMainView)mainView).receivedChangePlayerCommand(playerHoldemCommand);
+		modifyFoldButtonDisability(true);
 	}
 }

@@ -59,10 +59,10 @@ public class HoldemMainView extends AbstractMainView {
 
 			@Override
 			public void run() {
-				colorNextPlayer(holdemHouseCommand);
 				revealCard(holdemHouseCommand, 0);
 				revealCard(holdemHouseCommand, 1);
 				revealCard(holdemHouseCommand, 2);
+				colorNextPlayer(holdemHouseCommand);
 			}
 		});
 	}
@@ -76,8 +76,8 @@ public class HoldemMainView extends AbstractMainView {
 
 			@Override
 			public void run() {
-				colorNextPlayer(holdemHouseCommand);
 				revealCard(holdemHouseCommand, 3);
+				colorNextPlayer(holdemHouseCommand);
 			}
 		});
 	}
@@ -91,8 +91,8 @@ public class HoldemMainView extends AbstractMainView {
 
 			@Override
 			public void run() {
-				colorNextPlayer(holdemHouseCommand);
 				revealCard(holdemHouseCommand, 4);
+				colorNextPlayer(holdemHouseCommand);
 			}
 		});
 	}

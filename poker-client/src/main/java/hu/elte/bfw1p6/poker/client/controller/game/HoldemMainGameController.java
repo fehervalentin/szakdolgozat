@@ -3,7 +3,6 @@ package hu.elte.bfw1p6.poker.client.controller.game;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import com.cantero.games.poker.texasholdem.Card;
@@ -40,16 +39,19 @@ public class HoldemMainGameController extends AbstractMainGameController {
 		} catch (PokerUnauthenticatedException | RemoteException e) {
 			remoteExceptionHandler();
 		}
-		modifyButtonsDisability(null);
+		setButtonsDisability(true);
+		setQuitButtonDisability(false);
 	}
 
 	@Override
 	public void update(Object updateMsg) throws RemoteException {
 		// ha a ház küld utasítást
+		int whosOn = -1;
 		if (updateMsg instanceof HoldemHouseCommand) {
 			HoldemHouseCommand houseHoldemCommand = (HoldemHouseCommand)updateMsg;
+			whosOn = houseHoldemCommand.getWhosOn();
 			System.out.println("A haz utasítást küldött: " + houseHoldemCommand.getHouseCommandType());
-			
+			setButtonsDisability(model.getYouAreNth() != houseHoldemCommand.getWhosOn());
 			switch (houseHoldemCommand.getHouseCommandType()) {
 			case BLIND: {
 				receivedBlindHouseCommand(houseHoldemCommand);
@@ -87,8 +89,9 @@ public class HoldemMainGameController extends AbstractMainGameController {
 //			}
 		} else if (updateMsg instanceof HoldemPlayerCommand) {
 			HoldemPlayerCommand holdemPlayerCommand = (HoldemPlayerCommand)updateMsg;
+			whosOn = holdemPlayerCommand.getWhosOn();
 			System.out.println(holdemPlayerCommand.getSender() + " játékos utasítást küldött: " + holdemPlayerCommand.getPlayerCommandType());
-			
+			setButtonsDisability(model.getYouAreNth() !=  holdemPlayerCommand.getWhosOn());
 			switch (holdemPlayerCommand.getPlayerCommandType()) {
 			case BLIND: {
 				receivedBlindPlayerCommand(holdemPlayerCommand);
@@ -126,13 +129,21 @@ public class HoldemMainGameController extends AbstractMainGameController {
 //					automateExecution.schedule(timerTask, delay);
 //				}
 //			}
-			if (!holdemPlayerCommand.isWinnerCommand() && !holdemPlayerCommand.getCommandType().equals("QUIT") || holdemPlayerCommand.getCommandType().equals("QUIT") && holdemPlayerCommand.getClientsCount() >=2) {
+			/*if (!holdemPlayerCommand.isWinnerCommand() && !holdemPlayerCommand.getCommandType().equals("QUIT") || holdemPlayerCommand.getCommandType().equals("QUIT") && holdemPlayerCommand.getClientsCount() >=2) {
 				modifyButtonsDisability(holdemPlayerCommand);
-			}
+			}*/
 		} else {
 			throw new IllegalArgumentException();
 		}
-		debtChecker();
+//		Platform.runLater(new Runnable() {
+//			public void run() {
+//				checkButton.setDisable(true);
+//			}
+//		});
+		debtChecker(whosOn);
+//		if (model.getYouAreNth() != whosOn) {
+//			setButtonsDisability(true);
+//		}
 	}
 	
 	@Override
@@ -155,9 +166,8 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	 * @param houseHoldemCommand az utasítás
 	 */
 	private void receivedFlopHouseCommand(HoldemHouseCommand houseHoldemCommand) {
-		Card[] cards = houseHoldemCommand.getCards();
+		Card[] cards =  houseHoldemCommand.getCards();
 		System.out.println("Flop: " + cards[0] + " " + cards[1] + " " + cards[2]);
-		modifyButtonsDisability(houseHoldemCommand);
 		((HoldemMainView)mainView).receivedFlopHouseCommand(houseHoldemCommand);
 	}
 
@@ -166,9 +176,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	 * @param houseHoldemCommand az utasítás
 	 */
 	private void receivedTurnHouseCommand(HoldemHouseCommand houseHoldemCommand) {
-		Card[] cards = houseHoldemCommand.getCards();
-		System.out.println("Turn: " + cards[0]);
-		modifyButtonsDisability(houseHoldemCommand);
+		System.out.println("Turn: " + houseHoldemCommand.getCards()[0]);
 		((HoldemMainView)mainView).receivedTurnHouseCommand(houseHoldemCommand);
 	}
 
@@ -177,9 +185,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	 * @param houseHoldemCommand az utasítás
 	 */
 	private void receivedRiverHouseCommand(HoldemHouseCommand houseHoldemCommand) {
-		Card[] cards = houseHoldemCommand.getCards();
-		System.out.println("River: " + cards[0]);
-		modifyButtonsDisability(houseHoldemCommand);
+		System.out.println("River: " + houseHoldemCommand.getCards()[0]);
 		((HoldemMainView)mainView).receivedRiverHouseCommand(houseHoldemCommand);
 	}
 }

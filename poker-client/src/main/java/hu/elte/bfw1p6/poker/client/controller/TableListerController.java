@@ -27,6 +27,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 public class TableListerController extends AbstractPokerClientController implements PokerRemoteObserver {
 
+	private final String[] COLUMNS = {"name", "pokerType", "maxTime", "maxPlayers", "defaultPot", "maxBet"};
+	
 	private final String NO_TABLE_SELECTED_MESSAGE = "Nem választottál ki egy táblát sem!";
 	private final String SUCC_TABLE_DELETE_MSG = "Sikeresen kitörölted a táblát!";
 
@@ -67,6 +69,9 @@ public class TableListerController extends AbstractPokerClientController impleme
 		try {
 			List<PokerTable> tables = model.registerTableViewObserver(commCont);
 			tableView.getItems().setAll(tables);
+			//TODO: ezt kitörölni
+			tableView.getSelectionModel().select(0);
+			connectButton.fire();
 		} catch (PokerDataBaseException e) {
 			showErrorAlert(e.getMessage());
 		} catch (RemoteException | PokerUnauthenticatedException e ) {
@@ -76,12 +81,12 @@ public class TableListerController extends AbstractPokerClientController impleme
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		tableName.setCellValueFactory(new PropertyValueFactory<PokerTable, String>("name"));
-		pokerType.setCellValueFactory(new PropertyValueFactory<PokerTable, PokerType>("pokerType"));
-		maxTime.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>("maxTime"));
-		maxPlayers.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>("maxPlayers"));
-		defaultPot.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>("defaultPot"));
-		maxBet.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>("maxBet"));
+		tableName.setCellValueFactory(new PropertyValueFactory<PokerTable, String>(COLUMNS[0]));
+		pokerType.setCellValueFactory(new PropertyValueFactory<PokerTable, PokerType>(COLUMNS[1]));
+		maxTime.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>(COLUMNS[2]));
+		maxPlayers.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>(COLUMNS[3]));
+		defaultPot.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>(COLUMNS[4]));
+		maxBet.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>(COLUMNS[5]));
 
 		try {
 			if(!model.isAdmin()) {
@@ -101,14 +106,14 @@ public class TableListerController extends AbstractPokerClientController impleme
 	 * @param event az esemény
 	 */
 	@FXML protected void handleConnectToTable() {
-		PokerTable table = getSelectedPokerTable();
-		if (table == null) {
+		PokerTable selectedPokerTable = getSelectedPokerTable();
+		if (selectedPokerTable == null) {
 			showErrorAlert(NO_TABLE_SELECTED_MESSAGE);
 		} else {
-			model.setParameterPokerTable(table);
+			model.setParameterPokerTable(selectedPokerTable);
 			try {
 				model.removeTableViewObserver(commCont);
-				frameController.setMainGameFXML(table.getPokerType());
+				frameController.setMainGameFXML(selectedPokerTable.getPokerType());
 			} catch (RemoteException e) {
 				remoteExceptionHandler();
 			}
@@ -138,11 +143,11 @@ public class TableListerController extends AbstractPokerClientController impleme
 	 */
 	@FXML protected void handleModifyTable(ActionEvent event) {
 		PokerTable selectedPokerTable = getSelectedPokerTable();
-		if (selectedPokerTable != null) {
+		if (selectedPokerTable == null) {
+			showErrorAlert(NO_TABLE_SELECTED_MESSAGE);
+		} else {
 			model.setParameterPokerTable(selectedPokerTable);
 			frameController.setCreateTableFXML();
-		} else {
-			showErrorAlert(NO_TABLE_SELECTED_MESSAGE);
 		}
 	}
 

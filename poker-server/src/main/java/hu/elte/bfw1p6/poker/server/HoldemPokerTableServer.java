@@ -121,11 +121,11 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 		if (playersInRound <= 1 || (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && votedPlayers >= playersInRound)) {
 			startRound();
 		} else {
+			// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
+			whosOn = (dealer + 1 + foldCounter) % playersInRound;
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
 			if (votedPlayers >= playersInRound) {
 				HoldemHouseCommand houseHoldemCommand = new HoldemHouseCommand();
-				// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
-				whosOn = (dealer + 1 + foldCounter) % playersInRound;
 				switch (actualHoldemHouseCommandType) {
 				case FLOP: {
 					Card[] cards = new Card[]{deck.popCard(), deck.popCard(), deck.popCard()};
@@ -164,7 +164,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 		HoldemHouseCommand holdemHouseCommand = (HoldemHouseCommand)houseCommand;
 		List<IPlayer> winnerList = HoldemHandEvaluator.getInstance().getWinner(houseCards, players);
 		Card[] cards = winnerList.get(0).getCards();
-		// TODO: és mi van ha döntetlen?
+		// TODO: és mi van ha döntetlen? Nem kezelem le......
 		//TODO: aki nyert, annak el kell számolni a moneystacket
 		int winner = -1;
 		System.out.println("Players size: " + players.size());

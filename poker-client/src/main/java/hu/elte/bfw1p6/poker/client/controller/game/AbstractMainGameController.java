@@ -5,7 +5,6 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.ResourceBundle;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import com.cantero.games.poker.texasholdem.Card;
@@ -18,7 +17,6 @@ import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.client.view.AbstractMainView;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
-import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
@@ -133,7 +131,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param houseCommand az utasítás
 	 */
 	protected void receivedDealHouseCommand(HouseCommand houseCommand) {
-		modifyButtonsDisability(houseCommand);
 		model.receivedDealHouseCommand(houseCommand);
 		mainView.receivedDealHouseCommand(houseCommand);
 	}
@@ -145,8 +142,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	protected void receivedWinnerHouseCommand(HouseCommand houseCommand) {
 		Card[] cards = houseCommand.getCards();
 		System.out.println("Winner cards: " + Arrays.toString(cards));
-		modifyButtonsDisability(null);
-		System.out.println("WhosOn: " + houseCommand.getWhosOn() + " YouAreNth: " + model.getYouAreNth());
+		setButtonsDisability(true);
 		if (houseCommand.getWhosOn() == model.getYouAreNth()) {
 			Platform.runLater(new Runnable() {
 
@@ -164,17 +160,25 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * Módosítja a CALL, CHECK, FOLD, RAISE gombok disable tulajdonságát. Ha én nem jövök, vagy ha null értékkel hívom meg a függvényt, akkor letiltja a gombokat.
 	 * @param pokerCommand az utasítás
 	 */
-	protected void modifyButtonsDisability(PokerCommand pokerCommand) {
+	protected void setButtonsDisability(boolean isYourTurn) {
 		Platform.runLater(new Runnable() {
 
 			@Override
 			public void run() {
-				boolean disable = (pokerCommand == null || model.getYouAreNth() != pokerCommand.getWhosOn()) ? true : false;
-				callButton.setDisable(disable);
-				checkButton.setDisable(disable);
-				foldButton.setDisable(disable);
-				raiseButton.setDisable(disable);
-				quitButton.setDisable(disable);
+				callButton.setDisable(isYourTurn);
+				checkButton.setDisable(isYourTurn);
+				foldButton.setDisable(isYourTurn);
+				raiseButton.setDisable(isYourTurn);
+				quitButton.setDisable(isYourTurn);
+			}
+		});
+	}
+
+	protected void setQuitButtonDisability(boolean disabled) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				quitButton.setDisable(disabled);
 			}
 		});
 	}
@@ -308,10 +312,10 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	protected void receivedCheckPlayerCommand(PlayerCommand playerCommand) {
 		if (playerCommand.isWinnerCommand()) {
-			modifyButtonsDisability(null);
+			setButtonsDisability(true);
 		}
-		System.out.println("AZENYÉMBAZDMEGWhosOn: " + playerCommand.getWhosOn() + " YouAreNth: " + model.getYouAreNth() + " ISWINNER: " + playerCommand.isWinnerCommand());
-		if (playerCommand.getWhosOn() == model.getYouAreNth() && playerCommand.isWinnerCommand()) {
+		mainView.receivedCheckPlayerCommand(playerCommand);
+		if (model.getYouAreNth() ==  playerCommand.getWhosOn()) {
 			Platform.runLater(new Runnable() {
 
 				@Override
@@ -320,7 +324,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 				}
 			});
 		}
-		mainView.receivedCheckPlayerCommand(playerCommand);
 	}
 
 	/**
@@ -350,7 +353,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	protected void receivedQuitPlayerCommand(PlayerCommand playerCommand) {
 		//TODO: playerCommandban jöjjön le a kliensek száma 
 		if (playerCommand.getClientsCount() < 2) {
-			modifyButtonsDisability(null);
+			setButtonsDisability(false);
 		}
 		model.receivedQuitPlayerCommand(playerCommand);
 		mainView.receivedQuitPlayerCommand(playerCommand);
@@ -365,17 +368,19 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	}
 
 	/**
-	 * Ellenőrzi, hogy van-e addósságom, és ennek megfelelően állítja be a gombok disable tulajdonsgát.
+	 * Ellenőrzi, hogy van-e addósságom, és ennek megfelelően állítja be a CHECK és CALL gombok disable tulajdonsgát.
 	 */
-	protected void debtChecker() {
+	protected void debtChecker(int whosOn) {
 		Platform.runLater(new Runnable() {
 
 			@Override
 			public void run() {
-				if (model.getMyDebt().compareTo(BigDecimal.ZERO) > 0) {
-					checkButton.setDisable(true);
-				} else {
-					callButton.setDisable(true);
+				if (model.getYouAreNth() == whosOn) {
+					if (model.getMyDebt().compareTo(BigDecimal.ZERO) > 0) {
+						checkButton.setDisable(true);
+					} else {
+						callButton.setDisable(true);
+					}
 				}
 			}
 		});

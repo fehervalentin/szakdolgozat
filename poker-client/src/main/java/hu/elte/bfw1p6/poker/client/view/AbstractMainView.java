@@ -2,7 +2,6 @@ package hu.elte.bfw1p6.poker.client.view;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -306,7 +305,7 @@ public abstract class AbstractMainView {
 	 * @param whosOn a paraméter
 	 * @return
 	 */
-	protected int ultimateFormula(int whosOn) {
+	public int ultimateFormula(int whosOn) {
 		int value = (whosOn - fixSitPosition) % clientsCount;
 		value += value < 0 ? clientsCount : 0;
 		return value;
@@ -351,6 +350,7 @@ public abstract class AbstractMainView {
 
 			@Override
 			public void run() {
+				resetOpacity();
 				hideHouseCards();
 				loadMyCards(houseCommand);
 				nextPlayer = ultimateFormula(houseCommand.getWhosOn());
@@ -577,6 +577,8 @@ public abstract class AbstractMainView {
 	 */
 	public void setBalance(BigDecimal balance) {
 		Platform.runLater(new Runnable() {
+			
+			@Override
 			public void run() {
 				myBalance.setText(balance.toString());
 			}
