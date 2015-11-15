@@ -121,10 +121,10 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 		if (playersInRound <= 1 || (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && votedPlayers >= playersInRound)) {
 			startRound();
 		} else {
-			// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
-			whosOn = (dealer + 1 + foldCounter) % playersInRound;
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
 			if (votedPlayers >= playersInRound) {
+				// flopnál, turnnél, rivernél, winnernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
+				whosOn = (dealer + 1 + foldCounter) % playersInRound;
 				HoldemHouseCommand houseHoldemCommand = new HoldemHouseCommand();
 				switch (actualHoldemHouseCommandType) {
 				case FLOP: {

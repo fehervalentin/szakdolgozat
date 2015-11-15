@@ -4,7 +4,6 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;

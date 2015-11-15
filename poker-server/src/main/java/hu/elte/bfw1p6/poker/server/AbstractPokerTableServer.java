@@ -299,6 +299,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * @throws RemoteException
 	 */
 	protected void endOfReceivedPlayerCommand(PlayerCommand playerComand) throws RemoteException {
+		System.out.println(whosOn);
 		++whosOn;
 		if (playersInRound > 0)
 			whosOn %= playersInRound;

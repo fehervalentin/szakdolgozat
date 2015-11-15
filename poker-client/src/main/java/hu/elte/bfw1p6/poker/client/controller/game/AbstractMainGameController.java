@@ -343,7 +343,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 		System.out.println("A RAISE mértéke: " + playerCommand.getRaiseAmount());
 		model.receivedRaisePlayerCommand(playerCommand);
 		mainView.receivedRaisePlayerCommand(playerCommand);
-		checkButton.setDisable(true);
 	}
 
 	/**
