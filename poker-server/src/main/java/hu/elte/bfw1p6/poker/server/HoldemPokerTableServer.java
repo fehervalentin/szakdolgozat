@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import com.cantero.games.poker.texasholdem.Card;
 import com.cantero.games.poker.texasholdem.IPlayer;
@@ -182,6 +183,10 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 				break;
 			}
 		}
+		long count = IntStream.range(0, foldMask.length).filter(i -> foldMask[i]).count();
+		winner += count;
+		winner %= foldMask.length;
+		System.out.println("Hányan dobták a lapjaikat: " + count);
 		System.out.println("A győztes sorszáma: " + winner);
 		System.out.println("A győztes kártyalapjai: " + Arrays.toString(cards));
 		holdemHouseCommand.setUpWinnerCommand(cards, winner, whosOn);
