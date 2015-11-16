@@ -315,15 +315,16 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * @throws RemoteException
 	 */
 	protected void endOfReceivedPlayerCommand(PlayerCommand playerComand) throws RemoteException {
-		System.out.println(whosOn);
-		++whosOn;
-		whosOn = findNextValidClient(whosOn);
-		if (playersInRound > 0)
+		if (playersInRound > 0) {
+			System.out.println(whosOn);
+			++whosOn;
+			whosOn = findNextValidClient(whosOn);
 			whosOn %= foldMask.length;
-		playerComand.setWhosOn(whosOn);
-		playerComand.setClientsCount(clients.size());
-		notifyClients(playerComand);
-		nextRound();
+			playerComand.setWhosOn(whosOn);
+			playerComand.setClientsCount(clients.size());
+			notifyClients(playerComand);
+			nextRound();
+		}
 	}
 
 	/**
@@ -367,17 +368,17 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	}
 	
 	protected void bookMoneyStack(List<Card> houseCards) {
-		int winnerIndex = getWinner(houseCards).keySet().iterator().next();
-		PokerPlayer winnerPlayer = players.get(winnerIndex);
 		try {
+			int winnerIndex = getWinner(houseCards).keySet().iterator().next();
+			PokerPlayer winnerPlayer = players.get(winnerIndex);
 			User u = userDAO.findByUserName(winnerPlayer.getUserName());
 			u.setBalance(u.getBalance().add(moneyStack));
 			userDAO.modify(u);
+			moneyStack = BigDecimal.ZERO;
 		} catch (PokerDataBaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		moneyStack = BigDecimal.ZERO;
 	}
 	
 	protected HashMap<Integer, Card[]> getWinner(List<Card> houseCards) {
