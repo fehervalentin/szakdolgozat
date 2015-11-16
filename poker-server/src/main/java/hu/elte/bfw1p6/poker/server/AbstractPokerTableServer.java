@@ -5,7 +5,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -184,7 +183,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 */
 	protected void receivedFoldPlayerCommand() {
 		foldMask[whosOn] = true;
-//		++votedPlayers;
 		--playersInRound;
 	}
 

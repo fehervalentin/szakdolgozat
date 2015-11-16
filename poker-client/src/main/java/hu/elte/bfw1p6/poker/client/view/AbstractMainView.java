@@ -463,9 +463,6 @@ public abstract class AbstractMainView {
 			public void run() {
 
 				int convertedWinnerIndex = ultimateFormula(houseCommand.getWinner());
-//				++convertedWinnerIndex;
-//				convertedWinnerIndex %= clientsCount;
-				// ha nem én nyertem...
 				if (convertedWinnerIndex != 0) {
 					Card[] cards = houseCommand.getCards();
 					IntStream.range(0, defaultValues.MY_CARDS_COUNT).forEach(i -> 

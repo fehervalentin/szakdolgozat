@@ -10,7 +10,7 @@ CREATE TRIGGER pokerdb.create_table_trigger BEFORE INSERT ON pokerdb.poker_table
 			SET MESSAGE_TEXT = 'CONSTRAINT_POKER_TABLES_MAX_TIME';
 		end IF;
 	
-		IF (!(2 <= NEW.max_players && NEW.max_players <= 6)) THEN
+		IF (!(2 <= NEW.max_players && NEW.max_players <= 5)) THEN
 			SIGNAL SQLSTATE '45000'
 			SET MESSAGE_TEXT = 'CONSTRAINT_POKER_TABLES_MAX_PLAYERS';
 		end IF;

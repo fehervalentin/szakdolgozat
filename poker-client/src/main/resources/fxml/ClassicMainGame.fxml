@@ -14,9 +14,7 @@
 <AnchorPane fx:id="mainGamePane" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="hu.elte.bfw1p6.poker.client.controller.game.ClassicMainGameController">
 	<children>
-		<Label fx:id="pokerLabel" GridPane.rowIndex="0" text="Bejelentkezés"
-			styleClass="header-text" alignment="center" />
-		<ImageView fx:id="imageView" fitHeight="1650" fitWidth="1050"
+		<ImageView fx:id="tableImage" fitHeight="1650" fitWidth="1050"
 			layoutX="150" layoutY="50" pickOnBounds="true" preserveRatio="true">
 			<image>
 				<Image url="/images/table.png" backgroundLoading="true" />

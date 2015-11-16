@@ -23,6 +23,8 @@ public class HoldemMainGameController extends AbstractMainGameController {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+//		textArea.setDisable(true);
+		textArea.setOpacity(0.6);
 		this.mainView = new HoldemMainView(mainGamePane);
 //		this.automateExecution = new Timer();
 
@@ -31,7 +33,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 			this.model = new HoldemMainGameModel(commController);
 			this.model.connectToTable(commController);
 			this.mainView.setUserName(model.getUserName());
-			this.pokerLabel.setText(model.getUserName());
+			textArea.appendText("Felhasználónevem: " + model.getUserName());
 		} catch (PokerTooMuchPlayerException e) {
 			showErrorAlert(e.getMessage());
 			frameController.setTableListerFXML();
@@ -49,7 +51,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 		if (updateMsg instanceof HoldemHouseCommand) {
 			HoldemHouseCommand houseHoldemCommand = (HoldemHouseCommand)updateMsg;
 			whosOn = houseHoldemCommand.getWhosOn();
-			System.out.println("A haz utasítást küldött: " + houseHoldemCommand.getHouseCommandType());
+			textArea.appendText(System.lineSeparator() +  "Ház: " + houseHoldemCommand.getHouseCommandType() + " ");
 			setButtonsDisability(model.getYouAreNth() != houseHoldemCommand.getWhosOn());
 			
 			switch (houseHoldemCommand.getHouseCommandType()) {
@@ -90,7 +92,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 		} else if (updateMsg instanceof HoldemPlayerCommand) {
 			HoldemPlayerCommand holdemPlayerCommand = (HoldemPlayerCommand)updateMsg;
 			whosOn = holdemPlayerCommand.getWhosOn();
-			System.out.println(holdemPlayerCommand.getSender() + " játékos utasítást küldött: " + holdemPlayerCommand.getPlayerCommandType());
+			System.out.println(holdemPlayerCommand.getSender() + " : " + holdemPlayerCommand.getPlayerCommandType());
 			setButtonsDisability(model.getYouAreNth() !=  holdemPlayerCommand.getWhosOn());
 			
 			switch (holdemPlayerCommand.getPlayerCommandType()) {
@@ -160,7 +162,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	 */
 	private void receivedFlopHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		Card[] cards =  houseHoldemCommand.getCards();
-		System.out.println("Flop: " + cards[0] + " " + cards[1] + " " + cards[2]);
+		textArea.appendText(cards[0] + " " + cards[1] + " " + cards[2]);
 		((HoldemMainView)mainView).receivedFlopHouseCommand(houseHoldemCommand);
 	}
 
@@ -169,7 +171,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	 * @param houseHoldemCommand az utasítás
 	 */
 	private void receivedTurnHouseCommand(HoldemHouseCommand houseHoldemCommand) {
-		System.out.println("Turn: " + houseHoldemCommand.getCards()[0]);
+		textArea.appendText(houseHoldemCommand.getCards()[0].toString());
 		((HoldemMainView)mainView).receivedTurnHouseCommand(houseHoldemCommand);
 	}
 
@@ -178,7 +180,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	 * @param houseHoldemCommand az utasítás
 	 */
 	private void receivedRiverHouseCommand(HoldemHouseCommand houseHoldemCommand) {
-		System.out.println("River: " + houseHoldemCommand.getCards()[0]);
+		textArea.appendText(houseHoldemCommand.getCards()[0].toString());
 		((HoldemMainView)mainView).receivedRiverHouseCommand(houseHoldemCommand);
 	}
 }

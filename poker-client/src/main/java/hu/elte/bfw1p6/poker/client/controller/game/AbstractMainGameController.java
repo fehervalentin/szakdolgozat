@@ -7,8 +7,6 @@ import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.TimerTask;
 
-import com.cantero.games.poker.texasholdem.Card;
-
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
@@ -26,7 +24,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -37,10 +36,12 @@ import javafx.scene.layout.AnchorPane;
 public abstract class AbstractMainGameController implements PokerClientController, PokerRemoteObserver {
 
 	protected final String ERR_CONN = "Megszakadt a kommunikáció a szerverrel!";
-
+	
 	@FXML protected AnchorPane mainGamePane;
-
-	@FXML protected Label pokerLabel;
+	
+	@FXML protected ImageView tableImage;
+	
+	@FXML protected TextArea textArea;
 
 	@FXML protected Button callButton;
 	@FXML protected Button checkButton;
@@ -127,6 +128,9 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param houseCommand az utasítás
 	 */
 	protected void receivedDealHouseCommand(HouseCommand houseCommand) {
+		for (int i = 0; i < houseCommand.getCards().length; i++) {
+			textArea.appendText(houseCommand.getCards()[i].toString() + " ");
+		}
 		model.receivedDealHouseCommand(houseCommand);
 		mainView.receivedDealHouseCommand(houseCommand);
 	}
@@ -136,8 +140,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param houseCommand az utasítás
 	 */
 	protected void receivedWinnerHouseCommand(HouseCommand houseCommand) {
-		Card[] cards = houseCommand.getCards();
-		System.out.println("Winner cards: " + Arrays.toString(cards));
+		textArea.appendText(" Nyertes: " +  mainView.ultimateFormula(houseCommand.getWinner()) + " " +  Arrays.toString(houseCommand.getCards()) + System.lineSeparator());
 		setButtonsDisability(true);
 		if (houseCommand.getWhosOn() == model.getYouAreNth()) {
 			Platform.runLater(new Runnable() {
@@ -365,7 +368,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param playerCommand az utasítás
 	 */
 	protected void receivedRaisePlayerCommand(PlayerCommand playerCommand) {
-		System.out.println("A RAISE mértéke: " + playerCommand.getRaiseAmount());
 		model.receivedRaisePlayerCommand(playerCommand);
 		mainView.receivedRaisePlayerCommand(playerCommand);
 	}

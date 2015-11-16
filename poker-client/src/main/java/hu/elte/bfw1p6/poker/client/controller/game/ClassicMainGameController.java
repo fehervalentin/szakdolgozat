@@ -30,6 +30,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		textArea.setDisable(false);
 		this.mainView = new ClassicMainView(mainGamePane);
 //		this.automateExecution = new Timer();
 
@@ -37,7 +38,6 @@ public class ClassicMainGameController extends AbstractMainGameController {
 			commController = new CommunicatorController(this);
 			model = new ClassicMainGameModel(commController);
 			model.connectToTable(commController);
-			pokerLabel.setText(model.getUserName());
 		} catch (RemoteException e) {
 			remoteExceptionHandler();
 		} catch (PokerTooMuchPlayerException e) {
