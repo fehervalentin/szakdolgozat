@@ -13,7 +13,6 @@ import hu.elte.bfw1p6.poker.client.view.HoldemMainView;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
-import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 
 /**
  * A holdem játékmód kliens oldali controllere.
@@ -36,7 +35,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 		} catch (PokerTooMuchPlayerException e) {
 			showErrorAlert(e.getMessage());
 			frameController.setTableListerFXML();
-		} catch (PokerUnauthenticatedException | RemoteException e) {
+		} catch (RemoteException e) {
 			remoteExceptionHandler();
 		}
 		setButtonsDisability(true);

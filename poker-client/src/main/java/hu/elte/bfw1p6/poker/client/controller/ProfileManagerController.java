@@ -9,7 +9,6 @@ import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
-import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -64,7 +63,7 @@ public class ProfileManagerController extends AbstractPokerClientController {
 				showErrorAlert(OK_CHANGED_PW_MSG);
 			} catch (PokerDataBaseException | PokerInvalidPassword e) {
 				showErrorAlert(e.getMessage());
-			} catch (RemoteException | PokerUnauthenticatedException e) {
+			} catch (RemoteException e) {
 				remoteExceptionHandler();
 			}
 		}

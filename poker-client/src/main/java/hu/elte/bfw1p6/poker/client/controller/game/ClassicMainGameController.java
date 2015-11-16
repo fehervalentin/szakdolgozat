@@ -14,7 +14,6 @@ import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
-import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,7 +38,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 			model = new ClassicMainGameModel(commController);
 			model.connectToTable(commController);
 			pokerLabel.setText(model.getUserName());
-		} catch (RemoteException | PokerUnauthenticatedException e) {
+		} catch (RemoteException e) {
 			remoteExceptionHandler();
 		} catch (PokerTooMuchPlayerException e) {
 			showErrorAlert(e.getMessage());
@@ -176,7 +175,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 			((ClassicMainGameModel)model).sendChangeCommand(markedCards);
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
-		} catch (PokerUnauthenticatedException | RemoteException e) {
+		} catch (RemoteException e) {
 			remoteExceptionHandler();
 		}
 	}

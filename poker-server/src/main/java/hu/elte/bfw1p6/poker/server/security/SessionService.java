@@ -8,7 +8,6 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
-import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.UserDAO;
@@ -24,7 +23,7 @@ public class SessionService {
 		this.authenticatedUsers = new HashMap<>();
 	}
 	
-	public boolean isAuthenticated(UUID uuid) throws PokerUnauthenticatedException {
+	public boolean isAuthenticated(UUID uuid) {
 		return authenticatedUsers.containsKey(uuid);
 	}
 	

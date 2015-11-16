@@ -9,7 +9,6 @@ import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
-import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
@@ -83,7 +82,7 @@ public abstract class AbstractMainGameModel {
 	 * @throws PokerTooMuchPlayerException
 	 * @throws PokerUnauthenticatedException
 	 */
-	public void connectToTable(PokerRemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException {
+	public void connectToTable(PokerRemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException {
 		pokerRemote.connectToTable(pokerSession.getId(), pokerTable, observer);
 	}
 
@@ -111,7 +110,7 @@ public abstract class AbstractMainGameModel {
 	 * @throws PokerUnauthenticatedException 
 	 * @throws RemoteException 
 	 */
-	public void receivedBlindHouseCommand(HouseCommand houseCommand) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public void receivedBlindHouseCommand(HouseCommand houseCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		myDebt = pokerTable.getDefaultPot();
 		youAreNth = houseCommand.getNthPlayer();
 		players = houseCommand.getPlayers();
@@ -130,7 +129,7 @@ public abstract class AbstractMainGameModel {
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException
 	 */
-	protected void sendCommandToTable(PlayerCommand playerCommand) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	protected void sendCommandToTable(PlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		playerCommand.setSender(pokerSession.getPlayer().getUserName());
 		pokerRemote.sendPlayerCommand(pokerSession.getId(), pokerTable, communicatorController, playerCommand);
 		pokerSession.refreshBalance(pokerRemote.refreshBalance(pokerSession.getId()));
@@ -145,7 +144,7 @@ public abstract class AbstractMainGameModel {
 	 * @throws PokerUnauthenticatedException 
 	 * @throws RemoteException 
 	 */
-	protected abstract void tossBlind(Boolean bigBlind) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException;
+	protected abstract void tossBlind(Boolean bigBlind) throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
 	
 	/**
 	 * CALL típusú utasítás küldése a szervernek.
@@ -154,7 +153,7 @@ public abstract class AbstractMainGameModel {
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException
 	 */
-	public abstract void sendCallCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException;
+	public abstract void sendCallCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
 	
 	/**
 	 * CHECK típusú utasítás küldése a szervernek.
@@ -163,7 +162,7 @@ public abstract class AbstractMainGameModel {
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException
 	 */
-	public abstract void sendCheckCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException;
+	public abstract void sendCheckCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
 	
 	/**
 	 * RAISE típusú utasítás küldése a szervernek.
@@ -173,7 +172,7 @@ public abstract class AbstractMainGameModel {
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException
 	 */
-	public abstract void sendRaiseCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException;
+	public abstract void sendRaiseCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
 	
 	/**
 	 * FOLD típusú utasítás küldése a szervenek.
@@ -182,7 +181,7 @@ public abstract class AbstractMainGameModel {
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException
 	 */
-	public abstract void sendFoldCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException;
+	public abstract void sendFoldCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
 	
 	/**
 	 * QUIT típusú utasítás küldése a szervernek.
@@ -191,7 +190,7 @@ public abstract class AbstractMainGameModel {
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException
 	 */
-	public abstract void sendQuitCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException;
+	public abstract void sendQuitCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
 
 	/**
 	 * DEAL típusú utasítás érkezett a szervertől.

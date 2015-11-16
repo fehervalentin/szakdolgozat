@@ -21,7 +21,6 @@ import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
-import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
@@ -96,7 +95,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public synchronized void deleteTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+	public synchronized void deleteTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException {
 		if (sessionService.isAuthenticated(uuid)) {
 			pokerTableservers.remove(t.getName());
 			pokerTableDAO.delete(t);
@@ -106,7 +105,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public synchronized void createTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+	public synchronized void createTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException {
 		if (sessionService.isAuthenticated(uuid)) {
 			pokerTableDAO.save(t);
 			List<PokerTable> tables = pokerTableDAO.findAll();
@@ -129,7 +128,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public synchronized void modifyTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+	public synchronized void modifyTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException {
 		if (sessionService.isAuthenticated(uuid)) {
 			pokerTableDAO.modify(t);
 			this.notifyObservers();
@@ -137,7 +136,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public synchronized void modifyPassword(UUID uuid, String oldPassword, String newPassword) throws RemoteException, PokerDataBaseException, PokerInvalidPassword, PokerUnauthenticatedException {
+	public synchronized void modifyPassword(UUID uuid, String oldPassword, String newPassword) throws RemoteException, PokerDataBaseException, PokerInvalidPassword {
 		if (sessionService.isAuthenticated(uuid)) {
 			String userName = sessionService.lookUpUserName(uuid);
 			User u = userDAO.findByUserName(userName);
@@ -151,7 +150,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public List<PokerTable> getTables(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+	public List<PokerTable> getTables(UUID uuid) throws RemoteException, PokerDataBaseException {
 		if (sessionService.isAuthenticated(uuid)) {
 			return pokerTableDAO.findAll();
 		}
@@ -190,7 +189,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public boolean isAdmin(UUID uuid) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException {
+	public boolean isAdmin(UUID uuid) throws RemoteException, PokerDataBaseException {
 		if (sessionService.isAuthenticated(uuid)) {
 			String username = sessionService.lookUpUserName(uuid);
 			return userDAO.findByUserName(username).getAdmin();
@@ -208,7 +207,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public List<PokerTable> registerTableViewObserver(UUID uuid, PokerRemoteObserver observer) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+	public List<PokerTable> registerTableViewObserver(UUID uuid, PokerRemoteObserver observer) throws RemoteException, PokerDataBaseException {
 		clients.add(observer);
 		return getTables(uuid);
 	}
@@ -219,14 +218,14 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public void sendPlayerCommand(UUID uuid, PokerTable t, PokerRemoteObserver client, PlayerCommand playerCommand) throws RemoteException, PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException {
+	public void sendPlayerCommand(UUID uuid, PokerTable t, PokerRemoteObserver client, PlayerCommand playerCommand) throws RemoteException, PokerDataBaseException, PokerUserBalanceException {
 		if (sessionService.isAuthenticated(uuid)) {
 			pokerTableservers.get(t.getName()).receivedPlayerCommand(client, playerCommand);
 		}
 	}
 
 	@Override
-	public void connectToTable(UUID uuid, PokerTable t, PokerRemoteObserver client) throws RemoteException, PokerTooMuchPlayerException, PokerUnauthenticatedException {
+	public void connectToTable(UUID uuid, PokerTable t, PokerRemoteObserver client) throws RemoteException, PokerTooMuchPlayerException {
 		if (sessionService.isAuthenticated(uuid)) {
 			AbstractPokerTableServer pts = pokerTableservers.get(t.getName());
 			pts.join(client, sessionService.lookUpUserName(uuid));
@@ -239,7 +238,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public BigDecimal refreshBalance(UUID uuid) throws RemoteException, PokerDataBaseException, PokerUnauthenticatedException {
+	public BigDecimal refreshBalance(UUID uuid) throws RemoteException, PokerDataBaseException {
 		return userDAO.findByUserName(sessionService.lookUpUserName(uuid)).getPlayer().getBalance();
 	}
 

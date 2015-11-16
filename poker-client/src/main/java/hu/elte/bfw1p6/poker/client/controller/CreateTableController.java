@@ -9,7 +9,6 @@ import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
-import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.collections.FXCollections;
@@ -152,7 +151,7 @@ public class CreateTableController extends AbstractPokerClientController {
 				frameController.setTableListerFXML();
 			} catch (PokerDataBaseException e) {
 				showErrorAlert(e.getMessage());
-			} catch (RemoteException | PokerUnauthenticatedException e) {
+			} catch (RemoteException e) {
 				remoteExceptionHandler();
 			}
 		} else {
@@ -171,7 +170,7 @@ public class CreateTableController extends AbstractPokerClientController {
 				frameController.setTableListerFXML();
 			} catch (PokerDataBaseException e) {
 				showErrorAlert(e.getMessage());
-			} catch (RemoteException | PokerUnauthenticatedException e) {
+			} catch (RemoteException e) {
 				remoteExceptionHandler();
 			}
 			model.setParameterPokerTable(null);

@@ -8,7 +8,6 @@ import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
-import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 
 /**
@@ -23,7 +22,7 @@ public class ClassicMainGameModel extends AbstractMainGameModel {
 	}
 	
 	@Override
-	protected void tossBlind(Boolean bigBlind) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	protected void tossBlind(Boolean bigBlind) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		BigDecimal amount = pokerTable.getDefaultPot().divide(new BigDecimal(bigBlind ? 1 : 2));
 		myDebt = myDebt.subtract(amount);
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
@@ -32,7 +31,7 @@ public class ClassicMainGameModel extends AbstractMainGameModel {
 	}
 
 	@Override
-	public void sendCallCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public void sendCallCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		BigDecimal amount = BigDecimal.ZERO.add(myDebt);
 		myDebt = myDebt.subtract(amount);
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
@@ -41,28 +40,28 @@ public class ClassicMainGameModel extends AbstractMainGameModel {
 	}
 
 	@Override
-	public void sendCheckCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public void sendCheckCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpCheckCommand();
 		sendCommandToTable(playerCommand);
 	}
 
 	@Override
-	public void sendRaiseCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public void sendRaiseCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpRaiseCommand(myDebt, pokerTable.getDefaultPot());
 		sendCommandToTable(playerCommand);
 	}
 
 	@Override
-	public void sendFoldCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public void sendFoldCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpFoldCommand(youAreNth);
 		sendCommandToTable(playerCommand);
 	}
 
 	@Override
-	public void sendQuitCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public void sendQuitCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpQuitCommand(youAreNth);
 		sendCommandToTable(playerCommand);	
@@ -76,7 +75,7 @@ public class ClassicMainGameModel extends AbstractMainGameModel {
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException
 	 */
-	public void sendChangeCommand(List<Integer> markedCards) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public void sendChangeCommand(List<Integer> markedCards) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
 		playerCommand.setUpChangeCommand(markedCards);
 		sendCommandToTable(playerCommand);

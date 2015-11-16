@@ -6,7 +6,6 @@ import java.rmi.RemoteException;
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
-import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 
 /**
@@ -22,7 +21,7 @@ public class HoldemMainGameModel extends AbstractMainGameModel {
 
 
 	@Override
-	protected void tossBlind(Boolean bigBlind) throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	protected void tossBlind(Boolean bigBlind) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		BigDecimal amount = pokerTable.getDefaultPot().divide(new BigDecimal(bigBlind ? 1 : 2));
 		myDebt = myDebt.subtract(amount);
 		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
@@ -31,7 +30,7 @@ public class HoldemMainGameModel extends AbstractMainGameModel {
 	}
 
 	@Override
-	public void sendCallCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public void sendCallCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		BigDecimal amount = BigDecimal.ZERO.add(myDebt);
 		myDebt = myDebt.subtract(amount);
 		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
@@ -40,28 +39,28 @@ public class HoldemMainGameModel extends AbstractMainGameModel {
 	}
 
 	@Override
-	public void sendCheckCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public void sendCheckCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
 		playerCommand.setUpCheckCommand();
 		sendCommandToTable(playerCommand);
 	}
 
 	@Override
-	public void sendRaiseCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public void sendRaiseCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
 		playerCommand.setUpRaiseCommand(myDebt, pokerTable.getDefaultPot());
 		sendCommandToTable(playerCommand);
 	}
 
 	@Override
-	public void sendFoldCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public void sendFoldCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
 		playerCommand.setUpFoldCommand(youAreNth);
 		sendCommandToTable(playerCommand);
 	}
 
 	@Override
-	public void sendQuitCommand() throws PokerUnauthenticatedException, PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	public void sendQuitCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
 		playerCommand.setUpQuitCommand(youAreNth);
 		sendCommandToTable(playerCommand);		

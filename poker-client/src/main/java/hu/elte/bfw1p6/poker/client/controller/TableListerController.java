@@ -10,7 +10,6 @@ import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
-import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.event.ActionEvent;
@@ -74,7 +73,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 //			connectButton.fire();
 		} catch (PokerDataBaseException e) {
 			showErrorAlert(e.getMessage());
-		} catch (RemoteException | PokerUnauthenticatedException e ) {
+		} catch (RemoteException e ) {
 			remoteExceptionHandler();
 		}
 	}
@@ -97,7 +96,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 			}
 		} catch (PokerDataBaseException e) {
 			showErrorAlert(e.getMessage());
-		} catch (RemoteException | PokerUnauthenticatedException e) {
+		} catch (RemoteException e) {
 			remoteExceptionHandler();
 		}
 	}
@@ -163,7 +162,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 				showSuccessAlert(SUCC_TABLE_DELETE_MSG);
 			} catch (PokerDataBaseException e) {
 				showErrorAlert(e.getMessage());
-			} catch (RemoteException | PokerUnauthenticatedException e) {
+			} catch (RemoteException e) {
 				remoteExceptionHandler();
 			}
 		} else {

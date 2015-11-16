@@ -18,7 +18,6 @@ import hu.elte.bfw1p6.poker.client.view.AbstractMainView;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
-import hu.elte.bfw1p6.poker.exception.PokerUnauthenticatedException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -117,7 +116,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			model.receivedBlindHouseCommand(houseCommand);
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
-		} catch (PokerUnauthenticatedException | RemoteException e) {
+		} catch (RemoteException e) {
 			remoteExceptionHandler();
 		}
 	}
@@ -215,7 +214,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
-		} catch (RemoteException | PokerUnauthenticatedException e) {
+		} catch (RemoteException e) {
 			remoteExceptionHandler();
 		}
 	}
@@ -231,7 +230,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
-		} catch (PokerUnauthenticatedException | RemoteException e ) {
+		} catch (RemoteException e ) {
 			remoteExceptionHandler();
 		}
 	}
@@ -247,7 +246,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
-		} catch (PokerUnauthenticatedException | RemoteException e) {
+		} catch (RemoteException e) {
 			remoteExceptionHandler();
 		}
 	}
@@ -262,7 +261,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			model.sendFoldCommand();
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
-		} catch (PokerUnauthenticatedException | RemoteException e) {
+		} catch (RemoteException e) {
 			remoteExceptionHandler();
 		}
 	}
@@ -278,7 +277,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 		try {
 			model.sendQuitCommand();
 			frameController.setTableListerFXML();
-		} catch (PokerUnauthenticatedException | PokerDataBaseException | PokerUserBalanceException e) {
+		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
 		}
 		catch (RemoteException e) {

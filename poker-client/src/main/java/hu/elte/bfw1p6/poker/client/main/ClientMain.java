@@ -1,11 +1,7 @@
 package hu.elte.bfw1p6.poker.client.main;
 
-import java.rmi.NoSuchObjectException;
-import java.rmi.server.UnicastRemoteObject;
-
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
