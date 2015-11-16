@@ -110,12 +110,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 			showErrorAlert(NO_TABLE_SELECTED_MESSAGE);
 		} else {
 			model.setParameterPokerTable(selectedPokerTable);
-			try {
-				model.removeTableViewObserver(commCont);
-				frameController.setMainGameFXML(selectedPokerTable.getPokerType());
-			} catch (RemoteException e) {
-				remoteExceptionHandler();
-			}
+			frameController.setMainGameFXML(selectedPokerTable.getPokerType());
 		}
 	}
 
@@ -128,12 +123,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 	 * @param event az esemény
 	 */
 	@FXML protected void handleCreateTable(ActionEvent event) {
-		try {
-			model.removeTableViewObserver(commCont);
-			frameController.setCreateTableFXML();
-		} catch (RemoteException e) {
-			remoteExceptionHandler();
-		}
+		frameController.setCreateTableFXML();
 	}
 
 	/**
@@ -176,7 +166,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 	 */
 	@FXML protected void handleLogout(ActionEvent event) {
 		try {
-			model.logout();
+			model.logout(commCont);
 			frameController.setLoginFXML();
 		} catch (RemoteException e) {
 			remoteExceptionHandler();

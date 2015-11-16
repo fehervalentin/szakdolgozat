@@ -42,6 +42,8 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	private static final long serialVersionUID = -4495230178265270679L;
 
 	private final String ERR_BAD_PW = "Hibás jelszó!";
+	
+	private final String INITIAL_BALANCE = "1000.00";
 
 	private PokerProperties pokerProperties;
 
@@ -54,8 +56,6 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	private PokerTableDAO pokerTableDAO;
 	
 	private UserDAO userDAO;
-	
-	private String initialBalance = "1000.00";
 
 	public PokerRemoteImpl() throws RemoteException, PokerDataBaseException {
 		this.pokerProperties = PokerProperties.getInstance();
@@ -201,7 +201,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	public void registration(String username, String password) throws RemoteException, PokerDataBaseException {
 		User u = new User(username);
 		u.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-		u.setBalance(new BigDecimal(initialBalance));
+		u.setBalance(new BigDecimal(INITIAL_BALANCE));
 		u.setAdmin(false);
 		userDAO.save(u);
 	}

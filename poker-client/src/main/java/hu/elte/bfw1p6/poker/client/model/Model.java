@@ -138,7 +138,8 @@ public class Model {
 	 * Kijelentkezés.
 	 * @throws RemoteException
 	 */
-	public void logout() throws RemoteException {
+	public void logout(PokerRemoteObserver commCont) throws RemoteException {
+		removeTableViewObserver(commCont);
 		pokerRemote.logout(pokerSession.getId());
 		pokerSession = null;
 	}
