@@ -35,6 +35,11 @@ import hu.elte.bfw1p6.poker.server.logic.HoldemHandEvaluator;
  *
  */
 public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
+	
+	//TODO: kell egy időzítő!!!
+	// ha egy kliens jön éppen,, akkor kommunikáció áll, de kell egy timeout limit,
+	//amit az asztal határoz meg, ha addig nem jön válasz, akkor kiléptetjük a felhasználót
+	//a timeoutnak kell egy kis dilatáció, hogy a kliens oldali timer tudjon reagálni
 
 	private static final long serialVersionUID = -2646114665508361840L;
 
@@ -252,6 +257,12 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 					playerCommand.setClientsCount(clients.size()-1);
 					receivedQuitPlayerCommand(clients.get(i), playerCommand);
 					notifyClients(playerCommand);
+					try {
+						endOfReceivedPlayerCommand(playerCommand);
+					} catch (RemoteException e1) {
+						//TODO: GEEEEEEEEZ
+						e1.printStackTrace();
+					}
 				}
 			}}.start();
 	}

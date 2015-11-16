@@ -47,7 +47,6 @@ public class FrameController extends UnicastRemoteObject {
 //		setConnectorFXML();
 		setLoginFXML();
 //		setClassicMainGameFXML();
-		
 	}
 	
 	/**
