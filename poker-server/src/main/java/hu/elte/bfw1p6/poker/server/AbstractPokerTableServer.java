@@ -37,9 +37,11 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	private static final long serialVersionUID = -2646114665508361840L;
 
 	private final String ERR_BALANCE_MSG = "Nincs elég zsetonod!";
-	private final String ERR_TABLE_FULL = "Az asztal betelt, nem tudsz csatlakozni!";
+	protected final String ERR_TABLE_FULL = "Az asztal betelt, nem tudsz csatlakozni!";
 	
 	protected List<PokerRemoteObserver> waitingClients;
+	
+	protected List<String> waitingClientsNames;
 	
 	/**
 	 * Ház lapjai. Classic esetében null marad.
@@ -121,6 +123,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		this.clientsNames = new ArrayList<>();
 		this.userDAO = new UserDAO();
 		this.waitingClients = new ArrayList<>();
+		this.waitingClientsNames = new ArrayList<>();
 	}
 	
 	
@@ -142,17 +145,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * @param userName a csatlakozni kívánó játékos neve
 	 * @throws PokerTooMuchPlayerException
 	 */
-	public synchronized void join(PokerRemoteObserver client, String userName) throws PokerTooMuchPlayerException {
-		if (!clients.contains(client)) {
-			if (clients.size() >= minPlayer) {
-				throw new PokerTooMuchPlayerException(ERR_TABLE_FULL);
-			}
-			clients.add(client);
-			clientsNames.add(userName);
-			System.out.println("JOIN: " + client.toString());
-			startRound();
-		}
-	}
+	public abstract void join(PokerRemoteObserver client, String userName) throws PokerTooMuchPlayerException;
 
 	/**
 	 * QUIT típusú utasítás érkezett egy klienstől.
@@ -194,6 +187,11 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Inicializáció metódus új kör kezdés esetére.
 	 */
 	protected void preStartRound() {
+		//akik várakoznak, azokat felveszem teljes értékű játékosként
+		clients.addAll(waitingClients);
+		clientsNames.addAll(waitingClientsNames);
+		waitingClients.clear();
+		waitingClientsNames.clear();
 		// megnézem, hogy aktuálisan hány játékos van az asztalnál
 		playersInRound = clients.size();
 		foldMask = new boolean[playersInRound];
@@ -212,6 +210,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		}
 		//törlöm a játékosokat
 		players.clear();
+		
+		IntStream.range(0, clients.size()).forEach(i -> players.add(new PokerPlayer(clientsNames.get(i)))
+	);
 	}
 
 	/**
@@ -340,12 +341,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Új kört indít a szerveren.
 	 */
 	protected void startRound() {
-		if (clients.size() >= minPlayer) {
+		if (clients.size() + waitingClients.size() >= minPlayer) {
 			prepareNewRound();
 			preStartRound();
-			IntStream.range(0, clients.size()).forEach(i ->
-				players.add(new PokerPlayer(clientsNames.get(i)))
-			);
 			collectBlinds();
 			dealCardsToPlayers();
 		}
@@ -480,4 +478,16 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Vadonatúj kör kezdetének előkészítése.
 	 */
 	protected abstract void prepareNewRound();
+	
+	protected void preJoin(PokerRemoteObserver client, String userName) throws PokerTooMuchPlayerException {
+		clients.add(client);
+		clientsNames.add(userName);
+		System.out.println("JOIN: " + client.toString());
+	}
+	
+	protected void waitingJoin(PokerRemoteObserver client, String userName) {
+		waitingClients.add(client);
+		waitingClientsNames.add(userName);
+		System.out.println("WAITING: " + client.toString());
+	}
 }
