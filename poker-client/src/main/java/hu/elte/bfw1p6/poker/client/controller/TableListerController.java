@@ -110,7 +110,15 @@ public class TableListerController extends AbstractPokerClientController impleme
 			showErrorAlert(NO_TABLE_SELECTED_MESSAGE);
 		} else {
 			model.setParameterPokerTable(selectedPokerTable);
-			frameController.setMainGameFXML(selectedPokerTable.getPokerType());
+			try {
+				if (model.canSitIn()) {
+					frameController.setMainGameFXML(selectedPokerTable.getPokerType());
+				} else {
+					showErrorAlert("Nincs szabad hely az asztalnál!");
+				}
+			} catch (RemoteException e) {
+				remoteExceptionHandler();
+			}
 		}
 	}
 

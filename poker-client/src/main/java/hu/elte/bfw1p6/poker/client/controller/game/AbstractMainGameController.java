@@ -24,6 +24,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -199,6 +200,9 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param msg az üzenet
 	 */
 	protected void showErrorAlert(String msg) {
+		if (errorAlert == null) {
+			errorAlert = new Alert(AlertType.ERROR);
+		}
 		errorAlert.setContentText(msg);
 		errorAlert.showAndWait();
 	}
@@ -316,6 +320,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 				@Override
 				public void run() {
 					checkButton.setDisable(false);
+					quitButton.setDisable(false);
 				}
 			});
 		}

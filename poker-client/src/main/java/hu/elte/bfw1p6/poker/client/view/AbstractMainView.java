@@ -450,21 +450,6 @@ public abstract class AbstractMainView {
 			}
 		});
 	}
-	
-	private void reArrangeTable(int convertedWhoFold, PlayerCommand playerCommand) {
-		//TODO: NEM KELL, csak setopacity nulla, és mintha foldolt volna :)
-		int cc = clientsCount;
-		profileImages.subList(cc, profileImages.size()).forEach(profile -> profile.setVisible(false));
-		opponentsCards.subList(cc - 1, opponentsCards.size()).forEach(card -> card.setVisible(false));
-		opponentsCardSides.subList((cc - 1) * (defaultValues.MY_CARDS_COUNT - 1), opponentsCardSides.size()).forEach(card -> card.setVisible(false));
-		userNameLabels.subList(cc, userNameLabels.size()).forEach(label -> label.setVisible(false));
-		chips.forEach(chip -> chip.setVisible(false));
-		dealerButtonImageView.setVisible(false);
-		if (clientsCount < 2) {
-			hideHouseCards();
-			myCards.forEach(card -> card.setVisible(false));
-		}
-	}
 
 	/**
 	 * A szerver WINNER típusú utasítást küldött.

@@ -46,8 +46,6 @@ public abstract class AbstractPokerClientController implements PokerClientContro
 	private Alert successAlert;
 	
 	public AbstractPokerClientController() {
-		errorAlert = new Alert(AlertType.ERROR);
-		successAlert = new Alert(AlertType.INFORMATION);
 		try {
 			if (!(this instanceof ConnectorController)) {
 				model = Model.getInstance();
@@ -68,12 +66,6 @@ public abstract class AbstractPokerClientController implements PokerClientContro
 	 * Hibás szerver-kliens kommunikációt kezelő eljárás.
 	 */
 	public void remoteExceptionHandler() {
-//		try {
-//			Model.getInstance().setWasError(true);
-//		} catch (MalformedURLException | RemoteException | NotBoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		showErrorAlert(ERR_CONN);
 		if (!(this instanceof ConnectorController)) {
 			frameController.setConnectorFXML();
@@ -85,6 +77,9 @@ public abstract class AbstractPokerClientController implements PokerClientContro
 	 * @param msg az üzenet
 	 */
 	public void showErrorAlert(String msg) {
+		if (errorAlert == null) {
+			errorAlert = new Alert(AlertType.ERROR);
+		}
 		errorAlert.setContentText(msg);
 		errorAlert.showAndWait();
 	}
@@ -94,6 +89,9 @@ public abstract class AbstractPokerClientController implements PokerClientContro
 	 * @param msg az üzenet
 	 */
 	public void showSuccessAlert(String msg) {
+		if (successAlert == null) {
+			successAlert = new Alert(AlertType.INFORMATION);
+		}
 		successAlert.setContentText(msg);
 		successAlert.showAndWait();
 	}

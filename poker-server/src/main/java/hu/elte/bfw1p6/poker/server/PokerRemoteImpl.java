@@ -248,4 +248,9 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 		userDAO.findAll().forEach(user -> pokerPlayers.add(user.getPlayer()));
 		return pokerPlayers;
 	}
+
+	@Override
+	public boolean canSitIn(PokerTable paramPokerTable) throws RemoteException {
+		return pokerTableservers.get(paramPokerTable.getName()).canSitIn();
+	}
 }

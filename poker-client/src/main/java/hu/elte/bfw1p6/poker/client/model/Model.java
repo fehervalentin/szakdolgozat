@@ -213,4 +213,8 @@ public class Model {
 	public void setParameterPokerTable(PokerTable paramPokerTable) {
 		Model.paramPokerTable = paramPokerTable;
 	}
+
+	public boolean canSitIn() throws RemoteException {
+		return pokerRemote.canSitIn(paramPokerTable);
+	}
 }

@@ -141,6 +141,12 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 				break;
 			}
 			endOfReceivedPlayerCommand(classicPlayerCommand);
+		} else if (waitingClients.contains(client)) {
+			if (playerCommand.getCommandType() == "QUIT") {
+				receivedQuitPlayerCommandFromWaitingPlayer(client);
+			} else {
+				throw new IllegalArgumentException();
+			}
 		}
 	}
 	

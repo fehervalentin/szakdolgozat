@@ -150,27 +150,27 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	/**
 	 * QUIT típusú utasítás érkezett egy klienstől.
 	 * @param client a kilépendő kliens
-	 * @param playerComand az utasítás
+	 * @param playerCommand az utasítás
 	 * @throws PokerUserBalanceException
 	 * @throws PokerDataBaseException
 	 */
-	protected void receivedQuitPlayerCommand(PokerRemoteObserver client, PlayerCommand playerComand) {
-		// TODO: lehet, hogy itt a client paraméter lehagyható, elég ha nevet küld, vagy sorszámot...
-		//TODO: lapjait is szedjük ki
+	protected void receivedQuitPlayerCommand(PokerRemoteObserver client, PlayerCommand playerCommand) {
+		System.out.println("WhosQuit param: " + playerCommand.getWhosQuit());
+		System.out.println("Kliens visszakeresve: " + clients.indexOf(client));
 		int index = clients.indexOf(client);
 		quitMask[index] = true;
-		System.out.println("WhosQuit param: " + playerComand.getWhosQuit());
-		System.out.println("Kliens visszakeresve: " + clients.indexOf(client));
 		clients.remove(index);
+		clientsNames.remove(index);
 		if (players.size() > 0) {
 			players.remove(index);
 		}
-		clientsNames.remove(index);
-//		++votedPlayers;
-//		if (playersInRound > 0) {
 		--playersInRound;
-//		}
 		--whosOn;
+	}
+	
+	protected void receivedQuitPlayerCommandFromWaitingPlayer(PokerRemoteObserver client) {
+		System.out.println("WAITING PLAYER LEFT: " + client);
+		waitingClients.remove(client);
 	}
 
 	/**
@@ -489,5 +489,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		waitingClients.add(client);
 		waitingClientsNames.add(userName);
 		System.out.println("WAITING: " + client.toString());
+	}
+	
+	public boolean canSitIn() {
+		return (waitingClients.size() + clients.size()) < pokerTable.getMaxPlayers();
 	}
 }

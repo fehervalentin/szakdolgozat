@@ -95,9 +95,15 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 				break;
 			}
 			default:
-				break;
+				throw new IllegalArgumentException();
 			}
 			endOfReceivedPlayerCommand(holdemPlayerCommand);
+		} else if (waitingClients.contains(client)) {
+			if (playerCommand.getCommandType() == "QUIT") {
+				receivedQuitPlayerCommandFromWaitingPlayer(client);
+			} else {
+				throw new IllegalArgumentException();
+			}
 		}
 	}
 	

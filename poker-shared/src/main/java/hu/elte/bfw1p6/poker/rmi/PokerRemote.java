@@ -188,4 +188,6 @@ public interface PokerRemote extends Remote, Serializable {
 	 * @throws PokerDataBaseException
 	 */
 	List<PokerPlayer> getUsers() throws RemoteException, PokerDataBaseException;
+
+	boolean canSitIn(PokerTable paramPokerTable) throws RemoteException;
 }
