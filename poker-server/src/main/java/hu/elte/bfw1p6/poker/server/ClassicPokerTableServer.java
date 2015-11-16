@@ -1,8 +1,6 @@
 package hu.elte.bfw1p6.poker.server;
 
 import java.rmi.RemoteException;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -58,6 +56,11 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	}
 
 	@Override
+	protected HouseCommand houseWinnerCommandFactory(Card[] cards, int winner, int whosOn) {
+		return new ClassicHouseCommand().setUpWinnerCommand(cards, winner, whosOn);
+	}
+
+	@Override
 	protected void nextRound() throws RemoteException {
 //		System.out.println("VotedPlayers: " + votedPlayers);
 //		System.out.println("Players in round: " + playersInRound);
@@ -83,7 +86,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 					break;
 				}
 				case WINNER: {
-					winner(classicHouseCommand);
+					classicHouseCommand = (ClassicHouseCommand)winner();
 					break;
 				}
 				default:
@@ -162,20 +165,5 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 			pokerPlayer.setNthCard(i, deck.popCard());
 		}
 		++votedPlayers;
-	}
-
-	@Override
-	protected void winner(HouseCommand houseCommand) {
-		ClassicHouseCommand classicHouseCommand = (ClassicHouseCommand)houseCommand;
-		HashMap<Integer, Card[]> winner = getWinner(null);
-		int winnerIndex = winner.keySet().iterator().next();
-		long count = IntStream.range(0, foldMask.length).filter(i -> foldMask[i]).count();
-		long count2 = IntStream.range(0, quitMask.length).filter(i -> foldMask[i]).count();
-		winnerIndex += (count + count2);
-		winnerIndex %= foldMask.length;
-		System.out.println("Hányan dobták a lapjaikat: " + count);
-		System.out.println("A győztes sorszáma: " + winnerIndex);
-		System.out.println("A győztes kártyalapjai: " + Arrays.toString(winner.values().iterator().next()));
-		classicHouseCommand.setUpWinnerCommand(winner.get(winnerIndex), winnerIndex, whosOn);
 	}
 }

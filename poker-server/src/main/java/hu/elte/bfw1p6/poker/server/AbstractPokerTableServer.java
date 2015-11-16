@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +38,11 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 
 	private final String ERR_BALANCE_MSG = "Nincs elég zsetonod!";
 	private final String ERR_TABLE_FULL = "Az asztal betelt, nem tudsz csatlakozni!";
+	
+	/**
+	 * Ház lapjai. Classic esetében null marad.
+	 */
+	protected List<Card> houseCards;
 
 	/**
 	 * Maga az asztal entitás.
@@ -381,7 +387,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		}
 	}
 	
-	protected HashMap<Integer, Card[]> getWinner(List<Card> houseCards) {
+	private HashMap<Integer, Card[]> getWinner(List<Card> houseCards) {
 		if (houseCards == null) {
 			houseCards = new ArrayList<>();
 		}
@@ -413,6 +419,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * @return
 	 */
 	protected abstract HouseCommand houseDealCommandFactory(Card[] cards);
+	
+	protected abstract HouseCommand houseWinnerCommandFactory(Card[] cards, int winner, int whosOn);
 
 	/**
 	 * BLIND típusú ház utasítást hoz létre.
@@ -436,7 +444,18 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * @param houseCommand az utasítás
 	 * @throws PokerDataBaseException 
 	 */
-	protected abstract void winner(HouseCommand houseCommand) throws PokerDataBaseException;
+	protected HouseCommand winner() {
+		HashMap<Integer, Card[]> winner = getWinner(houseCards);
+		int winnerIndex = winner.keySet().iterator().next();
+		long count = IntStream.range(0, foldMask.length).filter(i -> foldMask[i]).count();
+		long count2 = IntStream.range(0, quitMask.length).filter(i -> foldMask[i]).count();
+		winnerIndex += (count + count2);
+		winnerIndex %= foldMask.length;
+		System.out.println("Hányan dobták a lapjaikat: " + count);
+		System.out.println("A győztes sorszáma: " + winnerIndex);
+		System.out.println("A győztes kártyalapjai: " + Arrays.toString(winner.values().iterator().next()));
+		return houseWinnerCommandFactory(winner.get(winnerIndex), winnerIndex, whosOn);
+	}
 
 	/**
 	 * Következő kör a szerveren.

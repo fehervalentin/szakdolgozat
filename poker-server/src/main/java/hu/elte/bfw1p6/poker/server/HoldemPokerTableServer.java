@@ -2,11 +2,8 @@ package hu.elte.bfw1p6.poker.server;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import com.cantero.games.poker.texasholdem.Card;
 
@@ -34,11 +31,6 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	 */
 	private HoldemHouseCommandType actualHoldemHouseCommandType;
 
-	/**
-	 * Ház lapjai.
-	 */
-	private List<Card> houseCards;
-
 	public HoldemPokerTableServer(PokerTable pokerTable) throws RemoteException, PokerDataBaseException {
 		super(pokerTable);
 		this.houseCards = new ArrayList<>();
@@ -63,6 +55,11 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	@Override
 	protected HouseCommand houseDealCommandFactory(Card[] cards) {
 		return new HoldemHouseCommand().setUpDealCommand(cards, whosOn);
+	}
+
+	@Override
+	protected HouseCommand houseWinnerCommandFactory(Card[] cards, int winner, int whosOn) {
+		return new HoldemHouseCommand().setUpWinnerCommand(cards, winner, whosOn);
 	}
 
 	@Override
@@ -148,7 +145,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 					break;
 				}
 				case WINNER: {
-					winner(houseHoldemCommand);
+					houseHoldemCommand = (HoldemHouseCommand)winner();
 				}
 				default:
 					break;
@@ -159,20 +156,5 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 				votedPlayers = 0;
 			}
 		}
-	}
-	
-	@Override
-	protected void winner(HouseCommand houseCommand) {
-		HoldemHouseCommand holdemHouseCommand = (HoldemHouseCommand)houseCommand;
-		HashMap<Integer, Card[]> winner = getWinner(houseCards);
-		int winnerIndex = winner.keySet().iterator().next();
-		long count = IntStream.range(0, foldMask.length).filter(i -> foldMask[i]).count();
-		long count2 = IntStream.range(0, quitMask.length).filter(i -> foldMask[i]).count();
-		winnerIndex += (count + count2);
-		winnerIndex %= foldMask.length;
-		System.out.println("Hányan dobták a lapjaikat: " + count);
-		System.out.println("A győztes sorszáma: " + winnerIndex);
-		System.out.println("A győztes kártyalapjai: " + Arrays.toString(winner.values().iterator().next()));
-		holdemHouseCommand.setUpWinnerCommand(winner.get(winnerIndex), winnerIndex, whosOn);
 	}
 }
