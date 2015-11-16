@@ -160,6 +160,14 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 
 	@Override
 	public PokerSession login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException, PokerDataBaseException {
+		for (int i = clients.size() - 1; i >= 0; i--) {
+			try {
+				clients.get(i).update("ping");
+			} catch (RemoteException e) {
+				clients.remove(i);
+				sessionService.invalidate(username);
+			}
+		}
 		PokerSession pokerSession = sessionService.authenticate(username, password);
 		return pokerSession;
 	}

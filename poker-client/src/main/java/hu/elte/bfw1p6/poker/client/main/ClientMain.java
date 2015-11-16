@@ -50,20 +50,7 @@ public class ClientMain extends Application {
 
     		@Override
 			public void handle(WindowEvent event) {
-    			System.out.println("ittttttt");
-    			try {
-					UnicastRemoteObject.unexportObject(frameController, true);
-				} catch (NoSuchObjectException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-    			try {
-					stop();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				Platform.exit();
+    			System.exit(0);
 			}
     	};
     	return closeEvent;

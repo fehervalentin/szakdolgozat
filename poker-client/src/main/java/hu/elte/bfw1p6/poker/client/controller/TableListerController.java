@@ -203,8 +203,10 @@ public class TableListerController extends AbstractPokerClientController impleme
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update(Object updateMsg) throws RemoteException {
-		List<PokerTable> tables = (List<PokerTable>)updateMsg;
-		tableView.getItems().setAll(tables);
-		System.out.println("MEGKAPTAM A TÁBLÁKAT");
+		if (updateMsg instanceof List<?>) {
+			List<PokerTable> tables = (List<PokerTable>)updateMsg;
+			tableView.getItems().setAll(tables);
+			System.out.println("MEGKAPTAM A TÁBLÁKAT");
+		}
 	}
 }

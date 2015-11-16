@@ -33,12 +33,14 @@ public class SessionService {
 		if (u == null || !BCrypt.checkpw(password, u.getPassword()) || authenticatedUsers.values().contains(username)) {
 			throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
 		}
-		//TODO: ne engedje be, de mi van, ha elfelejt kijelentkezni...?
-		//TODO: de amostani sem jó, mert játék közben kivágja, akkor mi van...?
 		UUID uuid = UUID.randomUUID();
 		authenticatedUsers.put(uuid, username);
 		PokerSession pokerSession = new PokerSession(uuid, u.getPlayer());
 		return pokerSession;
+	}
+	
+	public void invalidate(String username) {
+		authenticatedUsers.values().remove(username);
 	}
 	
 	public void invalidate(UUID uuid) {
