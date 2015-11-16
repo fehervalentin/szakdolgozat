@@ -17,6 +17,8 @@ import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
+import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
@@ -166,6 +168,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		}
 		--playersInRound;
 		--whosOn;
+		prepareNewRound();
 	}
 	
 	protected void receivedQuitPlayerCommandFromWaitingPlayer(PokerRemoteObserver client) {
@@ -231,9 +234,24 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 				try {
 					clients.get(i).update(pokerCommand);
 				} catch (RemoteException e) {
-					// TODO: megszakadt a klienssel a kapcsolat, tehát olyan mintha QUIT utasítást küldött volna...
-					// ki kell szedni a clientsből, körbe kell küldeni, hogy ez a player QUIT-telt.
-					e.printStackTrace();
+					PlayerCommand playerCommand;
+					switch (pokerTable.getPokerType()) {
+					case HOLDEM: {
+						playerCommand = new HoldemPlayerCommand().setUpQuitCommand(i);
+						break;
+					}
+					case CLASSIC: {
+						playerCommand = new ClassicPlayerCommand().setUpQuitCommand(i);
+						break;
+					}
+					default: {
+						throw new IllegalArgumentException();
+					}
+					}
+					playerCommand.setSender(clientsNames.get(i));
+					playerCommand.setClientsCount(clients.size()-1);
+					receivedQuitPlayerCommand(clients.get(i), playerCommand);
+					notifyClients(playerCommand);
 				}
 			}}.start();
 	}

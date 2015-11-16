@@ -79,10 +79,12 @@ public class ClassicPlayerCommand extends PlayerCommand {
 	/**
 	 * Ha egy játékos QUIT típusú utasítást küld, akkor ezt a metódust kell használni.
 	 * @param tempNth a játékos sorszáma
+	 * @return this
 	 */
-	public void setUpQuitCommand(int youAreNth) {
+	public ClassicPlayerCommand setUpQuitCommand(int youAreNth) {
 		this.playerCommandType = ClassicPlayerCommandType.QUIT;
 		this.whosQuit = youAreNth;
+		return this;
 	}
 	
 	/**

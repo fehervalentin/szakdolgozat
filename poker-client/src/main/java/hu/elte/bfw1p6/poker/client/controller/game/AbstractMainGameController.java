@@ -179,13 +179,30 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			}
 		});
 	}
+	
+	protected void modifyQuitButtonDisability(boolean disabled) {
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				quitButton.setDisable(disabled);
+				
+			}
+		});
+	}
 
 	/**
 	 * Módosítja a FOLD button disable tulajdonságát.
 	 * @param disabled
 	 */
 	protected void modifyFoldButtonDisability(boolean disabled) {
-		foldButton.setDisable(disabled);
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				foldButton.setDisable(disabled);
+			}
+		});
 	}
 
 	/**
@@ -193,7 +210,13 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param disabled
 	 */
 	protected void modifyCheckButtonDisability(boolean disabled) {
-		checkButton.setDisable(disabled);
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				checkButton.setDisable(disabled);
+			}
+		});
 	}
 
 	/**
@@ -352,11 +375,12 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param playerCommand az utasítás
 	 */
 	protected void receivedQuitPlayerCommand(PlayerCommand playerCommand) {
+		setButtonsDisability(model.getYouAreNth() !=  playerCommand.getWhosOn());
 		if (playerCommand.getClientsCount() < 2) {
-			setButtonsDisability(false);
+			setButtonsDisability(true);
+			modifyQuitButtonDisability(false);
 		}
 		model.receivedQuitPlayerCommand(playerCommand);
-		setButtonsDisability(model.getYouAreNth() !=  playerCommand.getWhosOn());
 		mainView.receivedQuitPlayerCommand(playerCommand);
 	}
 

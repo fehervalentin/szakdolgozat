@@ -429,26 +429,25 @@ public abstract class AbstractMainView {
 	 * @param playerCommand az utasítás
 	 */
 	public void receivedQuitPlayerCommand(PlayerCommand playerCommand) {
-		// TODO itt kurva sok mindent kell csinálni
 		Platform.runLater(new Runnable() {
 
 			@Override
 			public void run() {
-				double opacity = 0.0;
-				int convertedWhoQuit = ultimateFormula(playerCommand.getWhosQuit());
-//				--clientsCount;
-				if (convertedWhoQuit != 0) {
-					setNthPlayersCardsOpacity(opacity, convertedWhoQuit);
-					profileImages.get(convertedWhoQuit).setOpacity(opacity);
-					userNameLabels.get(convertedWhoQuit).setOpacity(opacity);
+				if (playerCommand.getClientsCount() < 2) {
+					hideAllProfiles();
+					hideHouseCards();
+					myCards.forEach(card -> card.setOpacity(0));
+					dealerButtonImageView.setVisible(false);
+					clearChips();
 				} else {
-//					reArrangeTable(convertedWhoFold, playerCommand);
-					//TODO: aki fölötte van az lejjebb csúszik a GUI-n is.
-					//TODO: dehogyis, csak setopacity, aztán majd új körnél újra az egész....
-//					setNthPlayersCardsOpacity(opacity, convertedWhoFold);
+					double opacity = 0.0;
+					int convertedWhoQuit = ultimateFormula(playerCommand.getWhosQuit());
+					if (convertedWhoQuit != 0) {
+						setNthPlayersCardsOpacity(opacity, convertedWhoQuit);
+						profileImages.get(convertedWhoQuit).setOpacity(opacity);
+						userNameLabels.get(convertedWhoQuit).setOpacity(opacity);
+					}
 				}
-				//TODO: ilyenkor lehet nem kell next player color
-//				colorNextPlayer(playerCommand);
 			}
 		});
 	}
