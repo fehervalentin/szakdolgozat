@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -168,9 +169,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		quitMask[index] = true;
 		clients.remove(index);
 		clientsNames.remove(index);
-		if (players.size() > 0) {
-			players.remove(index);
-		}
 		--playersInRound;
 		--whosOn;
 		prepareNewRound();
@@ -188,7 +186,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		foldMask[whosOn] = true;
 //		++votedPlayers;
 		--playersInRound;
-		players.remove(whosOn);
 	}
 
 	/**
@@ -423,6 +420,12 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		}
 		HashMap<Integer, Card[]> values = new HashMap<>();
 		int winner = -1;
+		List<PokerPlayer> valami = new ArrayList<>();
+		for (int i = 0; i < foldMask.length; i++) {
+			if (!foldMask[i] && ! quitMask[i]) {
+				valami.add(players.get(i));
+			}
+		}
 		List<IPlayer> winnerList = HoldemHandEvaluator.getInstance().getWinner(houseCards, players);
 		Card[] cards = winnerList.get(0).getCards();
 		System.out.println("Players size: " + players.size());
