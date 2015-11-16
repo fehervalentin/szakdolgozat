@@ -145,6 +145,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 				@Override
 				public void run() {
 					checkButton.setDisable(false);
+					quitButton.setDisable(false);
 				}
 			});
 		}

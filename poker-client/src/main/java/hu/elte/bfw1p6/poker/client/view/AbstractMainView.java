@@ -321,10 +321,12 @@ public abstract class AbstractMainView {
 						setLabelUserNames(houseCommand.getPlayersNames());
 						resetOpacity();
 						clearChips();
-						userNameLabels.subList(0, clientsCount).forEach(label -> label.setVisible(true));
-						profileImages.subList(0, clientsCount).forEach(label -> label.setVisible(true));
-						opponentsCards.subList(0, clientsCount - 1).forEach(card -> card.setVisible(true));
-						opponentsCardSides.subList(0, (clientsCount - 1) * (defaultValues.MY_CARDS_COUNT - 1)).forEach(card -> card.setVisible(true));
+						int cc = clientsCount;
+						userNameLabels.subList(0, cc).forEach(label -> label.setVisible(true));
+						profileImages.subList(0, cc).forEach(label -> label.setVisible(true));
+						opponentsCards.subList(0, cc - 1).forEach(card -> card.setVisible(true));
+						opponentsCardSides.subList(0, (cc - 1) * (defaultValues.MY_CARDS_COUNT - 1)).forEach(card -> card.setVisible(true));
+						profileImages.subList(0, cc).forEach(profile -> profile.setOpacity(1));
 
 						dealerButtonImageView.setLayoutX(defaultValues.DEALER_BUTTON_POSITIONS[DEALER_BUTTON_POSITION * 2]);
 						dealerButtonImageView.setLayoutY(defaultValues.DEALER_BUTTON_POSITIONS[DEALER_BUTTON_POSITION * 2 + 1]);
@@ -502,6 +504,7 @@ public abstract class AbstractMainView {
 		myCards.forEach(card -> card.setOpacity(1));
 		opponentsCards.forEach(card -> card.setOpacity(1));
 		opponentsCardSides.forEach(card -> card.setOpacity(1));
+		profileImages.forEach(profile -> profile.setOpacity(1));
 		winnerCards.forEach(card -> card.setOpacity(0));
 	}
 
