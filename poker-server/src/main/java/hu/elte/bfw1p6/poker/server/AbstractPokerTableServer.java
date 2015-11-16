@@ -39,6 +39,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	private final String ERR_BALANCE_MSG = "Nincs elég zsetonod!";
 	private final String ERR_TABLE_FULL = "Az asztal betelt, nem tudsz csatlakozni!";
 	
+	protected List<PokerRemoteObserver> waitingClients;
+	
 	/**
 	 * Ház lapjai. Classic esetében null marad.
 	 */
@@ -118,6 +120,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		this.players = new ArrayList<>();
 		this.clientsNames = new ArrayList<>();
 		this.userDAO = new UserDAO();
+		this.waitingClients = new ArrayList<>();
 	}
 	
 	
@@ -338,8 +341,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 */
 	protected void startRound() {
 		if (clients.size() >= minPlayer) {
-			preStartRound();
 			prepareNewRound();
+			preStartRound();
 			IntStream.range(0, clients.size()).forEach(i ->
 				players.add(new PokerPlayer(clientsNames.get(i)))
 			);
