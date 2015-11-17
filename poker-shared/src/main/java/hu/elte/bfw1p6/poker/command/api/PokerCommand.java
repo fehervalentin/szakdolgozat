@@ -9,7 +9,7 @@ import hu.elte.bfw1p6.poker.command.type.api.PokerCommandType;
  * @author feher
  *
  */
-public interface PokerCommand<E extends Enum<E>, T extends PokerCommandType<E>> extends Serializable {
+public interface PokerCommand<T extends PokerCommandType<T>> extends Serializable {
 	
 	int getWhosOn();
 	

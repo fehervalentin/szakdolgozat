@@ -1,10 +1,22 @@
 package hu.elte.bfw1p6.poker.command.type;
 
-public class ClassicPlayerPokerCommandType extends AbstractPokerCommandType<ClassicPlayerPokerCommandType> {
+import hu.elte.bfw1p6.poker.command.type.api.PlayerPokerCommandType;
 
-//	public ClassicPlayerPokerCommandType() {
-//		super();
-//		ClassicPlayerPokerCommandType command = new ClassicPlayerPokerCommandType();
-//		setAkarmi(command);
-//	}
+public enum ClassicPlayerPokerCommandType implements PlayerPokerCommandType<ClassicPlayerPokerCommandType> {
+	BLIND, CALL, CHECK, FOLD, RAISE, QUIT, CHANGE;
+
+	@Override
+	public ClassicPlayerPokerCommandType getNext() {
+		return values()[(ordinal()+1) % values().length];
+	}
+
+	@Override
+	public ClassicPlayerPokerCommandType[] getValues() {
+		return values();
+	}
+
+	@Override
+	public ClassicPlayerPokerCommandType getActual() {
+		return this;
+	}
 }
