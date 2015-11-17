@@ -80,7 +80,6 @@ public abstract class GenericDAO<T extends EntityWithId> {
 	 * @throws PokerDataBaseException
 	 */
 	public synchronized void delete(T t) throws PokerDataBaseException {
-		System.out.println("Delete:" + DELETE);
 		try {
 			Connection con = dbManager.getConnection();
 			PreparedStatement pstmt = con.prepareStatement(DELETE);

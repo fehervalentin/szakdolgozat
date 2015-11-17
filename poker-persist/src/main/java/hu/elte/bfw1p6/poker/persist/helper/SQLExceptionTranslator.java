@@ -34,7 +34,6 @@ public class SQLExceptionTranslator {
 		mappings.put("UQ_poker_table_name", "Ilyen nevű asztal már létezik!");
 		mappings.put("CONSTRAINT_POKER_TABLES_MAX_TIME", "A gondolkodasi ido nem esik bele a [5-40] intervallumba!");
 		mappings.put("CONSTRAINT_POKER_TABLES_MAX_PLAYERS", "A jatekosok szama nem esik bele a [2-6] intervallumba!");
-		mappings.put("CONSTRAINT_POKER_TABLES_POT_HIGHER_THAN_MAX_BET", "Az alaptet nem lehet lehet nagyobb a limitnel!");
 		mappings.put("CONSTRAINT_POKER_TABLES_NAME_LENGHT", "A szerver neve túl hosszú!");
 		
 		mappings.put("UQ_POKER_TYPES_NAME", "Ilyen nevű játéktípus már létezik az adatbázisban!");

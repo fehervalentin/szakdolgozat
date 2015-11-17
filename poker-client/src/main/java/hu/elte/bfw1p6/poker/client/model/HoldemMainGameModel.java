@@ -22,7 +22,7 @@ public class HoldemMainGameModel extends AbstractMainGameModel {
 
 	@Override
 	protected void tossBlind(Boolean bigBlind) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
-		BigDecimal amount = pokerTable.getDefaultPot().divide(new BigDecimal(bigBlind ? 1 : 2));
+		BigDecimal amount = pokerTable.getBigBlind().divide(new BigDecimal(bigBlind ? 1 : 2));
 		myDebt = myDebt.subtract(amount);
 		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
 		playerCommand.setUpBlindCommand(amount);
@@ -48,7 +48,7 @@ public class HoldemMainGameModel extends AbstractMainGameModel {
 	@Override
 	public void sendRaiseCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
-		playerCommand.setUpRaiseCommand(myDebt, pokerTable.getDefaultPot());
+		playerCommand.setUpRaiseCommand(myDebt, pokerTable.getBigBlind());
 		sendCommandToTable(playerCommand);
 	}
 

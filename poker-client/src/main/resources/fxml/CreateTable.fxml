@@ -31,15 +31,13 @@
 				GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="2" />
 			<TextField fx:id="maxPlayerTextField" promptText="Játékosok maximum száma"
 				GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.columnSpan="2" />
-			<TextField fx:id="defaultPotField" promptText="Alaptét"
+			<TextField fx:id="bigBlindField" promptText="Nagy vak"
 				GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.columnSpan="2" />
-			<TextField fx:id="maxBetTextField" promptText="Maximum tét"
-				GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.columnSpan="2" />
 
 			<Button fx:id="createTableButton" text="OK" onAction="#createTableHandler"
-				styleClass="rich-blue" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+				styleClass="rich-blue" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 			<Button fx:id="backButton" text="Mégsem" onAction="#backHandler"
-				styleClass="rich-blue" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+				styleClass="rich-blue" GridPane.columnIndex="2" GridPane.rowIndex="6" />
 		</GridPane>
 	</children>
 </AnchorPane>

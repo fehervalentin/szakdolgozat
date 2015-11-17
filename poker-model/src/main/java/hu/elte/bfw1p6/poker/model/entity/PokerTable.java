@@ -18,15 +18,13 @@ public class PokerTable implements EntityWithId {
 	private PokerType pokerType;
 	private Integer maxTime;
 	private Integer maxPlayers;
-	private BigDecimal defaultPot;
-	private BigDecimal maxBet;
+	private BigDecimal bigBlind;
 
-	public PokerTable(String name, Integer maxTime, Integer maxPlayers, BigDecimal maxBet, BigDecimal defaultPot, PokerType pokerType) {
+	public PokerTable(String name, Integer maxTime, Integer maxPlayers, BigDecimal bigBlind, PokerType pokerType) {
 		this.name = name;
 		this.maxTime = maxTime;
 		this.maxPlayers = maxPlayers;
-		this.maxBet = maxBet;
-		this.defaultPot = defaultPot;
+		this.bigBlind = bigBlind;
 		this.pokerType = pokerType;
 	}
 
@@ -66,20 +64,12 @@ public class PokerTable implements EntityWithId {
 		this.maxPlayers = maxPlayers;
 	}
 
-	public BigDecimal getMaxBet() {
-		return maxBet;
+	public BigDecimal getBigBlind() {
+		return bigBlind;
 	}
 
-	public void setMaxBet(BigDecimal maxBet) {
-		this.maxBet = maxBet;
-	}
-
-	public BigDecimal getDefaultPot() {
-		return defaultPot;
-	}
-
-	public void setDefaultPot(BigDecimal defaultPot) {
-		this.defaultPot = defaultPot;
+	public void setBigBlind(BigDecimal bigBlind) {
+		this.bigBlind = bigBlind;
 	}
 
 	public PokerType getPokerType() {
@@ -102,9 +92,7 @@ public class PokerTable implements EntityWithId {
 		case 3:
 			return maxPlayers;
 		case 4:
-			return defaultPot;
-		case 5:
-			return maxBet;
+			return bigBlind;
 		default:
 			return null;
 		}
@@ -130,11 +118,7 @@ public class PokerTable implements EntityWithId {
 			break;
 		}
 		case 4: {
-			setDefaultPot((BigDecimal) value);
-			break;
-		}
-		case 5: {
-			setMaxBet((BigDecimal) value);
+			setBigBlind((BigDecimal) value);
 			break;
 		}
 		}

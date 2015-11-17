@@ -152,7 +152,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			
 			@Override
 			public void run() {
-				PlayerCommand playerCommand = playerQuitCommandFactory(clientsNames.get(whosOn));
+//				PlayerCommand playerCommand = playerQuitCommandFactory(clientsNames.get(whosOn));
+				PlayerCommand playerCommand = playerQuitCommandFactory("");
 				receivedQuitPlayerCommand(clients.get(whosOn), playerCommand);
 				endOfReceivedPlayerCommand(playerCommand);
 			}

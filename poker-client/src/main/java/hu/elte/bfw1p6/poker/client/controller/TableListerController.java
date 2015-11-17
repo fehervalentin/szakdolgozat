@@ -26,7 +26,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 public class TableListerController extends AbstractPokerClientController implements PokerRemoteObserver {
 
-	private final String[] COLUMNS = {"name", "pokerType", "maxTime", "maxPlayers", "defaultPot", "maxBet"};
+	private final String[] COLUMNS = {"name", "pokerType", "maxTime", "maxPlayers", "bigBlind"};
 	
 	private final String NO_TABLE_SELECTED_MESSAGE = "Nem választottál ki egy táblát sem!";
 	private final String SUCC_TABLE_DELETE_MSG = "Sikeresen kitörölted a táblát!";
@@ -42,8 +42,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 	@FXML private TableColumn<PokerTable, PokerType> pokerType;
 	@FXML private TableColumn<PokerTable, Integer> maxTime;
 	@FXML private TableColumn<PokerTable, Integer> maxPlayers;
-	@FXML private TableColumn<PokerTable, BigDecimal> defaultPot;
-	@FXML private TableColumn<PokerTable, BigDecimal> maxBet;
+	@FXML private TableColumn<PokerTable, BigDecimal> bigBlind;
 
 	@FXML private Button connectButton;
 	@FXML private Button createTableButton;
@@ -84,8 +83,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 		pokerType.setCellValueFactory(new PropertyValueFactory<PokerTable, PokerType>(COLUMNS[1]));
 		maxTime.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>(COLUMNS[2]));
 		maxPlayers.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>(COLUMNS[3]));
-		defaultPot.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>(COLUMNS[4]));
-		maxBet.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>(COLUMNS[5]));
+		bigBlind.setCellValueFactory(new PropertyValueFactory<PokerTable, BigDecimal>(COLUMNS[4]));
 
 		try {
 			if(!model.isAdmin()) {

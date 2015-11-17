@@ -38,9 +38,7 @@ public class CreateTableController extends AbstractPokerClientController {
 
 	@FXML private TextField maxPlayerTextField;
 
-	@FXML private TextField defaultPotField;
-
-	@FXML private TextField maxBetTextField;
+	@FXML private TextField bigBlindField;
 
 	@FXML private Button createTableButton;
 
@@ -70,8 +68,7 @@ public class CreateTableController extends AbstractPokerClientController {
 		gameTypeComboBox.getSelectionModel().select(0);
 		maxTimeField.setText("39");
 		maxPlayerTextField.setText("5");
-		defaultPotField.setText("12");
-		maxBetTextField.setText("100");
+		bigBlindField.setText("12");
 	}
 
 	/**
@@ -84,8 +81,7 @@ public class CreateTableController extends AbstractPokerClientController {
 			gameTypeComboBox.getSelectionModel().select(pokerTable.getPokerType().getName());
 			maxTimeField.setText(String.valueOf(pokerTable.getMaxTime()));
 			maxPlayerTextField.setText(String.valueOf(pokerTable.getMaxPlayers()));
-			defaultPotField.setText(pokerTable.getDefaultPot().toString());
-			maxBetTextField.setText(pokerTable.getMaxBet().toString());
+			bigBlindField.setText(pokerTable.getBigBlind().toString());
 		}
 	}
 
@@ -96,8 +92,7 @@ public class CreateTableController extends AbstractPokerClientController {
 	@FXML protected void createTableHandler(ActionEvent event) {
 		maxTimeField.getStyleClass().remove(ERR_STYLECLASS);
 		maxPlayerTextField.getStyleClass().remove(ERR_STYLECLASS);
-		defaultPotField.getStyleClass().remove(ERR_STYLECLASS);
-		maxBetTextField.getStyleClass().remove(ERR_STYLECLASS);
+		bigBlindField.getStyleClass().remove(ERR_STYLECLASS);
 
 		String tableName = tableNameTextField.getText();
 
@@ -105,7 +100,7 @@ public class CreateTableController extends AbstractPokerClientController {
 		Integer maxTime = null;
 		Integer maxPlayers = null;
 		BigDecimal maxBet = null;
-		BigDecimal defaultPot = null;
+		BigDecimal bigBlind = null;
 		try {
 			pokerType = PokerType.valueOf(gameTypeComboBox.getSelectionModel().getSelectedItem());
 		} catch (IllegalArgumentException ex) {
@@ -127,17 +122,10 @@ public class CreateTableController extends AbstractPokerClientController {
 			return;
 		}
 		try {
-			defaultPot = BigDecimal.valueOf(Double.valueOf(defaultPotField.getText()));
+			bigBlind = BigDecimal.valueOf(Double.valueOf(bigBlindField.getText()));
 		} catch (NumberFormatException ex) {
-			defaultPotField.getStyleClass().add(ERR_STYLECLASS);
+			bigBlindField.getStyleClass().add(ERR_STYLECLASS);
 			showErrorAlert(String.format(ERR_TEXTFIELD_TEXT, "alaptét"));
-			return;
-		}
-		try {
-			maxBet = BigDecimal.valueOf(Double.valueOf(maxBetTextField.getText()));
-		} catch (NumberFormatException ex) {
-			maxBetTextField.getStyleClass().add(ERR_STYLECLASS);
-			showErrorAlert(String.format(ERR_TEXTFIELD_TEXT, "maximum tét"));
 			return;
 		}
 		
@@ -145,7 +133,7 @@ public class CreateTableController extends AbstractPokerClientController {
 		if (Model.getParamPokerTable() == null) {
 			// ekkor új táblát hozunk létre
 			try {
-				PokerTable t = new PokerTable(tableName, maxTime, maxPlayers, maxBet, defaultPot, pokerType);
+				PokerTable t = new PokerTable(tableName, maxTime, maxPlayers, bigBlind, pokerType);
 				model.createTable(t);
 				showSuccessAlert(SUCC_CREATE_TABLE_MSG);
 				frameController.setTableListerFXML();
@@ -162,8 +150,7 @@ public class CreateTableController extends AbstractPokerClientController {
 				t.setMaxTime(maxTime);
 				t.setMaxPlayers(maxPlayers);
 				t.setMaxPlayers(maxPlayers);
-				t.setMaxBet(maxBet);
-				t.setDefaultPot(defaultPot);
+				t.setBigBlind(bigBlind);
 				t.setPokerType(pokerType);
 				model.modifyTable(t);
 				showSuccessAlert(SUCC_MODIFY_TABLE_MSG);

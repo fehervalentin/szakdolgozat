@@ -61,7 +61,7 @@ public abstract class AbstractMainGameModel {
 		this.pokerRemote = Model.getPokerRemote();
 		this.youAreNth = -1;
 		this.pokerTable = Model.getParamPokerTable();
-		this.myDebt = pokerTable.getDefaultPot();
+		this.myDebt = pokerTable.getBigBlind();
 		this.communicatorController = communicatorController;
 
 		System.out.println("Ki vagyok: " + getUserName());
@@ -111,7 +111,7 @@ public abstract class AbstractMainGameModel {
 	 * @throws RemoteException 
 	 */
 	public void receivedBlindHouseCommand(HouseCommand houseCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
-		myDebt = pokerTable.getDefaultPot();
+		myDebt = pokerTable.getBigBlind();
 		youAreNth = houseCommand.getNthPlayer();
 		players = houseCommand.getPlayers();
 		if (areYouTheSmallBlind(houseCommand)) {
