@@ -50,7 +50,7 @@ insert into pokerdb.poker_types (name) values('HOLDEM');
 insert into pokerdb.poker_types (name) values('CLASSIC');
 
 insert into pokerdb.poker_tables (name, poker_type_id, max_time, max_players, default_pot, max_bet)
-	values('szerver1', 1, 10, 5, 100, 100);
+	values('szerver1', 1, 5, 5, 100, 100);
 	
 insert into pokerdb.poker_tables (name, poker_type_id, max_time, max_players, default_pot, max_bet)
 	values('#PL_125Q', 2, 39, 5, 200, 200);

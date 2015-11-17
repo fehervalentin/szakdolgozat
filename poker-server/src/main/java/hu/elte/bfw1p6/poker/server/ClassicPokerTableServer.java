@@ -2,6 +2,7 @@ package hu.elte.bfw1p6.poker.server;
 
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.TimerTask;
 import java.util.stream.IntStream;
 
 import com.cantero.games.poker.texasholdem.Card;
@@ -12,6 +13,7 @@ import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
 import hu.elte.bfw1p6.poker.command.classic.type.ClassicHouseCommandType;
+import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
@@ -63,7 +65,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	}
 
 	@Override
-	protected void nextRound() throws RemoteException {
+	protected void nextRound() {
 //		System.out.println("VotedPlayers: " + votedPlayers);
 //		System.out.println("Players in round: " + playersInRound);
 		if (playersInRound <= 1 || (actualClassicHouseCommandType == ClassicHouseCommandType.values()[0] && votedPlayers >= playersInRound)) {
@@ -188,5 +190,18 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 				waitingJoin(client, userName);
 			}
 		}
+	}
+
+	@Override
+	protected TimerTask createNewTimerTask() {
+		return new TimerTask() {
+			
+			@Override
+			public void run() {
+				ClassicPlayerCommand classicPlayerCommand = new ClassicPlayerCommand();
+				classicPlayerCommand.setUpQuitCommand(whosOn);
+				receivedQuitPlayerCommand(clients.get(whosOn), classicPlayerCommand);
+			}
+		};
 	}
 }

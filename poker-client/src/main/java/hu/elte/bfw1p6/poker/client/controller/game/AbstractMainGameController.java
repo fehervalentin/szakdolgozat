@@ -5,7 +5,6 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.ResourceBundle;
-import java.util.TimerTask;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
@@ -80,31 +79,11 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	protected Alert errorAlert;
 
-	/**
-	 * Időzített feladatokat végrehajtó objektum.
-	 */
-	//	protected Timer automateExecution;
-
-	/**
-	 * Az időzítendő feladat.
-	 */
-	//	protected TimerTask timerTask;
-
-	//TODO: játékszerver specifikus
-	@Deprecated
-	protected long delay = 5000;
-
 	@Override
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
 		this.scene = this.frameController.getScene();
 	}
-
-	/**
-	 * Új időzített feladatot hoz létre az automatikus cselekedéshez. (Check, change, fold gombok fire metódusának hívására.)
-	 * @return az új időzített feladat
-	 */
-	protected abstract TimerTask createTimerTask();
 
 	public abstract void initialize(URL location, ResourceBundle resources);
 
@@ -240,7 +219,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	@FXML protected void handleCall(ActionEvent event) {
 		try {
-			//			timerTask.cancel();
 			model.sendCallCommand();
 			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
@@ -256,7 +234,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	@FXML protected void handleCheck(ActionEvent event) {
 		try {
-			//			timerTask.cancel();
 			model.sendCheckCommand();
 			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
@@ -272,7 +249,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	@FXML protected void handleRaise(ActionEvent event) {
 		try {
-			//			timerTask.cancel();
 			model.sendRaiseCommand();
 			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
@@ -288,7 +264,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	@FXML protected void handleFold(ActionEvent event) {
 		try {
-			//			timerTask.cancel();
 			model.sendFoldCommand();
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
@@ -302,9 +277,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param event az esemény
 	 */
 	@FXML protected void handleQuit(ActionEvent event) {
-		//		if (timerTask != null) {
-		//			timerTask.cancel();
-		//		}
 		try {
 			model.sendQuitCommand();
 			frameController.setTableListerFXML();
@@ -382,7 +354,10 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			setButtonsDisability(true);
 			modifyQuitButtonDisability(false);
 		}
-		model.receivedQuitPlayerCommand(playerCommand);
+//		model.receivedQuitPlayerCommand(playerCommand);
+		if (playerCommand.getWhosQuit() == model.getYouAreNth()) {
+			frameController.setTableListerFXML();
+		}
 		mainView.receivedQuitPlayerCommand(playerCommand);
 	}
 

@@ -3,7 +3,6 @@ package hu.elte.bfw1p6.poker.client.controller.game;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
-import java.util.TimerTask;
 
 import com.cantero.games.poker.texasholdem.Card;
 
@@ -26,7 +25,6 @@ public class HoldemMainGameController extends AbstractMainGameController {
 //		textArea.setDisable(true);
 		textArea.setOpacity(0.6);
 		this.mainView = new HoldemMainView(mainGamePane);
-//		this.automateExecution = new Timer();
 
 		try {
 			this.commController = new CommunicatorController(this);
@@ -83,12 +81,6 @@ public class HoldemMainGameController extends AbstractMainGameController {
 				throw new IllegalArgumentException();
 			}
 			}
-//			if (houseHoldemCommand.getHouseCommandType() != HoldemHouseCommandType.BLIND) {
-//				if(houseHoldemCommand.getWhosOn() == mainView.getYouAreNth()) {
-//					timerTask = createTimerTask();
-//					automateExecution.schedule(timerTask, delay);
-//				}
-//			}
 		} else if (updateMsg instanceof HoldemPlayerCommand) {
 			HoldemPlayerCommand holdemPlayerCommand = (HoldemPlayerCommand)updateMsg;
 			whosOn = holdemPlayerCommand.getWhosOn();
@@ -124,36 +116,10 @@ public class HoldemMainGameController extends AbstractMainGameController {
 				break;
 			}
 			}
-//			if (holdemPlayerCommand.getPlayerCommandType() != HoldemPlayerCommandType.BLIND && holdemPlayerCommand.getPlayerCommandType() != HoldemPlayerCommandType.FOLD) {
-//				System.out.println("Sajatom: " + holdemPlayerCommand.getWhosOn() + " " + mainView.getYouAreNth());
-//				if(holdemPlayerCommand.getWhosOn() == mainView.getYouAreNth()) {
-//					System.out.println("Új taszkot hoztam létre!");
-//					timerTask = createTimerTask();
-//					automateExecution.schedule(timerTask, delay);
-//				}
-//			}
-			/*if (!holdemPlayerCommand.isWinnerCommand() && !holdemPlayerCommand.getCommandType().equals("QUIT") || holdemPlayerCommand.getCommandType().equals("QUIT") && holdemPlayerCommand.getClientsCount() >=2) {
-				modifyButtonsDisability(holdemPlayerCommand);
-			}*/
 		} else {
 			throw new IllegalArgumentException();
 		}
 		debtChecker(whosOn);
-	}
-	
-	@Override
-	protected TimerTask createTimerTask() {
-		return new TimerTask() {
-			
-			@Override
-			public void run() {
-				if (!checkButton.isDisable()) {
-					checkButton.fire();
-				} else {
-					foldButton.fire();
-				}
-			}
-		};
 	}
 
 	/**

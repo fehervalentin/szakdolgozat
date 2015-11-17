@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.TimerTask;
 
 import com.cantero.games.poker.texasholdem.Card;
 
@@ -97,7 +98,13 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 			default:
 				throw new IllegalArgumentException();
 			}
+			if (timerTask != null) {
+				timerTask.cancel();
+			}
+			timer.purge();
 			endOfReceivedPlayerCommand(holdemPlayerCommand);
+			timerTask = createNewTimerTask();
+			timer.schedule(timerTask, pokerTable.getMaxTime() * 1000);
 		} else if (waitingClients.contains(client)) {
 			if (playerCommand.getCommandType() == "QUIT") {
 				receivedQuitPlayerCommandFromWaitingPlayer(client);
@@ -119,7 +126,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	}
 
 	@Override
-	protected void nextRound() throws RemoteException {
+	protected void nextRound() {
 		// ha már kijött a river és az utolsó körben (rivernél) már mindenki nyilatkozott legalább egyszer, akkor új játszma kezdődik
 		System.out.println("VotedPlayers: " + votedPlayers);
 		System.out.println("Players in round: " + playersInRound);
@@ -130,7 +137,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
 			if (votedPlayers >= playersInRound) {
 				// flopnál, turnnél, rivernél, winnernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
-				whosOn = (dealer + 1) % foldMask.length;
+				whosOn = (dealer + 1) % leftRoundMask.length;
 				whosOn = findNextValidClient(whosOn);
 				HoldemHouseCommand houseHoldemCommand = new HoldemHouseCommand();
 				switch (actualHoldemHouseCommandType) {
@@ -179,5 +186,19 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 				waitingJoin(client, userName);
 			}
 		}
+	}
+
+	@Override
+	protected TimerTask createNewTimerTask() {
+		return new TimerTask() {
+			
+			@Override
+			public void run() {
+				HoldemPlayerCommand holdemPlayerCommand = new HoldemPlayerCommand();
+				holdemPlayerCommand.setUpQuitCommand(whosOn);
+				receivedQuitPlayerCommand(clients.get(whosOn), holdemPlayerCommand);
+				endOfReceivedPlayerCommand(holdemPlayerCommand);
+			}
+		};
 	}
 }

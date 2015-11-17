@@ -4,7 +4,6 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.TimerTask;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.model.ClassicMainGameModel;
@@ -32,7 +31,6 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	public void initialize(URL location, ResourceBundle resources) {
 		textArea.setDisable(false);
 		this.mainView = new ClassicMainView(mainGamePane);
-//		this.automateExecution = new Timer();
 
 		try {
 			commController = new CommunicatorController(this);
@@ -55,23 +53,6 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	 */
 	private void setChangeButtonDisability(boolean enabled) {
 		changeButton.setDisable(enabled);
-	}
-
-	@Override
-	protected TimerTask createTimerTask() {
-		return new TimerTask() {
-
-			@Override
-			public void run() {
-				if (!checkButton.isDisable()) {
-					checkButton.fire();
-				} else if (!changeButton.isDisable()) {
-					changeButton.fire();
-				} else {
-					foldButton.fire();
-				}
-			}
-		};
 	}
 
 	@Override
