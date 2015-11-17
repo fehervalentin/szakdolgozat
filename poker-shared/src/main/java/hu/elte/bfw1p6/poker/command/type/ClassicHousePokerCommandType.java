@@ -1,27 +1,16 @@
 package hu.elte.bfw1p6.poker.command.type;
 
-import hu.elte.bfw1p6.poker.command.type.api.HousePokerCommandType;
+import hu.elte.bfw1p6.poker.command.api.CommandTypeEnum;
+import hu.elte.bfw1p6.poker.command.type.enumeration.ClassicHousePokerCommandTypeEnum;
 
-public enum ClassicHousePokerCommandType implements HousePokerCommandType<ClassicHousePokerCommandType> {
-	BLIND, DEAL, BET, CHANGE, BET2, WINNER;
+public class ClassicHousePokerCommandType extends AbstractPokerCommandType<ClassicHousePokerCommandType> {
 	
-	@Override
-	public ClassicHousePokerCommandType getNext() {
-		return values()[(ordinal()+1) % values().length];
-	}
+	private CommandTypeEnum<ClassicHousePokerCommandTypeEnum> lol;
+	
+//	public ClassicHousePokerCommandType() {
+//		super();
+//		ClassicHousePokerCommandType command = new ClassicHousePokerCommandType();
+//		setAkarmi(command);
+//	}
 
-	@Override
-	public ClassicHousePokerCommandType[] getValues() {
-		return values();
-	}
-
-	@Override
-	public ClassicHousePokerCommandType getActual() {
-		return this;
-	}
-
-	@Override
-	public ClassicHousePokerCommandType getLastValue() {
-		return values()[values().length - 1];
-	}
 }

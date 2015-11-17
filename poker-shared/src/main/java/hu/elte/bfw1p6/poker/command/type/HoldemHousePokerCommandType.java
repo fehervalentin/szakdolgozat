@@ -1,27 +1,11 @@
 package hu.elte.bfw1p6.poker.command.type;
 
-import hu.elte.bfw1p6.poker.command.type.api.HousePokerCommandType;
+public class HoldemHousePokerCommandType extends AbstractPokerCommandType<HoldemHousePokerCommandType> {
 
-public enum HoldemHousePokerCommandType implements HousePokerCommandType<HoldemHousePokerCommandType> {
-	BLIND, DEAL, FLOP, TURN, RIVER, WINNER;
+//	public HoldemHousePokerCommandType() {
+//		super();
+//		HoldemHousePokerCommandType command = new HoldemHousePokerCommandType();
+//		setAkarmi(command);
+//	}
 	
-	@Override
-	public HoldemHousePokerCommandType getNext() {
-		return values()[(ordinal()+1) % values().length];
-	}
-
-	@Override
-	public HoldemHousePokerCommandType[] getValues() {
-		return values();
-	}
-
-	@Override
-	public HoldemHousePokerCommandType getActual() {
-		return this;
-	}
-
-	@Override
-	public HoldemHousePokerCommandType getLastValue() {
-		return values()[values().length - 1];
-	}
 }
