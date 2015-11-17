@@ -149,7 +149,17 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		this.timer = new Timer();
 	}
 	
-	protected abstract TimerTask createNewTimerTask();
+	protected TimerTask createNewTimerTask() {
+		return new TimerTask() {
+			
+			@Override
+			public void run() {
+				PlayerCommand playerCommand = playerQuitCommandFactory();
+				receivedQuitPlayerCommand(clients.get(whosOn), playerCommand);
+				endOfReceivedPlayerCommand(playerCommand);
+			}
+		};
+	}
 	
 	
 	protected int findNextValidClient(int whosOn) {
@@ -469,6 +479,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	protected abstract HouseCommand houseDealCommandFactory(Card[] cards);
 	
 	protected abstract HouseCommand houseWinnerCommandFactory(Card[] cards, int winner, int whosOn);
+	
+	protected abstract PlayerCommand playerQuitCommandFactory();
 
 	/**
 	 * BLIND típusú ház utasítást hoz létre.
@@ -539,5 +551,15 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	
 	public boolean canSitIn() {
 		return (waitingClients.size() + clients.size()) < pokerTable.getMaxPlayers();
+	}
+	
+	protected void startAutomateQuitTask(PlayerCommand playerCommand) {
+		if (timerTask != null) {
+			timerTask.cancel();
+		}
+		timer.purge();
+		endOfReceivedPlayerCommand(playerCommand);
+		timerTask = createNewTimerTask();
+		timer.schedule(timerTask, pokerTable.getMaxTime() * 1000);
 	}
 }

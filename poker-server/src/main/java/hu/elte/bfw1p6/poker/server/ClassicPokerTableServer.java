@@ -2,7 +2,6 @@ package hu.elte.bfw1p6.poker.server;
 
 import java.rmi.RemoteException;
 import java.util.List;
-import java.util.TimerTask;
 import java.util.stream.IntStream;
 
 import com.cantero.games.poker.texasholdem.Card;
@@ -13,7 +12,6 @@ import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
 import hu.elte.bfw1p6.poker.command.classic.type.ClassicHouseCommandType;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
@@ -50,13 +48,18 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	}
 
 	@Override
+	protected HouseCommand houseBlindCommandFactory(int fixSitPosition, int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
+		return new ClassicHouseCommand().setUpBlindCommand(fixSitPosition, nthPlayer, clients.size(), dealer, whosOn, clientsNames);
+	}
+	
+	@Override
 	protected HouseCommand houseDealCommandFactory(Card[] cards) {
 		return new ClassicHouseCommand().setUpDealCommand(cards, whosOn);
 	}
 
 	@Override
-	protected HouseCommand houseBlindCommandFactory(int fixSitPosition, int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
-		return new ClassicHouseCommand().setUpBlindCommand(fixSitPosition, nthPlayer, clients.size(), dealer, whosOn, clientsNames);
+	protected PlayerCommand playerQuitCommandFactory() {
+		return new ClassicPlayerCommand().setUpQuitCommand(whosOn);
 	}
 
 	@Override
@@ -142,7 +145,8 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 			default:
 				break;
 			}
-			endOfReceivedPlayerCommand(classicPlayerCommand);
+			startAutomateQuitTask(classicPlayerCommand);
+//			endOfReceivedPlayerCommand(classicPlayerCommand);
 		} else if (waitingClients.contains(client)) {
 			if (playerCommand.getCommandType() == "QUIT") {
 				receivedQuitPlayerCommandFromWaitingPlayer(client);
@@ -190,18 +194,5 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 				waitingJoin(client, userName);
 			}
 		}
-	}
-
-	@Override
-	protected TimerTask createNewTimerTask() {
-		return new TimerTask() {
-			
-			@Override
-			public void run() {
-				ClassicPlayerCommand classicPlayerCommand = new ClassicPlayerCommand();
-				classicPlayerCommand.setUpQuitCommand(whosOn);
-				receivedQuitPlayerCommand(clients.get(whosOn), classicPlayerCommand);
-			}
-		};
 	}
 }

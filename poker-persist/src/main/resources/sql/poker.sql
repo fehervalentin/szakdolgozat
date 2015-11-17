@@ -59,7 +59,7 @@ insert into pokerdb.poker_tables (name, poker_type_id, max_time, max_players, de
 	values('Holdem fun', 1, 15, 5, 100, 100);
 	
 insert into pokerdb.poker_tables (name, poker_type_id, max_time, max_players, default_pot, max_bet)
-	values('Classic fun', 2, 20, 5, 20, 20);
+	values('Classic fun', 2, 5, 5, 20, 20);
 	
 insert into pokerdb.poker_tables (name, poker_type_id, max_time, max_players, default_pot, max_bet)
 	values('?^xW!', 2, 23, 3, 1, 3);

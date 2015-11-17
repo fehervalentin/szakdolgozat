@@ -4,7 +4,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.TimerTask;
 
 import com.cantero.games.poker.texasholdem.Card;
 
@@ -61,6 +60,11 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	}
 
 	@Override
+	protected PlayerCommand playerQuitCommandFactory() {
+		return new HoldemPlayerCommand().setUpQuitCommand(whosOn);
+	}
+
+	@Override
 	protected HouseCommand houseWinnerCommandFactory(Card[] cards, int winner, int whosOn) {
 		return new HoldemHouseCommand().setUpWinnerCommand(cards, winner, whosOn);
 	}
@@ -98,13 +102,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 			default:
 				throw new IllegalArgumentException();
 			}
-			if (timerTask != null) {
-				timerTask.cancel();
-			}
-			timer.purge();
-			endOfReceivedPlayerCommand(holdemPlayerCommand);
-			timerTask = createNewTimerTask();
-			timer.schedule(timerTask, pokerTable.getMaxTime() * 1000);
+			startAutomateQuitTask(holdemPlayerCommand);
 		} else if (waitingClients.contains(client)) {
 			if (playerCommand.getCommandType() == "QUIT") {
 				receivedQuitPlayerCommandFromWaitingPlayer(client);
@@ -186,19 +184,5 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 				waitingJoin(client, userName);
 			}
 		}
-	}
-
-	@Override
-	protected TimerTask createNewTimerTask() {
-		return new TimerTask() {
-			
-			@Override
-			public void run() {
-				HoldemPlayerCommand holdemPlayerCommand = new HoldemPlayerCommand();
-				holdemPlayerCommand.setUpQuitCommand(whosOn);
-				receivedQuitPlayerCommand(clients.get(whosOn), holdemPlayerCommand);
-				endOfReceivedPlayerCommand(holdemPlayerCommand);
-			}
-		};
 	}
 }
