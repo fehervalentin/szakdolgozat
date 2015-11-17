@@ -10,6 +10,7 @@ import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
+import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
@@ -156,8 +157,9 @@ public class Model {
 	 * @param t a tábla entitás
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
+	 * @throws PokerTableDeleteException 
 	 */
-	public void deleteTable(PokerTable t) throws RemoteException, PokerDataBaseException {
+	public void deleteTable(PokerTable t) throws RemoteException, PokerDataBaseException, PokerTableDeleteException {
 		pokerRemote.deleteTable(pokerSession.getId(), t);
 	}
 

@@ -12,6 +12,8 @@ import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
+import hu.elte.bfw1p6.poker.exception.PokerPlayerAccountInUseException;
+import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
@@ -40,8 +42,9 @@ public interface PokerRemote extends Remote, Serializable {
 	 * @param u a User, akit ki szeretnénk törölni
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
+	 * @throws PokerPlayerAccountInUseException 
 	 */
-	void deletePlayer(UUID uuid, PokerPlayer player) throws RemoteException, PokerDataBaseException;
+	void deletePlayer(UUID uuid, PokerPlayer player) throws RemoteException, PokerDataBaseException, PokerPlayerAccountInUseException;
 
 	/**
 	 * Adott felhasználói fiókhoz tartozó jelszó cseréje
@@ -80,9 +83,10 @@ public interface PokerRemote extends Remote, Serializable {
 	 * @param pokerTable a törlendő játéktábla
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
+	 * @throws PokerTableDeleteException 
 	 * @throws PokerUnauthenticatedException 
 	 */
-	void deleteTable(UUID uuid, PokerTable pokerTable) throws RemoteException, PokerDataBaseException;
+	void deleteTable(UUID uuid, PokerTable pokerTable) throws RemoteException, PokerDataBaseException, PokerTableDeleteException;
 
 	/**
 	 * Már meglévő játéktábla módosítása

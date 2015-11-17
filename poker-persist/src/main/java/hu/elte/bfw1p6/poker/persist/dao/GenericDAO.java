@@ -26,6 +26,11 @@ public abstract class GenericDAO<T extends EntityWithId> {
 	protected final String TABLE_NAME;
 	
 	/**
+	 * Az adatbázistáblákban az elsődleges kulcs oszlop neve.
+	 */
+	protected final String ID_COLUMN = "id";
+	
+	/**
 	 * Az adatbázis táblában található oszlopok nevei.
 	 */
 	protected String[] columns;
@@ -44,12 +49,14 @@ public abstract class GenericDAO<T extends EntityWithId> {
 		this.sqlExceptionTranslator = new SQLExceptionTranslator();
 		this.dbManager = new DBManager();
 		FIND_ALL = "SELECT * FROM " + TABLE_NAME + ";";
-		DELETE = "DELETE FROM " + TABLE_NAME + " WHERE id=?;";
 		loadColumns();
+		DELETE = "DELETE FROM " + TABLE_NAME + " WHERE id=?;";
+		INSERT = "INSERT INTO " + TABLE_NAME + "(" + String.join(",", columns) + ")" + "VALUES ("+ String.join(",", Collections.nCopies(columns.length, "?")) + ");";
+		UPDATE = "UPDATE " + TABLE_NAME + " SET " + String.join("=?, ", columns) + "=? WHERE id=?;";
 	}
 
 	/**
-	 * Entitás ment az adatbázisba.
+	 * Entitást ment az adatbázisba.
 	 * @param t a letárolandó entitás
 	 * @throws PokerDataBaseException
 	 */
@@ -110,7 +117,6 @@ public abstract class GenericDAO<T extends EntityWithId> {
 		} catch (SQLException e) {
 			throw sqlExceptionTranslator.interceptException(e);
 		}
-
 	}
 	
 	/**
@@ -131,28 +137,5 @@ public abstract class GenericDAO<T extends EntityWithId> {
 		} catch (SQLException e) {
 			throw sqlExceptionTranslator.interceptException(e);
 		}
-		createQueries();
-	}
-
-	/**
-	 * Az alapqueryket állítja elő.
-	 * @throws PokerDataBaseException
-	 */
-	private void createQueries() throws PokerDataBaseException {
-		INSERT = "INSERT INTO " + TABLE_NAME + "(" + String.join(",", columns) + ")" + "VALUES ("+ String.join(",", Collections.nCopies(columns.length, "?")) + ")";
-		UPDATE = createQueryForUpdate();
-	}
-
-	/**
-	 * Az UPDATE queryt állítja elő.
-	 * @return
-	 */
-	private String createQueryForUpdate() {
-		StringBuilder sb = new StringBuilder("UPDATE " + TABLE_NAME + " SET " + columns[0] + "=?");
-		for (int i = 1; i < columns.length; i++) {
-			sb.append("," + columns[i] + "=?");
-		}
-		sb.append(" WHERE id=?;");
-		return sb.toString();
 	}
 }	

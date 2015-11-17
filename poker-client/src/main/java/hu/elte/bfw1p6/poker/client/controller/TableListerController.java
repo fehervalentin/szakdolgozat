@@ -10,6 +10,7 @@ import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
+import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.event.ActionEvent;
@@ -156,7 +157,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 			try {
 				model.deleteTable(selectedPokerTable);
 				showSuccessAlert(SUCC_TABLE_DELETE);
-			} catch (PokerDataBaseException e) {
+			} catch (PokerDataBaseException | PokerTableDeleteException e) {
 				showErrorAlert(e.getMessage());
 			} catch (RemoteException e) {
 				remoteExceptionHandler();

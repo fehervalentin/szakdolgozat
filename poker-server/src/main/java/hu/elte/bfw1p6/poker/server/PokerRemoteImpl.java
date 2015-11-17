@@ -20,6 +20,8 @@ import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
+import hu.elte.bfw1p6.poker.exception.PokerPlayerAccountInUseException;
+import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
@@ -42,6 +44,8 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	private static final long serialVersionUID = -4495230178265270679L;
 
 	private final String ERR_BAD_PW = "Hibás jelszó!";
+	private final String ERR_TABLE_DELETE = "Az asztal nem törölhető: nem üres!";
+	private final String ERR_PLAYER_DELETE = "A felhasználó nem törölhető: épp használatban van!";
 	
 	private final String INITIAL_BALANCE = "1000.00";
 
@@ -95,12 +99,19 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public synchronized void deleteTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException {
+	public synchronized void deleteTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerTableDeleteException {
 		if (sessionService.isAuthenticated(uuid)) {
-			pokerTableservers.remove(t.getName());
-			pokerTableDAO.delete(t);
-			this.setChanged();
-			this.notifyObservers(getTables(uuid));
+			AbstractPokerTableServer apts = pokerTableservers.get(t.getName());
+			if (apts.getPlayersCount() > 0) {
+				throw new PokerTableDeleteException(ERR_TABLE_DELETE);
+			} else {
+				pokerTableservers.remove(t.getName());
+				pokerTableDAO.delete(t);
+				List<PokerTable> tables = getTables(uuid);
+				for (int i = 0; i < clients.size(); i++) {
+					clients.get(i).update(tables);
+				}
+			}
 		}
 	}
 
@@ -233,8 +244,12 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public void deletePlayer(UUID uuid, PokerPlayer player) throws RemoteException, PokerDataBaseException {
-		userDAO.deletePlayer(player);
+	public void deletePlayer(UUID uuid, PokerPlayer player) throws RemoteException, PokerDataBaseException, PokerPlayerAccountInUseException {
+		if (sessionService.isAuthenicated(player.getUserName())) {
+			throw new PokerPlayerAccountInUseException(ERR_PLAYER_DELETE);
+		} else {
+			userDAO.deletePlayer(player);
+		}
 	}
 
 	@Override

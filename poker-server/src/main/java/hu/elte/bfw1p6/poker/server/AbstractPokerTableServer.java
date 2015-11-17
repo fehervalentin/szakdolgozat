@@ -36,10 +36,6 @@ import hu.elte.bfw1p6.poker.server.logic.HoldemHandEvaluator;
  */
 public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	
-	//TODO: kell egy időzítő!!!
-	// ha egy kliens jön éppen, akkor kommunikáció áll, de kell egy timeout limit,
-	//amit az asztal határoz meg, ha addig nem jön válasz, akkor kiléptetjük a felhasználót
-
 	private static final long serialVersionUID = -2646114665508361840L;
 
 	private final String ERR_BALANCE = "Nincs elég zsetonod!";
@@ -552,5 +548,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		endOfReceivedPlayerCommand(playerCommand);
 		timerTask = createNewTimerTask();
 		timer.schedule(timerTask, pokerTable.getMaxTime() * 1000);
+	}
+	
+	public int getPlayersCount() {
+		return clients.size() + waitingClients.size();
 	}
 }

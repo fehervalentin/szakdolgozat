@@ -38,7 +38,7 @@ public class UserDAO extends GenericDAO<User>{
 				for (int i = 0; i < columns.length; i++) {
 					u.set(i, rs.getObject(columns[i]));
 				}
-				u.setId(rs.getInt("id"));
+				u.setId(rs.getInt(ID_COLUMN));
 				users.add(u);
 			}
 
@@ -68,7 +68,7 @@ public class UserDAO extends GenericDAO<User>{
 				for (int i = 0; i < columns.length; i++) {
 					u.set(i, rs.getObject(columns[i]));
 				}
-				u.setId(rs.getInt("id"));
+				u.setId(rs.getInt(ID_COLUMN));
 			}
 
 			pstmt.close();

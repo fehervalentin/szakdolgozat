@@ -36,7 +36,7 @@ public class PokerTableDAO extends GenericDAO<PokerTable> {
 				for (int i = 0; i < columns.length; i++) {
 					t.set(i, rs.getObject(columns[i]));
 				}
-				t.setId(rs.getInt("id"));
+				t.setId(rs.getInt(ID_COLUMN));
 				tables.add(t);
 			}
 

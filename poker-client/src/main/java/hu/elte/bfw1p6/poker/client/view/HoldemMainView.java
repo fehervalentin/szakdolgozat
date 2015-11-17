@@ -55,16 +55,10 @@ public class HoldemMainView extends AbstractMainView {
 	 * @param holdemHouseCommand az utasítás
 	 */
 	public void receivedFlopHouseCommand(HoldemHouseCommand holdemHouseCommand) {
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				revealCard(holdemHouseCommand, 0);
-				revealCard(holdemHouseCommand, 1);
-				revealCard(holdemHouseCommand, 2);
-				colorNextPlayer(holdemHouseCommand);
-			}
-		});
+		revealCard(holdemHouseCommand.getCards(), 0);
+		revealCard(holdemHouseCommand.getCards(), 1);
+		revealCard(holdemHouseCommand.getCards(), 2);
+		colorNextPlayer(holdemHouseCommand);
 	}
 
 	/**
@@ -72,14 +66,8 @@ public class HoldemMainView extends AbstractMainView {
 	 * @param holdemHouseCommand az utasítás
 	 */
 	public void receivedTurnHouseCommand(HoldemHouseCommand holdemHouseCommand) {
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				revealCard(holdemHouseCommand, 3);
-				colorNextPlayer(holdemHouseCommand);
-			}
-		});
+		revealCard(holdemHouseCommand.getCards(), 3);
+		colorNextPlayer(holdemHouseCommand);
 	}
 
 	/**
@@ -87,35 +75,33 @@ public class HoldemMainView extends AbstractMainView {
 	 * @param holdemHouseCommand az utasítás
 	 */
 	public void receivedRiverHouseCommand(HoldemHouseCommand holdemHouseCommand) {
+		revealCard(holdemHouseCommand.getCards(), 4);
+		colorNextPlayer(holdemHouseCommand);
+	}
+
+	/**
+	 * Megjeleníti a ház i. kártyalapját.
+	 * @param holdemHouseCommand az utasítás
+	 * @param i a megjelenítendő kártya sorszáma
+	 */
+	private void revealCard(Card[] cards, int i) {
 		Platform.runLater(new Runnable() {
 
 			@Override
 			public void run() {
-				revealCard(holdemHouseCommand, 4);
-				colorNextPlayer(holdemHouseCommand);
+				Card card = null;
+				if (i == 0 || i == 3 || i == 4) {
+					card = cards[0];
+				} else if (i == 1) {
+					card = cards[1];
+				} else if (i == 2) {
+					card = cards[2];
+				} else {
+					throw new IllegalArgumentException();
+				}
+				houseCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(card) + defaultValues.PICTURE_EXTENSION));
+				houseCards.get(i).setVisible(true);
 			}
 		});
-	}
-
-	/**
-	 * Megjeleníti az i. ház kártyalapját.
-	 * @param holdemHouseCommand az utasítás
-	 * @param i a megjelenítendő kártya sorszáma
-	 */
-	private void revealCard(HoldemHouseCommand holdemHouseCommand, int i) {
-		Card[] cards = holdemHouseCommand.getCards();
-		Card card = null;
-		if (i == 0 || i == 3 || i == 4) {
-			card = cards[0];
-		} else if (i == 1) {
-			card = cards[1];
-		} else if (i == 2) {
-			card = cards[2];
-		} else {
-			throw new IllegalArgumentException();
-		}
-		int value = mapCard(card);
-		houseCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + defaultValues.PICTURE_EXTENSION));
-		houseCards.get(i).setVisible(true);
 	}
 }

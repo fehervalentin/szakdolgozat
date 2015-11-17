@@ -73,13 +73,7 @@ public class ClassicMainView extends AbstractMainView {
 	 * @param classicPlayerCommand az utasítás
 	 */
 	public void receivedChangePlayerCommand(ClassicPlayerCommand classicPlayerCommand) {
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				colorNextPlayer(classicPlayerCommand);
-			}
-		});
+		colorNextPlayer(classicPlayerCommand);
 	}
 
 	/**

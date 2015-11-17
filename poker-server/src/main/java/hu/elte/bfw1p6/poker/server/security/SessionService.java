@@ -27,6 +27,10 @@ public class SessionService {
 		return authenticatedUsers.containsKey(uuid);
 	}
 	
+	public boolean isAuthenicated(String userName) {
+		return authenticatedUsers.values().contains(userName);
+	}
+	
 	public PokerSession authenticate(String username, String password) throws PokerInvalidUserException, PokerDataBaseException {
 		User u = userDAO.findByUserName(username);
 		if (u == null || !BCrypt.checkpw(password, u.getPassword()) || authenticatedUsers.values().contains(username)) {
