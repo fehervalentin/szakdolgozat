@@ -19,8 +19,6 @@ import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
-import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
-import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
@@ -154,7 +152,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			
 			@Override
 			public void run() {
-				PlayerCommand playerCommand = playerQuitCommandFactory();
+				PlayerCommand playerCommand = playerQuitCommandFactory(clientsNames.get(whosOn));
 				receivedQuitPlayerCommand(clients.get(whosOn), playerCommand);
 				endOfReceivedPlayerCommand(playerCommand);
 			}
@@ -251,7 +249,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	}
 
 	/**
-	 * Értesíti az i. klienst
+	 * Értesíti az i. klienst, ha RemoteException lép fel, akkor úgy vesszük,
+	 * hogy QUIT típusú utasítást küldött.
 	 * @param i a kliens sorszáma
 	 * @param pokerCommand az utsítás
 	 */
@@ -266,22 +265,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 				try {
 					clients.get(i).update(pokerCommand);
 				} catch (RemoteException e) {
-					PlayerCommand playerCommand;
-					switch (pokerTable.getPokerType()) {
-					case HOLDEM: {
-						playerCommand = new HoldemPlayerCommand().setUpQuitCommand(i);
-						break;
-					}
-					case CLASSIC: {
-						playerCommand = new ClassicPlayerCommand().setUpQuitCommand(i);
-						break;
-					}
-					default: {
-						throw new IllegalArgumentException();
-					}
-					}
-					playerCommand.setSender(clientsNames.get(i));
-					playerCommand.setClientsCount(clients.size()-1);
+					PlayerCommand playerCommand = playerQuitCommandFactory(clientsNames.get(i));
 					receivedQuitPlayerCommand(clients.get(i), playerCommand);
 					notifyClients(playerCommand);
 					endOfReceivedPlayerCommand(playerCommand);
@@ -480,7 +464,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	
 	protected abstract HouseCommand houseWinnerCommandFactory(Card[] cards, int winner, int whosOn);
 	
-	protected abstract PlayerCommand playerQuitCommandFactory();
+	protected abstract PlayerCommand playerQuitCommandFactory(String userName);
 
 	/**
 	 * BLIND típusú ház utasítást hoz létre.

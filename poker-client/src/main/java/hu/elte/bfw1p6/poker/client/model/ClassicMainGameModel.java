@@ -63,7 +63,7 @@ public class ClassicMainGameModel extends AbstractMainGameModel {
 	@Override
 	public void sendQuitCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		ClassicPlayerCommand playerCommand = new ClassicPlayerCommand();
-		playerCommand.setUpQuitCommand(youAreNth);
+		playerCommand.setUpQuitCommand(pokerSession.getPlayer().getUserName(), youAreNth);
 		sendCommandToTable(playerCommand);	
 	}
 

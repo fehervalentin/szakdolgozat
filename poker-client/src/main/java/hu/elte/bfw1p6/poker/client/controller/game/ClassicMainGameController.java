@@ -128,16 +128,6 @@ public class ClassicMainGameController extends AbstractMainGameController {
 				break;
 			}
 			}
-//			if (classicPlayerCommand.getPlayerCommandType() != ClassicPlayerCommandType.BLIND) {
-//				if(classicPlayerCommand.getWhosOn() == mainView.getYouAreNth()) {
-//					automateExecution.purge();
-//					timerTask = createTimerTask();
-//					automateExecution.schedule(timerTask, delay);
-//				}
-//			}
-			/*if (!classicPlayerCommand.isWinnerCommand()  && !classicPlayerCommand.getCommandType().equals("QUIT") || classicPlayerCommand.getCommandType().equals("QUIT") && classicPlayerCommand.getClientsCount() >=2) {
-				modifyButtonsDisability(classicPlayerCommand);
-			}*/
 		} else {
 			throw new IllegalArgumentException();
 		}

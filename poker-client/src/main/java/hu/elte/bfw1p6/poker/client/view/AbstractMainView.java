@@ -28,7 +28,7 @@ import javafx.scene.layout.AnchorPane;
 public abstract class AbstractMainView {
 
 	/**
-	 * Beégetett, alapértékek, amelyek a megjelenítéshez kellenek.
+	 * Beégetett alapértékek, amelyek a megjelenítéshez kellenek.
 	 */
 	protected AbstractDefaultValues defaultValues;
 
@@ -363,7 +363,7 @@ public abstract class AbstractMainView {
 	public void loadMyCards(HouseCommand houseCommand) {
 		Card[] cards = houseCommand.getCards();
 		for (int j = 0; j < defaultValues.MY_CARDS_COUNT; j++) {
-			myCards.get(j).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(cards[j]) + ".png"));
+			myCards.get(j).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(cards[j]) + defaultValues.PICTURE_EXTENSION));
 		}
 	}
 
@@ -466,7 +466,7 @@ public abstract class AbstractMainView {
 				if (convertedWinnerIndex != 0) {
 					Card[] cards = houseCommand.getCards();
 					IntStream.range(0, defaultValues.MY_CARDS_COUNT).forEach(i -> 
-						winnerCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(cards[i]) + ".png"))
+						winnerCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(cards[i]) + defaultValues.PICTURE_EXTENSION))
 					);
 					setNthPlayersCardsOpacity(0, convertedWinnerIndex);
 					int[] winnerCardsPos = houseCommand instanceof HoldemHouseCommand ? defaultValues.CARD_B1FV_POINTS : defaultValues.MIDDLE_CARD_POINT;
@@ -534,7 +534,7 @@ public abstract class AbstractMainView {
 				default:
 					break;
 				}
-				ImageView chip = new ImageView(new Image(defaultValues.CHIP_IMAGE_PREFIX + chipColor + ".png"));
+				ImageView chip = new ImageView(new Image(defaultValues.CHIP_IMAGE_PREFIX + chipColor + defaultValues.PICTURE_EXTENSION));
 				int max = defaultValues.CHIPS_POINT[0] + spread;
 				int min = defaultValues.CHIPS_POINT[1] - spread;
 				chip.setLayoutX(random.nextInt(max - min) + min);

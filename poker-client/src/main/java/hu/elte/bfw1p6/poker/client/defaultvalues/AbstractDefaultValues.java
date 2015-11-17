@@ -7,8 +7,19 @@ package hu.elte.bfw1p6.poker.client.defaultvalues;
  */
 public class AbstractDefaultValues {
 	
+	/**
+	 * A képek kiterjesztése.
+	 */
+	public final String PICTURE_EXTENSION = ".png";
+	
+	/**
+	 * A tábla közepén elhelyezkedő kártyalapok pozíciói.
+	 */
 	public final int[] MIDDLE_CARD_POINT = {525, 300, 601, 300, 677, 300, 753, 300, 829, 300};
 	
+	/**
+	 * A GUI-n objektumok megjelölésére szolgáló styleclass.
+	 */
 	public String MARKER_STYLECLASS = "glow";
 	
 	/**
@@ -49,28 +60,28 @@ public class AbstractDefaultValues {
 	/**
 	 * A dealer zseton kép URL-je.
 	 */
-	public final String DEALER_BUTTON_IMAGE_URL = "/images/dealer.png";
+	public final String DEALER_BUTTON_IMAGE_URL = "/images/dealer" + PICTURE_EXTENSION;
 
 	/**
 	 * Az alapprofilképek URL-je.
 	 */
-	public final String PROFILE_IMAGE_URL = "/images/profile.png";
+	public final String PROFILE_IMAGE_URL = "/images/profile" + PICTURE_EXTENSION;
 
 	/**
 	 * A kártyapakli kép URL-je.
 	 */
-	public final String DECK_IMAGE_URL = "/images/cards/deck.png";
+	public final String DECK_IMAGE_URL = "/images/cards/deck" + PICTURE_EXTENSION;
 	
 
 	/**
 	 * Lefele fordított kártyaszél kép URL-je.
 	 */
-	public final String CARD_SIDE_IMAGE_URL = "/images/cards/b1pl.png";
+	public final String CARD_SIDE_IMAGE_URL = "/images/cards/b1pl" + PICTURE_EXTENSION;
 	
 	/**
 	 * Lefelé fordított egész kártya kép URL-je.
 	 */
-	public final String CARD_BACKFACE_IMAGE= "/images/cards/b1fv.png";
+	public final String CARD_BACKFACE_IMAGE= "/images/cards/b1fv" + PICTURE_EXTENSION;
 	
 	/**
 	 * A dealer gomb helyei.

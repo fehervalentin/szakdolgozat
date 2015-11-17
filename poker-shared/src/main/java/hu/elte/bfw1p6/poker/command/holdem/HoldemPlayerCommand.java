@@ -74,8 +74,9 @@ public class HoldemPlayerCommand extends PlayerCommand {
 	 * @param tempNth a játékos sorszáma
 	 * @return this
 	 */
-	public HoldemPlayerCommand setUpQuitCommand(int youAreNth) {
+	public HoldemPlayerCommand setUpQuitCommand(String sender, int youAreNth) {
 		this.playerCommandType = HoldemPlayerCommandType.QUIT;
+		this.sender = sender;
 		this.whosQuit = youAreNth;
 		return this;
 	}

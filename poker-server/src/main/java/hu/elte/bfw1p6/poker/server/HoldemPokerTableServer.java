@@ -60,8 +60,8 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	}
 
 	@Override
-	protected PlayerCommand playerQuitCommandFactory() {
-		return new HoldemPlayerCommand().setUpQuitCommand(whosOn);
+	protected PlayerCommand playerQuitCommandFactory(String sender) {
+		return new HoldemPlayerCommand().setUpQuitCommand(sender, whosOn);
 	}
 
 	@Override

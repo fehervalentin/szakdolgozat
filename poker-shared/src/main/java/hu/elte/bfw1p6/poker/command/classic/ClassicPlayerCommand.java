@@ -81,8 +81,9 @@ public class ClassicPlayerCommand extends PlayerCommand {
 	 * @param tempNth a játékos sorszáma
 	 * @return this
 	 */
-	public ClassicPlayerCommand setUpQuitCommand(int youAreNth) {
+	public ClassicPlayerCommand setUpQuitCommand(String sender, int youAreNth) {
 		this.playerCommandType = ClassicPlayerCommandType.QUIT;
+		this.sender = sender;
 		this.whosQuit = youAreNth;
 		return this;
 	}

@@ -115,7 +115,7 @@ public class HoldemMainView extends AbstractMainView {
 			throw new IllegalArgumentException();
 		}
 		int value = mapCard(card);
-		houseCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + ".png"));
+		houseCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + value + defaultValues.PICTURE_EXTENSION));
 		houseCards.get(i).setVisible(true);
 	}
 }

@@ -62,7 +62,7 @@ public class HoldemMainGameModel extends AbstractMainGameModel {
 	@Override
 	public void sendQuitCommand() throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		HoldemPlayerCommand playerCommand = new HoldemPlayerCommand();
-		playerCommand.setUpQuitCommand(youAreNth);
+		playerCommand.setUpQuitCommand(pokerSession.getPlayer().getUserName(), youAreNth);
 		sendCommandToTable(playerCommand);		
 	}
 }
