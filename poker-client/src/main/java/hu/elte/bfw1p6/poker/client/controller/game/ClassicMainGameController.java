@@ -2,13 +2,11 @@ package hu.elte.bfw1p6.poker.client.controller.game;
 
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.model.ClassicMainGameModel;
 import hu.elte.bfw1p6.poker.client.view.ClassicMainView;
-import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
@@ -33,9 +31,9 @@ public class ClassicMainGameController extends AbstractMainGameController {
 		this.mainView = new ClassicMainView(mainGamePane);
 
 		try {
-			commController = new CommunicatorController(this);
-			model = new ClassicMainGameModel(commController);
-			model.connectToTable(commController);
+			this.commController = new CommunicatorController(this);
+			this.model = new ClassicMainGameModel(commController);
+			this.model.connectToTable(commController);
 		} catch (RemoteException e) {
 			remoteExceptionHandler();
 		} catch (PokerTooMuchPlayerException e) {
@@ -44,15 +42,15 @@ public class ClassicMainGameController extends AbstractMainGameController {
 		}
 		setButtonsDisability(true);
 		setChangeButtonDisability(true);
-		setQuitButtonDisability(false);
+		modifyQuitButtonDisability(false);
 	}
 
 	/**
-	 * Módosítja a CHANGE button disable tulajdonságát.
-	 * @param disabled
+	 * Módosítja a CHANGE gomb disable tulajdonságát.
+	 * @param disabled a beállítandó érték
 	 */
-	private void setChangeButtonDisability(boolean enabled) {
-		changeButton.setDisable(enabled);
+	private void setChangeButtonDisability(boolean disabled) {
+		changeButton.setDisable(disabled);
 	}
 
 	@Override
@@ -125,7 +123,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 				break;
 			}
 			default: {
-				break;
+				throw new IllegalArgumentException();
 			}
 			}
 		} else {
@@ -139,11 +137,9 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	 * @param event az esemény
 	 */
 	@FXML protected void handleChange(ActionEvent event) {
-//		timerTask.cancel();
-		List<Integer> markedCards = ((ClassicMainView)mainView).getMarkedCards();
 		try {
 			setChangeButtonDisability(true);
-			((ClassicMainGameModel)model).sendChangeCommand(markedCards);
+			((ClassicMainGameModel)model).sendChangeCommand(((ClassicMainView)mainView).getMarkedCards());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
 		} catch (RemoteException e) {
@@ -153,16 +149,16 @@ public class ClassicMainGameController extends AbstractMainGameController {
 
 	/**
 	 * A szerver CHANGE típusú utasítást küldött.
-	 * @param houseCommand az utasítás
+	 * @param classicHouseCommand az utasítás
 	 */
 	private void receivedChangeHouseCommand(ClassicHouseCommand classicHouseCommand) {
 		((ClassicMainView)mainView).receivedChangeHouseCommand(classicHouseCommand);
-		changeState(classicHouseCommand);
+		changeState(classicHouseCommand.getWhosOn());
 	}
 
 	/**
 	 * A szerver DEAL2 típusú utasítást küldött.
-	 * @param houseCommand az utasítás
+	 * @param classicHouseCommand az utasítás
 	 */
 	private void receivedDeal2HouseCommand(ClassicHouseCommand classicHouseCommand) {
 		((ClassicMainGameModel)model).receivedDeal2HouseCommand(classicHouseCommand);
@@ -172,18 +168,22 @@ public class ClassicMainGameController extends AbstractMainGameController {
 
 	/**
 	 * CHANGE típusú utasítás érkezett egy játékostól.
-	 * @param houseCommand az utasítás
+	 * @param classicPlayerCommand az utasítás
 	 */
-	private void receivedChangePlayerCommand(ClassicPlayerCommand playerHoldemCommand) {
-		((ClassicMainView)mainView).receivedChangePlayerCommand(playerHoldemCommand);
-		changeState(playerHoldemCommand);
+	private void receivedChangePlayerCommand(ClassicPlayerCommand classicPlayerCommand) {
+		((ClassicMainView)mainView).receivedChangePlayerCommand(classicPlayerCommand);
+		changeState(classicPlayerCommand.getWhosOn());
 	}
 	
-	private void changeState(PokerCommand pokerCommand) {
-		if (model.getYouAreNth() == pokerCommand.getWhosOn()) {
+	/**
+	 * Ha CHANGE típusú utasítás érkezett, akkor a gombokat ennek megfelelően kell beállítani.
+	 * @param pokerCommand
+	 */
+	private void changeState(int whosOn) {
+		if (model.getYouAreNth() == whosOn) {
 			setButtonsDisability(true);
 			setChangeButtonDisability(false);
-			setQuitButtonDisability(false);
+			modifyQuitButtonDisability(false);
 		}
 	}
 }

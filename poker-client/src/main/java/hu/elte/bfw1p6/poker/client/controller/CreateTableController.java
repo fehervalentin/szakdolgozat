@@ -3,9 +3,9 @@ package hu.elte.bfw1p6.poker.client.controller;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
@@ -46,20 +46,9 @@ public class CreateTableController extends AbstractPokerClientController {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		fillPokerTypes();
+		gameTypeComboBox.setItems(FXCollections.observableArrayList(Arrays.asList(PokerType.values()).stream().map(PokerType::toString).collect(Collectors.toList())));
 		dummyData();
 		setParamPokerTable();
-	}
-
-	/**
-	 * Játékstílusokkal tölti fel a legördülő listát.
-	 */
-	private void fillPokerTypes() {
-		List<String> pokerTypes = new ArrayList<>();
-		for (int i = 0; i < PokerType.values().length; i++) {
-			pokerTypes.add(PokerType.values()[i].toString());
-		}
-		gameTypeComboBox.setItems(FXCollections.observableArrayList(pokerTypes));
 	}
 
 	@Deprecated
@@ -99,7 +88,6 @@ public class CreateTableController extends AbstractPokerClientController {
 		PokerType pokerType = null;
 		Integer maxTime = null;
 		Integer maxPlayers = null;
-		BigDecimal maxBet = null;
 		BigDecimal bigBlind = null;
 		try {
 			pokerType = PokerType.valueOf(gameTypeComboBox.getSelectionModel().getSelectedItem());

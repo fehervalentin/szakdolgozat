@@ -25,12 +25,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
  *
  */
 public class TableListerController extends AbstractPokerClientController implements PokerRemoteObserver {
+	
+	private final String ERR_TABLE_SELECTION = "Nem választottál ki egy táblát sem!";
+	private final String SUCC_TABLE_DELETE = "Sikeresen kitörölted a táblát!";
+	private final String ERR_TABLE_FULL = "Nincs szabad hely az asztalnál!";
 
+	/**
+	 * Egy pókerasztal oszlopai.
+	 */
 	private final String[] COLUMNS = {"name", "pokerType", "maxTime", "maxPlayers", "bigBlind"};
 	
-	private final String NO_TABLE_SELECTED_MESSAGE = "Nem választottál ki egy táblát sem!";
-	private final String SUCC_TABLE_DELETE_MSG = "Sikeresen kitörölted a táblát!";
-
 	/**
 	 * Hálózati kommunikációért felelős controller.
 	 */
@@ -65,11 +69,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
 		try {
-			List<PokerTable> tables = model.registerTableViewObserver(commCont);
-			tableView.getItems().setAll(tables);
-			//TODO: ezt kitörölni
-//			tableView.getSelectionModel().select(0);
-//			connectButton.fire();
+			tableView.getItems().setAll(model.registerTableViewObserver(commCont));
 		} catch (PokerDataBaseException e) {
 			showErrorAlert(e.getMessage());
 		} catch (RemoteException e ) {
@@ -102,17 +102,17 @@ public class TableListerController extends AbstractPokerClientController impleme
 	 * A CONNECT TO TABLE gomb click handlerje.
 	 * @param event az esemény
 	 */
-	@FXML protected void handleConnectToTable() {
+	@FXML protected void handleConnectToTable(ActionEvent event) {
 		PokerTable selectedPokerTable = getSelectedPokerTable();
 		if (selectedPokerTable == null) {
-			showErrorAlert(NO_TABLE_SELECTED_MESSAGE);
+			showErrorAlert(ERR_TABLE_SELECTION);
 		} else {
 			model.setParameterPokerTable(selectedPokerTable);
 			try {
 				if (model.canSitIn()) {
 					frameController.setMainGameFXML(selectedPokerTable.getPokerType());
 				} else {
-					showErrorAlert("Nincs szabad hely az asztalnál!");
+					showErrorAlert(ERR_TABLE_FULL);
 				}
 			} catch (RemoteException e) {
 				remoteExceptionHandler();
@@ -139,7 +139,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 	@FXML protected void handleModifyTable(ActionEvent event) {
 		PokerTable selectedPokerTable = getSelectedPokerTable();
 		if (selectedPokerTable == null) {
-			showErrorAlert(NO_TABLE_SELECTED_MESSAGE);
+			showErrorAlert(ERR_TABLE_SELECTION);
 		} else {
 			model.setParameterPokerTable(selectedPokerTable);
 			frameController.setCreateTableFXML();
@@ -155,14 +155,14 @@ public class TableListerController extends AbstractPokerClientController impleme
 		if (selectedPokerTable != null) {
 			try {
 				model.deleteTable(selectedPokerTable);
-				showSuccessAlert(SUCC_TABLE_DELETE_MSG);
+				showSuccessAlert(SUCC_TABLE_DELETE);
 			} catch (PokerDataBaseException e) {
 				showErrorAlert(e.getMessage());
 			} catch (RemoteException e) {
 				remoteExceptionHandler();
 			}
 		} else {
-			showErrorAlert(NO_TABLE_SELECTED_MESSAGE);
+			showErrorAlert(ERR_TABLE_SELECTION);
 		}
 	}
 
@@ -199,9 +199,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 	@Override
 	public void update(Object updateMsg) throws RemoteException {
 		if (updateMsg instanceof List<?>) {
-			List<PokerTable> tables = (List<PokerTable>)updateMsg;
-			tableView.getItems().setAll(tables);
-			System.out.println("MEGKAPTAM A TÁBLÁKAT");
+			tableView.getItems().setAll((List<PokerTable>)updateMsg);
 		}
 	}
 }

@@ -19,7 +19,6 @@ public class HoldemMainGameModel extends AbstractMainGameModel {
 		super(communicatorController);
 	}
 
-
 	@Override
 	protected void tossBlind(Boolean bigBlind) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
 		BigDecimal amount = pokerTable.getBigBlind().divide(new BigDecimal(bigBlind ? 1 : 2));

@@ -8,6 +8,16 @@ package hu.elte.bfw1p6.poker.client.defaultvalues;
 public class AbstractDefaultValues {
 	
 	/**
+	 * A stílusleíró URL-je.
+	 */
+	public final String CSS_PATH = "styles/poker.css";
+	
+	/**
+	 * Az alkalmazás neve.
+	 */
+	public final String APP_NAME = "Poker";
+	
+	/**
 	 * A képek kiterjesztése.
 	 */
 	public final String PICTURE_EXTENSION = ".png";

@@ -80,7 +80,6 @@ public abstract class AbstractMainGameModel {
 	 * @param observer a csatlakozni kívánó kliens
 	 * @throws RemoteException
 	 * @throws PokerTooMuchPlayerException
-	 * @throws PokerUnauthenticatedException
 	 */
 	public void connectToTable(PokerRemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException {
 		pokerRemote.connectToTable(pokerSession.getId(), pokerTable, observer);
@@ -103,11 +102,10 @@ public abstract class AbstractMainGameModel {
 	}
 	
 	/**
-	 * Ha BLIND utasítás jött a szervertől
+	 * Ha BLIND típusú utasítás jött a szervertől
 	 * @param houseHoldemCommand a szerver utasítás
 	 * @throws PokerUserBalanceException 
 	 * @throws PokerDataBaseException 
-	 * @throws PokerUnauthenticatedException 
 	 * @throws RemoteException 
 	 */
 	public void receivedBlindHouseCommand(HouseCommand houseCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
@@ -124,7 +122,6 @@ public abstract class AbstractMainGameModel {
 	/**
 	 * Utasítás küldése a játéktábla szervernek.
 	 * @param playerCommand az utasítás
-	 * @throws PokerUnauthenticatedException
 	 * @throws PokerDataBaseException
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException
@@ -133,7 +130,6 @@ public abstract class AbstractMainGameModel {
 		playerCommand.setSender(pokerSession.getPlayer().getUserName());
 		pokerRemote.sendPlayerCommand(pokerSession.getId(), pokerTable, communicatorController, playerCommand);
 		pokerSession.refreshBalance(pokerRemote.refreshBalance(pokerSession.getId()));
-//		System.out.println("uj balance: " + pokerSession.getPlayer().getBalance());
 	}
 	
 	/**
@@ -141,14 +137,12 @@ public abstract class AbstractMainGameModel {
 	 * @param bigBlind ha nagy vakot szeretnénk berakni, akkor az értéke true, különben false
 	 * @throws PokerUserBalanceException 
 	 * @throws PokerDataBaseException 
-	 * @throws PokerUnauthenticatedException 
 	 * @throws RemoteException 
 	 */
 	protected abstract void tossBlind(Boolean bigBlind) throws PokerDataBaseException, PokerUserBalanceException, RemoteException;
 	
 	/**
 	 * CALL típusú utasítás küldése a szervernek.
-	 * @throws PokerUnauthenticatedException
 	 * @throws PokerDataBaseException
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException
@@ -157,7 +151,6 @@ public abstract class AbstractMainGameModel {
 	
 	/**
 	 * CHECK típusú utasítás küldése a szervernek.
-	 * @throws PokerUnauthenticatedException
 	 * @throws PokerDataBaseException
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException
@@ -167,7 +160,6 @@ public abstract class AbstractMainGameModel {
 	/**
 	 * RAISE típusú utasítás küldése a szervernek.
 	 * @param amount az emelendő összeg
-	 * @throws PokerUnauthenticatedException
 	 * @throws PokerDataBaseException
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException
@@ -176,7 +168,6 @@ public abstract class AbstractMainGameModel {
 	
 	/**
 	 * FOLD típusú utasítás küldése a szervenek.
-	 * @throws PokerUnauthenticatedException
 	 * @throws PokerDataBaseException
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException
@@ -185,7 +176,6 @@ public abstract class AbstractMainGameModel {
 	
 	/**
 	 * QUIT típusú utasítás küldése a szervernek.
-	 * @throws PokerUnauthenticatedException
 	 * @throws PokerDataBaseException
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException
@@ -205,25 +195,7 @@ public abstract class AbstractMainGameModel {
 	 * @param playerCommand az utasítás
 	 */
 	public void receivedRaisePlayerCommand(PlayerCommand playerCommand) {
-		// és mi van ha én magam emeltem...
-		// ha én magam emeltem, akkor a szerver elszámolta a teljes adósságom
 		myDebt = playerCommand.getSender().equals(getUserName()) ? BigDecimal.ZERO : myDebt.add(playerCommand.getRaiseAmount());
-	}
-
-	/**
-	 * FOLD típusú utasítás érkezett egy játékostól.
-	 * @param playerCommand az utasítás
-	 */
-	public void receivedFoldPlayerCommand(PlayerCommand playerCommand) {
-		
-	}
-	
-	/**
-	 * QUIT típusú utasítás érkezett egy játékostól.
-	 * @param playerCommand az utasítás
-	 */
-	public void receivedQuitPlayerCommand(PlayerCommand playerCommand) {
-		
 	}
 
 	public BigDecimal getMyDebt() {

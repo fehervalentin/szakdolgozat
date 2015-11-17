@@ -61,6 +61,7 @@ public class ClassicMainView extends AbstractMainView {
 
 			@Override
 			public void run() {
+				myCards.forEach(card -> card.setOnMouseClicked(null));
 				loadMyCards(houseCommand);
 				colorNextPlayer(houseCommand);
 			}

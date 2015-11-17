@@ -38,26 +38,26 @@
 			</TableView>
 			<GridPane alignment="CENTER" hgap="10.0" vgap="10.0"
 				GridPane.columnIndex="1" GridPane.rowIndex="1">
-				<Button fx:id="connectButton" text="Csatlakozás" onAction="#handleConnectToTable" styleClass="rich-blue"
-					GridPane.columnIndex="1" GridPane.rowIndex="1" />
-				<Button fx:id="profileManagerButton" text="Profil megtekintése" styleClass="rich-blue"
-					onAction="#handleProfileManager" GridPane.columnIndex="1"
-					GridPane.rowIndex="2" />
-				<Button fx:id="createTableButton" text="Kijelentkezés" styleClass="rich-blue"
-					onAction="#handleLogout" GridPane.columnIndex="1"
-					GridPane.rowIndex="3" />
-				<Button fx:id="createTableButton" text="Új tábla létrehozása" styleClass="rich-blue"
-					onAction="#handleCreateTable" GridPane.columnIndex="1"
-					GridPane.rowIndex="4" />
-				<Button fx:id="modifyTableButton" text="Tábla módosítása" styleClass="rich-blue"
-					onAction="#handleModifyTable" GridPane.columnIndex="1"
-					GridPane.rowIndex="5" />
-				<Button fx:id="deleteTableButton" text="Asztal törlése" styleClass="rich-blue"
-					onAction="#handleDeleteTable" GridPane.columnIndex="1"
-					GridPane.rowIndex="6" />
-				<Button fx:id="viewUsersbutton" text="Userek megtekintése" styleClass="rich-blue"
-					onAction="#handleViewUsers" GridPane.columnIndex="1"
-					GridPane.rowIndex="7" />
+				<Button fx:id="connectButton" text="Csatlakozás" onAction="#handleConnectToTable"
+					styleClass="rich-blue" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+				<Button fx:id="profileManagerButton" text="Profil megtekintése"
+					styleClass="rich-blue" onAction="#handleProfileManager"
+					GridPane.columnIndex="1" GridPane.rowIndex="2" />
+				<Button fx:id="createTableButton" text="Kijelentkezés"
+					styleClass="rich-blue" onAction="#handleLogout"
+					GridPane.columnIndex="1" GridPane.rowIndex="3" />
+				<Button fx:id="createTableButton" text="Új tábla létrehozása"
+					styleClass="rich-blue" onAction="#handleCreateTable"
+					GridPane.columnIndex="1" GridPane.rowIndex="4" />
+				<Button fx:id="modifyTableButton" text="Tábla módosítása"
+					styleClass="rich-blue" onAction="#handleModifyTable"
+					GridPane.columnIndex="1" GridPane.rowIndex="5" />
+				<Button fx:id="deleteTableButton" text="Asztal törlése"
+					styleClass="rich-blue" onAction="#handleDeleteTable"
+					GridPane.columnIndex="1" GridPane.rowIndex="6" />
+				<Button fx:id="viewUsersbutton" text="Userek megtekintése"
+					styleClass="rich-blue" onAction="#handleViewUsers"
+					GridPane.columnIndex="1" GridPane.rowIndex="7" />
 			</GridPane>
 		</GridPane>
 	</children>

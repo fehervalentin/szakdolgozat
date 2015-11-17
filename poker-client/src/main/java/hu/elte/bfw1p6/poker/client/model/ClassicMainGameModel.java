@@ -70,7 +70,6 @@ public class ClassicMainGameModel extends AbstractMainGameModel {
 	/**
 	 * CHANGE típusú utasítás küldése a szervernek.
 	 * @param markedCards a cserélendő kártyák sorszámai
-	 * @throws PokerUnauthenticatedException
 	 * @throws PokerDataBaseException
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException

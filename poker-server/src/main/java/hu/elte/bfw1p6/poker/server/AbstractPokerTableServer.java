@@ -154,6 +154,12 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			public void run() {
 //				PlayerCommand playerCommand = playerQuitCommandFactory(clientsNames.get(whosOn));
 				PlayerCommand playerCommand = playerQuitCommandFactory("");
+				//TODO: Exception in thread "Timer-0" java.lang.ArrayIndexOutOfBoundsException: -1
+//				at java.util.ArrayList.elementData(ArrayList.java:418)
+//				at java.util.ArrayList.get(ArrayList.java:431)
+//				at hu.elte.bfw1p6.poker.server.AbstractPokerTableServer$1.run(AbstractPokerTableServer.java:157)
+//				at java.util.TimerThread.mainLoop(Timer.java:555)
+//				at java.util.TimerThread.run(Timer.java:505)
 				receivedQuitPlayerCommand(clients.get(whosOn), playerCommand);
 				endOfReceivedPlayerCommand(playerCommand);
 			}

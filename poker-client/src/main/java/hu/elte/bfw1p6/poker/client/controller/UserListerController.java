@@ -3,7 +3,6 @@ package hu.elte.bfw1p6.poker.client.controller;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
@@ -23,6 +22,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 public class UserListerController extends AbstractPokerClientController {
 	
+	/**
+	 * Egy regisztrált felhasználó oszlopai.
+	 */
+	private final String[] COLUMNS = {"userName", "regDate", "balance"};
+	
 	@FXML private Button backButton;
 	
 	@FXML private TableColumn<PokerPlayer, String> userName;
@@ -33,25 +37,21 @@ public class UserListerController extends AbstractPokerClientController {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		userName.setCellValueFactory(new PropertyValueFactory<PokerPlayer, String>("userName"));
-		regDate.setCellValueFactory(new PropertyValueFactory<PokerPlayer, Long>("regDate"));
-		balance.setCellValueFactory(new PropertyValueFactory<PokerPlayer, BigDecimal>("balance"));
-	}
-
-	@Override
-	public void setDelegateController(FrameController frameController) {
-		this.frameController = frameController;
-		
-		List<PokerPlayer> tables;
+		userName.setCellValueFactory(new PropertyValueFactory<PokerPlayer, String>(COLUMNS[0]));
+		regDate.setCellValueFactory(new PropertyValueFactory<PokerPlayer, Long>(COLUMNS[1]));
+		balance.setCellValueFactory(new PropertyValueFactory<PokerPlayer, BigDecimal>(COLUMNS[2]));
 		try {
-			tables = model.getUsers();
-			userView.getItems().setAll(tables);
+			userView.getItems().setAll(model.getUsers());
 		} catch (PokerDataBaseException e) {
 			showErrorAlert(e.getMessage());
 		} catch (RemoteException e) {
 			remoteExceptionHandler();
 		}
-		
+	}
+
+	@Override
+	public void setDelegateController(FrameController frameController) {
+		this.frameController = frameController;
 	}
 	
 	/**

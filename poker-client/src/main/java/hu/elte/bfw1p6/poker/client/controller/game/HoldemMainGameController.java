@@ -39,7 +39,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 			remoteExceptionHandler();
 		}
 		setButtonsDisability(true);
-		setQuitButtonDisability(false);
+		modifyQuitButtonDisability(false);
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 				break;
 			}
 			default: {
-				break;
+				throw new IllegalArgumentException();
 			}
 			}
 		} else {

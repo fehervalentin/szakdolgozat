@@ -40,42 +40,42 @@ public abstract class AbstractMainView {
 	/**
 	 * A nyertes kártyalapok.
 	 */
-	protected List<ImageView> winnerCards;
+	private List<ImageView> winnerCards;
 
 	/**
 	 * Profilképek.
 	 */
-	protected List<ImageView> profileImages;
+	private List<ImageView> profileImages;
 
 	/**
 	 * Az ellenfelek lefordított egész kártyái.
 	 */
-	protected List<ImageView> opponentsCards;
+	private List<ImageView> opponentsCards;
 
 	/**
 	 * Az ellenfelek lefordított kártyaszélei.
 	 */
-	protected List<ImageView> opponentsCardSides;
+	private List<ImageView> opponentsCardSides;
 
 	/**
 	 * A zsetonok.
 	 */
-	protected List<ImageView> chips;
+	private List<ImageView> chips;
 
 	/**
 	 * A játékosok nevei.
 	 */
-	protected List<Label> userNameLabels;
+	private List<Label> userNameLabels;
 
 	/**
 	 * Az egyenlegem.
 	 */
-	protected Label myBalance;
+	private Label myBalance;
 
 	/**
 	 * Az osztó gomb.
 	 */
-	protected ImageView dealerButtonImageView;
+	private ImageView dealerButtonImageView;
 
 	/**
 	 * A színtérgráf gyökere.
@@ -85,32 +85,27 @@ public abstract class AbstractMainView {
 	/**
 	 * Hány játékossal játszom egy asztalnál.
 	 */
-	protected int clientsCount;
+	private int clientsCount;
 
 	/**
 	 * Random objektum.
 	 */
-	protected Random random;
-
-	/**
-	 * Az osztó gomb elhelyezkedése az asztalon.
-	 */
-	protected int DEALER_BUTTON_POSITION;
+	private Random random;
 
 	/**
 	 * A következő játékos.
 	 */
-	protected int nextPlayer = -1;
+	private int nextPlayer = -1;
 
 	/**
 	 * Hanyadik vagy a körben.
 	 */
-	protected int youAreNth;
+	private int youAreNth;
 
 	/**
 	 * Fixen hanyadik játékosként vagy beülve az asztalhoz.
 	 */
-	protected int fixSitPosition;
+	private int fixSitPosition;
 	
 	public AbstractMainView(AnchorPane mainGamePane, AbstractDefaultValues defaultValues) {
 		this.mainGamePane = mainGamePane;
@@ -201,7 +196,7 @@ public abstract class AbstractMainView {
 			mainGamePane.getChildren().add(imageView);
 		}
 
-		//mycards
+		//my cards
 		for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
 			ImageView myCard = new ImageView();
 			int gap = 5;
@@ -229,7 +224,6 @@ public abstract class AbstractMainView {
 		myBalance.setLayoutX(defaultValues.PROFILE_POINTS[0]);
 		myBalance.setLayoutY(defaultValues.PROFILE_POINTS[1]+20);
 		mainGamePane.getChildren().add(myBalance);
-		
 	}
 	
 	public void setUserName(String userName) {
@@ -266,7 +260,7 @@ public abstract class AbstractMainView {
 	}
 
 	/**
-	 * Kitörlöm a chipeket.
+	 * Kitörli a chipeket.
 	 */
 	protected void clearChips() {
 		chips.forEach(chip -> mainGamePane.getChildren().remove(chip));
@@ -293,9 +287,10 @@ public abstract class AbstractMainView {
 	}
 
 	/**
-	 * A paramétert konvertálja a megfelelő játékos adott táblanézet szerint. (Mindegyik játékos máshogy látja a táblát.)
+	 * A paramétert konvertálja a megfelelő játékos adott táblanézete szerint.
+	 * (Mindegyik játékos máshogy látja a táblát.)
 	 * @param whosOn a paraméter
-	 * @return
+	 * @return a konvertált érték
 	 */
 	public int ultimateFormula(int whosOn) {
 		int value = (whosOn - fixSitPosition) % clientsCount;
@@ -311,7 +306,7 @@ public abstract class AbstractMainView {
 		clientsCount = houseCommand.getPlayers();
 		youAreNth = houseCommand.getNthPlayer();
 		fixSitPosition = houseCommand.getFixSitPosition();
-		DEALER_BUTTON_POSITION = (clientsCount + houseCommand.getDealer() - youAreNth) % clientsCount;
+		int dealerButtonPosition = (clientsCount + houseCommand.getDealer() - youAreNth) % clientsCount;
 		Platform.runLater(
 				new Runnable() {
 
@@ -328,8 +323,8 @@ public abstract class AbstractMainView {
 						opponentsCardSides.subList(0, (cc - 1) * (defaultValues.MY_CARDS_COUNT - 1)).forEach(card -> card.setVisible(true));
 						profileImages.subList(0, cc).forEach(profile -> profile.setOpacity(1));
 
-						dealerButtonImageView.setLayoutX(defaultValues.DEALER_BUTTON_POSITIONS[DEALER_BUTTON_POSITION * 2]);
-						dealerButtonImageView.setLayoutY(defaultValues.DEALER_BUTTON_POSITIONS[DEALER_BUTTON_POSITION * 2 + 1]);
+						dealerButtonImageView.setLayoutX(defaultValues.DEALER_BUTTON_POSITIONS[dealerButtonPosition * 2]);
+						dealerButtonImageView.setLayoutY(defaultValues.DEALER_BUTTON_POSITIONS[dealerButtonPosition * 2 + 1]);
 						dealerButtonImageView.setVisible(true);
 					}
 				});
@@ -348,9 +343,6 @@ public abstract class AbstractMainView {
 				hideHouseCards();
 				loadMyCards(houseCommand);
 				nextPlayer = ultimateFormula(houseCommand.getWhosOn());
-				System.out.println("Dealer gomb helye: " + DEALER_BUTTON_POSITION);
-				System.out.println("Hanyan vagyunk: " + clientsCount);
-				System.out.println("Ki a következő játékos (ki lett beszinezve): " + nextPlayer);
 				colorNextPlayer(houseCommand);
 			}
 		});
@@ -442,11 +434,9 @@ public abstract class AbstractMainView {
 				} else {
 					double opacity = 0.0;
 					int convertedWhoQuit = ultimateFormula(playerCommand.getWhosQuit());
-					if (convertedWhoQuit != 0) {
-						setNthPlayersCardsOpacity(opacity, convertedWhoQuit);
-						profileImages.get(convertedWhoQuit).setOpacity(opacity);
-						userNameLabels.get(convertedWhoQuit).setOpacity(opacity);
-					}
+					setNthPlayersCardsOpacity(opacity, convertedWhoQuit);
+					profileImages.get(convertedWhoQuit).setOpacity(opacity);
+					userNameLabels.get(convertedWhoQuit).setOpacity(opacity);
 				}
 			}
 		});
@@ -464,9 +454,8 @@ public abstract class AbstractMainView {
 
 				int convertedWinnerIndex = ultimateFormula(houseCommand.getWinner());
 				if (convertedWinnerIndex != 0) {
-					Card[] cards = houseCommand.getCards();
 					IntStream.range(0, defaultValues.MY_CARDS_COUNT).forEach(i -> 
-						winnerCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(cards[i]) + defaultValues.PICTURE_EXTENSION))
+						winnerCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(houseCommand.getCards()[i]) + defaultValues.PICTURE_EXTENSION))
 					);
 					setNthPlayersCardsOpacity(0, convertedWinnerIndex);
 					int[] winnerCardsPos = houseCommand instanceof HoldemHouseCommand ? defaultValues.CARD_B1FV_POINTS : defaultValues.MIDDLE_CARD_POINT;

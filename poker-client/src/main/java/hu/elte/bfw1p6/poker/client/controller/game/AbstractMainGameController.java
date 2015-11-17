@@ -136,24 +136,28 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 
 
 	/**
-	 * Módosítja a CALL, CHECK, FOLD, RAISE gombok disable tulajdonságát. Ha én nem jövök, vagy ha null értékkel hívom meg a függvényt, akkor letiltja a gombokat.
-	 * @param pokerCommand az utasítás
+	 * Módosítja a CALL, CHECK, FOLD, RAISE, QUIT gombok disable tulajdonságát.
+	 * @param disabled a beállítandó érték
 	 */
-	protected void setButtonsDisability(boolean isYourTurn) {
+	protected void setButtonsDisability(boolean disabled) {
 		Platform.runLater(new Runnable() {
 
 			@Override
 			public void run() {
-				callButton.setDisable(isYourTurn);
-				checkButton.setDisable(isYourTurn);
-				foldButton.setDisable(isYourTurn);
-				raiseButton.setDisable(isYourTurn);
-				quitButton.setDisable(isYourTurn);
+				callButton.setDisable(disabled);
+				checkButton.setDisable(disabled);
+				foldButton.setDisable(disabled);
+				raiseButton.setDisable(disabled);
+				quitButton.setDisable(disabled);
 			}
 		});
 	}
 
-	protected void setQuitButtonDisability(boolean disabled) {
+	/**
+	 * Módosítja a QUIT gomb disable tulajdonságát.
+	 * @param disabled a beállítandó érték
+	 */
+	protected void modifyQuitButtonDisability(boolean disabled) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -162,20 +166,22 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 		});
 	}
 	
-	protected void modifyQuitButtonDisability(boolean disabled) {
+	/**
+	 * Módosítja a CALL gomb disable tulajdonságát.
+	 * @param disabled a beállítandó érték
+	 */
+	protected void modifyCallButtonDisability(boolean disabled) {
 		Platform.runLater(new Runnable() {
-			
 			@Override
 			public void run() {
-				quitButton.setDisable(disabled);
-				
+				callButton.setDisable(disabled);
 			}
 		});
 	}
 
 	/**
-	 * Módosítja a FOLD button disable tulajdonságát.
-	 * @param disabled
+	 * Módosítja a FOLD gomb disable tulajdonságát.
+	 * @param disabled a beállítandó érték
 	 */
 	protected void modifyFoldButtonDisability(boolean disabled) {
 		Platform.runLater(new Runnable() {
@@ -188,8 +194,8 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	}
 
 	/**
-	 * Módosítja a CHECK button disable tulajdonságát.
-	 * @param disabled
+	 * Módosítja a CHECK gomb disable tulajdonságát.
+	 * @param disabled a beállítandó érték
 	 */
 	protected void modifyCheckButtonDisability(boolean disabled) {
 		Platform.runLater(new Runnable() {
@@ -202,7 +208,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	}
 
 	/**
-	 * Felugró ablakot jelenít meg.
+	 * Hibát jelző felugró ablakot jelenít meg.
 	 * @param msg az üzenet
 	 */
 	protected void showErrorAlert(String msg) {
@@ -297,7 +303,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	}
 
 	/**
-	 * BLIND típusú utasítás érkezett egy játékostól.
+	 * CALL típusú utasítás érkezett egy játékostól.
 	 * @param playerCommand az utasítás
 	 */
 	protected void receivedCallPlayerCommand(PlayerCommand playerCommand) {
@@ -314,14 +320,8 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 		}
 		mainView.receivedCheckPlayerCommand(playerCommand);
 		if (model.getYouAreNth() ==  playerCommand.getWhosOn()) {
-			Platform.runLater(new Runnable() {
-
-				@Override
-				public void run() {
-					checkButton.setDisable(false);
-					quitButton.setDisable(false);
-				}
-			});
+			modifyCheckButtonDisability(false);
+			modifyQuitButtonDisability(false);
 		}
 	}
 
@@ -330,7 +330,6 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param playerCommand az utasítás
 	 */
 	protected void receivedFoldPlayerCommand(PlayerCommand playerCommand) {
-		model.receivedFoldPlayerCommand(playerCommand);
 		setButtonsDisability(model.getYouAreNth() !=  playerCommand.getWhosOn());
 		mainView.receivedFoldPlayerCommand(playerCommand);
 	}
@@ -354,11 +353,11 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			setButtonsDisability(true);
 			modifyQuitButtonDisability(false);
 		}
-//		model.receivedQuitPlayerCommand(playerCommand);
 		if (playerCommand.getWhosQuit() == model.getYouAreNth()) {
 			frameController.setTableListerFXML();
+		} else {
+			mainView.receivedQuitPlayerCommand(playerCommand);
 		}
-		mainView.receivedQuitPlayerCommand(playerCommand);
 	}
 
 	/**
@@ -370,21 +369,15 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	}
 
 	/**
-	 * Ellenőrzi, hogy van-e addósságom, és ennek megfelelően állítja be a CHECK és CALL gombok disable tulajdonsgát.
+	 * Ellenőrzi, hogy van-e adósságom, és ennek megfelelően állítja be a CHECK és CALL gombok disable tulajdonsgát.
 	 */
 	protected void debtChecker(int whosOn) {
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				if (model.getYouAreNth() == whosOn) {
-					if (model.getMyDebt().compareTo(BigDecimal.ZERO) > 0) {
-						checkButton.setDisable(true);
-					} else {
-						callButton.setDisable(true);
-					}
-				}
+		if (model.getYouAreNth() == whosOn) {
+			if (model.getMyDebt().compareTo(BigDecimal.ZERO) > 0) {
+				modifyCheckButtonDisability(true);
+			} else {
+				modifyCallButtonDisability(true);
 			}
-		});
+		}
 	}
 }

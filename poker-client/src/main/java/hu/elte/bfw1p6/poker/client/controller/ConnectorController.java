@@ -31,8 +31,19 @@ public class ConnectorController extends AbstractPokerClientController {
 	
 	private PokerProperties properties;
 	
+	/**
+	 * A szerver neve.
+	 */
 	private String SVNAME;
+	
+	/**
+	 * A szerver portja.
+	 */
 	private String PORT;
+	
+	/**
+	 * A szerver IP-je.
+	 */
 	private String SVIP;
 	
 	@Override

@@ -1,6 +1,7 @@
 package hu.elte.bfw1p6.poker.client.main;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
+import hu.elte.bfw1p6.poker.client.defaultvalues.HoldemDefaultValues;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -14,9 +15,6 @@ import javafx.stage.WindowEvent;
  */
 public class ClientMain extends Application {
 
-	private final String TITLE = "Poker";
-	private final String CSS_PATH = "/styles/login.css";
-	
 	private Scene scene;
 	private FrameController frameController;
 	
@@ -24,9 +22,9 @@ public class ClientMain extends Application {
     public void start(Stage stage) throws Exception {
         frameController = new FrameController(stage);
         scene = frameController.getScene();
-        scene.getStylesheets().add(CSS_PATH);
+        scene.getStylesheets().add(HoldemDefaultValues.getInstance().CSS_PATH);
         
-        stage.setTitle(TITLE);
+        stage.setTitle(HoldemDefaultValues.getInstance().APP_NAME);
         stage.setScene(scene);
         stage.setOnCloseRequest(getFormCloseEvent());
         stage.setResizable(false);
@@ -41,6 +39,10 @@ public class ClientMain extends Application {
         launch(args);
     }
     
+    /**
+     * A teljes alkalmazás bezárásakor lefutó eseményt létrehozó eljárást.
+     * @return a létrehozott esemény
+     */
     private EventHandler<WindowEvent> getFormCloseEvent() {
     	EventHandler<WindowEvent> closeEvent = new EventHandler<WindowEvent>() {
 

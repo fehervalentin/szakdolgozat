@@ -67,7 +67,7 @@ public class RegistrationController extends AbstractPokerClientController {
 	 * A BACK gomb click handlerje.
 	 * @param event az esemény
 	 */
-	@FXML protected void goToLogin(ActionEvent event) {
+	@FXML protected void navigateToLoginForm(ActionEvent event) {
 		frameController.setLoginFXML();
 	}
 }

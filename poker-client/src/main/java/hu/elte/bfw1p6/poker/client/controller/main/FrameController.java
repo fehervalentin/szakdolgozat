@@ -19,16 +19,17 @@ public class FrameController extends UnicastRemoteObject {
 	private static final long serialVersionUID = 4102088160605201971L;
 	
 	private final String FXML_PREFIX = "/fxml/";
+	private final String FXML_EXTENSION = ".fxml";
 	
-	private final String LOGIN_FXML = "Login.fxml";
-	private final String USERS_FXML = "UserLister.fxml";
-	private final String CONNECTOR_FXML = "Connector.fxml";
-	private final String CREATE_TABLE_FXML = "CreateTable.fxml";
-	private final String TABLE_LISTER_FXML = "TableLister.fxml";
-	private final String REGISTRATION_FXML = "Registration.fxml";
-	private final String PROFILE_MANAGER_FXML = "ProfileManager.fxml";
-	private final String HOLDEM_MAIN_GAME_FXML = "HoldemMainGame.fxml";
-	private final String CLASSIC_MAIN_GAME_FXML = "ClassicMainGame.fxml";
+	private final String LOGIN_FXML = "Login";
+	private final String USERS_FXML = "UserLister";
+	private final String CONNECTOR_FXML = "Connector";
+	private final String CREATE_TABLE_FXML = "CreateTable";
+	private final String TABLE_LISTER_FXML = "TableLister";
+	private final String REGISTRATION_FXML = "Registration";
+	private final String PROFILE_MANAGER_FXML = "ProfileManager";
+	private final String HOLDEM_MAIN_GAME_FXML = "HoldemMainGame";
+	private final String CLASSIC_MAIN_GAME_FXML = "ClassicMainGame";
 	
 	private final int MENU_GAME_WIDHT = 900;
 	private final int MENU_GAME_HEIGHT = 500;
@@ -50,7 +51,7 @@ public class FrameController extends UnicastRemoteObject {
 	}
 	
 	/**
-	 * A csatlakozásos FXML-t jeleníti meg.
+	 * Csatlakozás a szerverhez FXML-t jeleníti meg.
 	 */
 	public void setConnectorFXML() {
 		setFXML(CONNECTOR_FXML);
@@ -125,8 +126,12 @@ public class FrameController extends UnicastRemoteObject {
 		setFXML(USERS_FXML);
 	}
 	
+	/**
+	 * FXML állít be a színtérre.
+	 * @param resource a beállítandó fxml neve
+	 */
 	private void setFXML(String resource) {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_PREFIX + resource));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_PREFIX + resource + FXML_EXTENSION));
 		try {
 			if (scene == null) {
 				this.scene = new Scene(loader.load());

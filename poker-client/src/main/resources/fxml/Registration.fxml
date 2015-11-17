@@ -21,14 +21,12 @@
 			GridPane.rowIndex="9" />
 		<PasswordField fx:id="passwordField" promptText="Jelszó"
 			GridPane.columnSpan="2" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-		<Label fx:id="rePasswordLabel" GridPane.columnIndex="0"
-			GridPane.rowIndex="3" text="Repeat password:" />
 		<PasswordField fx:id="rePasswordField" promptText="Jelszó újra"
 			GridPane.columnSpan="2" GridPane.columnIndex="1" GridPane.rowIndex="11" />
 
 		<Button fx:id="regButton" text="Regisztrálok" onAction="#handleRegistrationButton"
 			styleClass="rich-blue" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-		<Button fx:id="backButton" text="Vissza" onAction="#goToLogin"
+		<Button fx:id="backButton" text="Vissza" onAction="#navigateToLoginForm"
 			styleClass="rich-blue" GridPane.columnIndex="2" GridPane.rowIndex="12" />
 	</GridPane>
 </AnchorPane>
