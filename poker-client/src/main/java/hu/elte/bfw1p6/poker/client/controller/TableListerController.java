@@ -70,7 +70,8 @@ public class TableListerController extends AbstractPokerClientController impleme
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
 		try {
-			tableView.getItems().setAll(model.registerTableViewObserver(commCont));
+			List<PokerTable> tables = model.registerTableViewObserver(commCont);
+			tableView.getItems().setAll(tables);
 		} catch (PokerDataBaseException e) {
 			showErrorAlert(e.getMessage());
 		} catch (RemoteException e ) {

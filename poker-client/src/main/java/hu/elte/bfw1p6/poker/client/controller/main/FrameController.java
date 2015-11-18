@@ -130,7 +130,7 @@ public class FrameController extends UnicastRemoteObject {
 	 * FXML állít be a színtérre.
 	 * @param resource a beállítandó fxml neve
 	 */
-	private void setFXML(String resource) {
+	private synchronized void setFXML(String resource) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_PREFIX + resource + FXML_EXTENSION));
 		try {
 			if (scene == null) {

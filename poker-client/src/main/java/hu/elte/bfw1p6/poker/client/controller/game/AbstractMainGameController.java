@@ -349,7 +349,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	protected void receivedQuitPlayerCommand(PlayerCommand playerCommand) {
 		setButtonsDisability(model.getYouAreNth() !=  playerCommand.getWhosOn());
-		if (playerCommand.getClientsCount() < 2) {
+		if (playerCommand.getClientsCount() == 1) {
 			setButtonsDisability(true);
 			modifyQuitButtonDisability(false);
 		}
