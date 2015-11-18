@@ -36,7 +36,7 @@ public final class DBManager {
 		try {
 			con = DriverManager.getConnection(strCon);
 		} catch (SQLException e) {
-			System.err.println(e);
+			e.printStackTrace();
 		}
 	}
 

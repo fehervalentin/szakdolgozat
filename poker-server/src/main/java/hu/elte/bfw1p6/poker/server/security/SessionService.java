@@ -12,7 +12,14 @@ import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.UserDAO;
 
+/**
+ * A kliensek sessionjeit tartja nyilván és kezeli.
+ * @author feher
+ *
+ */
 public class SessionService {
+	
+	private final String ERR_BAD_AUTH = "Hibás bejelentkezési adatok!";
 	
 	private Map<UUID, String> authenticatedUsers;
 	
@@ -34,7 +41,7 @@ public class SessionService {
 	public PokerSession authenticate(String username, String password) throws PokerInvalidUserException, PokerDataBaseException {
 		User u = userDAO.findByUserName(username);
 		if (u == null || !BCrypt.checkpw(password, u.getPassword()) || authenticatedUsers.values().contains(username)) {
-			throw new PokerInvalidUserException("Hibás bejelentkezési adatok!");
+			throw new PokerInvalidUserException(ERR_BAD_AUTH);
 		}
 		UUID uuid = UUID.randomUUID();
 		authenticatedUsers.put(uuid, username);

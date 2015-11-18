@@ -3,7 +3,8 @@ package hu.elte.bfw1p6.poker.command;
 import java.io.Serializable;
 
 /**
- * A különböző utasításokat összefogó interface: server, kliens utasítás, és azokon belül is játék típus: holdem, classic
+ * A különböző utasításokat összefogó interface:
+ * server, kliens utasítás, és azokon belül is játék típus: holdem, classic
  * @author feher
  *
  */

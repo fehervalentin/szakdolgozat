@@ -1,7 +1,7 @@
 package hu.elte.bfw1p6.poker.command.classic.type;
 
 /**
- * A classic játékstílusú játékosai által küldendő utasítások típusai.
+ * A classic játékstílusú ház által küldendő utasítások típusai.
  * @author feher
  *
  */

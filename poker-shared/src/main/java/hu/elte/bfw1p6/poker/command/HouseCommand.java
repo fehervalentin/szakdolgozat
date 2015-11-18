@@ -14,7 +14,7 @@ public abstract class HouseCommand implements PokerCommand {
 	private static final long serialVersionUID = 1571742099156009456L;
 	
 	/**
-	 * Az utasítás első lapja.
+	 * Az utasítás lapjai.
 	 */
 	protected Card cards[];
 
@@ -57,6 +57,32 @@ public abstract class HouseCommand implements PokerCommand {
 	public int getWhosOn() {
 		return whosOn;
 	}
+	
+	/**
+	 * Ha a szerver BLIND típusú utasítást küld, akkor ezt a metódust kell használni.
+	 * @param nthPlayer hanyadik játékos vagy a körben
+	 * @param players hány játékos van összesen a körben
+	 * @param dealer ki az aktuális osztó
+	 * @param whosOn az épppen következő (soron levő) játékos
+	 * @return a beállítot utasítás
+	 */
+	public abstract HouseCommand setUpBlindCommand(int fixSitPosition, int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames);
+	
+	/**
+	 * Ha a szerver DEAL típusú utasítást küld, akkor ezt a metódust kell használni.
+	 * @param cards a játékosnak küldött lapok
+	 * @param whosOn az épppen következő (soron levő) játékos
+	 * @return a beállítot utasítás
+	 */
+	public abstract HouseCommand setUpDealCommand(Card cards[], int whosOn);
+	
+	/**
+	 * Ha a szerver WINNER típusú utasítást küld, akkor ezt a metódust kell használni.
+	 * @param cards a nyertes kártyalapok
+	 * @param winnerUserName a nyertes neve
+	 * @return a beállított utasítás
+	 */
+	public abstract HouseCommand setUpWinnerCommand(Card[] cards, int winner, int whosOn);
 	
 	public abstract String getCommandType();
 	

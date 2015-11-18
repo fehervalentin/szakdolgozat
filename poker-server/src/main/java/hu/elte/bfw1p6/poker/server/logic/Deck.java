@@ -22,6 +22,11 @@ public class Deck {
 	private final int NUMER_OF_CARDS = 52;
 	
 	/**
+	 * Hányféle kártyatípus van a pakliban.
+	 */
+	private final int NUMBER_OF_SUITS = 4;
+	
+	/**
 	 * Kártyák listája.
 	 */
 	private final List<Card> cards;
@@ -41,13 +46,11 @@ public class Deck {
 	}
 	
 	private void loadCards() {
-        int suitsLenght = 4;
-        for (int i = 0; i < NUMER_OF_CARDS / suitsLenght; i++) {
-        	for (int j = 0; j < suitsLenght; j++) {
+        for (int i = 0; i < NUMER_OF_CARDS / NUMBER_OF_SUITS; i++) {
+        	for (int j = 0; j < NUMBER_OF_SUITS; j++) {
         		cards.add(new Card(CardSuitEnum.values()[j], CardRankEnum.values()[i]));
         	}
         }
-//        System.out.println(this);
     }
 	
 	/**
@@ -67,17 +70,4 @@ public class Deck {
 		stackPointer = 0;
 		Collections.shuffle(cards, new Random(System.nanoTime()));
 	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder("Deck:[" + System.lineSeparator());
-		for (int i = 0; i < NUMER_OF_CARDS; i++) {
-			sb.append(cards.get(i).toString());
-			sb.append(System.lineSeparator());
-		}
-		sb.append("]");
-		return sb.toString();
-	}
-	
-	
 }

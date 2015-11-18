@@ -36,8 +36,14 @@ public abstract class PlayerCommand implements PokerCommand {
 	 */
 	protected int whosQuit;
 	
+	/**
+	 * Ha winner körben CHECK-el valaki, az nem szokványos CHECK.
+	 */
 	protected boolean winnerCommand;
 	
+	/**
+	 * Hány játékos van az adott körben.
+	 */
 	protected int clientsCount;
 	
 	@Override
@@ -46,6 +52,43 @@ public abstract class PlayerCommand implements PokerCommand {
 	}
 	
 	public abstract String getCommandType();
+	
+	/**
+	 * Ha egy játékos BLIND típusú utasítást küld, akkor ezt a metódust kell használni.
+	 * @param callAmount a vak mértéke
+	 */
+	public abstract void setUpBlindCommand(BigDecimal callAmount);
+	
+	/**
+	 * Ha egy játékos CHECK típusú utasítást küld, akkor ezt a metódust kell használni.
+	 */
+	public abstract void setUpCheckCommand();
+	
+	/**
+	 * Ha egy játékos CALL típusú utasítást küld, akkor ezt a metódust kell használni.
+	 * @param callAmount a megadandó tét
+	 */
+	public abstract void setUpCallCommand(BigDecimal callAmount);
+	
+	/**
+	 * Ha egy játékos RAISE típusú utasítást küld, akkor ezt a metódust kell használni.
+	 * @param callAmount a megadandó tét
+	 * @param raiseAmount az emelendő tét
+	 */
+	public abstract void setUpRaiseCommand(BigDecimal callAmount, BigDecimal raiseAmount);
+	
+	/**
+	 * Ha egy játékos FOLD típusú utasítást küld, akkor ezt a metódust kell használni.
+	 * @param youAreNth a játékos sorszáma
+	 */
+	public abstract void setUpFoldCommand(int youAreNth);
+	
+	/**
+	 * Ha egy játékos QUIT típusú utasítást küld, akkor ezt a metódust kell használni.
+	 * @param tempNth a játékos sorszáma
+	 * @return this
+	 */
+	public abstract PlayerCommand setUpQuitCommand(String sender, int youAreNth);
 	
 	public String getSender() {
 		return sender;

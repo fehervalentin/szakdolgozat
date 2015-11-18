@@ -37,15 +37,8 @@ public class HoldemHouseCommand extends HouseCommand {
 		return houseCommandType.name();
 	}
 	
-	/**
-	 * Ha a holdem szerver BLIND utasítást küld, akkor ezt a metódust kell használni.
-	 * @param nthPlayer hanyadik játékos vagy a körben
-	 * @param players hány játékos van összesen a körben
-	 * @param dealer ki az aktuális osztó
-	 * @param whosOn az épppen következő (soron levő) játékos
-	 * @return a beállított utasítás
-	 */
-	public HoldemHouseCommand setUpBlindCommand(int fixSitPosition, int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
+	@Override
+	public HouseCommand setUpBlindCommand(int fixSitPosition, int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames) {
 		this.houseCommandType = HoldemHouseCommandType.BLIND;
 		this.fixSitPosition = fixSitPosition;
 		this.nthPlayer = nthPlayer;
@@ -56,14 +49,8 @@ public class HoldemHouseCommand extends HouseCommand {
 		return this;
 	}
 	
-	/**
-	 * Ha a holdem szerver DEAL utasítást küld, akkor ezt a metódust kell használni.
-	 * @param card1 a playernek küldött első kártya
-	 * @param card2 a playernek küldött második kártya
-	 * @param whosOn az épppen következő (soron levő) játékos
-	 * @return a beállított utasítás
-	 */
-	public HoldemHouseCommand setUpDealCommand(Card cards[], int whosOn) {
+	@Override
+	public HouseCommand setUpDealCommand(Card cards[], int whosOn) {
 		this.houseCommandType = HoldemHouseCommandType.DEAL;
 		this.cards = cards;
 		this.whosOn = whosOn;
@@ -88,14 +75,8 @@ public class HoldemHouseCommand extends HouseCommand {
 		return this;
 	}
 	
-	/**
-	 * Ha a holdem szerver WINNER utasítást küld, akkor ezt a metódust kell használni.
-	 * @param card1 a nyertes első lapja
-	 * @param card2 a nyertes második lapja
-	 * @param winnerUserName a nyertes neve
-	 * @return a beállított utasítás
-	 */
-	public HoldemHouseCommand setUpWinnerCommand(Card[] cards, int winner, int whosOn) {
+	@Override
+	public HouseCommand setUpWinnerCommand(Card[] cards, int winner, int whosOn) {
 		this.houseCommandType = HoldemHouseCommandType.WINNER;
 		this.cards = cards;
 		this.winner = winner;

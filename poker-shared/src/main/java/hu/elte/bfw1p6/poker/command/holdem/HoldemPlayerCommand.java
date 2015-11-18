@@ -24,56 +24,37 @@ public class HoldemPlayerCommand extends PlayerCommand {
 		return playerCommandType.name();
 	}
 
-	/**
-	 * Ha egy játékos CALL típusú utasítást küld, akkor ezt a metódust kell használni.
-	 * @param callAmount a megadandó tét
-	 */
+	@Override
 	public void setUpCallCommand(BigDecimal callAmount) {
 		this.playerCommandType = HoldemPlayerCommandType.CALL;
 		this.callAmount = callAmount;
 	}
 
-	/**
-	 * Ha egy játékos BLIND típusú utasítást küld, akkor ezt a metódust kell használni.
-	 * @param callAmount a vak mértéke
-	 */
+	@Override
 	public void setUpBlindCommand(BigDecimal callAmount) {
 		this.playerCommandType = HoldemPlayerCommandType.BLIND;
 		this.callAmount = callAmount;
 	}
 
-	/**
-	 * Ha egy játékos CHECK típusú utasítást küld, akkor ezt a metódust kell használni.
-	 */
+	@Override
 	public void setUpCheckCommand() {
 		this.playerCommandType = HoldemPlayerCommandType.CHECK;
 	}
 
-	/**
-	 * Ha egy játékos RAISE típusú utasítást küld, akkor ezt a metódust kell használni.
-	 * @param callAmount a megadandó tét
-	 * @param raiseAmount az emelendő tét
-	 */
+	@Override
 	public void setUpRaiseCommand(BigDecimal callAmount, BigDecimal raiseAmount) {
 		this.playerCommandType = HoldemPlayerCommandType.RAISE;
 		this.callAmount = callAmount;
 		this.raiseAmount = raiseAmount;
 	}
 
-	/**
-	 * Ha egy játékos FOLD típusú utasítást küld, akkor ezt a metódust kell használni.
-	 * @param youAreNth a játékos sorszáma
-	 */
+	@Override
 	public void setUpFoldCommand(int tempNth) {
 		this.playerCommandType = HoldemPlayerCommandType.FOLD;
 		this.whosQuit = tempNth;
 	}
 
-	/**
-	 * Ha egy játékos QUIT típusú utasítást küld, akkor ezt a metódust kell használni.
-	 * @param tempNth a játékos sorszáma
-	 * @return this
-	 */
+	@Override
 	public HoldemPlayerCommand setUpQuitCommand(String sender, int youAreNth) {
 		this.playerCommandType = HoldemPlayerCommandType.QUIT;
 		this.sender = sender;

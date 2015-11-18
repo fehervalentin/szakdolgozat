@@ -78,7 +78,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
 			if (votedPlayers >= playersInRound) {
 				ClassicHouseCommand classicHouseCommand = new ClassicHouseCommand();
-				// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
+				// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de arról a szerver gondoskodik)
 				whosOn = (dealer + 1) % playersInRound;
 				whosOn = findNextValidClient(whosOn);
 				switch (actualClassicHouseCommandType) {
@@ -99,7 +99,6 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 				default:
 					throw new IllegalArgumentException();
 				}
-				System.out.println("Next round");
 				if (actualClassicHouseCommandType != ClassicHouseCommandType.DEAL2) {
 					notifyClients(classicHouseCommand);
 				}
@@ -146,7 +145,6 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 				break;
 			}
 			startAutomateQuitTask(classicPlayerCommand);
-//			endOfReceivedPlayerCommand(classicPlayerCommand);
 		} else if (waitingClients.contains(client)) {
 			if (playerCommand.getCommandType() == "QUIT") {
 				receivedQuitPlayerCommandFromWaitingPlayer(client);
@@ -155,10 +153,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 			}
 		}
 	}
-	
-	/**
-	 * CHECK típusú utasítás érkezett egy klienstől.
-	 */
+
 	@Override
 	protected void receivedCheckPlayerCommand(PlayerCommand playerComand) {
 		++votedPlayers;
@@ -167,22 +162,25 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 		}
 	}
 
+	/**
+	 * CHANGE típusú utasítás érkezett egy klienstől.
+	 * @param classicPlayerCommand az utasítás
+	 */
 	private void receivedChangePlayerCommand(ClassicPlayerCommand classicPlayerCommand) {
-		List<Integer> markedCards = classicPlayerCommand.getMarkedCards();
 		PokerPlayer pokerPlayer = null;
 		for (PokerPlayer player : players) {
 			if(player.getUserName().equals(classicPlayerCommand.getSender())) {
 				pokerPlayer = player;
 			}
 		}
-		for (Integer i : markedCards) {
+		for (Integer i : classicPlayerCommand.getMarkedCards()) {
 			pokerPlayer.setNthCard(i, deck.popCard());
 		}
 		++votedPlayers;
 	}
 
 	@Override
-	public void join(PokerRemoteObserver client, String userName) throws PokerTooMuchPlayerException {
+	public synchronized void join(PokerRemoteObserver client, String userName) throws PokerTooMuchPlayerException {
 		if (!clients.contains(client)) {
 			if (clients.size() + waitingClients.size() >= pokerTable.getMaxPlayers()) {
 				throw new PokerTooMuchPlayerException(ERR_TABLE_FULL);

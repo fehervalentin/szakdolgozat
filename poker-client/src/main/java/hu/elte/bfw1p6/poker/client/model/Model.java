@@ -190,7 +190,7 @@ public class Model {
 	}
 
 	public List<PokerPlayer> getUsers() throws PokerDataBaseException, RemoteException {
-		return pokerRemote.getUsers();
+		return pokerRemote.getUsers(pokerSession.getId());
 	}
 	
 	public static PokerTable getParamPokerTable() {
@@ -215,6 +215,6 @@ public class Model {
 	 * @throws RemoteException
 	 */
 	public boolean canSitIn() throws RemoteException {
-		return pokerRemote.canSitIn(paramPokerTable);
+		return pokerRemote.canSitIn(pokerSession.getId(), paramPokerTable);
 	}
 }

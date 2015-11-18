@@ -12,5 +12,4 @@ public class PokerInvalidGameTypeException extends Exception {
 	public PokerInvalidGameTypeException(String msg) {
 		super(msg);
 	}
-
 }

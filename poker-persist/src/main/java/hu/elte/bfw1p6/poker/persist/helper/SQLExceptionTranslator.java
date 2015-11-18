@@ -45,15 +45,14 @@ public class SQLExceptionTranslator {
 	 * @return
 	 */
 	public PokerDataBaseException interceptException(SQLException e) {
-		String sqlMsg = e.getMessage();
-		String pokerMsg = lookUpMsg(sqlMsg);
+		String pokerMsg = lookUpMsg(e.getMessage());
 		return new PokerDataBaseException(pokerMsg);
 	}
 	
 	/**
 	 * Megkeresi a mapperben, hogy át tudja-e fordítani az adatbázisból érkező egyéni megszorítások neveit,
 	 * ha nem, akkor az eredeti üzenetet továbbítja,
-	 * ha igen, akkor az átfordított üzenetet küldi tovább
+	 * ha igen, akkor az átfordított üzenetet küldi tovább.
 	 * @param msg az sql hiba leírása
 	 * @return az átfordított üzenet
 	 */

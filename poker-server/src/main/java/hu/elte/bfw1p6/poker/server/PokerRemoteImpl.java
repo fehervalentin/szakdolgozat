@@ -2,7 +2,6 @@ package hu.elte.bfw1p6.poker.server;
 
 import java.math.BigDecimal;
 import java.rmi.AlreadyBoundException;
-import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -20,7 +19,6 @@ import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
-import hu.elte.bfw1p6.poker.exception.PokerPlayerAccountInUseException;
 import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
@@ -45,20 +43,37 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 
 	private final String ERR_BAD_PW = "Hibás jelszó!";
 	private final String ERR_TABLE_DELETE = "Az asztal nem törölhető: nem üres!";
-	private final String ERR_PLAYER_DELETE = "A felhasználó nem törölhető: épp használatban van!";
 	
 	private final String INITIAL_BALANCE = "1000.00";
 
+	/**
+	 * A szerver hálózati beállításai. (Melyik porton és milyen néven kell elérhetővé tenni a szervert.)
+	 */
 	private PokerProperties pokerProperties;
 
+	/**
+	 * Session kezelő objektum.
+	 */
 	private SessionService sessionService;
 
+	/**
+	 * A csatlakozott kliensek
+	 */
 	private List<PokerRemoteObserver> clients;
 
+	/**
+	 * Az éppen futó játéktábla szerverek.
+	 */
 	private Hashtable<String, AbstractPokerTableServer> pokerTableservers;
 	
+	/**
+	 * A játéktáblákat kezelő DAO.
+	 */
 	private PokerTableDAO pokerTableDAO;
 	
+	/**
+	 * A felhasználókat kezelő DAO.
+	 */
 	private UserDAO userDAO;
 
 	public PokerRemoteImpl() throws RemoteException, PokerDataBaseException {
@@ -169,7 +184,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public PokerSession login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException, PokerDataBaseException {
+	public synchronized PokerSession login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException, PokerDataBaseException {
 		for (int i = clients.size() - 1; i >= 0; i--) {
 			try {
 				clients.get(i).update("ping");
@@ -178,24 +193,11 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 				sessionService.invalidate(username);
 			}
 		}
-		PokerSession pokerSession = sessionService.authenticate(username, password);
-		return pokerSession;
+		return sessionService.authenticate(username, password);
 	}
 
 	@Override
-	public boolean shutDown(UUID uuid) throws RemoteException {
-		try {
-			UnicastRemoteObject.unexportObject(this, true);
-			System.out.println("A szerver leállt");
-			return true;
-		} catch (NoSuchObjectException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	@Override
-	public void logout(UUID uuid) throws RemoteException {
+	public synchronized void logout(UUID uuid) throws RemoteException {
 		sessionService.invalidate(uuid);
 	}
 
@@ -209,7 +211,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public void registration(String username, String password) throws RemoteException, PokerDataBaseException {
+	public synchronized void registration(String username, String password) throws RemoteException, PokerDataBaseException {
 		User u = new User(username);
 		u.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
 		u.setBalance(new BigDecimal(INITIAL_BALANCE));
@@ -218,25 +220,25 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public List<PokerTable> registerTableViewObserver(UUID uuid, PokerRemoteObserver observer) throws RemoteException, PokerDataBaseException {
+	public synchronized List<PokerTable> registerTableViewObserver(UUID uuid, PokerRemoteObserver observer) throws RemoteException, PokerDataBaseException {
 		clients.add(observer);
 		return getTables(uuid);
 	}
 
 	@Override
-	public void removeTableViewObserver(PokerRemoteObserver observer) {
+	public synchronized void removeTableViewObserver(PokerRemoteObserver observer) {
 		clients.remove(observer);
 	}
 
 	@Override
-	public void sendPlayerCommand(UUID uuid, PokerTable t, PokerRemoteObserver client, PlayerCommand playerCommand) throws RemoteException, PokerDataBaseException, PokerUserBalanceException {
+	public synchronized void sendPlayerCommand(UUID uuid, PokerTable t, PokerRemoteObserver client, PlayerCommand playerCommand) throws RemoteException, PokerDataBaseException, PokerUserBalanceException {
 		if (sessionService.isAuthenticated(uuid)) {
 			pokerTableservers.get(t.getName()).receivedPlayerCommand(client, playerCommand);
 		}
 	}
 
 	@Override
-	public void connectToTable(UUID uuid, PokerTable t, PokerRemoteObserver client) throws RemoteException, PokerTooMuchPlayerException {
+	public synchronized void connectToTable(UUID uuid, PokerTable t, PokerRemoteObserver client) throws RemoteException, PokerTooMuchPlayerException {
 		if (sessionService.isAuthenticated(uuid)) {
 			AbstractPokerTableServer pts = pokerTableservers.get(t.getName());
 			pts.join(client, sessionService.lookUpUserName(uuid));
@@ -244,28 +246,25 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public void deletePlayer(UUID uuid, PokerPlayer player) throws RemoteException, PokerDataBaseException, PokerPlayerAccountInUseException {
-		if (sessionService.isAuthenicated(player.getUserName())) {
-			throw new PokerPlayerAccountInUseException(ERR_PLAYER_DELETE);
-		} else {
-			userDAO.deletePlayer(player);
-		}
-	}
-
-	@Override
-	public BigDecimal refreshBalance(UUID uuid) throws RemoteException, PokerDataBaseException {
+	public synchronized BigDecimal refreshBalance(UUID uuid) throws RemoteException, PokerDataBaseException {
 		return userDAO.findByUserName(sessionService.lookUpUserName(uuid)).getPlayer().getBalance();
 	}
 
 	@Override
-	public List<PokerPlayer> getUsers() throws RemoteException, PokerDataBaseException {
-		List<PokerPlayer> pokerPlayers = new ArrayList<>();
-		userDAO.findAll().forEach(user -> pokerPlayers.add(user.getPlayer()));
-		return pokerPlayers;
+	public List<PokerPlayer> getUsers(UUID uuid) throws RemoteException, PokerDataBaseException {
+		if (sessionService.isAuthenticated(uuid)) {
+			List<PokerPlayer> pokerPlayers = new ArrayList<>();
+			userDAO.findAll().forEach(user -> pokerPlayers.add(user.getPlayer()));
+			return pokerPlayers;
+		}
+		return null;
 	}
 
 	@Override
-	public boolean canSitIn(PokerTable paramPokerTable) throws RemoteException {
-		return pokerTableservers.get(paramPokerTable.getName()).canSitIn();
+	public synchronized boolean canSitIn(UUID uuid, PokerTable paramPokerTable) throws RemoteException {
+		if (sessionService.isAuthenticated(uuid)) {
+			return pokerTableservers.get(paramPokerTable.getName()).canSitIn();
+		}
+		return false;
 	}
 }
