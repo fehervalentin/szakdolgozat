@@ -128,13 +128,6 @@ public interface PokerRemote extends Remote, Serializable {
 	 * @throws PokerDataBaseException
 	 */
 	List<PokerTable> registerTableViewObserver(UUID uuid, PokerRemoteObserver observer) throws RemoteException, PokerDataBaseException;
-
-	/**
-	 * A pókerjáték szerver listázó megfigyelő objektumát csatlakoztatja.
-	 * @param observer a megfigyelő objektum
-	 * @throws RemoteException
-	 */
-	void removeTableViewObserver(PokerRemoteObserver observer) throws RemoteException;
 	
 	/**
 	 * Utasítás küldése játékszervernek.

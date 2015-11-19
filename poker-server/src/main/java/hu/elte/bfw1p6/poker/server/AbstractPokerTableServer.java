@@ -151,6 +151,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			@Override
 			public void run() {
 //				PlayerCommand playerCommand = playerQuitCommandFactory(clientsNames.get(whosOn));
+				//TODO: LOL
 				PlayerCommand playerCommand = playerQuitCommandFactory("");
 				if (whosOn > -1 && clients.size() > 0) {
 					receivedQuitPlayerCommand(clients.get(whosOn), playerCommand);
@@ -180,6 +181,24 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * @throws PokerTooMuchPlayerException
 	 */
 	public abstract void join(PokerRemoteObserver client, String userName) throws PokerTooMuchPlayerException;
+	
+	public void pingWaitingClients() {
+		for (int i = waitingClients.size() - 1; i >= 0; i--) {
+			try {
+				waitingClients.get(i).update("ping");
+			} catch (RemoteException e) {
+				waitingClients.remove(i);
+			}
+		}
+		
+		for (int i = clients.size() - 1; i >= 0; i--) {
+			try {
+				clients.get(i).update("ping");
+			} catch (RemoteException e) {
+				clients.remove(i);
+			}
+		}
+	}
 
 	/**
 	 * QUIT típusú utasítás érkezett egy klienstől.

@@ -187,6 +187,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	@Override
 	public synchronized void join(PokerRemoteObserver client, String userName) throws PokerTooMuchPlayerException {
 		if (!clients.contains(client)) {
+			pingWaitingClients();
 			if (clients.size() + waitingClients.size() >= pokerTable.getMaxPlayers()) {
 				throw new PokerTooMuchPlayerException(ERR_TABLE_FULL);
 			}

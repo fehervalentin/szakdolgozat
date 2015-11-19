@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -134,18 +135,24 @@ public class FrameController extends UnicastRemoteObject {
 	 * @param resource a beállítandó fxml neve
 	 */
 	private synchronized void setFXML(String resource) {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_PREFIX + resource + FXML_EXTENSION));
-		try {
-			if (scene == null) {
-				scene = new Scene(loader.load());
-			} else {
-				scene.setRoot(loader.load());
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_PREFIX + resource + FXML_EXTENSION));
+				try {
+					if (scene == null) {
+						scene = new Scene(loader.load());
+					} else {
+						scene.setRoot(loader.load());
+					}
+					PokerClientController controller = loader.<PokerClientController>getController();
+					controller.setDelegateController(fc);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
-			PokerClientController controller = loader.<PokerClientController>getController();
-			controller.setDelegateController(fc);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		});
 	}
 
 	public Scene getScene() {

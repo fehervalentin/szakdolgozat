@@ -3,6 +3,7 @@ package hu.elte.bfw1p6.poker.client.main;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.defaultvalues.HoldemDefaultValues;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -21,14 +22,20 @@ public class ClientMain extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         frameController = new FrameController(stage);
-        scene = frameController.getScene();
-        scene.getStylesheets().add(HoldemDefaultValues.getInstance().CSS_PATH);
-        
-        stage.setTitle(HoldemDefaultValues.getInstance().APP_NAME);
-        stage.setScene(scene);
-        stage.setOnCloseRequest(getFormCloseEvent());
-        stage.setResizable(false);
-        stage.show();
+        Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				scene = frameController.getScene();
+		        scene.getStylesheets().add(HoldemDefaultValues.getInstance().CSS_PATH);
+		        
+		        stage.setTitle(HoldemDefaultValues.getInstance().APP_NAME);
+		        stage.setScene(scene);
+		        stage.setOnCloseRequest(getFormCloseEvent());
+		        stage.setResizable(false);
+		        stage.show();
+			}
+		});
     }
 
     /**

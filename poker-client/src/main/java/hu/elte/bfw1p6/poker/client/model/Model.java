@@ -124,20 +124,10 @@ public class Model {
 	}
 
 	/**
-	 * A kliens lecsatlakozik a szerverről.
-	 * @param observer
-	 * @throws RemoteException
-	 */
-	public void removeTableViewObserver(PokerRemoteObserver observer) throws RemoteException {
-		pokerRemote.removeTableViewObserver(observer);
-	}
-
-	/**
 	 * Kijelentkezés.
 	 * @throws RemoteException
 	 */
 	public void logout(PokerRemoteObserver commCont) throws RemoteException {
-		removeTableViewObserver(commCont);
 		pokerRemote.logout(pokerSession.getId());
 		pokerSession = null;
 	}

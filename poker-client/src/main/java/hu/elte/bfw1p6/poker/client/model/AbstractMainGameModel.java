@@ -63,8 +63,6 @@ public abstract class AbstractMainGameModel {
 		this.pokerTable = Model.getParamPokerTable();
 		this.myDebt = pokerTable.getBigBlind();
 		this.communicatorController = communicatorController;
-
-		System.out.println("Ki vagyok: " + getUserName());
 	}
 
 	public String getUserName() {

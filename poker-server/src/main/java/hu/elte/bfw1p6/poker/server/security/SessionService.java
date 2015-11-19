@@ -1,7 +1,7 @@
 package hu.elte.bfw1p6.poker.server.security;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -21,43 +21,47 @@ public class SessionService {
 	
 	private final String ERR_BAD_AUTH = "Hibás bejelentkezési adatok!";
 	
-	private Map<UUID, String> authenticatedUsers;
+	private List<PokerSession> sessions;
 	
 	private UserDAO userDAO;
 	
 	public SessionService(UserDAO userDAO) {
 		this.userDAO = userDAO;
-		this.authenticatedUsers = new HashMap<>();
+		this.sessions = new ArrayList<>();
 	}
 	
 	public boolean isAuthenticated(UUID uuid) {
-		return authenticatedUsers.containsKey(uuid);
+		return sessions.stream().anyMatch(session -> session.getId().equals(uuid));
 	}
 	
 	public boolean isAuthenicated(String userName) {
-		return authenticatedUsers.values().contains(userName);
+		return sessions.stream().anyMatch(session -> session.getPlayer().getUserName().equals(userName));
 	}
 	
-	public PokerSession authenticate(String username, String password) throws PokerInvalidUserException, PokerDataBaseException {
-		User u = userDAO.findByUserName(username);
-		if (u == null || !BCrypt.checkpw(password, u.getPassword()) || authenticatedUsers.values().contains(username)) {
+	public PokerSession authenticate(String userName, String password) throws PokerInvalidUserException, PokerDataBaseException {
+		User u = userDAO.findByUserName(userName);
+		if (u == null || !BCrypt.checkpw(password, u.getPassword()) || sessions.stream().anyMatch(session -> session.getPlayer().getUserName().equals(userName))) {
 			throw new PokerInvalidUserException(ERR_BAD_AUTH);
 		}
 		UUID uuid = UUID.randomUUID();
-		authenticatedUsers.put(uuid, username);
 		PokerSession pokerSession = new PokerSession(uuid, u.getPlayer());
+		sessions.add(pokerSession);
 		return pokerSession;
 	}
 	
+	public void invalidate(int i) {
+		sessions.remove(i);
+	}
+	
 	public void invalidate(String username) {
-		authenticatedUsers.values().remove(username);
+		sessions.removeIf(session -> session.getPlayer().getUserName().equals(username));
 	}
 	
 	public void invalidate(UUID uuid) {
-		authenticatedUsers.remove(uuid);
+		sessions.removeIf(session -> session.getId().equals(uuid));
 	}
 	
 	public String lookUpUserName(UUID uuid) {
-		return authenticatedUsers.get(uuid);
+		return sessions.stream().filter(session -> session.getId().equals(uuid)).findFirst().get().getPlayer().getUserName();
 	}
 }

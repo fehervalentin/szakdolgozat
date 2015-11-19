@@ -184,16 +184,24 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public synchronized PokerSession login(String username, String password) throws RemoteException, SecurityException, PokerInvalidUserException, PokerDataBaseException {
+	public synchronized PokerSession login(String userName, String password) throws RemoteException, PokerInvalidUserException, PokerDataBaseException {
+		purgeClients();
+		return sessionService.authenticate(userName, password);
+	}
+	
+	/**
+	 * Akinél megszakadt a kapcsolat, azt kidobjuk.
+	 * @param userName
+	 */
+	private void purgeClients() {
 		for (int i = clients.size() - 1; i >= 0; i--) {
 			try {
 				clients.get(i).update("ping");
 			} catch (RemoteException e) {
 				clients.remove(i);
-				sessionService.invalidate(username);
+				sessionService.invalidate(i);
 			}
 		}
-		return sessionService.authenticate(username, password);
 	}
 
 	@Override
@@ -223,11 +231,6 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	public synchronized List<PokerTable> registerTableViewObserver(UUID uuid, PokerRemoteObserver observer) throws RemoteException, PokerDataBaseException {
 		clients.add(observer);
 		return getTables(uuid);
-	}
-
-	@Override
-	public synchronized void removeTableViewObserver(PokerRemoteObserver observer) {
-		clients.remove(observer);
 	}
 
 	@Override

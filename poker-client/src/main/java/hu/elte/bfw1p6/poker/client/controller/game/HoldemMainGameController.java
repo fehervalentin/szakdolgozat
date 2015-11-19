@@ -115,6 +115,11 @@ public class HoldemMainGameController extends AbstractMainGameController {
 				throw new IllegalArgumentException();
 			}
 			}
+		} else if (updateMsg instanceof String){
+			String msg = (String)updateMsg;
+			if (!msg.equals("ping")) {
+				throw new IllegalArgumentException();
+			}
 		} else {
 			throw new IllegalArgumentException();
 		}

@@ -71,7 +71,9 @@ public class TableListerController extends AbstractPokerClientController impleme
 		this.frameController = frameController;
 		try {
 			List<PokerTable> tables = model.registerTableViewObserver(commCont);
-			tableView.getItems().setAll(tables);
+			if (tables != null) {
+				tableView.getItems().setAll(tables);
+			}
 		} catch (PokerDataBaseException e) {
 			showErrorAlert(e.getMessage());
 		} catch (RemoteException e ) {
