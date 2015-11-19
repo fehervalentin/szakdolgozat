@@ -307,6 +307,10 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param playerCommand az utasítás
 	 */
 	protected void receivedCallPlayerCommand(PlayerCommand playerCommand) {
+//		if (model.getYouAreNth() ==  playerCommand.getWhosOn()) {
+//			modifyCheckButtonDisability(false);
+//			modifyQuitButtonDisability(false);
+//		}
 		mainView.receivedCallPlayerCommand(playerCommand);
 	}
 

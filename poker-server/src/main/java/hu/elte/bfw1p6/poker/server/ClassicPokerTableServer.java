@@ -157,7 +157,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	@Override
 	protected void receivedCheckPlayerCommand(PlayerCommand playerComand) {
 		++votedPlayers;
-		if (actualClassicHouseCommandType == ClassicHouseCommandType.WINNER) {
+		if (actualClassicHouseCommandType == ClassicHouseCommandType.BLIND) {
 			playerComand.setWinnerCommand(true);
 		}
 	}
