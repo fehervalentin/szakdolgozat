@@ -143,6 +143,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 			}
 			case CHANGE: {
 				receivedChangePlayerCommand(classicPlayerCommand);
+				break;
 			}
 			default:
 				throw new IllegalArgumentException();
