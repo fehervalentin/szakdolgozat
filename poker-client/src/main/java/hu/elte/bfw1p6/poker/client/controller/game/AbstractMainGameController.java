@@ -18,6 +18,8 @@ import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -39,16 +41,17 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	@FXML protected AnchorPane mainGamePane;
 	
 	@FXML protected ImageView tableImage;
-	
-	@FXML protected TextArea textArea;
 
 	@FXML protected Button callButton;
 	@FXML protected Button checkButton;
 	@FXML protected Button raiseButton;
 	@FXML protected Button foldButton;
 	@FXML protected Button quitButton;
+	@FXML protected Button logButton;
 
 
+	protected TextArea textArea;
+	
 	/**
 	 * A póker játék GUI-ja.
 	 */
@@ -83,6 +86,17 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
 		this.scene = this.frameController.getScene();
+	}
+	
+	protected void setTextArea() {
+		textArea = new TextArea();
+		textArea.setLayoutX(370);
+		textArea.setLayoutY(200);
+		textArea.setMinSize(500, 300);
+		textArea.setDisable(true);
+		textArea.setOpacity(0);
+		textArea.setFocusTraversable(false);
+		mainGamePane.getChildren().add(textArea);
 	}
 
 	public abstract void initialize(URL location, ResourceBundle resources);
@@ -327,6 +341,14 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			modifyCheckButtonDisability(false);
 			modifyQuitButtonDisability(false);
 		}
+	}
+	
+	/**
+	 * A LOG gomb click handlerje
+	 * @param event az esemény
+	 */
+	@FXML protected void handleLog(ActionEvent event) {
+		textArea.setOpacity(textArea.getOpacity() == 1 ? 0 : 1);
 	}
 
 	/**

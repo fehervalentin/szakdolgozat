@@ -27,7 +27,6 @@ public class ClassicMainGameController extends AbstractMainGameController {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		textArea.setDisable(false);
 		this.mainView = new ClassicMainView(mainGamePane);
 
 		try {
@@ -43,6 +42,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 		setButtonsDisability(true);
 		setChangeButtonDisability(true);
 		modifyQuitButtonDisability(false);
+		setTextArea();
 	}
 
 	/**
