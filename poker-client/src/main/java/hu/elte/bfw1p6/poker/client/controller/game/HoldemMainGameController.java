@@ -22,8 +22,6 @@ public class HoldemMainGameController extends AbstractMainGameController {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-//		textArea.setDisable(true);
-		textArea.setOpacity(0.6);
 		this.mainView = new HoldemMainView(mainGamePane);
 
 		try {
@@ -31,7 +29,6 @@ public class HoldemMainGameController extends AbstractMainGameController {
 			this.model = new HoldemMainGameModel(commController);
 			this.model.connectToTable(commController);
 			this.mainView.setUserName(model.getUserName());
-			textArea.appendText("Felhasználónevem: " + model.getUserName());
 		} catch (PokerTooMuchPlayerException e) {
 			showErrorAlert(e.getMessage());
 			frameController.setTableListerFXML();
@@ -40,6 +37,8 @@ public class HoldemMainGameController extends AbstractMainGameController {
 		}
 		setButtonsDisability(true);
 		modifyQuitButtonDisability(false);
+		setTextArea();
+		textArea.appendText("Felhasználónevem: " + model.getUserName());
 	}
 
 	@Override
@@ -49,7 +48,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 		if (updateMsg instanceof HoldemHouseCommand) {
 			HoldemHouseCommand houseHoldemCommand = (HoldemHouseCommand)updateMsg;
 			whosOn = houseHoldemCommand.getWhosOn();
-			textArea.appendText(System.lineSeparator() +  "Ház: " + houseHoldemCommand.getHouseCommandType() + " ");
+			logHouseCommand(houseHoldemCommand);
 			setButtonsDisability(model.getYouAreNth() != houseHoldemCommand.getWhosOn());
 			
 			switch (houseHoldemCommand.getHouseCommandType()) {
@@ -84,7 +83,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 		} else if (updateMsg instanceof HoldemPlayerCommand) {
 			HoldemPlayerCommand holdemPlayerCommand = (HoldemPlayerCommand)updateMsg;
 			whosOn = holdemPlayerCommand.getWhosOn();
-			System.out.println(holdemPlayerCommand.getSender() + " : " + holdemPlayerCommand.getPlayerCommandType());
+			logPlayerCommand(holdemPlayerCommand);
 			setButtonsDisability(model.getYouAreNth() !=  holdemPlayerCommand.getWhosOn());
 			
 			switch (holdemPlayerCommand.getPlayerCommandType()) {

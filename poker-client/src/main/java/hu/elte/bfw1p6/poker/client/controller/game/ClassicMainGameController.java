@@ -28,7 +28,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.mainView = new ClassicMainView(mainGamePane);
-
+		
 		try {
 			this.commController = new CommunicatorController(this);
 			this.model = new ClassicMainGameModel(commController);
@@ -43,6 +43,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 		setChangeButtonDisability(true);
 		modifyQuitButtonDisability(false);
 		setTextArea();
+		textArea.appendText("Felhasználónevem: " + model.getUserName());
 	}
 
 	/**
@@ -59,7 +60,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 		if (updateMsg instanceof ClassicHouseCommand) {
 			ClassicHouseCommand classicHouseCommand = (ClassicHouseCommand)updateMsg;
 			whosOn = classicHouseCommand.getWhosOn();
-			System.out.println("A ház utasítást küldött: " + classicHouseCommand.getHouseCommandType());
+			logHouseCommand(classicHouseCommand);
 			setButtonsDisability(model.getYouAreNth() != classicHouseCommand.getWhosOn());
 
 			switch (classicHouseCommand.getHouseCommandType()) {
@@ -90,7 +91,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 		} else if (updateMsg instanceof ClassicPlayerCommand) {
 			ClassicPlayerCommand classicPlayerCommand = (ClassicPlayerCommand)updateMsg;
 			whosOn = classicPlayerCommand.getWhosOn();
-			System.out.println(classicPlayerCommand.getSender() + " játékos utasítást küldött: " + classicPlayerCommand.getPlayerCommandType());
+			logPlayerCommand(classicPlayerCommand);
 			setButtonsDisability(model.getYouAreNth() !=  classicPlayerCommand.getWhosOn());
 
 			switch (classicPlayerCommand.getPlayerCommandType()) {

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.GridPane?>
@@ -15,14 +14,13 @@
 <AnchorPane fx:id="mainGamePane" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="hu.elte.bfw1p6.poker.client.controller.game.HoldemMainGameController">
 	<children>
-		<TextArea fx:id="textArea" layoutX="0" layoutY="0" maxHeight="250" maxWidth="250"></TextArea>
 		<ImageView fx:id="tableImage" fitHeight="1650" fitWidth="1050"
 			layoutX="150" layoutY="50" pickOnBounds="true" preserveRatio="true">
 			<image>
 				<Image url="/images/table.png" backgroundLoading="true" />
 			</image>
 		</ImageView>
-		<GridPane alignment="center" hgap="10" vgap="10" layoutX="450"
+		<GridPane alignment="center" hgap="10" vgap="10" layoutX="333"
 			layoutY="680">
 			<Button fx:id="logButton" text="Log" onAction="#handleLog"
 				styleClass="rich-blue" GridPane.columnIndex="0" GridPane.rowIndex="0" />
@@ -39,4 +37,3 @@
 		</GridPane>
 	</children>
 </AnchorPane>
-

@@ -18,8 +18,6 @@ import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -321,10 +319,10 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param playerCommand az utasítás
 	 */
 	protected void receivedCallPlayerCommand(PlayerCommand playerCommand) {
-//		if (model.getYouAreNth() ==  playerCommand.getWhosOn()) {
-//			modifyCheckButtonDisability(false);
-//			modifyQuitButtonDisability(false);
-//		}
+		if (model.getYouAreNth() ==  playerCommand.getWhosOn()) {
+			modifyCheckButtonDisability(false);
+			modifyQuitButtonDisability(false);
+		}
 		mainView.receivedCallPlayerCommand(playerCommand);
 	}
 
@@ -404,6 +402,34 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			} else {
 				modifyCallButtonDisability(true);
 			}
+		}
+	}
+	
+	/**
+	 * Felhasználó által küldött utasítást logol.
+	 * @param playerCommand az utasítás
+	 */
+	protected void logPlayerCommand(PlayerCommand playerCommand) {
+		textArea.appendText(System.lineSeparator() + playerCommand.getSender() + ": " + playerCommand.getCommandType());
+	}
+	
+	/**
+	 * A ház által küldött utasítást logol.
+	 * @param houseCommand
+	 */
+	protected void logHouseCommand(HouseCommand houseCommand) {
+		if (textArea == null) {
+			System.out.println("textareanull");
+		}
+		if (houseCommand == null) {
+			System.out.println("commandnull");
+		}
+		if (houseCommand.getCommandType() == null) {
+			System.out.println("typenull");
+		}
+		if (textArea != null) {
+			System.out.println("textareanull");
+			textArea.appendText(System.lineSeparator() + "Ház: " + houseCommand.getCommandType() + " ");
 		}
 	}
 }

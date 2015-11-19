@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -41,8 +42,11 @@ public class FrameController extends UnicastRemoteObject {
 	
 	private Stage stage;
 	
+	private FrameController fc;
+	
 	public FrameController(Stage stage) throws RemoteException {
 		this.stage = stage;
+		this.fc = this;
 //		setStageSize(MAIN_GAME_WIDHT, MAIN_GAME_HEIGHT);
 		setStageSize(MENU_GAME_WIDHT, MENU_GAME_HEIGHT);
 //		setConnectorFXML();
@@ -134,12 +138,12 @@ public class FrameController extends UnicastRemoteObject {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_PREFIX + resource + FXML_EXTENSION));
 		try {
 			if (scene == null) {
-				this.scene = new Scene(loader.load());
+				scene = new Scene(loader.load());
 			} else {
 				scene.setRoot(loader.load());
 			}
 			PokerClientController controller = loader.<PokerClientController>getController();
-			controller.setDelegateController(this);
+			controller.setDelegateController(fc);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
