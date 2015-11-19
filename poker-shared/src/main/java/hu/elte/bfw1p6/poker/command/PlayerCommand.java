@@ -80,8 +80,9 @@ public abstract class PlayerCommand implements PokerCommand {
 	/**
 	 * Ha egy játékos FOLD típusú utasítást küld, akkor ezt a metódust kell használni.
 	 * @param youAreNth a játékos sorszáma
+	 * @return this
 	 */
-	public abstract void setUpFoldCommand(int youAreNth);
+	public abstract PlayerCommand setUpFoldCommand(int youAreNth);
 	
 	/**
 	 * Ha egy játékos QUIT típusú utasítást küld, akkor ezt a metódust kell használni.

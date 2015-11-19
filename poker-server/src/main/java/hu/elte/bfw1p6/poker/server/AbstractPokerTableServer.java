@@ -501,6 +501,13 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * @return az új utasítás
 	 */
 	protected abstract PlayerCommand playerQuitCommandFactory(String userName);
+	
+	/**
+	 * FOLD típusú player utasítást hoz létre.
+	 * @param whosOn a soron következő játékos
+	 * @return az új utasítás
+	 */
+	protected abstract PlayerCommand playerFoldCommandFactory(int whosOn);
 
 	/**
 	 * BLIND típusú ház utasítást hoz létre.

@@ -55,9 +55,10 @@ public class ClassicPlayerCommand extends PlayerCommand {
 	}
 
 	@Override
-	public void setUpFoldCommand(int youAreNth) {
+	public ClassicPlayerCommand setUpFoldCommand(int youAreNth) {
 		this.playerCommandType = ClassicPlayerCommandType.FOLD;
 		this.whosQuit = youAreNth;
+		return this;
 	}
 
 	@Override

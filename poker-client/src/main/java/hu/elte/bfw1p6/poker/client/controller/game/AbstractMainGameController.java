@@ -410,7 +410,19 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param playerCommand az utasítás
 	 */
 	protected void logPlayerCommand(PlayerCommand playerCommand) {
-		textArea.appendText(System.lineSeparator() + playerCommand.getSender() + ": " + playerCommand.getCommandType());
+		if (textArea == null) {
+			System.out.println("textareanull");
+		}
+		if (playerCommand == null) {
+			System.out.println("commandnull");
+		}
+		if (playerCommand.getCommandType() == null) {
+			System.out.println("typenull");
+		}
+		if (textArea != null) {
+			System.out.println("textareanull");
+			textArea.appendText(System.lineSeparator() + playerCommand.getSender() + ": " + playerCommand.getCommandType());
+		}
 	}
 	
 	/**

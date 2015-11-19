@@ -61,6 +61,11 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	protected PlayerCommand playerQuitCommandFactory(String sender) {
 		return new ClassicPlayerCommand().setUpQuitCommand(sender, whosOn);
 	}
+	
+	@Override
+	protected PlayerCommand playerFoldCommandFactory(int whosOn) {
+		return new ClassicPlayerCommand().setUpFoldCommand(whosOn);
+	}
 
 	@Override
 	protected HouseCommand houseWinnerCommandFactory(Card[] cards, int winner, int whosOn) {

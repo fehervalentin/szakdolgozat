@@ -49,9 +49,10 @@ public class HoldemPlayerCommand extends PlayerCommand {
 	}
 
 	@Override
-	public void setUpFoldCommand(int tempNth) {
+	public HoldemPlayerCommand setUpFoldCommand(int tempNth) {
 		this.playerCommandType = HoldemPlayerCommandType.FOLD;
 		this.whosQuit = tempNth;
+		return this;
 	}
 
 	@Override
