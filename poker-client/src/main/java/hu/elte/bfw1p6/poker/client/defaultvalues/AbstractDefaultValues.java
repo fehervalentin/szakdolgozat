@@ -33,6 +33,11 @@ public class AbstractDefaultValues {
 	public String MARKER_STYLECLASS = "glow";
 	
 	/**
+	 * A classic játékstílus GUI részén a cserére kiválasztott kártyákat jelöli meg.
+	 */
+	public String SELECTED_CARD_MAKER_STYLECLASS = "selected";
+	
+	/**
 	 * A kártyalapjaim pozíciói.
 	 */
 	public int[] MY_CARDS_POSITION;

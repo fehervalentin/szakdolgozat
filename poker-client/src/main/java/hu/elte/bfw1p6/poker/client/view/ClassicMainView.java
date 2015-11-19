@@ -18,6 +18,8 @@ import javafx.scene.layout.AnchorPane;
  *
  */
 public class ClassicMainView extends AbstractMainView {
+	
+	private final int SLIP_OUT_PX = 15;
 
 	public ClassicMainView(AnchorPane mainGamePane) {
 		super(mainGamePane, ClassicDefaultValues.getInstance());
@@ -41,10 +43,12 @@ public class ClassicMainView extends AbstractMainView {
 
 					@Override
 					public void handle(Event event) {
-						if (card.getStyleClass().contains(defaultValues.MARKER_STYLECLASS)) {
-							card.getStyleClass().remove(defaultValues.MARKER_STYLECLASS);
+						if (card.getStyleClass().contains(defaultValues.SELECTED_CARD_MAKER_STYLECLASS)) {
+							card.getStyleClass().remove(defaultValues.SELECTED_CARD_MAKER_STYLECLASS);
+							card.setLayoutY(card.getLayoutY() + SLIP_OUT_PX);
 						} else {
-							card.getStyleClass().add(defaultValues.MARKER_STYLECLASS);
+							card.getStyleClass().add(defaultValues.SELECTED_CARD_MAKER_STYLECLASS);
+							card.setLayoutY(card.getLayoutY() - SLIP_OUT_PX);
 						}
 					}
 				}));
@@ -83,9 +87,10 @@ public class ClassicMainView extends AbstractMainView {
 	public List<Integer> getMarkedCards() {
 		List<Integer> markedCards = new ArrayList<>();
 		for (int i = 0; i < myCards.size(); i++) {
-			if (myCards.get(i).getStyleClass().contains(defaultValues.MARKER_STYLECLASS)) {
+			if (myCards.get(i).getStyleClass().contains(defaultValues.SELECTED_CARD_MAKER_STYLECLASS)) {
 				markedCards.add(i);
-				myCards.get(i).getStyleClass().remove(defaultValues.MARKER_STYLECLASS);
+				myCards.get(i).getStyleClass().remove(defaultValues.SELECTED_CARD_MAKER_STYLECLASS);
+				myCards.get(i).setLayoutY(myCards.get(i).getLayoutY() + SLIP_OUT_PX);
 			}
 		}
 		return markedCards;
