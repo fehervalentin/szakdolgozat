@@ -634,4 +634,16 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	public int getPlayersCount() {
 		return clients.size() + waitingClients.size();
 	}
+	
+	public String getName() {
+		return pokerTable.getName();
+	}
+	
+	/**
+	 * Ha játékstílust cserélünk egy asztalon.
+	 * @param pokerTable az új asztal
+	 */
+	public void setPokerTable(PokerTable pokerTable) {
+		this.pokerTable = pokerTable;
+	}
 }

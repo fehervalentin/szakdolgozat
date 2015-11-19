@@ -7,7 +7,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Observable;
 import java.util.UUID;
@@ -64,7 +63,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	/**
 	 * Az éppen futó játéktábla szerverek.
 	 */
-	private Hashtable<String, AbstractPokerTableServer> pokerTableservers;
+	private List<AbstractPokerTableServer> pokerTableservers;
 	
 	/**
 	 * A játéktáblákat kezelő DAO.
@@ -82,7 +81,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 		this.userDAO = new UserDAO();
 		this.sessionService = new SessionService(userDAO);
 		this.clients = new ArrayList<>();
-		this.pokerTableservers = new Hashtable<>();
+		this.pokerTableservers = new ArrayList<>();
 		List<PokerTable> tables = pokerTableDAO.findAll();
 		
 		for (int i = 0; i < tables.size(); i++) {
@@ -97,7 +96,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 			default:
 				throw new IllegalArgumentException();
 			}
-			pokerTableservers.put(tables.get(i).getName(), apts);
+			pokerTableservers.add(apts);
 		}
 		try {
 			System.out.println("***POKER SZERVER***");
@@ -116,12 +115,12 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	@Override
 	public synchronized void deleteTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerTableDeleteException {
 		if (sessionService.isAuthenticated(uuid)) {
-			AbstractPokerTableServer apts = pokerTableservers.get(t.getName());
+			AbstractPokerTableServer apts = getAbstractPokerTableServerByTableName(t.getName());
 			if (apts.getPlayersCount() > 0) {
 				throw new PokerTableDeleteException(ERR_TABLE_DELETE);
 			} else {
-				pokerTableservers.remove(t.getName());
 				pokerTableDAO.delete(t);
+				pokerTableservers.remove(getAbstractPokerTableServerByTableName(t.getName()));
 				List<PokerTable> tables = getTables(uuid);
 				for (int i = 0; i < clients.size(); i++) {
 					clients.get(i).update(tables);
@@ -147,18 +146,37 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 			default:
 				throw new IllegalArgumentException();
 			}
-			pokerTableservers.put(tables.get(last).getName(), apts);
+			pokerTableservers.add(apts);
 			this.setChanged();
 			this.notifyObservers(getTables(uuid));
 		}
 	}
 
 	@Override
-	public synchronized void modifyTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException {
+	public synchronized void modifyTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerTableDeleteException {
 		if (sessionService.isAuthenticated(uuid)) {
-			pokerTableDAO.modify(t);
-			this.setChanged();
-			this.notifyObservers(getTables(uuid));
+			AbstractPokerTableServer apts = getAbstractPokerTableServerByTableName(t.getName());
+			if (apts.getPlayersCount() > 0) {
+				throw new PokerTableDeleteException(ERR_TABLE_DELETE);
+			} else {
+				pokerTableDAO.modify(t);
+				switch (t.getPokerType()) {
+				case HOLDEM:
+					apts = new HoldemPokerTableServer(t);
+					break;
+				case CLASSIC:
+					apts = new ClassicPokerTableServer(t);
+					break;
+				default:
+					throw new IllegalArgumentException();
+				}
+				int index = pokerTableservers.indexOf(getAbstractPokerTableServerByTableName(t.getName()));
+				pokerTableservers.set(index, apts);
+				List<PokerTable> tables = getTables(uuid);
+				for (int i = 0; i < clients.size(); i++) {
+					clients.get(i).update(tables);
+				}
+			}
 		}
 	}
 
@@ -236,14 +254,14 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	@Override
 	public synchronized void sendPlayerCommand(UUID uuid, PokerTable t, PokerRemoteObserver client, PlayerCommand playerCommand) throws RemoteException, PokerDataBaseException, PokerUserBalanceException {
 		if (sessionService.isAuthenticated(uuid)) {
-			pokerTableservers.get(t.getName()).receivedPlayerCommand(client, playerCommand);
+			getAbstractPokerTableServerByTableName(t.getName()).receivedPlayerCommand(client, playerCommand);
 		}
 	}
 
 	@Override
 	public synchronized void connectToTable(UUID uuid, PokerTable t, PokerRemoteObserver client) throws RemoteException, PokerTooMuchPlayerException {
 		if (sessionService.isAuthenticated(uuid)) {
-			AbstractPokerTableServer pts = pokerTableservers.get(t.getName());
+			AbstractPokerTableServer pts = getAbstractPokerTableServerByTableName(t.getName());
 			pts.join(client, sessionService.lookUpUserName(uuid));
 		}
 	}
@@ -266,8 +284,12 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	@Override
 	public synchronized boolean canSitIn(UUID uuid, PokerTable paramPokerTable) throws RemoteException {
 		if (sessionService.isAuthenticated(uuid)) {
-			return pokerTableservers.get(paramPokerTable.getName()).canSitIn();
+			return getAbstractPokerTableServerByTableName(paramPokerTable.getName()).canSitIn();
 		}
 		return false;
+	}
+	
+	private AbstractPokerTableServer getAbstractPokerTableServerByTableName(String tableName) {
+		return pokerTableservers.stream().filter(sv -> sv.getName().equals(tableName)).findFirst().get();
 	}
 }

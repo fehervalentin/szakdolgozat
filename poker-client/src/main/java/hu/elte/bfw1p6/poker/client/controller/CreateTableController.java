@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import hu.elte.bfw1p6.poker.client.model.Model;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
+import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.collections.FXCollections;
@@ -143,7 +144,7 @@ public class CreateTableController extends AbstractPokerClientController {
 				model.modifyTable(t);
 				showSuccessAlert(SUCC_MODIFY_TABLE_MSG);
 				frameController.setTableListerFXML();
-			} catch (PokerDataBaseException e) {
+			} catch (PokerDataBaseException | PokerTableDeleteException e) {
 				showErrorAlert(e.getMessage());
 			} catch (RemoteException e) {
 				remoteExceptionHandler();

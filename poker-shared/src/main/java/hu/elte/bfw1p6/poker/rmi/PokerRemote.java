@@ -78,8 +78,9 @@ public interface PokerRemote extends Remote, Serializable {
 	 * @param t a módosítandó játéktábla
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
+	 * @throws PokerTableDeleteException 
 	 */
-	void modifyTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException;
+	void modifyTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerTableDeleteException;
 
 	/**
 	 * Az összes játéktábla lekérése

@@ -137,8 +137,9 @@ public class Model {
 	 * @param t a létező, módosított tábla entitás
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
+	 * @throws PokerTableDeleteException 
 	 */
-	public void modifyTable(PokerTable t) throws RemoteException, PokerDataBaseException {
+	public void modifyTable(PokerTable t) throws RemoteException, PokerDataBaseException, PokerTableDeleteException {
 		pokerRemote.modifyTable(pokerSession.getId(), t);
 	}
 
