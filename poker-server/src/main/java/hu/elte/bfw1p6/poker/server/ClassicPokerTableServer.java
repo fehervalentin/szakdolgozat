@@ -74,8 +74,6 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 
 	@Override
 	protected void nextRound() {
-//		System.out.println("VotedPlayers: " + votedPlayers);
-//		System.out.println("Players in round: " + playersInRound);
 		if (playersInRound <= 1 || (actualClassicHouseCommandType == ClassicHouseCommandType.values()[0] && votedPlayers >= playersInRound)) {
 			bookMoneyStack(null);
 			startRound();
@@ -84,7 +82,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 			if (votedPlayers >= playersInRound) {
 				ClassicHouseCommand classicHouseCommand = new ClassicHouseCommand();
 				// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de arról a szerver gondoskodik)
-				whosOn = (dealer + 1) % playersInRound;
+				whosOn = (dealer + 1) % leftRoundMask.length;
 				whosOn = findNextValidClient(whosOn);
 				switch (actualClassicHouseCommandType) {
 				case CHANGE: {
@@ -147,7 +145,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 				receivedChangePlayerCommand(classicPlayerCommand);
 			}
 			default:
-				break;
+				throw new IllegalArgumentException();
 			}
 			startAutomateQuitTask(classicPlayerCommand);
 		} else if (waitingClients.contains(client)) {

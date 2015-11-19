@@ -157,7 +157,8 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	public synchronized void modifyTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException {
 		if (sessionService.isAuthenticated(uuid)) {
 			pokerTableDAO.modify(t);
-			this.notifyObservers();
+			this.setChanged();
+			this.notifyObservers(getTables(uuid));
 		}
 	}
 
@@ -191,7 +192,6 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	
 	/**
 	 * Akinél megszakadt a kapcsolat, azt kidobjuk.
-	 * @param userName
 	 */
 	private void purgeClients() {
 		for (int i = clients.size() - 1; i >= 0; i--) {

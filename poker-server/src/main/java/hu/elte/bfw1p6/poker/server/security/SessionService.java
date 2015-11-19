@@ -53,10 +53,6 @@ public class SessionService {
 		sessions.remove(i);
 	}
 	
-	public void invalidate(String username) {
-		sessions.removeIf(session -> session.getPlayer().getUserName().equals(username));
-	}
-	
 	public void invalidate(UUID uuid) {
 		sessions.removeIf(session -> session.getId().equals(uuid));
 	}

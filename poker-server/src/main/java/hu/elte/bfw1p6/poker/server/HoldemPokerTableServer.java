@@ -131,8 +131,6 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	@Override
 	protected void nextRound() {
 		// ha már kijött a river és az utolsó körben (rivernél) már mindenki nyilatkozott legalább egyszer, akkor új játszma kezdődik
-		System.out.println("VotedPlayers: " + votedPlayers);
-		System.out.println("Players in round: " + playersInRound);
 		if (playersInRound <= 1 || (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && votedPlayers >= playersInRound)) {
 			bookMoneyStack(houseCards);
 			startRound();
@@ -166,9 +164,8 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 					houseHoldemCommand = (HoldemHouseCommand)winner();
 				}
 				default:
-					break;
+					throw new IllegalArgumentException();
 				}
-				System.out.println("Next round");
 				notifyClients(houseHoldemCommand);
 				nextStep();
 				votedPlayers = 0;
