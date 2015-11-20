@@ -156,7 +156,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 				System.out.println("Lefuttatom a timertaskot!");
 				PlayerCommand playerCommand = playerQuitCommandFactory("");
 				//TODO: ez lehet felesleges, kintről is védem
-				if (whosOn > -1 && clients.size() > 0) {
+//				if (whosOn > -1 && clients.size() > 0) {
 					try {
 						System.out.println("bent vagyok a tryban!");
 						receivedPlayerCommand(clients.get(whosOn), playerCommand);
@@ -165,9 +165,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 						e.printStackTrace();
 						System.out.println("ciki");
 					}
-				} else {
-					System.out.println("nem léptem be");
-				}
+//				} else {
+//					System.out.println("nem léptem be");
+//				}
 			}
 		};
 	}
@@ -411,6 +411,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Új kört indít a szerveren.
 	 */
 	protected void startRound() {
+		//ha a timertask == null, akkor nincs soron következő játékos, vagyis "idle" van
 		if (clients.size() + waitingClients.size() >= minPlayer && timerTask == null) {
 			prepareNewRound();
 			preStartRound();
@@ -621,7 +622,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			timerTask.cancel();
 		}
 		timer.purge();
-		if (clients.size() > 0) {
+		if (clients.size() > 1 && 1 < playersInRound && votedPlayers < playersInRound) {
 			timerTask = createNewTimerTask();
 			timer.schedule(timerTask, pokerTable.getMaxTime() * 1000);
 			System.out.println("Időzítem a timertaskot!");
