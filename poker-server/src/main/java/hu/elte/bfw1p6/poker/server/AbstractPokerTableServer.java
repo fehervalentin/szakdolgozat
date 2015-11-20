@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -35,34 +34,32 @@ import hu.elte.bfw1p6.poker.server.logic.HoldemHandEvaluator;
  *
  */
 public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
-	
+
 	private static final long serialVersionUID = -2646114665508361840L;
 
 	private final String ERR_BALANCE = "Nincs elég zsetonod!";
 	protected final String ERR_TABLE_FULL = "Az asztal betelt, nem tudsz csatlakozni!";
-	
-	private CountDownLatch latch;
-	
+
 	/**
 	 * Az automatikus kiléptetési feladat időzítője.
 	 */
 	private Timer timer;
-	
+
 	/**
 	 * Az automatikus kiléptető feladat.
 	 */
 	private TimerTask timerTask;
-	
+
 	/**
 	 * A kliensek, akik várakoznak a következő partyra (körre).
 	 */
 	protected List<PokerRemoteObserver> waitingClients;
-	
+
 	/**
 	 * A kliensek nevei, akik várakoznak a következő partyra (körre).
 	 */
 	protected List<String> waitingClientsNames;
-	
+
 	/**
 	 * Ház lapjai. Classic esetében null marad.
 	 * (Azért kell az abstract osztályba, mert a hand evaluationnek nullként kell beadni.)
@@ -83,12 +80,12 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Kliensek (observerek).
 	 */
 	protected List<PokerRemoteObserver> clients;
-	
+
 	/**
 	 * Maguk a játékosok.
 	 */
 	protected List<PokerPlayer> players;
-	
+
 	/**
 	 * A kliensek username-jei (mert a PokerPlayerben a userName-re nincs setter! (perzisztálást védi...)
 	 */
@@ -128,7 +125,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * A felhasználók adatainak módosítására szolgáló objektum.
 	 */
 	protected UserDAO userDAO;
-	
+
 	/**
 	 * Kik azok a játékosok, akik FOLD vagy QUIT típusú utasítást küldtek.
 	 */
@@ -146,16 +143,15 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		this.waitingClients = new ArrayList<>();
 		this.waitingClientsNames = new ArrayList<>();
 		this.timer = new Timer();
-		this.latch = new CountDownLatch(0);
 	}
-	
+
 	protected TimerTask createNewTimerTask() {
 		System.out.println("Új timertaskot hozok létre!");
 		return new TimerTask() {
-			
+
 			@Override
 			public void run() {
-//				PlayerCommand playerCommand = playerQuitCommandFactory(clientsNames.get(whosOn));
+				//				PlayerCommand playerCommand = playerQuitCommandFactory(clientsNames.get(whosOn));
 				//TODO: LOL
 				System.out.println("Lefuttatom a timertaskot!");
 				PlayerCommand playerCommand = playerQuitCommandFactory("");
@@ -164,7 +160,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 					try {
 						System.out.println("bent vagyok a tryban!");
 						receivedPlayerCommand(clients.get(whosOn), playerCommand);
-						timerTask = null;
 					} catch (RemoteException | PokerDataBaseException | PokerUserBalanceException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -176,8 +171,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			}
 		};
 	}
-	
-	
+
+
 	protected int findNextValidClient(int whosOn) {
 		int start = whosOn; // TODO: NA VAJON EZ KELL?
 		//TODO: ha körbeértünk, vagy már csak 1 kliens van, akkor reset game...
@@ -185,6 +180,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		while (leftRoundMask[whosOn]) {
 			++whosOn;
 			whosOn %= leftRoundMask.length;
+			if (start == whosOn) break;
 		}
 		return whosOn;
 	}
@@ -197,7 +193,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * @throws PokerTooMuchPlayerException
 	 */
 	public abstract void join(PokerRemoteObserver client, String userName) throws PokerTooMuchPlayerException;
-	
+
 	public void pingWaitingClients() {
 		for (int i = waitingClients.size() - 1; i >= 0; i--) {
 			try {
@@ -206,14 +202,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 				waitingClients.remove(i);
 			}
 		}
-		
-//		for (int i = clients.size() - 1; i >= 0; i--) {
-//			try {
-//				clients.get(i).update("ping");
-//			} catch (RemoteException e) {
-//				clients.remove(i);
-//			}
-//		}
 	}
 
 	/**
@@ -244,14 +232,14 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 				try {
 					client.update(playerCommand);
 				} catch (RemoteException e) {
-//					removeClient(index);
+					//					removeClient(index);
 				}
 			}
-			
+
 		}.start();
 		prepareNewRound();
 	}
-	
+
 	/**
 	 * Várakozó listán lévő kliens kilépett.
 	 * @param client a kliens
@@ -287,12 +275,12 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		deck.reset();
 		//senki sem beszélt még
 		votedPlayers = 0;
-//		if (playersInRound > 0) {
-			//nem baj, ha körbeértünk...
-			dealer %= leftRoundMask.length;
-			//a dealertől balra ülő harmadik játékos kezd
-			whosOn = (dealer + 3) % playersInRound;
-//		}
+		//		if (playersInRound > 0) {
+		//nem baj, ha körbeértünk...
+		dealer %= leftRoundMask.length;
+		//a dealertől balra ülő harmadik játékos kezd
+		whosOn = (dealer + 3) % playersInRound;
+		//		}
 		//törlöm a játékosokat
 		players.clear();
 		//új játékosokat veszek fel
@@ -304,21 +292,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * @param pokerCommand az utasítás
 	 */
 	protected void notifyClients(PokerCommand pokerCommand) {
-		//TODO: meg kell várni amíg mindenkit értesítettem
-		latch = new CountDownLatch(clients.size());
-		System.out.println("CLIENTSCOUNT......................................" + clients.size());
-		for (int i = clients.size() - 1; i >= 0; i--) {
-			notifyNthClient(i, pokerCommand);
-		}
-//		IntStream.range(0, clients.size()).forEach(i -> notifyNthClient(i, pokerCommand));
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("AZ ÖSSZES KLIENST ÉRTESÍTETTEM................................");
-		System.out.println("CLIENTSCOUNT......................................" + clients.size());
+		IntStream.range(0, clients.size()).forEach(i -> notifyNthClient(i, pokerCommand));
 	}
 
 	/**
@@ -335,27 +309,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 
 			@Override
 			public void run() {
-				try {
-					latch.countDown();
-					clients.get(i).update(pokerCommand);
-				} catch (RemoteException e) {
-					//TODO: az ideje úgy is lejár.... majd a timertask elvégzi, ami kell....
-					/*try {
-						if (clients.size() > 0 && clientsNames.size() > 0) {
-							String name = clientsNames.get(i);
-							receivedPlayerCommand(clients.get(i), playerQuitCommandFactory(name));
-						}
-					} catch (RemoteException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (PokerDataBaseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (PokerUserBalanceException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}*/
-				}
+				try { clients.get(i).update(pokerCommand); }
+				catch (RemoteException e) { }
 			}}.start();
 	}
 
@@ -442,14 +397,14 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * @throws RemoteException
 	 */
 	protected void endOfReceivedPlayerCommand(PlayerCommand playerCommand) {
-		if (playersInRound > 0) {
+//		if (playersInRound > 0) {
 			++whosOn;
 			whosOn = (findNextValidClient(whosOn) % leftRoundMask.length);
 			playerCommand.setWhosOn(whosOn);
 			playerCommand.setClientsCount(clients.size());
 			notifyClients(playerCommand);
 			nextRound();
-		}
+//		}
 	}
 
 	/**
@@ -484,11 +439,11 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	protected void collectBlinds() {
 		System.out.println("Kliensek szama: " + players.size());
 		IntStream.range(0, clients.size()).forEach(i ->
-			notifyNthClient(i, houseBlindCommandFactory(i, i, clients.size(), dealer, whosOn, players.stream().map(PokerPlayer::getUserName).collect(Collectors.toList()))
-		));
+		notifyNthClient(i, houseBlindCommandFactory(i, i, clients.size(), dealer, whosOn, players.stream().map(PokerPlayer::getUserName).collect(Collectors.toList()))
+				));
 		nextStep();
 	}
-	
+
 	/**
 	 * Elszámolja az asztalon lévő zsetonokat.
 	 * @param houseCards a ház lapjai
@@ -505,7 +460,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Megkeresi a nyertes játékost.
 	 * @param houseCards a ház lapjai
@@ -548,7 +503,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * @return az új utasítás
 	 */
 	protected abstract HouseCommand houseDealCommandFactory(Card[] cards);
-	
+
 	/**
 	 * WINNER típusú ház utasítást hoz létre.
 	 * @param cards a nyertes kártyalapok
@@ -557,14 +512,14 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * @return az új utasítás
 	 */
 	protected abstract HouseCommand houseWinnerCommandFactory(Card[] cards, int winner, int whosOn);
-	
+
 	/**
 	 * QUIT típusú players utasítást hoz létre.
 	 * @param userName a kilépett kliens neve
 	 * @return az új utasítás
 	 */
 	protected abstract PlayerCommand playerQuitCommandFactory(String userName);
-	
+
 	/**
 	 * FOLD típusú player utasítást hoz létre.
 	 * @param whosOn a soron következő játékos
@@ -599,9 +554,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		long count = IntStream.range(0, leftRoundMask.length).filter(i -> leftRoundMask[i]).count();
 		winnerIndex += count;
 		winnerIndex %= leftRoundMask.length;
-//		System.out.println("Hányan dobták a lapjaikat: " + count);
-//		System.out.println("A győztes sorszáma: " + winnerIndex);
-//		System.out.println("A győztes kártyalapjai: " + Arrays.toString(winner.values().iterator().next()));
+		//		System.out.println("Hányan dobták a lapjaikat: " + count);
+		//		System.out.println("A győztes sorszáma: " + winnerIndex);
+		//		System.out.println("A győztes kártyalapjai: " + Arrays.toString(winner.values().iterator().next()));
 		return houseWinnerCommandFactory(winner.get(winnerIndex), winnerIndex, whosOn);
 	}
 
@@ -625,7 +580,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Vadonatúj kör kezdetének előkészítése.
 	 */
 	protected abstract void prepareNewRound();
-	
+
 	/**
 	 * Join esetén a két játéktábla-szerver közös része.
 	 * @param client a kliens
@@ -637,7 +592,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		clientsNames.add(userName);
 		System.out.println("JOIN: " + client.toString());
 	}
-	
+
 	/**
 	 * Ha éppen folyik egy party az asztalnál, akkor várakozó listára kerül a frissen csatlakozott játékos.
 	 * @param client a kliens
@@ -648,7 +603,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		waitingClientsNames.add(userName);
 		System.out.println("WAITING: " + client.toString());
 	}
-	
+
 	/**
 	 * Van-e még hely az asztalnál.
 	 * @return ha igen, akkor true, különben false
@@ -656,7 +611,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	public boolean canSitIn() {
 		return (waitingClients.size() + clients.size()) < pokerTable.getMaxPlayers();
 	}
-	
+
 	/**
 	 * Elindítja az automatikus kiléptető feladatot.
 	 * @param playerCommand az utasítás
@@ -666,14 +621,16 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			timerTask.cancel();
 		}
 		timer.purge();
-		endOfReceivedPlayerCommand(playerCommand);
 		if (clients.size() > 0) {
 			timerTask = createNewTimerTask();
 			timer.schedule(timerTask, pokerTable.getMaxTime() * 1000);
 			System.out.println("Időzítem a timertaskot!");
+		} else {
+			timerTask = null;
 		}
+		endOfReceivedPlayerCommand(playerCommand);
 	}
-	
+
 	/**
 	 * Lekérdezi az asztalnál ülő játékosok számát.
 	 * @return az asztalnál ülő játékosok darabszáma
@@ -681,11 +638,11 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	public int getPlayersCount() {
 		return clients.size() + waitingClients.size();
 	}
-	
+
 	public String getName() {
 		return pokerTable.getName();
 	}
-	
+
 	/**
 	 * Ha játékstílust cserélünk egy asztalon.
 	 * @param pokerTable az új asztal

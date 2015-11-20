@@ -75,7 +75,9 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	@Override
 	protected void nextRound() {
 		if (playersInRound <= 1 || (actualClassicHouseCommandType == ClassicHouseCommandType.values()[0] && votedPlayers >= playersInRound)) {
-			bookMoneyStack(null);
+			if (playersInRound > 0) {
+				bookMoneyStack(null);
+			}
 			startRound();
 		} else {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)

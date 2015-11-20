@@ -132,7 +132,9 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	protected void nextRound() {
 		// ha már kijött a river és az utolsó körben (rivernél) már mindenki nyilatkozott legalább egyszer, akkor új játszma kezdődik
 		if (playersInRound <= 1 || (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && votedPlayers >= playersInRound)) {
-			bookMoneyStack(houseCards);
+			if (playersInRound > 0) {
+				bookMoneyStack(null);
+			}
 			startRound();
 		} else {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
