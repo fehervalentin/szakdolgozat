@@ -41,7 +41,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	private static final long serialVersionUID = -4495230178265270679L;
 
 	private final String ERR_BAD_PW = "Hibás jelszó!";
-	private final String ERR_TABLE_DELETE = "Az asztal nem törölhető: nem üres!";
+	private final String ERR_TABLE_DELETE = "Az asztal nem törölhető/módosítható: nem üres!";
 	
 	private final String INITIAL_BALANCE = "1000.00";
 

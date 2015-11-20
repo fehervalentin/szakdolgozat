@@ -146,16 +146,26 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	}
 	
 	protected TimerTask createNewTimerTask() {
+		System.out.println("Új timertaskot hozok létre!");
 		return new TimerTask() {
 			
 			@Override
 			public void run() {
 //				PlayerCommand playerCommand = playerQuitCommandFactory(clientsNames.get(whosOn));
 				//TODO: LOL
+				System.out.println("Lefuttatom a timertaskot!");
 				PlayerCommand playerCommand = playerQuitCommandFactory("");
 				if (whosOn > -1 && clients.size() > 0) {
-					receivedQuitPlayerCommand(clients.get(whosOn), playerCommand);
-					endOfReceivedPlayerCommand(playerCommand);
+					try {
+						System.out.println("bent vagyok a tryban!");
+						receivedPlayerCommand(clients.get(whosOn), playerCommand);
+					} catch (RemoteException | PokerDataBaseException | PokerUserBalanceException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						System.out.println("ciki");
+					}
+				} else {
+					System.out.println("nem léptem be");
 				}
 			}
 		};
@@ -191,13 +201,13 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			}
 		}
 		
-		for (int i = clients.size() - 1; i >= 0; i--) {
-			try {
-				clients.get(i).update("ping");
-			} catch (RemoteException e) {
-				clients.remove(i);
-			}
-		}
+//		for (int i = clients.size() - 1; i >= 0; i--) {
+//			try {
+//				clients.get(i).update("ping");
+//			} catch (RemoteException e) {
+//				clients.remove(i);
+//			}
+//		}
 	}
 
 	/**
@@ -216,18 +226,22 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		--whosOn;
 		clientsNames.remove(index);
 		clients.remove(index);
-		new Thread() {
-
-			@Override
-			public void run() {
-				try {
-					client.update(playerCommand);
-				} catch (RemoteException e) {
-//					removeClient(index);
-				}
-			}
-			
-		}.start();
+		//TODO: a faszom, ez azért kell mert őt már nem fogom értesíteni, ha kiveszem, szóval őt külön kell
+		//mi van, ha nem várja meg a kliens, míg értesítik? egyből kilép....
+		//AMGC 380. sor
+		// jónak tűnik.....
+//		new Thread() {
+//
+//			@Override
+//			public void run() {
+//				try {
+//					client.update(playerCommand);
+//				} catch (RemoteException e) {
+////					removeClient(index);
+//				}
+//			}
+//			
+//		}.start();
 		prepareNewRound();
 	}
 	
@@ -288,23 +302,27 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 
 			@Override
 			public void run() {
-				try {
-					clients.get(i).update(pokerCommand);
-				} catch (RemoteException e) {
-					removeClient(i);
+				if (clients.size() > 0) {
+					try {
+						clients.get(i).update(pokerCommand);
+					} catch (RemoteException e) {
+						try {
+							String name = clientsNames.get(i);
+							receivedPlayerCommand(clients.get(i), playerQuitCommandFactory(name));
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (PokerDataBaseException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (PokerUserBalanceException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+	//					removeClient(i);
+				}
 				}
 			}}.start();
-	}
-	
-	/**
-	 * Törli az i. klienst
-	 * @param i az index
-	 */
-	private void removeClient(int i) {
-		PlayerCommand playerCommand = playerQuitCommandFactory(clientsNames.get(i));
-		receivedQuitPlayerCommand(clients.get(i), playerCommand);
-		notifyClients(playerCommand);
-		endOfReceivedPlayerCommand(playerCommand);
 	}
 
 	/**
@@ -625,6 +643,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		endOfReceivedPlayerCommand(playerCommand);
 		timerTask = createNewTimerTask();
 		timer.schedule(timerTask, pokerTable.getMaxTime() * 1000);
+		System.out.println("Időzítem a timertaskot!");
 	}
 	
 	/**

@@ -377,11 +377,13 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			setButtonsDisability(true);
 			modifyQuitButtonDisability(false);
 		}
-		if (playerCommand.getWhosQuit() == model.getYouAreNth()) {
-			frameController.setTableListerFXML();
-		} else {
-			mainView.receivedQuitPlayerCommand(playerCommand);
-		}
+		mainView.receivedQuitPlayerCommand(playerCommand);
+		//TODO: meg kell szerelni
+//		if (playerCommand.getWhosQuit() == model.getYouAreNth()) {
+//			frameController.setTableListerFXML();
+//		} else {
+//			mainView.receivedQuitPlayerCommand(playerCommand);
+//		}
 	}
 
 	/**
@@ -421,9 +423,13 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 */
 	protected void logHouseCommand(HouseCommand houseCommand) {
 		if (textArea != null) {
-			if (houseCommand == null || houseCommand.getCommandType() == null) {
+			if (houseCommand != null && houseCommand.getCommandType() != null) {
 				textArea.appendText(System.lineSeparator() + "Ház: " + houseCommand.getCommandType() + " ");
+			} else {
+				System.out.println("nem logolt");
 			}
+		} else {
+			System.out.println("textarea null");
 		}
 	}
 }

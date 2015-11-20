@@ -162,6 +162,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 				}
 				case WINNER: {
 					houseHoldemCommand = (HoldemHouseCommand)winner();
+					break;
 				}
 				default:
 					throw new IllegalArgumentException();

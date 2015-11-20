@@ -33,6 +33,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 			this.commController = new CommunicatorController(this);
 			this.model = new ClassicMainGameModel(commController);
 			this.model.connectToTable(commController);
+			this.mainView.setUserName(model.getUserName());
 		} catch (RemoteException e) {
 			remoteExceptionHandler();
 		} catch (PokerTooMuchPlayerException e) {
