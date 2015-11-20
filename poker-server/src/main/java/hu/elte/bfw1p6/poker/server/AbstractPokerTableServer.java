@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -39,6 +40,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 
 	private final String ERR_BALANCE = "Nincs elég zsetonod!";
 	protected final String ERR_TABLE_FULL = "Az asztal betelt, nem tudsz csatlakozni!";
+	
+	private CountDownLatch latch;
 	
 	/**
 	 * Az automatikus kiléptetési feladat időzítője.
@@ -143,6 +146,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		this.waitingClients = new ArrayList<>();
 		this.waitingClientsNames = new ArrayList<>();
 		this.timer = new Timer();
+		this.latch = new CountDownLatch(0);
 	}
 	
 	protected TimerTask createNewTimerTask() {
@@ -155,10 +159,12 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 				//TODO: LOL
 				System.out.println("Lefuttatom a timertaskot!");
 				PlayerCommand playerCommand = playerQuitCommandFactory("");
+				//TODO: ez lehet felesleges, kintről is védem
 				if (whosOn > -1 && clients.size() > 0) {
 					try {
 						System.out.println("bent vagyok a tryban!");
 						receivedPlayerCommand(clients.get(whosOn), playerCommand);
+						timerTask = null;
 					} catch (RemoteException | PokerDataBaseException | PokerUserBalanceException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -226,6 +232,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		--whosOn;
 		clientsNames.remove(index);
 		clients.remove(index);
+		if (clients.size() == 0) {
+			timerTask = null;
+		}
 		//kell, mert a kliens így várja, hogy mit csináljon, szétküldöm a klienseknek, hogy
 		//a szerver kit léptetett ki
 		new Thread() {
@@ -291,6 +300,28 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	}
 
 	/**
+	 * Az összes klienst értesíti.
+	 * @param pokerCommand az utasítás
+	 */
+	protected void notifyClients(PokerCommand pokerCommand) {
+		//TODO: meg kell várni amíg mindenkit értesítettem
+		latch = new CountDownLatch(clients.size());
+		System.out.println("CLIENTSCOUNT......................................" + clients.size());
+		for (int i = clients.size() - 1; i >= 0; i--) {
+			notifyNthClient(i, pokerCommand);
+		}
+//		IntStream.range(0, clients.size()).forEach(i -> notifyNthClient(i, pokerCommand));
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("AZ ÖSSZES KLIENST ÉRTESÍTETTEM................................");
+		System.out.println("CLIENTSCOUNT......................................" + clients.size());
+	}
+
+	/**
 	 * Értesíti az i. klienst, ha RemoteException lép fel, akkor úgy vesszük,
 	 * hogy QUIT típusú utasítást küldött.
 	 * @param i a kliens sorszáma
@@ -305,9 +336,11 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			@Override
 			public void run() {
 				try {
+					latch.countDown();
 					clients.get(i).update(pokerCommand);
 				} catch (RemoteException e) {
-					try {
+					//TODO: az ideje úgy is lejár.... majd a timertask elvégzi, ami kell....
+					/*try {
 						if (clients.size() > 0 && clientsNames.size() > 0) {
 							String name = clientsNames.get(i);
 							receivedPlayerCommand(clients.get(i), playerQuitCommandFactory(name));
@@ -321,17 +354,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 					} catch (PokerUserBalanceException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					}
+					}*/
 				}
 			}}.start();
-	}
-
-	/**
-	 * Az összes klienst értesíti.
-	 * @param pokerCommand az utasítás
-	 */
-	protected void notifyClients(PokerCommand pokerCommand) {
-		IntStream.range(0, clients.size()).forEach(i -> notifyNthClient(i, pokerCommand));
 	}
 
 	/**
@@ -431,7 +456,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Új kört indít a szerveren.
 	 */
 	protected void startRound() {
-		if (clients.size() + waitingClients.size() >= minPlayer) {
+		if (clients.size() + waitingClients.size() >= minPlayer && timerTask == null) {
 			prepareNewRound();
 			preStartRound();
 			collectBlinds();
