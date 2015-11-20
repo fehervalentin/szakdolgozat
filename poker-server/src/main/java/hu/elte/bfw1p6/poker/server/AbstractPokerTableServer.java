@@ -226,25 +226,27 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		--whosOn;
 		clientsNames.remove(index);
 		clients.remove(index);
-		//TODO: a faszom, ez azért kell mert őt már nem fogom értesíteni, ha kiveszem, szóval őt külön kell
-		//mi van, ha nem várja meg a kliens, míg értesítik? egyből kilép....
-		//AMGC 380. sor
-		// jónak tűnik.....
-//		new Thread() {
-//
-//			@Override
-//			public void run() {
-//				try {
-//					client.update(playerCommand);
-//				} catch (RemoteException e) {
-////					removeClient(index);
-//				}
-//			}
-//			
-//		}.start();
+		//kell, mert a kliens így várja, hogy mit csináljon, szétküldöm a klienseknek, hogy
+		//a szerver kit léptetett ki
+		new Thread() {
+
+			@Override
+			public void run() {
+				try {
+					client.update(playerCommand);
+				} catch (RemoteException e) {
+//					removeClient(index);
+				}
+			}
+			
+		}.start();
 		prepareNewRound();
 	}
 	
+	/**
+	 * Várakozó listán lévő kliens kilépett.
+	 * @param client a kliens
+	 */
 	protected void receivedQuitPlayerCommandFromWaitingPlayer(PokerRemoteObserver client) {
 		System.out.println("WAITING PLAYER LEFT: " + client);
 		waitingClients.remove(client);
@@ -302,25 +304,24 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 
 			@Override
 			public void run() {
-				if (clients.size() > 0) {
+				try {
+					clients.get(i).update(pokerCommand);
+				} catch (RemoteException e) {
 					try {
-						clients.get(i).update(pokerCommand);
-					} catch (RemoteException e) {
-						try {
+						if (clients.size() > 0 && clientsNames.size() > 0) {
 							String name = clientsNames.get(i);
 							receivedPlayerCommand(clients.get(i), playerQuitCommandFactory(name));
-						} catch (RemoteException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} catch (PokerDataBaseException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} catch (PokerUserBalanceException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
 						}
-	//					removeClient(i);
-				}
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (PokerDataBaseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (PokerUserBalanceException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}}.start();
 	}
@@ -641,9 +642,11 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		}
 		timer.purge();
 		endOfReceivedPlayerCommand(playerCommand);
-		timerTask = createNewTimerTask();
-		timer.schedule(timerTask, pokerTable.getMaxTime() * 1000);
-		System.out.println("Időzítem a timertaskot!");
+		if (clients.size() > 0) {
+			timerTask = createNewTimerTask();
+			timer.schedule(timerTask, pokerTable.getMaxTime() * 1000);
+			System.out.println("Időzítem a timertaskot!");
+		}
 	}
 	
 	/**

@@ -377,13 +377,11 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			setButtonsDisability(true);
 			modifyQuitButtonDisability(false);
 		}
-		mainView.receivedQuitPlayerCommand(playerCommand);
-		//TODO: meg kell szerelni
-//		if (playerCommand.getWhosQuit() == model.getYouAreNth()) {
-//			frameController.setTableListerFXML();
-//		} else {
-//			mainView.receivedQuitPlayerCommand(playerCommand);
-//		}
+		if (playerCommand.getWhosQuit() == model.getYouAreNth()) {
+			frameController.setTableListerFXML();
+		} else {
+			mainView.receivedQuitPlayerCommand(playerCommand);
+		}
 	}
 
 	/**
