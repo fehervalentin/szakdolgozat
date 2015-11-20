@@ -410,9 +410,15 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param playerCommand az utasítás
 	 */
 	protected void logPlayerCommand(PlayerCommand playerCommand) {
-		if (textArea != null) {
-			textArea.appendText(System.lineSeparator() + playerCommand.getSender() + ": " + playerCommand.getCommandType());
-		}
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (textArea != null) {
+					textArea.appendText(System.lineSeparator() + playerCommand.getSender() + ": " + playerCommand.getCommandType());
+				}
+			}
+		});
 	}
 	
 	/**
@@ -420,15 +426,21 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param houseCommand
 	 */
 	protected void logHouseCommand(HouseCommand houseCommand) {
-		if (textArea != null) {
-			if (houseCommand != null && houseCommand.getCommandType() != null) {
-				textArea.appendText("fasz");
-//				textArea.appendText(System.lineSeparator() + "Ház: " + houseCommand.getCommandType() + " ");
-			} else {
-				System.out.println("nem logolt");
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (textArea != null) {
+					if (houseCommand != null && houseCommand.getCommandType() != null) {
+//						textArea.appendText("fasz");
+						textArea.appendText("\n" + "Ház: " + houseCommand.getCommandType() + " ");
+					} else {
+						System.out.println("nem logolt");
+					}
+				} else {
+					System.out.println("textarea null");
+				}
 			}
-		} else {
-			System.out.println("textarea null");
-		}
+		});
 	}
 }
