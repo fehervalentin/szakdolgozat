@@ -38,7 +38,7 @@ public class SessionService {
 		return sessions.stream().anyMatch(session -> session.getPlayer().getUserName().equals(userName));
 	}
 	
-	public PokerSession authenticate(String userName, String password) throws PokerInvalidUserException, PokerDataBaseException {
+	public synchronized PokerSession authenticate(String userName, String password) throws PokerInvalidUserException, PokerDataBaseException {
 		User u = userDAO.findByUserName(userName);
 		if (u == null || !BCrypt.checkpw(password, u.getPassword()) || sessions.stream().anyMatch(session -> session.getPlayer().getUserName().equals(userName))) {
 			throw new PokerInvalidUserException(ERR_BAD_AUTH);
@@ -49,11 +49,11 @@ public class SessionService {
 		return pokerSession;
 	}
 	
-	public void invalidate(int i) {
+	public synchronized void invalidate(int i) {
 		sessions.remove(i);
 	}
 	
-	public void invalidate(UUID uuid) {
+	public synchronized void invalidate(UUID uuid) {
 		sessions.removeIf(session -> session.getId().equals(uuid));
 	}
 	

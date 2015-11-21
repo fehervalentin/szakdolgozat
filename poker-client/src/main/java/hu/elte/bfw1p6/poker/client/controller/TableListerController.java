@@ -27,6 +27,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 public class TableListerController extends AbstractPokerClientController implements PokerRemoteObserver {
 	
+	/**
+	 * A szervernél csak egyszer regisztráljam be magam.
+	 */
+	private static boolean registered = false;
+	
 	private final String ERR_TABLE_SELECTION = "Nem választottál ki egy táblát sem!";
 	private final String SUCC_TABLE_DELETE = "Sikeresen kitörölted a táblát!";
 	private final String ERR_TABLE_FULL = "Nincs szabad hely az asztalnál!";
@@ -70,10 +75,16 @@ public class TableListerController extends AbstractPokerClientController impleme
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
 		try {
-			List<PokerTable> tables = model.registerTableViewObserver(commCont);
+			List<PokerTable> tables = null;
+			if (registered) {
+				tables = model.getTables();
+			} else {
+				tables = model.registerTableViewObserver(commCont);
+			}
 			if (tables != null) {
 				tableView.getItems().setAll(tables);
 			}
+			registered = true;
 		} catch (PokerDataBaseException e) {
 			showErrorAlert(e.getMessage());
 		} catch (RemoteException e ) {

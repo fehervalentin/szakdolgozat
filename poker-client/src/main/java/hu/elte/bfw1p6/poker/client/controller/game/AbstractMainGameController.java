@@ -118,9 +118,8 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * A szerver DEAL típusú utasítást küldött.
 	 * @param houseCommand az utasítás
 	 */
-	protected void receivedDealHouseCommand(HouseCommand houseCommand) {
+	protected synchronized void receivedDealHouseCommand(HouseCommand houseCommand) {
 		for (int i = 0; i < houseCommand.getCards().length; i++) {
-			//TODO: EXCEPTION
 			textArea.appendText(houseCommand.getCards()[i].toString() + " ");
 		}
 		model.receivedDealHouseCommand(houseCommand);
@@ -131,7 +130,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * A szerver WINNER típusú utasítást küldött.
 	 * @param houseCommand az utasítás
 	 */
-	protected void receivedWinnerHouseCommand(HouseCommand houseCommand) {
+	protected synchronized void receivedWinnerHouseCommand(HouseCommand houseCommand) {
 		textArea.appendText(" Nyertes: " +  mainView.ultimateFormula(houseCommand.getWinner()) + " " +  Arrays.toString(houseCommand.getCards()) + System.lineSeparator());
 		setButtonsDisability(true);
 		if (houseCommand.getWhosOn() == model.getYouAreNth()) {
