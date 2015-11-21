@@ -1,6 +1,5 @@
 package hu.elte.bfw1p6.poker.persist.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,14 +24,9 @@ public class UserDAO extends GenericDAO<User>{
 
 	@Override
 	public List<User> findAll() throws PokerDataBaseException {
-		List<User> users = new ArrayList<>();
-
-		try {
-			String QRY = FIND_ALL;
-			Connection con = dbManager.getConnection();
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(QRY);
-
+		try(Statement stmt = dbManager.getConnection().createStatement()) {
+			List<User> users = new ArrayList<>();
+			ResultSet rs = stmt.executeQuery(FIND_ALL);
 			while (rs.next()) {
 				User u = new User();
 				for (int i = 0; i < columns.length; i++) {
@@ -41,12 +35,10 @@ public class UserDAO extends GenericDAO<User>{
 				u.setId(rs.getInt(ID_COLUMN));
 				users.add(u);
 			}
-
-			stmt.close();
+			return users;
 		} catch (SQLException e) {
 			throw sqlExceptionTranslator.interceptException(e);
 		}
-		return users;
 	}
 	
 	/**
@@ -56,11 +48,9 @@ public class UserDAO extends GenericDAO<User>{
 	 * @throws PokerDataBaseException
 	 */
 	public User findByUserName(String username) throws PokerDataBaseException {
-		try {
+		String query = "SELECT * FROM " + User.TABLE_NAME + " WHERE username=?;";
+		try(PreparedStatement pstmt = dbManager.getConnection().prepareStatement(query)) {
 			User u = null;
-			String QRY = "SELECT * FROM " + User.TABLE_NAME + " WHERE username=?";
-			Connection con = dbManager.getConnection();
-			PreparedStatement pstmt = con.prepareStatement(QRY);
 			pstmt.setString(1, username);
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -70,8 +60,6 @@ public class UserDAO extends GenericDAO<User>{
 				}
 				u.setId(rs.getInt(ID_COLUMN));
 			}
-
-			pstmt.close();
 			return u;
 		} catch (SQLException e) {
 			throw sqlExceptionTranslator.interceptException(e);
@@ -85,14 +73,11 @@ public class UserDAO extends GenericDAO<User>{
 	 * @throws PokerDataBaseException
 	 */
 	public void modifyPassword(String username, String newPassword) throws PokerDataBaseException {
-		try {
-			Connection con = dbManager.getConnection();
-			String SQL = "UPDATE " + User.TABLE_NAME + " SET password=? WHERE username=?";
-			PreparedStatement pstmt = con.prepareStatement(SQL);
+		String query = "UPDATE " + User.TABLE_NAME + " SET password=? WHERE username=?;";
+		try(PreparedStatement pstmt = dbManager.getConnection().prepareStatement(query)) {
 			pstmt.setString(1, newPassword);
 			pstmt.setString(2, username);
 			pstmt.executeUpdate();
-			pstmt.close();
 		} catch (SQLException e) {
 			throw sqlExceptionTranslator.interceptException(e);
 		}
@@ -104,14 +89,10 @@ public class UserDAO extends GenericDAO<User>{
 	 * @throws PokerDataBaseException
 	 */
 	public void deletePlayer(PokerPlayer player) throws PokerDataBaseException {
-		try {
+		try(PreparedStatement pstmt = dbManager.getConnection().prepareStatement(DELETE)) {
 			User u = findByUserName(player.getUserName());
-			Connection con = dbManager.getConnection();
-			String SQL = DELETE;
-			PreparedStatement pstmt = con.prepareStatement(SQL);
 			pstmt.setLong(1, u.getId());
 			pstmt.executeUpdate();
-			pstmt.close();
 		} catch (SQLException e) {
 			throw sqlExceptionTranslator.interceptException(e);
 		}

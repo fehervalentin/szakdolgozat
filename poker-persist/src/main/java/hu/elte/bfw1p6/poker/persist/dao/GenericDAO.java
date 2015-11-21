@@ -1,6 +1,5 @@
 package hu.elte.bfw1p6.poker.persist.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,12 +35,18 @@ public abstract class GenericDAO<T extends EntityWithId> {
 	protected String[] columns;
 
 	protected String FIND_ALL;
+	protected String DELETE;
 	private String INSERT;
 	private String UPDATE;
-	protected String DELETE;
 	
+	/**
+	 * Az adatbázissal való kapcsolatot felügyelő osztály.
+	 */
 	protected DBManager dbManager;
 
+	/**
+	 * Az adatbázisból érkező kivételeket fordítja át.
+	 */
 	protected SQLExceptionTranslator sqlExceptionTranslator;
 
 	public GenericDAO(String tableName) throws PokerDataBaseException {
@@ -61,14 +66,11 @@ public abstract class GenericDAO<T extends EntityWithId> {
 	 * @throws PokerDataBaseException
 	 */
 	public synchronized void save(T t) throws PokerDataBaseException {
-		try {
-			Connection con = dbManager.getConnection();
-			PreparedStatement pstmt = con.prepareStatement(INSERT);
+		try(PreparedStatement pstmt = dbManager.getConnection().prepareStatement(INSERT)) {
 			for (int i = 0; i < columns.length; i++) {
 				pstmt.setObject(i+1, t.get(i));
 			}
 			pstmt.executeUpdate();
-			pstmt.close();
 		} catch (SQLException e) {
 			throw sqlExceptionTranslator.interceptException(e);
 		}
@@ -87,12 +89,9 @@ public abstract class GenericDAO<T extends EntityWithId> {
 	 * @throws PokerDataBaseException
 	 */
 	public synchronized void delete(T t) throws PokerDataBaseException {
-		try {
-			Connection con = dbManager.getConnection();
-			PreparedStatement pstmt = con.prepareStatement(DELETE);
+		try(PreparedStatement pstmt = dbManager.getConnection().prepareStatement(DELETE)) {
 			pstmt.setInt(1, t.getId());
 			pstmt.executeUpdate();
-			pstmt.close();
 		} catch (SQLException e) {
 			throw sqlExceptionTranslator.interceptException(e);
 		}
@@ -104,16 +103,12 @@ public abstract class GenericDAO<T extends EntityWithId> {
 	 * @throws PokerDataBaseException
 	 */
 	public synchronized void modify(T t) throws PokerDataBaseException {
-		try {
-			Connection con = dbManager.getConnection();
-			PreparedStatement pstmt = con.prepareStatement(UPDATE);
+		try(PreparedStatement pstmt = dbManager.getConnection().prepareStatement(UPDATE)) {
 			for (int i = 0; i < columns.length; i++) {
 				pstmt.setObject(i+1, t.get(i));
 			}
 			pstmt.setObject(columns.length + 1, t.getId());
 			pstmt.executeUpdate();
-
-			pstmt.close();
 		} catch (SQLException e) {
 			throw sqlExceptionTranslator.interceptException(e);
 		}
@@ -124,16 +119,13 @@ public abstract class GenericDAO<T extends EntityWithId> {
 	 * @throws PokerDataBaseException
 	 */
 	private void loadColumns() throws PokerDataBaseException {
-		Connection con = dbManager.getConnection();
-		try {
-			Statement stmt = con.createStatement();
+		try(Statement stmt = dbManager.getConnection().createStatement()) {
 			ResultSet rs = stmt.executeQuery(FIND_ALL);
 			int count = rs.getMetaData().getColumnCount() - 1;
 			columns = new String[count];
 			for (int i = 0; i < count; i++) {
 				columns[i] = rs.getMetaData().getColumnLabel(i + 2);
 			}
-			stmt.close();
 		} catch (SQLException e) {
 			throw sqlExceptionTranslator.interceptException(e);
 		}
