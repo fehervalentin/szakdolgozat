@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -40,6 +41,11 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	private final String ERR_BALANCE = "Nincs elég zsetonod!";
 	protected final String ERR_TABLE_FULL = "Az asztal betelt, nem tudsz csatlakozni!";
 
+	/**
+	 * Szálak végrehajtási sorrendjét biztosítja.
+	 */
+	private CountDownLatch latch;
+	
 	/**
 	 * Az automatikus kiléptetési feladat időzítője.
 	 */
@@ -292,7 +298,15 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * @param pokerCommand az utasítás
 	 */
 	protected void notifyClients(PokerCommand pokerCommand) {
+		// meg kell várni, amíg az összes klienst értesítettük!
+		latch = new CountDownLatch(clients.size());
 		IntStream.range(0, clients.size()).forEach(i -> notifyNthClient(i, pokerCommand));
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -309,8 +323,16 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 
 			@Override
 			public void run() {
-				try { clients.get(i).update(pokerCommand); }
-				catch (RemoteException e) { }
+				try {
+					
+					clients.get(i).update(pokerCommand);
+					if (latch != null) {
+						latch.countDown();
+					}
+				}
+				catch (RemoteException e) {
+					latch.countDown();
+				}
 			}}.start();
 	}
 

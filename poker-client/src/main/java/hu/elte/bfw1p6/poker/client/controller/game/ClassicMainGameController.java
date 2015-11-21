@@ -26,7 +26,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	@FXML protected Button changeButton;
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public synchronized void initialize(URL location, ResourceBundle resources) {
 		this.mainView = new ClassicMainView(mainGamePane);
 		
 		try {

@@ -21,7 +21,7 @@ import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 public class HoldemMainGameController extends AbstractMainGameController {
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public synchronized void initialize(URL location, ResourceBundle resources) {
 		this.mainView = new HoldemMainView(mainGamePane);
 
 		try {
@@ -130,7 +130,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	 * A szerver FLOP típusú utasítás küldött.
 	 * @param houseHoldemCommand az utasítás
 	 */
-	private void receivedFlopHouseCommand(HoldemHouseCommand houseHoldemCommand) {
+	private synchronized void receivedFlopHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		Card[] cards =  houseHoldemCommand.getCards();
 		textArea.appendText(cards[0] + " " + cards[1] + " " + cards[2]);
 		((HoldemMainView)mainView).receivedFlopHouseCommand(houseHoldemCommand);
@@ -140,7 +140,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	 * A szerver TURN típusú utasítás küldött.
 	 * @param houseHoldemCommand az utasítás
 	 */
-	private void receivedTurnHouseCommand(HoldemHouseCommand houseHoldemCommand) {
+	private synchronized void receivedTurnHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		textArea.appendText(houseHoldemCommand.getCards()[0].toString());
 		((HoldemMainView)mainView).receivedTurnHouseCommand(houseHoldemCommand);
 	}
@@ -149,7 +149,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	 * A szerver RIVER típusú utasítás küldött.
 	 * @param houseHoldemCommand az utasítás
 	 */
-	private void receivedRiverHouseCommand(HoldemHouseCommand houseHoldemCommand) {
+	private synchronized void receivedRiverHouseCommand(HoldemHouseCommand houseHoldemCommand) {
 		textArea.appendText(houseHoldemCommand.getCards()[0].toString());
 		((HoldemMainView)mainView).receivedRiverHouseCommand(houseHoldemCommand);
 	}

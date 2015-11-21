@@ -429,6 +429,7 @@ public abstract class AbstractMainView {
 					hideAllProfiles();
 					hideHouseCards();
 					myCards.forEach(card -> card.setOpacity(0));
+					winnerCards.forEach(card -> card.setOpacity(0));
 					dealerButtonImageView.setVisible(false);
 					clearChips();
 				} else {
