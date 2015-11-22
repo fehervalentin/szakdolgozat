@@ -1,0 +1,256 @@
+
+\documentclass[oneside,11pt,a4paper]{article}	
+
+% ---------------------------------------------------
+% Preambulum
+% ---------------------------------------------------
+
+\usepackage[magyar]{babel}	
+\usepackage[latin2]{inputenc}		
+\usepackage{t1enc}							
+\usepackage{indentfirst}
+\usepackage{graphicx}	
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\usepackage{algorithmic} 
+\usepackage{algorithm}
+
+\newtheorem{theorem}{Tétel}
+\newtheorem{definition}{Definíció}
+\newtheorem{proof}{Bizonyítás}
+
+\DeclareMathOperator{\diag}{diag}
+
+%Számhalmazok jelölése%
+\newcommand{\IN}{\mathbb{N}}
+\newcommand{\IZ}{\mathbb{Z}}
+\newcommand{\IR}{\mathbb{R}}
+\newcommand{\IC}{\mathbb{C}}
+\newcommand{\IP}{\mathbb{P}}
+
+
+\title{Programcsomagok numerikus módszerekben\\ \vspace{3mm} \large Dokumentáció sablon}
+\author{Kovács Péter}
+\date{2012.03.11.}
+
+\begin{document}
+\maketitle			
+
+
+% ---------------------------------------------------
+% Bevezetés
+% ---------------------------------------------------
+
+\section{Bevezetés}
+
+A tárgy teljesítésének, a legalább elégséges gyakorlati jegynek a feltétele egy összetettebb beadandó feladat elkészítése \textsc{Matlab}-ban. Az elkészített programot és tesztelését részletesen dokumentálni kell. A dokumentáció tartalmazza a feladat szövegét, az alkalmazott numerikus módszer leírását (nem átmásolva egy internetes jegyzetbõl), az implementáció megfontolásait (a felmerült nehézségeket, azok áthidalását, a \textsc{Matlab} lehetõségeihez való igazítását). \par 
+
+	Ezen túlmenõen a dokumentáció tartalmazza a tesztelés menetét, az egyes teszteseteket, a kapott kimeneteket (ábrákat, mátrixokat, hibaüzeneteket), azok magyarázatát. Természetesen a készítõ neve, \textsc{eha} kódja is szerepeljen benne. A dokumentációt \LaTeX -ben kell elkészíteni és pdf formátumban várjuk, az alábbi mintának megfelelõen.
+
+% ---------------------------------------------------
+% Dokumentáció formátuma
+% ---------------------------------------------------
+	
+\section{Dokumentáció formátuma}
+
+\subsection{Alfejezet}
+Alfejezet szövege.
+
+\begin{theorem}
+Legyenek $x_0,x_1,\ldots,x_n \in [a,b]$ különbözõ alappontok és tekintsük az $y_0, y_1, \ldots, y_n \in \IR$ értékeket. Ekkor $\exists! \; \text{olyan} \; P\in \IP_n$ legfeljebb n-ed fokú polinom\,, melyre 
+\[
+P(x_i)=y_i \quad (i=0,\ldots,n).
+\]
+\end{theorem}
+\begin{proof}
+\ldots
+\end{proof}
+
+\subsubsection{Al-alfejezet}
+Al-alfejezet szövege.
+\begin{definition}
+	Az $x_0,x_1,\ldots,x_n$ alappontok által meghatározott Lagrange--alappolinomokat a következõképpen definiáljuk: 
+\[
+	\ell_{k}(x)=\prod_{ \substack{ j=0 \\ j \neq k }}^n \frac{x-x_j}{x_k-x_j} \quad (k=0,\ldots,n)\;.
+\]
+\end{definition}
+
+% ---------------------------------------------------
+% Matematikai kifejezések
+% ---------------------------------------------------
+
+\section{Matematikai kifejezések}
+
+\subsection{Képletek}
+
+Az egy soros egyenleteket a hagyományos \texttt{equation} környezetben definiáljuk:
+
+\begin{equation}
+	\label{interpol} %címke
+	P(x)=\sum_{i=0}^{n} a_i x^i \; .
+\end{equation}
+
+	Matematikai képleteket a folyószövegbe is beágyazhatunk a \$ jel segítségével. Használhatunk elõre definiált operátorokat, például $\cos$, $\sin$, $\tan$, $\arctan$ stb. Ugyanakkor saját operátorokat is definiálhatunk: $\diag$. \par
+
+	A többsoros képletek megjelenítésére használhatjuk a \texttt{gather}, \texttt{align} parancsokat:
+	
+	\begin{gather}
+		\ell_{k}(x)=\prod_{ \substack{ i=0 \\ i \neq k }}^n \frac{x-x_i}{x_k-x_i} \;, \\ 
+		\omega_n(x)=\prod_{i=0}^n (x-x_i) \;.
+	\end{gather}
+	
+	\begin{align}
+		L_{n}(x) & = \sum_{k=0}^n f(x_k)\ell_k(x), \quad (n\in \IN) \\
+		N_{n}(x) & = f(x_0) + \sum_{k=1}^n f[x_0,\ldots,x_k] \omega_{k-1}(x).
+	\end{align} 
+
+\subsection{Mátrixok}
+Mátrixokat az \texttt{array} környezet segítségével adhatunk meg. Például az $(x_0,\ldots,x_3)$ és $(y_0,\ldots,y_3)$ alappontokhoz tartozó $V\textbf{p}=\textbf{y}$ LER-t, vagyis az interpolációs polinom $\textbf{p}$ együttható vektorát a következõképpen adhatjuk meg:
+\begin{equation}
+	\left[\begin{array}{cccc}
+	   	  1 &  x_0  &  x_0^2  &  x_0^3\\ \vspace{1mm}
+	   	  1 &  x_1  &  x_1^2  &  x_1^3\\ \vspace{1mm}
+	   	  1 &  x_1  &  x_2^2  &  x_2^3\\ \vspace{1mm}
+	   	  1 &  x_3  &  x_3^2  &  x_3^3
+	\end{array}\right] 
+	\left[\begin{array}{cccc}
+	   	  p_0 \\ \vspace{1mm}
+	   	  p_1 \\ \vspace{1mm}
+	   	  p_2 \\ \vspace{1mm}
+	   	  p_3   
+	\end{array}\right] 
+	=
+	\left[\begin{array}{cccc}
+	   	  y_0 \\ \vspace{1mm}
+	   	  y_1 \\ \vspace{1mm}
+	   	  y_2 \\ \vspace{1mm}
+	   	  y_3   
+	\end{array}\right]
+\end{equation}
+Ezzel a módszerrel általános $A\in\IR^{m \times n}$ mátrixokat is megadhatunk.
+\begin{equation}
+	A = 
+	\left[\begin{array}{ccccc}
+	   	d_1 &   f_1  &     0  &  \ldots &  0     \\
+	  	  0 &   d_2  &   f_2  & 				&  0     \\
+   \vdots & \ddots & \ddots & \ddots  & \vdots \\
+   			0 & \ldots & 				& d_{n-1} & f_{n-1}\\
+   			0 & \ldots &        &					&			d_n\\
+   			\hline\\
+   			  &&\hspace{6mm}\mbox{\fontsize{24.88}{24.88}\selectfont 0}&& 
+	\end{array}\right] \in \IR^{m \times n}
+	\label{fig:bidiag}
+\end{equation}
+
+% ---------------------------------------------------
+% Ábrák, táblázatok
+% ---------------------------------------------------
+
+\section{Ábrák, táblázatok}
+Képeket az \texttt{graphichx} csomag \texttt{\textbackslash includegraphics} parancsával illeszthetünk a dokumentumba. A szerkesztés során vektorgrafikus képeket kell használni, hogy átméretezés hatására se torzuljanak az ábrák. A \textsc{Matlab} lehetõséget ad arra, hogy a generált ábrákat különbözõ formátumokban menthessük le, többek között eps-ben és pdf-ben is. Ha elkerülhetetlen a raszteres képek használata, akkor ügyeljünk rá, hogy azokat kellõen nagy felbontásban mentsük le.
+\begin{figure}[htb!]
+  \caption{Az $f(x)=\frac{1}{1+x^2}$ és a 3-adfokú Lagrange-interpolációs polinom képe $[0,1]$-en.}
+  \label{fig:interpol}
+\end{figure}
+
+Táblázatokat a \texttt{tabular} környezet segítségével adhatunk meg. Erre különösen nagy szükség lesz a teszteredmények összefoglalásakor. A következõ táblázat, az $f(x)=\frac{1}{1+x^2}$ függvényhez és a $(0,0,1,1)$ alappontokhoz tartozó Hermite-interpolációs polinom osztott differenciáit tartalmazza. 
+\begin{table}[htb]
+  \begin{center}
+    \begin{tabular}{|c|cccc}
+    $x_i$ 			      & $y_i$ 	& 	$f[x_i,x_{i+1}]$	& $f[x_i,x_{i+1},x_{i+2}]$ & \ldots \\\hline
+    0 & \fbox{1} 			&                               &                          &\\
+    0 & 1 						& \fbox{$f'(0)=0$}              & 							           &\\
+    1 & $\frac{1}{2}$ & $\frac{1}{2}-1=-\frac{1}{2}$  &  \fbox{$-\frac{1}{2}$}   &\\
+    1 & $\frac{1}{2}$ & $f'(1)=-\frac{1}{2}$          &  0                       &\fbox{$\frac{1}{2}$}           				
+    \end{tabular}
+  \end{center}
+  \caption{Osztott differencia táblázat.}
+  \label{tbl:hermite}  
+\end{table}
+
+% ---------------------------------------------------
+% Hivatkozások
+% ---------------------------------------------------
+
+\section{Hivatkozások}
+	Az egyenletekre az \texttt{\textbackslash eqref\{\}} paranccsal hivatkozhatunk, például az elsõ képletre az \eqref{interpol} számmal. A kapcsos zárójelbe a megfelelõ hivatkozás címkéje kerül, melyet a \texttt{\textbackslash label} paranccsal adhatunk meg az egyenleteknél, ábráknál, táblázatoknál. Az utóbbi két esetben \texttt{\textbackslash ref\{\}} kulcsszó segítségével tudunk hivatkozni. Ha a dokumentum végén lévõ referenciákat akarjuk idézni, akkor a \texttt{\textbackslash cite\{\}} parancsot kell használni. A kapcsos zárójelbe most is a hivatkozás címkéje kerül. A dokumentumba webcímeket is beszúrhatunk az \texttt{\textbackslash url\{\} } parancs segítségével. Például \url{http://numanal.inf.elte.hu}.\par
+
+% ---------------------------------------------------
+% Referenciák: a referenciák legyenek szerzõ szerint abc sorrendben.
+% ---------------------------------------------------
+
+
+\begin{thebibliography}{9}
+
+\bibitem{matComp}
+\textbf{Golub, G.H., Van Loan, C.F.,}
+\textit{Matrix Computations, 3rd~ed.},
+Johns Hopkins University Press, Baltimore and London, 1996.
+
+\bibitem{paper}
+\textbf{Hill, R. and A. Dow,}
+An index formula,
+\textit{J. Differential Equations}, \textbf{15} (1982), 197--211.
+
+\bibitem{book1}
+\textbf{Acz\'el, J.,}
+\textit{Lectures on Functional Equations and their Applications},
+Academic Press, New York and London, 1966.
+
+\bibitem{book2}
+\textbf{Timan, A.F.,}
+\textit{Theory of Approximation of Functions of a Real Variable},
+Gosudarstv. Izdat. Fiz.-Mat. Lit., Moscow, 1960 (in Russian).
+
+\bibitem{inproceedings}
+\textbf{Kuhn, N.,}
+A note on $t$-convex functions,
+in: W. Walter (Ed.) \textit{General Inequalities, 4}  (Oberwolfach, 1983),
+International Series of Numerical Mathematics \textbf{71},
+Birkh\"auser, Basel, 1984, 269--276.
+
+\bibitem{electronic}
+\textbf{Granlund, T.,} GNU MP: The GNU Multiple Precision Arithmetic Library,
+{\tt http://www.swox.se/gmp/\#DOC}
+
+\end{thebibliography}
+
+% ---------------------------------------------------
+% Appendix
+% ---------------------------------------------------
+\newpage
+\appendix
+\thesection
+\section{Függelék}	
+	A függelék rendszerint a dokumentum legvégén kap helyet, a referencia lista után. Ide kerülnek a programkódok, pszeudo kódok, stb.\\
+	A programkódok megkülönböztetésére a \texttt{verbatim} környezetet használjuk. Például a \ref{fig:interpol}.~ábrát a következõ \textsc{Matlab} utasítások végrehajtásával kaptuk:
+	\begin{verbatim}
+		>> f=@(x) 1./(1+x.^2);
+		>> X=linspace(0,1,1000);
+		>> plot(X,f(X),'g','LineWidth',2);
+
+		>> hold on;		
+		>> xi=linspace(0,1,4);
+		>> lagrange_alak(xi,f(xi),0.01);
+	\end{verbatim}
+	A pszeudokódokat algoritmusok vázlatos leírásához használhatjuk. Ehhez az \texttt{algorithm}, illetve az \texttt{algorithmic} környezetekre lesz szükségünk.
+\begin{algorithm}[htp] 
+\begin{algorithmic}
+\STATE function [c,s]=givens(a,b)
+\IF {$b=0$} 
+        \STATE $c=1;\quad s=0;$
+\ELSE
+        \IF {$\left|b\right|>\left|a\right|$}
+                \STATE $\tau=-a/b;\quad s=1/\sqrt{1+\tau^2};\quad c=s\tau$
+        \ELSE
+                \STATE $\tau=-b/a;\quad c=1/\sqrt{1+\tau^2};\quad s=c\tau$        
+        \ENDIF
+\ENDIF
+\end{algorithmic}
+\caption{algorithm 5.1.3 from \cite{matComp}}
+\label{alg:givens}
+\end{algorithm}
+
+
+\end{document}

@@ -9,6 +9,7 @@
 	<packaging>pom</packaging>
 
 	<name>poker-parent</name>
+	<description>ELTE-IK BSc szakdolgozat - BFW1P6</description>
 
 	<modules>
 		<module>poker-server</module>
@@ -21,6 +22,14 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
+	<distributionManagement>
+		<site>
+			<id>${project.artifactId}-site</id>
+			<name>Poker site</name>
+			<url>D:/temp/site</url>
+		</site>
+	</distributionManagement>
 
 	<build>
 		<plugins>

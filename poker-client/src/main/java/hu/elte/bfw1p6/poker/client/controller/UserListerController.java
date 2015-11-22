@@ -3,6 +3,7 @@ package hu.elte.bfw1p6.poker.client.controller;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
@@ -25,23 +26,26 @@ public class UserListerController extends AbstractPokerClientController {
 	/**
 	 * Egy regisztrált felhasználó oszlopai.
 	 */
-	private final String[] COLUMNS = {"userName", "regDate", "balance"};
+	private final String[] COLUMNS = {"userName", "regDate", "balance", "admin"};
 	
 	@FXML private Button backButton;
 	
-	@FXML private TableColumn<PokerPlayer, String> userName;
-	@FXML private TableColumn<PokerPlayer, Long> regDate;
-	@FXML private TableColumn<PokerPlayer, BigDecimal> balance;
+	@FXML private TableColumn<PokerPlayer, String> userNameColumn;
+	@FXML private TableColumn<PokerPlayer, Long> regDateColumn;
+	@FXML private TableColumn<PokerPlayer, BigDecimal> balanceColumn;
+	@FXML private TableColumn<PokerPlayer, Boolean> adminColumn;
 	
 	@FXML private TableView<PokerPlayer> userView;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		userName.setCellValueFactory(new PropertyValueFactory<PokerPlayer, String>(COLUMNS[0]));
-		regDate.setCellValueFactory(new PropertyValueFactory<PokerPlayer, Long>(COLUMNS[1]));
-		balance.setCellValueFactory(new PropertyValueFactory<PokerPlayer, BigDecimal>(COLUMNS[2]));
+		userNameColumn.setCellValueFactory(new PropertyValueFactory<PokerPlayer, String>(COLUMNS[0]));
+		regDateColumn.setCellValueFactory(new PropertyValueFactory<PokerPlayer, Long>(COLUMNS[1]));
+		balanceColumn.setCellValueFactory(new PropertyValueFactory<PokerPlayer, BigDecimal>(COLUMNS[2]));
+		adminColumn.setCellValueFactory(new PropertyValueFactory<PokerPlayer, Boolean>(COLUMNS[3]));
 		try {
-			userView.getItems().setAll(model.getUsers());
+			List<PokerPlayer> players = model.getUsers();
+			userView.getItems().setAll(players);
 		} catch (PokerDataBaseException e) {
 			showErrorAlert(e.getMessage());
 		} catch (RemoteException e) {

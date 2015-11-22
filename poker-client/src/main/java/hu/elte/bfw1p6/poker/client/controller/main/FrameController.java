@@ -49,8 +49,8 @@ public class FrameController extends UnicastRemoteObject {
 		this.fc = this;
 //		setStageSize(MAIN_GAME_WIDHT, MAIN_GAME_HEIGHT);
 		setStageSize(MENU_GAME_WIDHT, MENU_GAME_HEIGHT);
-		setConnectorFXML();
-//		setLoginFXML();
+//		setConnectorFXML();
+		setLoginFXML();
 //		setClassicMainGameFXML();
 	}
 	

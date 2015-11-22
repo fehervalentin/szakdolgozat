@@ -20,11 +20,6 @@ public class User extends PokerPlayer implements EntityWithId {
 	 */
 	private String password;
 
-	/**
-	 * A felhasználó admin-e.
-	 */
-	private Boolean admin;
-
 	public User(String username) {
 		super(username);
 	}
@@ -53,19 +48,12 @@ public class User extends PokerPlayer implements EntityWithId {
 		this.id = id;
 	}
 
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
-	}
-
-	public Boolean getAdmin() {
-		return admin;
-	}
-
 	public PokerPlayer getPlayer() {
 		PokerPlayer p = new PokerPlayer();
 		p.userName = this.userName;
 		p.balance = this.balance;
 		p.regDate = this.regDate;
+		p.admin = this.admin;
 		return p;
 	}
 

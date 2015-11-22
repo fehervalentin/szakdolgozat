@@ -9,10 +9,19 @@
 	<packaging>jar</packaging>
 
 	<name>poker-model</name>
+	<description>A póker játék adatbázis modelje</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	
+	<distributionManagement>
+		<site>
+			<id>${project.artifactId}-site</id>
+			<name>Poker site</name>
+			<url>D:/temp/site</url>
+		</site>
+	</distributionManagement>
 
 	<dependencies>
 		<dependency>

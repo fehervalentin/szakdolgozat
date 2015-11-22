@@ -24,10 +24,11 @@
 			<TableView fx:id="userView" GridPane.columnIndex="0"
 				GridPane.rowIndex="1">
 				<columns>
-					<TableColumn prefWidth="100.0" text="Username" fx:id="userName" />
+					<TableColumn prefWidth="100.0" text="Username" fx:id="userNameColumn" />
 					<TableColumn prefWidth="100.0" text="Regisztráció dátuma"
-						fx:id="regDate" />
-					<TableColumn prefWidth="100.0" text="Admin" fx:id="balance" />
+						fx:id="regDateColumn" />
+					<TableColumn prefWidth="100.0" text="Balance" fx:id="balanceColumn" />
+					<TableColumn prefWidth="100.0" text="Admin" fx:id="adminColumn" />
 				</columns>
 			</TableView>
 			<Button fx:id="backButton" text="Vissza" onAction="#handleBack"

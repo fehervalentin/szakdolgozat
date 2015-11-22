@@ -27,6 +27,11 @@ public class PokerPlayer extends Player {
 	 * A játékos egyenlege.
 	 */
 	protected BigDecimal balance;
+
+	/**
+	 * A felhasználó admin-e.
+	 */
+	protected Boolean admin;
 	
 	public PokerPlayer() {
 		
@@ -56,5 +61,13 @@ public class PokerPlayer extends Player {
 	
 	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+
+	public Boolean getAdmin() {
+		return admin;
 	}
 }
