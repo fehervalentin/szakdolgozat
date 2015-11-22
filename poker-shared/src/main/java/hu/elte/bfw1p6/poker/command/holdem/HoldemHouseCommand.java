@@ -59,7 +59,7 @@ public class HoldemHouseCommand extends HouseCommand {
 	
 	/**
 	 * Ha a holdem szerver FLOP vagy TURN vagy RIVER utasítást küld, akkor ezt a metódust kell használni.
-	 * @param houseCommandType FLOP vagy TURN vagy RIVER
+	 * @param type FLOP vagy TURN vagy RIVER
 	 * @param cards a ház lapjai
 	 * @param whosOn az épppen következő (soron levő) játékos
 	 * @return a beállított utasítás

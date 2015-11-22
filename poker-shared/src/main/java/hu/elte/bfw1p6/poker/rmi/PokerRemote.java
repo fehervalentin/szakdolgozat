@@ -41,6 +41,8 @@ public interface PokerRemote extends Remote, Serializable {
 	 * @param oldPassword a régi jelszó
 	 * @param newPassword az új jelszó
 	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 * @throws PokerInvalidPassword
 	 */
 	void modifyPassword(UUID uuid, String oldPassword, String newPassword) throws RemoteException, PokerDataBaseException, PokerInvalidPassword;
 	
@@ -55,7 +57,7 @@ public interface PokerRemote extends Remote, Serializable {
 	
 	/**
 	 * Új játéktáblát hoz létre
-	 * @param a kliens egyedi session azonosítója
+	 * @param uuid a kliens egyedi session azonosítója
 	 * @param t a létrehozandó tábla entitás
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
@@ -64,7 +66,7 @@ public interface PokerRemote extends Remote, Serializable {
 	
 	/**
 	 * Már meglévő játéktáblát töröl
-	 * @param a kliens egyedi session azonosítója
+	 * @param uuid a kliens egyedi session azonosítója
 	 * @param pokerTable a törlendő játéktábla
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
@@ -74,7 +76,7 @@ public interface PokerRemote extends Remote, Serializable {
 
 	/**
 	 * Már meglévő játéktábla módosítása
-	 * @param a kliens egyedi session azonosítója
+	 * @param uuid a kliens egyedi session azonosítója
 	 * @param t a módosítandó játéktábla
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
@@ -84,7 +86,7 @@ public interface PokerRemote extends Remote, Serializable {
 
 	/**
 	 * Az összes játéktábla lekérése
-	 * @param a kliens egyedi session azonosítója
+	 * @param uuid a kliens egyedi session azonosítója
 	 * @return az összes játéktábla
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
@@ -95,12 +97,10 @@ public interface PokerRemote extends Remote, Serializable {
 	 * Bejelentkezés a póker játékba
 	 * @param username a felhasználónév
 	 * @param password a jelszó
-	 * @param username
-	 * @param password
-	 * @return PokerSession a kliensek számára egyedi UUID-val
 	 * @throws RemoteException
 	 * @throws PokerInvalidUserException
 	 * @throws PokerDataBaseException
+	 * @return PokerSession a kliensek számára egyedi UUID-val
 	 */
 	PokerSession login(String username, String password) throws RemoteException, PokerInvalidUserException, PokerDataBaseException;
 
