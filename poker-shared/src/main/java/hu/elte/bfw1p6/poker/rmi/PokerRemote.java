@@ -169,4 +169,22 @@ public interface PokerRemote extends Remote, Serializable {
 	 * @throws RemoteException
 	 */
 	boolean canSitIn(UUID uuid, PokerTable paramPokerTable) throws RemoteException;
+
+	/**
+	 * Már meglévő felhasználó módosítása
+	 * @param uuid a kliens egyedi session azonosítója
+	 * @param u a módosítandó felhasználó
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 */
+	void modifyUser(UUID id, User u) throws RemoteException, PokerDataBaseException;
+
+	/**
+	 * Már meglévő felhasználót töröl
+	 * @param uuid a kliens egyedi session azonosítója
+	 * @param u a törlendő felhasználó
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 */
+	void deleteUser(UUID id, User u) throws RemoteException, PokerDataBaseException;
 }

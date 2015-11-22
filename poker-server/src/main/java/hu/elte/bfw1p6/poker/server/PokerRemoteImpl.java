@@ -291,4 +291,18 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	private AbstractPokerTableServer getAbstractPokerTableServerByTableName(String tableName) {
 		return pokerTableservers.stream().filter(sv -> sv.getName().equals(tableName)).findFirst().get();
 	}
+
+	@Override
+	public void modifyUser(UUID uuid, User u) throws RemoteException, PokerDataBaseException {
+		if (sessionService.isAuthenticated(uuid)) {
+			userDAO.modify(u);
+		}
+	}
+
+	@Override
+	public void deleteUser(UUID uuid, User u) throws RemoteException, PokerDataBaseException {
+		if (sessionService.isAuthenticated(uuid)) {
+			userDAO.delete(u);
+		}
+	}
 }

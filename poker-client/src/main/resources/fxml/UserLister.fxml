@@ -31,8 +31,17 @@
 					<TableColumn prefWidth="100.0" text="Admin" fx:id="adminColumn" />
 				</columns>
 			</TableView>
-			<Button fx:id="backButton" text="Vissza" onAction="#handleBack"
-				GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="rich-blue" />
+			<GridPane alignment="CENTER" hgap="10.0" vgap="10.0"
+				GridPane.columnIndex="1" GridPane.rowIndex="1">
+				<Button fx:id="deleteUserButton" text="Felhasználó törlése"
+					onAction="#handledeleteUse" GridPane.columnIndex="1" GridPane.rowIndex="0"
+					styleClass="rich-blue" />
+				<Button fx:id="modifyAdminButton" text="Admin jog billentés"
+					onAction="#handleAdmin" GridPane.columnIndex="1" GridPane.rowIndex="1"
+					styleClass="rich-blue" />
+				<Button fx:id="backButton" text="Vissza" onAction="#handleBack"
+					GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="rich-blue" />
+			</GridPane>
 		</GridPane>
 	</children>
 </AnchorPane>

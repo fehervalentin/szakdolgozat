@@ -209,4 +209,26 @@ public class Model {
 	public boolean canSitIn() throws RemoteException {
 		return pokerRemote.canSitIn(pokerSession.getId(), paramPokerTable);
 	}
+
+	/**
+	 * Már meglévő felhasználó módosítása
+	 * @param uuid a kliens egyedi session azonosítója
+	 * @param u a módosítandó felhasználó
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 */
+	public void modifyUser(User u) throws RemoteException, PokerDataBaseException {
+		pokerRemote.modifyUser(pokerSession.getId(), u);
+	}
+
+	/**
+	 * Már meglévő felhasználót töröl
+	 * @param uuid a kliens egyedi session azonosítója
+	 * @param u a törlendő felhasználó
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 */
+	public void deleteUser(User u) throws RemoteException, PokerDataBaseException {
+		pokerRemote.deleteUser(pokerSession.getId(), u);
+	}
 }

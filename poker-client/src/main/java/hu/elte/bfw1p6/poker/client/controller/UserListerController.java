@@ -23,13 +23,19 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 public class UserListerController extends AbstractPokerClientController {
 	
+	private final String ERR_USER_SELECTION = "Nem választottál ki egy felhasználót sem!";
+	private final String SUCC_USER_MODIFY = "Sikeresen módosítottad a felhasználót!";
+	private final String SUCC_USER_DELETE = "Sikeresen törölted a felhasználót!";
+	
 	/**
 	 * Egy regisztrált felhasználó oszlopai.
 	 */
 	private final String[] COLUMNS = {"userName", "regDate", "balance", "admin"};
 	
 	@FXML private Button backButton;
-	
+	@FXML private Button modifyAdminButton;
+	@FXML private Button deleteUserButton;
+
 	@FXML private TableColumn<User, String> userNameColumn;
 	@FXML private TableColumn<User, Long> regDateColumn;
 	@FXML private TableColumn<User, BigDecimal> balanceColumn;
@@ -52,10 +58,54 @@ public class UserListerController extends AbstractPokerClientController {
 			remoteExceptionHandler();
 		}
 	}
+	
+	private User getSelectedUser() {
+		return userView.getSelectionModel().getSelectedItem();
+	}
 
 	@Override
 	public void setDelegateController(FrameController frameController) {
 		this.frameController = frameController;
+	}
+	
+	/**
+	 * A DELETE gomb click handlerje.
+	 * @param event az esemény
+	 */
+	@FXML protected void handledeleteUse(ActionEvent event) {
+		User selectedUser = getSelectedUser();
+		if (selectedUser != null) {
+			try {
+				selectedUser.setAdmin(!selectedUser.getAdmin());
+				model.deleteUser(selectedUser);
+				showSuccessAlert(SUCC_USER_DELETE);
+			} catch (PokerDataBaseException e) {
+				showErrorAlert(e.getMessage());
+			} catch (RemoteException e) {
+				remoteExceptionHandler();
+			}
+		}
+	}
+	
+	/**
+	 * Az ADMIN gomb click handlerje.
+	 * @param event az esemény
+	 */
+	@FXML protected void handleAdmin(ActionEvent event) {
+		User selectedUser = getSelectedUser();
+		if (selectedUser != null) {
+			try {
+				selectedUser.setAdmin(!selectedUser.getAdmin());
+				model.modifyUser(selectedUser);
+				showSuccessAlert(SUCC_USER_MODIFY);
+			} catch (PokerDataBaseException e) {
+				showErrorAlert(e.getMessage());
+			} catch (RemoteException e) {
+				remoteExceptionHandler();
+			}
+		} else {
+			showErrorAlert(ERR_USER_SELECTION);
+		}
 	}
 	
 	/**
