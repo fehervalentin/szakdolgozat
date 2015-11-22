@@ -2,27 +2,45 @@ package hu.elte.bfw1p6.poker.model.entity;
 
 import java.math.BigDecimal;
 
+import com.cantero.games.poker.texasholdem.Player;
+
 /**
  * A ténylegesen letárolandó felhasználói fiók.
  * @author feher
  *
  */
-public class User extends PokerPlayer implements EntityWithId {
+public class User extends Player implements EntityWithId {
 
 	private static final long serialVersionUID = 8433545627454578662L;
 	
 	public static final String TABLE_NAME = "users";
 
 	private Integer id;
+	
+	/**
+	 * A játékos felhasználó neve.
+	 */
+	protected String userName;
+	
+	/**
+	 * A játékos regisztráció dátuma.
+	 */
+	protected long regDate;
+	
+	/**
+	 * A játékos egyenlege.
+	 */
+	protected BigDecimal balance;
+
+	/**
+	 * A felhasználó admin-e.
+	 */
+	protected Boolean admin;
 
 	/**
 	 * A felhasználó hashelt jelszava.
 	 */
 	private String password;
-
-	public User(String username) {
-		super(username);
-	}
 
 	public User() {
 
@@ -46,15 +64,6 @@ public class User extends PokerPlayer implements EntityWithId {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public PokerPlayer getPlayer() {
-		PokerPlayer p = new PokerPlayer();
-		p.userName = this.userName;
-		p.balance = this.balance;
-		p.regDate = this.regDate;
-		p.admin = this.admin;
-		return p;
 	}
 
 	@Override
@@ -104,5 +113,29 @@ public class User extends PokerPlayer implements EntityWithId {
 			break;
 		}
 		}
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public long getRegDate() {
+		return regDate;
+	}
+
+	public BigDecimal getBalance() {
+		return balance;
+	}
+	
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+
+	public Boolean getAdmin() {
+		return admin;
 	}
 }

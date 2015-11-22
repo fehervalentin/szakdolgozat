@@ -15,8 +15,8 @@ import hu.elte.bfw1p6.poker.command.classic.type.ClassicHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
-import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
+import hu.elte.bfw1p6.poker.model.entity.User;
 
 /**
  * Póker játékasztal-szerver classic játékhoz.
@@ -91,8 +91,8 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 					break;
 				}
 				case DEAL2: {
-					IntStream.range(0, players.size()).forEach(i ->
-						notifyNthClient(i, new ClassicHouseCommand().setUpDeal2Command(players.get(i).getCards(), whosOn))
+					IntStream.range(0, users.size()).forEach(i ->
+						notifyNthClient(i, new ClassicHouseCommand().setUpDeal2Command(users.get(i).getCards(), whosOn))
 					);
 					break;
 				}
@@ -172,9 +172,9 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	 * @param classicPlayerCommand az utasítás
 	 */
 	private void receivedChangePlayerCommand(ClassicPlayerCommand classicPlayerCommand) {
-		PokerPlayer pokerPlayer = players.stream().filter(player -> player.getUserName().equals(classicPlayerCommand.getSender())).findFirst().get();
+		User user = users.stream().filter(player -> player.getUserName().equals(classicPlayerCommand.getSender())).findFirst().get();
 		for (Integer i : classicPlayerCommand.getMarkedCards()) {
-			pokerPlayer.setNthCard(i, deck.popCard());
+			user.setNthCard(i, deck.popCard());
 		}
 		++votedPlayers;
 	}

@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
-import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
+import hu.elte.bfw1p6.poker.model.entity.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -30,21 +30,21 @@ public class UserListerController extends AbstractPokerClientController {
 	
 	@FXML private Button backButton;
 	
-	@FXML private TableColumn<PokerPlayer, String> userNameColumn;
-	@FXML private TableColumn<PokerPlayer, Long> regDateColumn;
-	@FXML private TableColumn<PokerPlayer, BigDecimal> balanceColumn;
-	@FXML private TableColumn<PokerPlayer, Boolean> adminColumn;
+	@FXML private TableColumn<User, String> userNameColumn;
+	@FXML private TableColumn<User, Long> regDateColumn;
+	@FXML private TableColumn<User, BigDecimal> balanceColumn;
+	@FXML private TableColumn<User, Boolean> adminColumn;
 	
-	@FXML private TableView<PokerPlayer> userView;
+	@FXML private TableView<User> userView;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		userNameColumn.setCellValueFactory(new PropertyValueFactory<PokerPlayer, String>(COLUMNS[0]));
-		regDateColumn.setCellValueFactory(new PropertyValueFactory<PokerPlayer, Long>(COLUMNS[1]));
-		balanceColumn.setCellValueFactory(new PropertyValueFactory<PokerPlayer, BigDecimal>(COLUMNS[2]));
-		adminColumn.setCellValueFactory(new PropertyValueFactory<PokerPlayer, Boolean>(COLUMNS[3]));
+		userNameColumn.setCellValueFactory(new PropertyValueFactory<User, String>(COLUMNS[0]));
+		regDateColumn.setCellValueFactory(new PropertyValueFactory<User, Long>(COLUMNS[1]));
+		balanceColumn.setCellValueFactory(new PropertyValueFactory<User, BigDecimal>(COLUMNS[2]));
+		adminColumn.setCellValueFactory(new PropertyValueFactory<User, Boolean>(COLUMNS[3]));
 		try {
-			List<PokerPlayer> players = model.getUsers();
+			List<User> players = model.getUsers();
 			userView.getItems().setAll(players);
 		} catch (PokerDataBaseException e) {
 			showErrorAlert(e.getMessage());

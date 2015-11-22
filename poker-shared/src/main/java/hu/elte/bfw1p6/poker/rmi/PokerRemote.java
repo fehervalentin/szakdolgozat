@@ -16,8 +16,8 @@ import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
-import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
+import hu.elte.bfw1p6.poker.model.entity.User;
 
 /**
  * A szerver publikus interface-e.
@@ -159,7 +159,7 @@ public interface PokerRemote extends Remote, Serializable {
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
 	 */
-	List<PokerPlayer> getUsers(UUID uuid) throws RemoteException, PokerDataBaseException;
+	List<User> getUsers(UUID uuid) throws RemoteException, PokerDataBaseException;
 
 	/**
 	 * Lekérdezi, hogy a kiválasztott asztalnál van-e még szabad hely.

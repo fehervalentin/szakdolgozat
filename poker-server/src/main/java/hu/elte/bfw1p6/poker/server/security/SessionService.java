@@ -35,16 +35,16 @@ public class SessionService {
 	}
 	
 	public boolean isAuthenicated(String userName) {
-		return sessions.stream().anyMatch(session -> session.getPlayer().getUserName().equals(userName));
+		return sessions.stream().anyMatch(session -> session.getUser().getUserName().equals(userName));
 	}
 	
 	public synchronized PokerSession authenticate(String userName, String password) throws PokerInvalidUserException, PokerDataBaseException {
 		User u = userDAO.findByUserName(userName);
-		if (u == null || !BCrypt.checkpw(password, u.getPassword()) || sessions.stream().anyMatch(session -> session.getPlayer().getUserName().equals(userName))) {
+		if (u == null || !BCrypt.checkpw(password, u.getPassword()) || sessions.stream().anyMatch(session -> session.getUser().getUserName().equals(userName))) {
 			throw new PokerInvalidUserException(ERR_BAD_AUTH);
 		}
 		UUID uuid = UUID.randomUUID();
-		PokerSession pokerSession = new PokerSession(uuid, u.getPlayer());
+		PokerSession pokerSession = new PokerSession(uuid, u);
 		sessions.add(pokerSession);
 		return pokerSession;
 	}
@@ -58,6 +58,6 @@ public class SessionService {
 	}
 	
 	public String lookUpUserName(UUID uuid) {
-		return sessions.stream().filter(session -> session.getId().equals(uuid)).findFirst().get().getPlayer().getUserName();
+		return sessions.stream().filter(session -> session.getId().equals(uuid)).findFirst().get().getUser().getUserName();
 	}
 }

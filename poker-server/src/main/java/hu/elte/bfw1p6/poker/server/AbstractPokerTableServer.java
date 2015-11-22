@@ -22,7 +22,6 @@ import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
-import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.UserDAO;
@@ -95,7 +94,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	/**
 	 * Maguk a játékosok.
 	 */
-	protected List<PokerPlayer> players;
+	protected List<User> users;
 
 	/**
 	 * Kártyapakli.
@@ -143,7 +142,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		this.deck = new Deck();
 		
 		this.clients = new ArrayList<>();
-		this.players = new ArrayList<>();
+		this.users = new ArrayList<>();
 		this.clientsNames = new ArrayList<>();
 		this.waitingClients = new ArrayList<>();
 		this.waitingClientsNames = new ArrayList<>();
@@ -274,9 +273,16 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		whosOn = (dealer + 3) % playersInRound;
 		//		}
 		//törlöm a játékosokat
-		players.clear();
+		users.clear();
 		//új játékosokat veszek fel
-		IntStream.range(0, clients.size()).forEach(i -> players.add(new PokerPlayer(clientsNames.get(i))));
+		for (int j = 0; j < clients.size(); j++) {
+			try {
+				users.add(userDAO.findByUserName(clientsNames.get(j)));
+			} catch (PokerDataBaseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -433,7 +439,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		for (int i = 0; i < clients.size(); i++) {
 			Card[] cards = new Card[cardsToHand];
 			IntStream.range(0, cardsToHand).forEach(j -> cards[j] = deck.popCard());
-			players.get(i).setCards(cards);
+			users.get(i).setCards(cards);
 			notifyNthClient(i, houseDealCommandFactory(cards));
 		}
 		nextStep();
@@ -444,7 +450,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 */
 	protected void collectBlinds() {
 		IntStream.range(0, clients.size()).forEach(i ->
-			notifyNthClient(i, houseBlindCommandFactory(i, i, clients.size(), dealer, whosOn, players.stream().map(PokerPlayer::getUserName).collect(Collectors.toList())))
+			notifyNthClient(i, houseBlindCommandFactory(i, i, clients.size(), dealer, whosOn, users.stream().map(User::getUserName).collect(Collectors.toList())))
 		);
 		nextStep();
 	}
@@ -456,8 +462,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	protected void bookMoneyStack(List<Card> houseCards) {
 		try {
 			int winnerIndex = getWinner(houseCards).keySet().iterator().next();
-			PokerPlayer winnerPlayer = players.get(winnerIndex);
-			User u = userDAO.findByUserName(winnerPlayer.getUserName());
+			User winnerUser = users.get(winnerIndex);
+			User u = userDAO.findByUserName(winnerUser.getUserName());
 			u.setBalance(u.getBalance().add(moneyStack));
 			userDAO.modify(u);
 			moneyStack = BigDecimal.ZERO;
@@ -477,18 +483,18 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		}
 		HashMap<Integer, Card[]> values = new HashMap<>();
 		int winner = -1;
-		List<PokerPlayer> playersInRound = new ArrayList<>();
+		List<User> playersInRound = new ArrayList<>();
 		for (int i = 0; i < leftRoundMask.length; i++) {
 			if (!leftRoundMask[i]) {
-				playersInRound.add(players.get(i));
+				playersInRound.add(users.get(i));
 			}
 		}
 		List<IPlayer> winnerList = HoldemHandEvaluator.getInstance().getWinner(houseCards, playersInRound);
 		Card[] cards = winnerList.get(0).getCards();
-		for (int i = 0; i < players.size(); i++) {
+		for (int i = 0; i < users.size(); i++) {
 			boolean gotIt = true;
 			for (int j = 0; j < cards.length; j++) {
-				if (!players.get(i).getCards()[j].equals(cards[j])) {
+				if (!users.get(i).getCards()[j].equals(cards[j])) {
 					gotIt = false;
 					break;
 				}

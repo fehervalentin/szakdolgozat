@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -22,7 +23,6 @@ import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
-import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.PokerTableDAO;
@@ -237,8 +237,9 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public synchronized void registration(String username, String password) throws RemoteException, PokerDataBaseException {
-		User u = new User(username);
+	public synchronized void registration(String userName, String password) throws RemoteException, PokerDataBaseException {
+		User u = new User();
+		u.setUserName(userName);
 		u.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
 		u.setBalance(new BigDecimal(INITIAL_BALANCE));
 		u.setAdmin(false);
@@ -268,15 +269,13 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 
 	@Override
 	public synchronized BigDecimal refreshBalance(UUID uuid) throws RemoteException, PokerDataBaseException {
-		return userDAO.findByUserName(sessionService.lookUpUserName(uuid)).getPlayer().getBalance();
+		return userDAO.findByUserName(sessionService.lookUpUserName(uuid)).getBalance();
 	}
 
 	@Override
-	public List<PokerPlayer> getUsers(UUID uuid) throws RemoteException, PokerDataBaseException {
+	public List<User> getUsers(UUID uuid) throws RemoteException, PokerDataBaseException {
 		if (sessionService.isAuthenticated(uuid)) {
-			List<PokerPlayer> pokerPlayers = new ArrayList<>();
-			userDAO.findAll().forEach(user -> pokerPlayers.add(user.getPlayer()));
-			return pokerPlayers;
+			return userDAO.findAll().stream().collect(Collectors.toList());
 		}
 		return null;
 	}

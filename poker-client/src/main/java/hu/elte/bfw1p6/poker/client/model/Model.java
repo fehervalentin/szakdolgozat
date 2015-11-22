@@ -12,8 +12,8 @@ import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
 import hu.elte.bfw1p6.poker.model.PokerSession;
-import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
+import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.properties.PokerProperties;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 
@@ -177,11 +177,11 @@ public class Model {
 		return pokerRemote.isAdmin(pokerSession.getId());
 	}
 	
-	public PokerPlayer getPlayer() {
-		return pokerSession.getPlayer();
+	public User getUser() {
+		return pokerSession.getUser();
 	}
 
-	public List<PokerPlayer> getUsers() throws PokerDataBaseException, RemoteException {
+	public List<User> getUsers() throws PokerDataBaseException, RemoteException {
 		return pokerRemote.getUsers(pokerSession.getId());
 	}
 	

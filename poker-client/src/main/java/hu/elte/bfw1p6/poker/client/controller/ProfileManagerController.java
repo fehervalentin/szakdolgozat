@@ -38,8 +38,8 @@ public class ProfileManagerController extends AbstractPokerClientController {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		usernameLabel.setText(model.getPlayer().getUserName() + " profilja");
-		Date date = new Date(model.getPlayer().getRegDate() * 1000);
+		usernameLabel.setText(model.getUser().getUserName() + " profilja");
+		Date date = new Date(model.getUser().getRegDate() * 1000);
 	    Format format = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
 		regDateLabel.setText(format.format(date).toString());
 	}

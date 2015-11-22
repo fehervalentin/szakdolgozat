@@ -8,7 +8,7 @@ import com.cantero.games.poker.texasholdem.Card;
 import com.cantero.games.poker.texasholdem.IPlayer;
 import com.cantero.games.poker.texasholdem.RankingUtil;
 
-import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
+import hu.elte.bfw1p6.poker.model.entity.User;
 
 public class HoldemHandEvaluator {
 	
@@ -23,20 +23,20 @@ public class HoldemHandEvaluator {
 		return instance;
 	}
 	
-	private void checkPlayersRanking(List<Card> houseCards, List<PokerPlayer> players) {
-		for (PokerPlayer player : players) {
-			RankingUtil.checkRanking(player, houseCards);
+	private void checkPlayersRanking(List<Card> houseCards, List<User> users) {
+		for (User user : users) {
+			RankingUtil.checkRanking(user, houseCards);
 		}
 	}
 	
-	public List<IPlayer> getWinner(List<Card> houseCards, List<PokerPlayer> players) {
-		checkPlayersRanking(houseCards, players);
+	public List<IPlayer> getWinner(List<Card> houseCards, List<User> users) {
+		checkPlayersRanking(houseCards, users);
 		List<IPlayer> winnerList = new ArrayList<IPlayer>();
-		IPlayer winner = players.get(0);
+		IPlayer winner = users.get(0);
 		Integer winnerRank = RankingUtil.getRankingToInt(winner);
 		winnerList.add(winner);
-		for (int i = 1; i < players.size(); i++) {
-			IPlayer player = players.get(i);
+		for (int i = 1; i < users.size(); i++) {
+			IPlayer player = users.get(i);
 			Integer playerRank = RankingUtil.getRankingToInt(player);
 			//Draw game
 			if (winnerRank == playerRank) {

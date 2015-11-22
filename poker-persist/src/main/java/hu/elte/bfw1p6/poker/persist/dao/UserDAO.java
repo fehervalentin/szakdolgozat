@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
-import hu.elte.bfw1p6.poker.model.entity.PokerPlayer;
 import hu.elte.bfw1p6.poker.model.entity.User;
 
 /**
@@ -77,21 +76,6 @@ public class UserDAO extends GenericDAO<User>{
 		try(PreparedStatement pstmt = dbManager.getConnection().prepareStatement(query)) {
 			pstmt.setString(1, newPassword);
 			pstmt.setString(2, username);
-			pstmt.executeUpdate();
-		} catch (SQLException e) {
-			throw sqlExceptionTranslator.interceptException(e);
-		}
-	}
-	
-	/**
-	 * Létező user entitást töröl az adatbázisból.
-	 * @param player az entitás
-	 * @throws PokerDataBaseException
-	 */
-	public void deletePlayer(PokerPlayer player) throws PokerDataBaseException {
-		try(PreparedStatement pstmt = dbManager.getConnection().prepareStatement(DELETE)) {
-			User u = findByUserName(player.getUserName());
-			pstmt.setLong(1, u.getId());
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			throw sqlExceptionTranslator.interceptException(e);

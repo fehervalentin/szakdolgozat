@@ -66,11 +66,11 @@ public abstract class AbstractMainGameModel {
 	}
 
 	public String getUserName() {
-		return pokerSession.getPlayer().getUserName();
+		return pokerSession.getUser().getUserName();
 	}
 	
 	public BigDecimal getBalance() {
-		return pokerSession.getPlayer().getBalance();
+		return pokerSession.getUser().getBalance();
 	}
 	
 	/**
@@ -127,7 +127,7 @@ public abstract class AbstractMainGameModel {
 	 * @throws RemoteException
 	 */
 	protected void sendCommandToTable(PlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
-		playerCommand.setSender(pokerSession.getPlayer().getUserName());
+		playerCommand.setSender(pokerSession.getUser().getUserName());
 		pokerRemote.sendPlayerCommand(pokerSession.getId(), pokerTable, communicatorController, playerCommand);
 		pokerSession.refreshBalance(pokerRemote.refreshBalance(pokerSession.getId()));
 	}
@@ -186,7 +186,7 @@ public abstract class AbstractMainGameModel {
 	 * @param houseCommand az utasítás
 	 */
 	public void receivedDealHouseCommand(HouseCommand houseCommand) {
-		pokerSession.getPlayer().setCards(houseCommand.getCards());
+		pokerSession.getUser().setCards(houseCommand.getCards());
 	}
 	
 	/**
