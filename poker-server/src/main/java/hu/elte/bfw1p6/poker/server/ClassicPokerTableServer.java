@@ -83,7 +83,6 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
 			if (votedPlayers >= playersInRound) {
 				ClassicHouseCommand classicHouseCommand = new ClassicHouseCommand();
-				// flopnál, turnnél, rivernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de arról a szerver gondoskodik)
 				whosOn = (dealer + 1) % leftRoundMask.length;
 				whosOn = findNextValidClient(whosOn);
 				switch (actualClassicHouseCommandType) {
@@ -114,7 +113,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	}
 
 	@Override
-	protected void receivedPlayerCommand(PokerRemoteObserver client, PlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	protected void receivedPlayerCommand(PokerRemoteObserver client, PlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException {
 		// ha valid klienstől érkezik üzenet, azt feldolgozzuk, körbeküldjük
 		if (clients.contains(client)) {
 			ClassicPlayerCommand classicPlayerCommand = (ClassicPlayerCommand)playerCommand;
@@ -173,12 +172,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	 * @param classicPlayerCommand az utasítás
 	 */
 	private void receivedChangePlayerCommand(ClassicPlayerCommand classicPlayerCommand) {
-		PokerPlayer pokerPlayer = null;
-		for (PokerPlayer player : players) {
-			if(player.getUserName().equals(classicPlayerCommand.getSender())) {
-				pokerPlayer = player;
-			}
-		}
+		PokerPlayer pokerPlayer = players.stream().filter(player -> player.getUserName().equals(classicPlayerCommand.getSender())).findFirst().get();
 		for (Integer i : classicPlayerCommand.getMarkedCards()) {
 			pokerPlayer.setNthCard(i, deck.popCard());
 		}

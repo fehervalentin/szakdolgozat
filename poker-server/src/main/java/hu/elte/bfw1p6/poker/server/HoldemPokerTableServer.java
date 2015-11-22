@@ -75,7 +75,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	}
 
 	@Override
-	protected synchronized void receivedPlayerCommand(PokerRemoteObserver client, PlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException, RemoteException {
+	protected synchronized void receivedPlayerCommand(PokerRemoteObserver client, PlayerCommand playerCommand) throws PokerDataBaseException, PokerUserBalanceException {
 		// ha valid klienstől érkezik üzenet, azt feldolgozzuk, körbeküldjük
 		if (clients.contains(client)) {
 			HoldemPlayerCommand holdemPlayerCommand = (HoldemPlayerCommand)playerCommand;
@@ -130,7 +130,6 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 
 	@Override
 	protected void nextRound() {
-		// ha már kijött a river és az utolsó körben (rivernél) már mindenki nyilatkozott legalább egyszer, akkor új játszma kezdődik
 		if (playersInRound <= 1 || (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND && votedPlayers >= playersInRound)) {
 			if (playersInRound > 0) {
 				bookMoneyStack(null);
@@ -139,7 +138,6 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 		} else {
 			// ha már mindenki nyilatkozott legalább egyszer (raise esetén újraindul a kör...)
 			if (votedPlayers >= playersInRound) {
-				// flopnál, turnnél, rivernél, winnernél mindig a kisvak kezdi a gondolkodást! (persze kivétel, ha eldobta a lapjait, de akkor úgy is lecsúsznak a helyére
 				whosOn = (dealer + 1) % leftRoundMask.length;
 				whosOn = findNextValidClient(whosOn);
 				HoldemHouseCommand houseHoldemCommand = new HoldemHouseCommand();
