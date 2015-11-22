@@ -86,7 +86,8 @@ public abstract class PlayerCommand implements PokerCommand {
 	
 	/**
 	 * Ha egy játékos QUIT típusú utasítást küld, akkor ezt a metódust kell használni.
-	 * @param tempNth a játékos sorszáma
+	 * @param sender az utasítást küldő játékos neve
+	 * @param youAreNth hanyadik vagy a körben
 	 * @return this
 	 */
 	public abstract PlayerCommand setUpQuitCommand(String sender, int youAreNth);

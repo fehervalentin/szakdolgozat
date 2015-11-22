@@ -109,6 +109,7 @@ public class FrameController extends UnicastRemoteObject {
 	
 	/**
 	 * A póker játék fő-FXML-t jeleníti meg.
+	 * @param pokerType a játékstílus
 	 */
 	public void setMainGameFXML(PokerType pokerType) {
 		switch (pokerType) {

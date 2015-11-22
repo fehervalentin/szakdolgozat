@@ -71,7 +71,7 @@ public class ClassicPlayerCommand extends PlayerCommand {
 	
 	/**
 	 * Ha egy játékos CHANGE típusú utasítást küld, akkor ezt a metódust kell használni.
-	 * @param tempNth a játékos sorszáma
+	 * @param markedCards a cserélendő kártyák sorszáma
 	 */
 	public void setUpChangeCommand(List<Integer> markedCards) {
 		this.markedCards = markedCards;

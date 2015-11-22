@@ -60,10 +60,12 @@ public abstract class HouseCommand implements PokerCommand {
 	
 	/**
 	 * Ha a szerver BLIND típusú utasítást küld, akkor ezt a metódust kell használni.
+	 * @param fixSitPosition a játékos fix beülő pozíciója az asztalnál
 	 * @param nthPlayer hanyadik játékos vagy a körben
 	 * @param players hány játékos van összesen a körben
 	 * @param dealer ki az aktuális osztó
 	 * @param whosOn az épppen következő (soron levő) játékos
+	 * @param clientsNames az asztalnál ülő játékosok nevei
 	 * @return a beállítot utasítás
 	 */
 	public abstract HouseCommand setUpBlindCommand(int fixSitPosition, int nthPlayer, int players, int dealer, int whosOn, List<String> clientsNames);
@@ -79,7 +81,8 @@ public abstract class HouseCommand implements PokerCommand {
 	/**
 	 * Ha a szerver WINNER típusú utasítást küld, akkor ezt a metódust kell használni.
 	 * @param cards a nyertes kártyalapok
-	 * @param winnerUserName a nyertes neve
+	 * @param winner a nyertes neve
+	 * @param whosOn a következő játékos
 	 * @return a beállított utasítás
 	 */
 	public abstract HouseCommand setUpWinnerCommand(Card[] cards, int winner, int whosOn);

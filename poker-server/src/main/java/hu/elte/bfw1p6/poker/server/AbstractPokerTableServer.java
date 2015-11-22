@@ -201,8 +201,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * QUIT típusú utasítás érkezett egy klienstől.
 	 * @param client a kilépendő kliens
 	 * @param playerCommand az utasítás
-	 * @throws PokerUserBalanceException
-	 * @throws PokerDataBaseException
 	 */
 	protected void receivedQuitPlayerCommand(PokerRemoteObserver client, PlayerCommand playerCommand) {
 		int index = clients.indexOf(client);
@@ -402,17 +400,14 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Ha a kliens üzenetét fogadtuk, akkor ezeket az utasításokat
 	 * minden fogadott kliens utasítás után kötelezően végre kell hajtani.
 	 * @param playerCommand az utasítás
-	 * @throws RemoteException
 	 */
 	protected void endOfReceivedPlayerCommand(PlayerCommand playerCommand) {
-//		if (playersInRound > 0) {
-			++whosOn;
-			whosOn = (findNextValidClient(whosOn) % leftRoundMask.length);
-			playerCommand.setWhosOn(whosOn);
-			playerCommand.setClientsCount(clients.size());
-			notifyClients(playerCommand);
-			nextRound();
-//		}
+		++whosOn;
+		whosOn = (findNextValidClient(whosOn) % leftRoundMask.length);
+		playerCommand.setWhosOn(whosOn);
+		playerCommand.setClientsCount(clients.size());
+		notifyClients(playerCommand);
+		nextRound();
 	}
 
 	/**
@@ -554,7 +549,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 
 	/**
 	 * A nyertes megkeresése, és kihirdetése.
-	 * @param houseCommand az utasítás
+	 * @return WINNER típusú utasítás
 	 */
 	protected HouseCommand winner() {
 		HashMap<Integer, Card[]> winner = getWinner(houseCards);
@@ -570,7 +565,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 
 	/**
 	 * Következő kör a szerveren.
-	 * @throws RemoteException
 	 */
 	protected abstract void nextRound();
 

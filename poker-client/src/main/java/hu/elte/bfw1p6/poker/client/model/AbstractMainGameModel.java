@@ -85,6 +85,7 @@ public abstract class AbstractMainGameModel {
 
 	/**
 	 * A dealer mellett közvetlenül balra ülő játékos köteles kis vakot betenni.
+	 * @param houseCommand az utasítás
 	 * @return ha nekem kell betenni a kis vakot, akkor true, különben false.
 	 */
 	protected boolean areYouTheSmallBlind(HouseCommand houseCommand) {
@@ -93,6 +94,7 @@ public abstract class AbstractMainGameModel {
 
 	/**
 	 * A dealer mellett kettővel balra ülő játékos köteles nagy vakot betenni.
+	 * @param houseCommand az utasítás
 	 * @return ha nekem kell betenni a nagy vakot, akkor true, különben false.
 	 */
 	protected boolean areYouTheBigBlind(HouseCommand houseCommand) {
@@ -101,7 +103,7 @@ public abstract class AbstractMainGameModel {
 	
 	/**
 	 * Ha BLIND típusú utasítás jött a szervertől
-	 * @param houseHoldemCommand a szerver utasítás
+	 * @param houseCommand a szerver utasítás
 	 * @throws PokerUserBalanceException 
 	 * @throws PokerDataBaseException 
 	 * @throws RemoteException 
@@ -157,7 +159,6 @@ public abstract class AbstractMainGameModel {
 	
 	/**
 	 * RAISE típusú utasítás küldése a szervernek.
-	 * @param amount az emelendő összeg
 	 * @throws PokerDataBaseException
 	 * @throws PokerUserBalanceException
 	 * @throws RemoteException

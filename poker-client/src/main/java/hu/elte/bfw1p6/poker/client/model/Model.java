@@ -125,6 +125,7 @@ public class Model {
 
 	/**
 	 * Kijelentkezés.
+	 * @param commCont a kommunikációs kontroller
 	 * @throws RemoteException
 	 */
 	public void logout(PokerRemoteObserver commCont) throws RemoteException {

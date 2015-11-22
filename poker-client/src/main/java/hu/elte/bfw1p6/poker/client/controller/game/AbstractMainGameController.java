@@ -394,6 +394,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 
 	/**
 	 * Ellenőrzi, hogy van-e adósságom, és ennek megfelelően állítja be a CHECK és CALL gombok disable tulajdonsgát.
+	 * @param whosOn ki következik
 	 */
 	protected void debtChecker(int whosOn) {
 		if (model.getYouAreNth() == whosOn) {
@@ -425,7 +426,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	
 	/**
 	 * A ház által küldött utasítást logol.
-	 * @param houseCommand
+	 * @param houseCommand az utasítás
 	 */
 	protected synchronized void logHouseCommand(HouseCommand houseCommand) {
 		Platform.runLater(new Runnable() {
