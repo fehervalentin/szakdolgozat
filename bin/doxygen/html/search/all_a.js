@@ -1,9 +1,0 @@
-var searchData=
-[
-  ['leftroundmask',['leftRoundMask',['../classhu_1_1elte_1_1bfw1p6_1_1poker_1_1server_1_1_abstract_poker_table_server.html#a3f757729b56bbeba3f4f05eb98e0d202',1,'hu::elte::bfw1p6::poker::server::AbstractPokerTableServer']]],
-  ['loadmycards',['loadMyCards',['../classhu_1_1elte_1_1bfw1p6_1_1poker_1_1client_1_1view_1_1_abstract_main_view.html#a83173421a07ab054e3bc311a7c8b3a18',1,'hu::elte::bfw1p6::poker::client::view::AbstractMainView']]],
-  ['login',['login',['../classhu_1_1elte_1_1bfw1p6_1_1poker_1_1client_1_1model_1_1_model.html#a3dc5865ec7c522abe8623a90ee0a408d',1,'hu.elte.bfw1p6.poker.client.model.Model.login()'],['../classhu_1_1elte_1_1bfw1p6_1_1poker_1_1server_1_1_poker_remote_impl.html#a537a64e08430f0c21e722b5f170c574d',1,'hu.elte.bfw1p6.poker.server.PokerRemoteImpl.login()'],['../interfacehu_1_1elte_1_1bfw1p6_1_1poker_1_1rmi_1_1_poker_remote.html#a88cf2a75a0ab7176af18b1463b851675',1,'hu.elte.bfw1p6.poker.rmi.PokerRemote.login()']]],
-  ['logincontroller',['LoginController',['../classhu_1_1elte_1_1bfw1p6_1_1poker_1_1client_1_1controller_1_1_login_controller.html',1,'hu::elte::bfw1p6::poker::client::controller']]],
-  ['loginhandler',['loginHandler',['../classhu_1_1elte_1_1bfw1p6_1_1poker_1_1client_1_1controller_1_1_login_controller.html#a6560a07766f3ae764fbb3e3956cf96b7',1,'hu::elte::bfw1p6::poker::client::controller::LoginController']]],
-  ['logout',['logout',['../classhu_1_1elte_1_1bfw1p6_1_1poker_1_1client_1_1model_1_1_model.html#a4ae261af4206757a63d37b38e2ba1ede',1,'hu.elte.bfw1p6.poker.client.model.Model.logout()'],['../classhu_1_1elte_1_1bfw1p6_1_1poker_1_1server_1_1_poker_remote_impl.html#a07ceb6650ddc01da67aba54816f915c2',1,'hu.elte.bfw1p6.poker.server.PokerRemoteImpl.logout()'],['../interfacehu_1_1elte_1_1bfw1p6_1_1poker_1_1rmi_1_1_poker_remote.html#a5621c1ef70279dfdda38bc61012fff37',1,'hu.elte.bfw1p6.poker.rmi.PokerRemote.logout()']]]
-];
