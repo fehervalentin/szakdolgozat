@@ -19,47 +19,54 @@
 		<fill.db.file.path>${sql.file.path.prefix}/poker.sql</fill.db.file.path>
 	</properties>
 
+	<profiles>
+		<profile>
+			<id>bootstrap</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.4.0</version>
+						<configuration>
+							<executable>mvn</executable>
+							<arguments>
+								<argument>sql:execute@create-db</argument>
+								<argument>sql:execute@create-triggers</argument>
+								<argument>sql:execute@fill-db</argument>
+							</arguments>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>install</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<dependencies>
-		<dependency>
-			<groupId>hu.elte.bfw1p6.poker</groupId>
-			<artifactId>poker-model</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>hu.elte.bfw1p6.poker</groupId>
 			<artifactId>poker-shared</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		<!-- specify the dependent jdbc driver here -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.6</version>
 		</dependency>
-		<dependency>
-			<groupId>org.mindrot</groupId>
-			<artifactId>jbcrypt</artifactId>
-			<version>0.3m</version>
-		</dependency>
 	</dependencies>
-
 
 	<build>
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>exec-maven-plugin</artifactId>
-					<version>1.4.0</version>
-					<configuration>
-						<executable>mvn</executable>
-						<arguments>
-							<argument>sql:execute@create-db</argument>
-							<argument>sql:execute@create-triggers</argument>
-							<argument>sql:execute@fill-db</argument>
-						</arguments>
-					</configuration>
-				</plugin>
-
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
@@ -72,18 +79,6 @@
 						</compilerArguments>
 					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.16</version>
-					<configuration>
-						<additionalClasspathElements>
-							<additionalClasspathElement>${java.home}/lib/jfxrt.jar</additionalClasspathElement>
-						</additionalClasspathElements>
-					</configuration>
-				</plugin>
-
-
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>sql-maven-plugin</artifactId>
@@ -102,10 +97,12 @@
 					<configuration>
 						<driver>com.mysql.jdbc.Driver</driver>
 						<url>${jdbc.server.connection.url}</url>
-						<username>root</username>
-						<password>1234</password>
+						<!-- https://maven.apache.org/guides/mini/guide-encryption.html -->
+						<!-- ezt nyilván nem így kéne... -->
 						<!-- You can comment out username/password configurations and have 
 							maven to look them up in your settings.xml using ${settingsKey} -->
+						<username>root</username>
+						<password>1234</password>
 						<settingsKey>sensibleKey</settingsKey>
 					</configuration>
 
@@ -117,7 +114,6 @@
 								<goal>execute</goal>
 							</goals>
 							<configuration>
-								<!-- need another database to drop the targeted one -->
 								<autocommit>true</autocommit>
 								<srcFiles>
 									<srcFile>${create.db.schema.file.path}</srcFile>

@@ -63,9 +63,13 @@ public class ConnectorController extends AbstractPokerClientController {
 	 */
 	@FXML protected void connectHandler(ActionEvent event) {
 		try {
-			Naming.lookup("//" + SVIP + ":" + PORT + "/" + SVNAME);
+			System.out.println("Csatlakozás...");
+			System.out.println("//" + serverIPField.getText() + ":" + serverPortField.getText() + "/" + serverNameField.getText());
+			Naming.lookup("//" + serverIPField.getText() + ":" + serverPortField.getText() + "/" + serverNameField.getText());
+			
 			frameController.setLoginFXML();
 		} catch (NotBoundException | MalformedURLException | RemoteException e) {
+			System.out.println("Sikertelen csatlakozás!");
 			remoteExceptionHandler();
 		}
 	}
