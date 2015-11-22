@@ -1,0 +1,92 @@
+\hypertarget{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1persist_1_1dao_1_1_user_d_a_o}{}\section{hu.\+elte.\+bfw1p6.\+poker.\+persist.\+dao.\+User\+D\+A\+O Class Reference}
+\label{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1persist_1_1dao_1_1_user_d_a_o}\index{hu.\+elte.\+bfw1p6.\+poker.\+persist.\+dao.\+User\+D\+A\+O@{hu.\+elte.\+bfw1p6.\+poker.\+persist.\+dao.\+User\+D\+A\+O}}
+Inheritance diagram for hu.\+elte.\+bfw1p6.\+poker.\+persist.\+dao.\+User\+D\+A\+O\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1persist_1_1dao_1_1_user_d_a_o}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1persist_1_1dao_1_1_user_d_a_o_acdc1fa19439cafbc55b38a6cf828285f}{}List$<$ \hyperlink{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1model_1_1entity_1_1_user}{User} $>$ {\bfseries find\+All} ()  throws Poker\+Data\+Base\+Exception \label{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1persist_1_1dao_1_1_user_d_a_o_acdc1fa19439cafbc55b38a6cf828285f}
+
+\item 
+\hyperlink{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1model_1_1entity_1_1_user}{User} \hyperlink{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1persist_1_1dao_1_1_user_d_a_o_add19b0ad4622ebe7a05eee5e2230cbed}{find\+By\+User\+Name} (String username)  throws Poker\+Data\+Base\+Exception 
+\item 
+void \hyperlink{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1persist_1_1dao_1_1_user_d_a_o_a27191cddedd780a5eaf37c5a0191cbd7}{modify\+Password} (String username, String new\+Password)  throws Poker\+Data\+Base\+Exception 
+\item 
+void \hyperlink{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1persist_1_1dao_1_1_user_d_a_o_ae2b1f249cb26c63e0024e32439a11c59}{delete\+Player} (\hyperlink{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1model_1_1entity_1_1_poker_player}{Poker\+Player} player)  throws Poker\+Data\+Base\+Exception 
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+A felhasználók letárolásáért felelős osztály. \begin{DoxyAuthor}{Author}
+feher 
+\end{DoxyAuthor}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1persist_1_1dao_1_1_user_d_a_o_ae2b1f249cb26c63e0024e32439a11c59}{}\index{hu\+::elte\+::bfw1p6\+::poker\+::persist\+::dao\+::\+User\+D\+A\+O@{hu\+::elte\+::bfw1p6\+::poker\+::persist\+::dao\+::\+User\+D\+A\+O}!delete\+Player@{delete\+Player}}
+\index{delete\+Player@{delete\+Player}!hu\+::elte\+::bfw1p6\+::poker\+::persist\+::dao\+::\+User\+D\+A\+O@{hu\+::elte\+::bfw1p6\+::poker\+::persist\+::dao\+::\+User\+D\+A\+O}}
+\subsubsection[{delete\+Player(\+Poker\+Player player)}]{\setlength{\rightskip}{0pt plus 5cm}void hu.\+elte.\+bfw1p6.\+poker.\+persist.\+dao.\+User\+D\+A\+O.\+delete\+Player (
+\begin{DoxyParamCaption}
+\item[{{\bf Poker\+Player}}]{player}
+\end{DoxyParamCaption}
+) throws {\bf Poker\+Data\+Base\+Exception}}\label{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1persist_1_1dao_1_1_user_d_a_o_ae2b1f249cb26c63e0024e32439a11c59}
+Létező user entitást töröl az adatbázisból. 
+\begin{DoxyParams}{Parameters}
+{\em player} & az entitás \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Poker\+Data\+Base\+Exception} & \\
+\hline
+\end{DoxyExceptions}
+\hypertarget{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1persist_1_1dao_1_1_user_d_a_o_add19b0ad4622ebe7a05eee5e2230cbed}{}\index{hu\+::elte\+::bfw1p6\+::poker\+::persist\+::dao\+::\+User\+D\+A\+O@{hu\+::elte\+::bfw1p6\+::poker\+::persist\+::dao\+::\+User\+D\+A\+O}!find\+By\+User\+Name@{find\+By\+User\+Name}}
+\index{find\+By\+User\+Name@{find\+By\+User\+Name}!hu\+::elte\+::bfw1p6\+::poker\+::persist\+::dao\+::\+User\+D\+A\+O@{hu\+::elte\+::bfw1p6\+::poker\+::persist\+::dao\+::\+User\+D\+A\+O}}
+\subsubsection[{find\+By\+User\+Name(\+String username)}]{\setlength{\rightskip}{0pt plus 5cm}{\bf User} hu.\+elte.\+bfw1p6.\+poker.\+persist.\+dao.\+User\+D\+A\+O.\+find\+By\+User\+Name (
+\begin{DoxyParamCaption}
+\item[{String}]{username}
+\end{DoxyParamCaption}
+) throws {\bf Poker\+Data\+Base\+Exception}}\label{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1persist_1_1dao_1_1_user_d_a_o_add19b0ad4622ebe7a05eee5e2230cbed}
+Felhaználónév alapján keres entitást az adatbázisban. 
+\begin{DoxyParams}{Parameters}
+{\em username} & a felhasználónév \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+ha létezik ilyen entitás, akkor a megtalált entitás, különben null 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Poker\+Data\+Base\+Exception} & \\
+\hline
+\end{DoxyExceptions}
+\hypertarget{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1persist_1_1dao_1_1_user_d_a_o_a27191cddedd780a5eaf37c5a0191cbd7}{}\index{hu\+::elte\+::bfw1p6\+::poker\+::persist\+::dao\+::\+User\+D\+A\+O@{hu\+::elte\+::bfw1p6\+::poker\+::persist\+::dao\+::\+User\+D\+A\+O}!modify\+Password@{modify\+Password}}
+\index{modify\+Password@{modify\+Password}!hu\+::elte\+::bfw1p6\+::poker\+::persist\+::dao\+::\+User\+D\+A\+O@{hu\+::elte\+::bfw1p6\+::poker\+::persist\+::dao\+::\+User\+D\+A\+O}}
+\subsubsection[{modify\+Password(\+String username, String new\+Password)}]{\setlength{\rightskip}{0pt plus 5cm}void hu.\+elte.\+bfw1p6.\+poker.\+persist.\+dao.\+User\+D\+A\+O.\+modify\+Password (
+\begin{DoxyParamCaption}
+\item[{String}]{username, }
+\item[{String}]{new\+Password}
+\end{DoxyParamCaption}
+) throws {\bf Poker\+Data\+Base\+Exception}}\label{classhu_1_1elte_1_1bfw1p6_1_1poker_1_1persist_1_1dao_1_1_user_d_a_o_a27191cddedd780a5eaf37c5a0191cbd7}
+Adott felhasználónévhez új jelszót rendel. 
+\begin{DoxyParams}{Parameters}
+{\em username} & a felhasználónév \\
+\hline
+{\em new\+Password} & az új jelszó \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Poker\+Data\+Base\+Exception} & \\
+\hline
+\end{DoxyExceptions}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+poker-\/persist/src/main/java/hu/elte/bfw1p6/poker/persist/dao/User\+D\+A\+O.\+java\end{DoxyCompactItemize}

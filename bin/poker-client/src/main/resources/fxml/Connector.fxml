@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.StackPane?>
+<?import hu.elte.bfw1p6.poker.client.view.FieldWithLabel?>
+
+<AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="hu.elte.bfw1p6.poker.client.controller.ConnectorController">
+	<children>
+		<GridPane alignment="center" hgap="10" vgap="10">
+			<Label fx:id="pokerLabel" GridPane.columnIndex="0"
+				GridPane.rowIndex="0" GridPane.columnSpan="20" text="Szerver keresés"
+				styleClass="header-text" alignment="center" />
+			<TextField fx:id="serverNameField" GridPane.columnIndex="8"
+				promptText="Szerver neve" GridPane.columnSpan="2" GridPane.rowIndex="10" />
+			<TextField fx:id="serverIPField" promptText="Szerver IP címe"
+				GridPane.columnSpan="2" GridPane.columnIndex="8" GridPane.rowIndex="11" />
+			<TextField fx:id="serverPortField" promptText="Szerver portja"
+				GridPane.columnSpan="2" GridPane.columnIndex="8" GridPane.rowIndex="12" />
+			<Button fx:id="connectButton" text="Csatlakozás" onAction="#connectHandler"
+				styleClass="rich-blue" GridPane.columnIndex="8" GridPane.rowIndex="13" />
+		</GridPane>
+	</children>
+</AnchorPane>

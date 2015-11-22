@@ -42,7 +42,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	protected final String ERR_TABLE_FULL = "Az asztal betelt, nem tudsz csatlakozni!";
 
 	/**
-	 * Szálak végrehajtási sorrendjét biztosítja.
+	 * Szálak megfelelő végrehajtási sorrendjét biztosítja.
 	 */
 	private CountDownLatch latch;
 	
@@ -167,8 +167,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		};
 	}
 
-
 	protected int findNextValidClient(int whosOn) {
+		whosOn %= leftRoundMask.length;
 		int start = whosOn;
 		while (leftRoundMask[whosOn]) {
 			++whosOn;
@@ -178,7 +178,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		return whosOn;
 	}
 
-
 	/**
 	 * Asztalhoz való csatlakozás.
 	 * @param client a csatlakozni kívánó kliens
@@ -187,6 +186,9 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 */
 	public abstract void join(PokerRemoteObserver client, String userName) throws PokerTooMuchPlayerException;
 
+	/**
+	 * A várakozó klienseknek üzen, ha valamelyiknél megszakadt a kapcsolat, akkor kidobja.
+	 */
 	public void pingWaitingClients() {
 		for (int i = waitingClients.size() - 1; i >= 0; i--) {
 			try {
