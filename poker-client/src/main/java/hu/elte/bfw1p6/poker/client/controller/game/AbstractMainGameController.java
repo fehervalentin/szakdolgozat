@@ -119,9 +119,16 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param houseCommand az utasítás
 	 */
 	protected synchronized void receivedDealHouseCommand(HouseCommand houseCommand) {
-		for (int i = 0; i < houseCommand.getCards().length; i++) {
-			textArea.appendText(houseCommand.getCards()[i].toString() + " ");
-		}
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				for (int i = 0; i < houseCommand.getCards().length; i++) {
+					textArea.appendText(houseCommand.getCards()[i].toString() + " ");
+				}
+			}
+		});
+		
 		model.receivedDealHouseCommand(houseCommand);
 		mainView.receivedDealHouseCommand(houseCommand);
 	}
@@ -131,7 +138,9 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param houseCommand az utasítás
 	 */
 	protected synchronized void receivedWinnerHouseCommand(HouseCommand houseCommand) {
-		textArea.appendText(" Nyertes: " +  mainView.ultimateFormula(houseCommand.getWinner()) + " " +  Arrays.toString(houseCommand.getCards()) + System.lineSeparator());
+		if (textArea != null) {
+			textArea.appendText(" Nyertes: " +  mainView.ultimateFormula(houseCommand.getWinner()) + " " +  Arrays.toString(houseCommand.getCards()) + "\n");
+		}
 		setButtonsDisability(true);
 		if (houseCommand.getWhosOn() == model.getYouAreNth()) {
 			Platform.runLater(new Runnable() {
@@ -170,12 +179,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param disabled a beállítandó érték
 	 */
 	protected void modifyQuitButtonDisability(boolean disabled) {
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				quitButton.setDisable(disabled);
-			}
-		});
+		Platform.runLater(() -> quitButton.setDisable(disabled));
 	}
 	
 	/**
@@ -183,12 +187,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param disabled a beállítandó érték
 	 */
 	protected void modifyCallButtonDisability(boolean disabled) {
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				callButton.setDisable(disabled);
-			}
-		});
+		Platform.runLater(() -> callButton.setDisable(disabled));
 	}
 
 	/**
@@ -415,10 +414,8 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			
 			@Override
 			public void run() {
-				if (textArea != null) {
-					String sender = playerCommand.getSender();
-					String type = playerCommand.getCommandType();
-					textArea.appendText("\n" + sender + ": " + type);
+				synchronized (textArea) {
+					textArea.appendText(System.lineSeparator() + playerCommand.getSender() + ": " + playerCommand.getCommandType());
 				}
 			}
 		});
@@ -433,15 +430,8 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 			
 			@Override
 			public void run() {
-				if (textArea != null) {
-					if (houseCommand != null && houseCommand.getCommandType() != null) {
-						String type = houseCommand.getCommandType();
-						textArea.appendText("\n" + "Ház: " + type + " ");
-					} else {
-						System.out.println("nem logolt");
-					}
-				} else {
-					System.out.println("textarea null");
+				synchronized (textArea) {
+					textArea.appendText(System.lineSeparator() + "Ház: " + houseCommand.getCommandType() + " ");
 				}
 			}
 		});

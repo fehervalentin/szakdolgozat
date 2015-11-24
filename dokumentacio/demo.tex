@@ -1,0 +1,551 @@
+%demonstrations of Prosper capabilities
+%written by Janos Markus, markusjancsi@users.sourceforge.net
+
+%Copyright (c) Janos Markus (markusjancsi@users.sourceforge.net), BUTE, 2002. 
+%All rights reserved.
+
+%% WARNING: this demonstration file is special in the sense that in includes
+%% some ps-figures at some special coordinates (namely the examples).
+%% This file won't look good with any other style-file or without
+%% letterpaper option! Sorry.
+
+%% Due to the large size of the example ps files, I did not include them with
+%% the source. However, if you really want to generate the same output,
+%% you can generate the Example*.ps figures first from their *.tex 
+%% counterpair, then compile this code.
+
+\documentclass[pdf,letterpaper,colorBG,slideColor,gradboy]{prosper}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{pstricks}
+
+\newpagestyle{examplepagestyle}{}{}
+\renewcommand\textregistered{\textsuperscript{\textcircled{\usefont{OT1}{cmr}{m}{sc}\selectfont r}}}
+\renewcommand{\to}{\ensuremath\rightarrow}
+\newcommand{\textcode}[1]{{\usefont{OT1}{cmtt}{m}{n}\selectfont #1}}
+
+
+\Logo{\includegraphics[width=1.4\realin, keepaspectratio]{logo2}}
+
+\title{Demonstration of the\\ \textcode{prosper} class}
+\subtitle{v 1.9a}
+\author{J\'anos M\'arkus}
+\email{markusjancsi@users.sourceforge.net}
+\institution{%
+Oregon State University\\
+Department of Electrical and Computer Engineering}
+
+\slideCaption{The \textcode{prosper} class}
+
+\begin{document}
+
+%============================ SLIDE ============================
+\addtocounter{slide}{-1}
+\begin{slide}{Technical Comments}
+
+\begin{itemize}
+\item To switch to full-screen, use the option \texttt{View \to\ Full Screen}, 
+to leave, hit the \texttt{$<$Esc$>$} key;
+\item If some superscript is blocked out by a gray box in the following 
+equation: \tiny $\left(x+y\right)^{\left(a_i-b_{i+1}+c_{i-1}\right)^{\left(2+e^{x+a}\right)}}$,
+\small then
+% in Acrobat\textregistered\ Reader\texttrademark\ 
+uncheck the \texttt{Edit \to\ Preferences \to\ Display \to\ Use Greek Text} 
+option;
+\item \texttt{PgUp}, \texttt{PgDn} or the \texttt{arrow} keys advance pages,
+however, in the \texttt{Preferences \to\ Full Screen} section you can 
+set the mouse to advance, too. (You can also hide it, overwrite default 
+transition and many more.)
+\end{itemize}
+\end{slide}
+
+
+%============================ SLIDE ============================
+\maketitle
+
+%============================ SLIDE ============================
+%\begin{slide}{Corner testing}%
+%
+%\pscircle*[linecolor=green,fillcolor=green](-1,2.1){.08}
+%\pscircle*[linecolor=green,fillcolor=green](10,2.1){.08}
+%
+%\rule{1ex}{1ex}
+%\end{slide}
+
+%============================ SLIDE ============================
+\overlays{6}{%
+\begin{slide}{Introduction}%
+The \textcode{prosper} class (written by Fr\'ed\'eric Goualard)
+\begin{itemstep}
+\item permits producing high quality slides;
+\item offers all the advantages (and disadvantages) of \LaTeX;
+\item freely available;
+\item platform independent;
+\item easily extendable;
+\item make the task of recycling materials from previously written 
+article(s) easy.
+\end{itemstep}
+\end{slide}}
+
+%============================ SLIDE ============================
+\begin{slide}{Prerequisites}%
+\textcode{Prosper} relies on some recent \LaTeX\ packages and other softwares. 
+The following version-numbers are mandatory:
+
+\begin{itemize}
+  \item a recent distribution of \LaTeX\ with the \textcode{pstricks} 
+        and \textcode{seminar} packages with \textcode{seminar.bg2} (May 22, 1998);
+  \item a recent version of \textcode{hyperref} (version $\ge$ 6.70u);
+  \item \textcode{dvips} (version $\ge$ 5.85);
+  \item \textcode{GhostScript} (version $\ge$ 6.5) for handling embedded fonts.
+\end{itemize}
+\end{slide}
+
+%============================ SLIDE ============================
+\overlays{3}{
+\begin{slide}{Styles}%
+
+\textcode{Prosper} offers some predefined and contributed styles to prepare a 
+presentation. These are as follows:
+
+\begin{itemize}
+\fromSlide{2}{\item Predefined Styles
+
+\textcode{default}, \textcode{alienglow}, \textcode{autumn}, \textcode{azure}, 
+\textcode{contemporain}, \textcode{darkblue}, \textcode{frames}, 
+\textcode{lignesbleues}, \textcode{nuancegris}, \textcode{troispoints};}
+
+\fromSlide{3}{\item Contributed Styles
+
+\textcode{alcatel} (based on \textcode{troispoints}), \textcode{blends}, 
+\textcode{gradboy}, \textcode{pascal}, \textcode{rico}, \textcode{gyom}.}
+
+\end{itemize}
+\end{slide}}
+
+%============================ SLIDE ============================
+\overlays{7}{
+\begin{slide}{Transitions}%
+The following transitions (switching effects between two slides) 
+are defined:
+\begin{itemstep}
+\item R or Replace;
+\item Split;
+\item Blinds;
+\item Box;
+\item Wipe;
+\item Dissolve;
+\item Glitter.
+\end{itemstep}
+\end{slide}}
+
+\iffalse
+%============================ SLIDE ============================
+\begin{slide}{Predefined styles}%
+
+The next 10 slides show the different styles developed by the author of 
+the class-file (Fr\'ed\'eric Goualard). 
+
+\medskip
+
+Each slide's title contains the stylename and the transition's name 
+which is used to switch to that particular slide.
+
+\end{slide}
+
+\slidepagestyle{examplepagestyle}
+\Logo{}
+%============================ SLIDE ============================
+\begin{slide}{Default style w/ Replace}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/Example.ps}}}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Alien glow style w/ Split}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/ExampleAlienGlow.ps}}}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Autumn style w/ Blinds}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/ExampleAutumn.ps}}}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Azure style w/ Box}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/ExampleAzure.ps}}}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Contemporain style w/ Wipe}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/ExampleContemporain.ps}}}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Dark blue style w/ Dissolve}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/ExampleDarkBlue.ps}}}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Frames style w/ Glitter}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/ExampleFrames.ps}}}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Lignes bleues style w/ Replace}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/ExampleLignesBleues.ps}}}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Nuances de gris style w/ Blinds}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/ExampleNuanceGris.ps}}}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Trois points style w/ Box}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/ExampleTroisPoints.ps}}}
+\end{slide}
+
+\slidepagestyle{GenericPageStyle}
+\Logo{\includegraphics[width=1.4\realin, keepaspectratio]{logo2}}
+%============================ SLIDE ============================
+\begin{slide}{Contributed styles}%
+
+The next 6 slides show the styles developed by different contributors.
+
+\medskip
+
+Comment: \textcode{Alcatel} slide is based on \textcode{troispoints}.  
+Using the \textcode{slideColor} option they look exactly the same.
+
+\end{slide}
+
+\slidepagestyle{examplepagestyle}
+\Logo{}
+%============================ SLIDE ============================
+\begin{slide}{Alcatel style w/ Wipe}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/contrib/ExampleAlcatel.ps}}}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Blends style w/ Dissolve}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/contrib/ExampleBlends.ps}}}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Gradient Blue-Orange-Yellow style w/ Glitter}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/contrib/ExampleGradBoy.ps}}}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Gym personal style w/ Replace}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/contrib/ExampleGyom.ps}}}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Pascal style w/ Split}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/contrib/ExamplePascal.ps}}}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Rico style w/ Blinds}
+\rput[lt](-1,2.1){%
+\psframebox[fillstyle=solid,fillcolor=white,framesep=0,
+linewidth=0pt,linestyle=none]{\includegraphics[angle=-90, 
+width=\RealPaperWidth]{examples/contrib/ExampleRico.ps}}}
+\end{slide}
+
+
+\fi
+\slidepagestyle{GenericPageStyle}
+\Logo{\includegraphics[width=1.4\realin, keepaspectratio]{logo2}}
+%============================ SLIDE ============================
+\begin{slide}{Using the class}
+
+To start using the class, have a look into the following resources:
+\begin{itemize}
+\item The \href{http://prosper.sourceforge.net/}{{\green homepage}} of the project;
+\item The documentation of the class (\textcode{prosper-doc.pdf});
+\item Some addition to the documentation -- e.g.\ introducing
+      \textcode{letterpaper} option (\textcode{prosper-doc-add.pdf});
+\item Example files in the \textcode{doc} directory;
+\item The source of this file (\textcode{demo.tex}).
+\end{itemize}
+\end{slide}
+
+
+
+%============================ SLIDE ============================
+\begin{slide}{Testing your workflow}
+
+This is a must.
+
+There is a very up-to-date testfile on CTAN, which checks all critical
+part of your workflow to determine whether your current configuration
+is capable to produce high-quality ps/pdf files or not. 
+
+The following URL leads to the directory which has the testfile 
+(\textcode{testflow.tex}), ideal output files and a documentation 
+how to detect and correct any errors:
+
+\begin{center}
+\href{http://www.ctan.org/tex-archive/macros/latex/contrib/supported/IEEEtran/testflow/}%
+{{\green URL: testflow directory on CTAN}}
+\end{center}
+
+Read the documentation (\textcode{testflow\_doc.txt}) how to use this test.
+
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Recycling xfig-figures (1)}
+
+By default, the combined \LaTeX\ and PostScript output of \textcode{xfig}
+gives a transparent background. However, in your paper the figure
+is probably black. If you include it, it will look like this:
+
+\centering
+\resizebox{0.7\slideWidth}{!}{\input{xfig_normal.eps_t}}
+
+\textcode{xfig\_normal.eps\_t}
+
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Recycling xfig-figures (2)}
+
+Quick-and-dirty trick:
+
+\begin{itemize}
+\item Change the fill colors of dots, etc.\ to white;
+\item Glue every object into one compound;
+\item Update object, set only PenColor option on;
+\item Change PenColor to White;
+\item Apply it to the compound you made (you won't see too much from now on);
+\item Save it to a different file and export it, then include it here.
+\end{itemize}
+
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Recycling xfig-figures (3)}
+
+The text in your figure would inherit the color of the slide text, but, 
+you can make it white with the \textcode{\textbackslash white} command.
+
+\begin{center}
+{\white
+\resizebox{0.5\slideWidth}{!}{\input{xfig_transp.eps_t}}}
+
+\textcode{xfig\_transp.eps\_t}
+\end{center}
+
+Well, actually you need both versions, one for color and one 
+for white background\dots
+
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Recycling MATLAB-figures (1)}
+
+\begin{itemize}
+
+\item Use \textcode{plottransp.m} function shipped with this document;
+\item Use it instead of \textcode{plot};
+\item One can modify it to be used instead of \textcode{semilogx}, etc.;
+\item Latest version is 
+      \href{http://mit.bme.hu/~markus/latex/prosper/}{{\green here}}.
+\end{itemize}
+\end{slide}
+
+
+%============================ SLIDE ============================
+\begin{slide}{Recycling MATLAB-figures (2)}
+
+\tiny
+\begin{verbatim}
+plot(0:.01:1,[(0:.01:1);(0:.01:1).^2;(0:.01:1).^3]);
+title('Normal MATLAB figure');
+print -deps2c matlab_normal.eps 
+\end{verbatim}
+\bigskip
+\begin{center}
+\includegraphics[width=0.5\slideWidth, keepaspectratio]{matlab_normal}
+
+\medskip
+\textcode{matlab\_normal.eps}
+\end{center}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Recycling MATLAB-figures (3)}
+
+\tiny
+\begin{verbatim}
+plottransp(0:.01:1,[(0:.01:1);(0:.01:1).^2;(0:.01:1).^3]);
+title('Inverted, transparent MATLAB figure');
+print -deps2c matlab_transp.eps 
+\end{verbatim}
+\bigskip
+\begin{center}
+\includegraphics[width=0.5\slideWidth, keepaspectratio]{matlab_transp}
+
+\medskip
+\textcode{matlab\_transp.eps}
+\end{center}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Recycling Simulink-diagrams (1)}
+
+\begin{itemize}
+\item You can print into eps-file by using the 
+\verb+print -s<modelname> -deps2c <filename.eps>+ command.
+\item Unfortunately, Simulink does not know ``transparent colors'';
+\item Simulink 3.0.1 (R11.1) does not even print the background (screen)
+color;
+\item Simulink 4.1 (R12.1) does. 
+\end{itemize}
+\end{slide}
+
+
+%============================ SLIDE ============================
+\begin{slide}{Recycling Simulink-diagrams (2)}
+
+To make the Simulink \textcode{eps} file transparent, one have to find the
+command which fills up the background with white or any other color.
+It is relative easy to find (at least in these versions).
+
+\begin{itemize}
+
+\item Open the printed eps-file in a text editor;
+\item Search for the following line:\\
+      \textcode{12 dict begin \%Colortable dictionary}\\
+      (or part of it, like \textcode{Colortable});
+\end{itemize}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Recycling Simulink-diagrams (3)}
+
+\begin{itemize}
+\item under 8 lines of color definitions, you can see the following 
+two or three lines:
+
+{\footnotesize
+
+  \begin{tabular}{ll}
+  \textcode{\red c0}     & this selects black color; \\
+  \red something         & \parbox[t]{.6\slideWidth}{%
+                           if your background color is not black,
+                           this line sets up the background color;}\\
+  \textcode{\red -1 -1 $n_1$ $n_2$ rf}
+                         & \parbox[t]{.5\slideWidth}{%
+                           where $n_1$ and $n_2$ are 
+                           (usually three-digit) numbers.}
+  \end{tabular}
+}
+\item The last line (\textcode{rf}=\textcode{rectfill}) creates the box to 
+be filled. If you uncomment this line using the \% character, it results 
+a nice transparent figure.
+
+\end{itemize}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Recycling Simulink-diagrams (4)}
+
+\begin{center}
+
+\includegraphics[angle=-90, width=0.5\slideWidth, keepaspectratio]{simtest_orange}
+
+\medskip
+\textcode{simtest\_orange.eps}
+
+\bigskip
+\includegraphics[angle=-90, width=0.5\slideWidth, keepaspectratio]{simtest_transp}
+
+\medskip
+\textcode{simtest\_transp.eps}
+
+\end{center}
+\end{slide}
+
+
+%============================ SLIDE ============================
+\begin{slide}{Writing new style}
+
+To write a new style, the following resources are available:
+\begin{itemize}
+\item The \href{http://prosper.sourceforge.net/}{{\green homepage}} of the classfile;
+\item The documentation of the class (\textcode{prosper-doc.pdf});
+\item Some addition to the documentation (\textcode{prosper-doc-add.pdf});
+\item various style-files (\textcode{PPR*.sty}).
+\end{itemize}
+\end{slide}
+
+%============================ SLIDE ============================
+\begin{slide}{Acknowledgement}
+
+Many thanks to those, who has contributed to the \textcode{prosper} class:
+
+\begin{itemize}
+
+\item Timothy Van Zandt (author of \textcode{pstricks} and \textcode{seminar}
+classes);
+
+\item Denis Girou (who is currently maintaining the previous packages);
+
+\item Fr\'ed\'eric Goualard and the Prosper development team (author 
+and developer(s) of the \textcode{prosper} class).
+
+\end{itemize}
+\end{slide}
+
+\end{document}

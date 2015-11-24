@@ -2,14 +2,14 @@ DROP DATABASE IF EXISTS pokerdb;
 CREATE DATABASE pokerdb;
 
 CREATE TABLE pokerdb.poker_types (
-	id INTEGER NOT NULL AUTO_INCREMENT,
+	id TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	name VARCHAR(10) NOT NULL,
 	PRIMARY KEY (id),
 	CONSTRAINT UQ_POKER_TYPES_NAME UNIQUE (name)
 );
 
 CREATE TABLE pokerdb.users (
-	id INTEGER NOT NULL AUTO_INCREMENT,
+	id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
 	username VARCHAR(20) NOT NULL,
 	balance DECIMAL(65,18) NOT NULL,
 	reg_date BIGINT,
@@ -20,12 +20,12 @@ CREATE TABLE pokerdb.users (
 );
 	
 CREATE TABLE pokerdb.poker_tables (
-    id INTEGER NOT NULL AUTO_INCREMENT,
+    id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(30) NOT NULL,
-    poker_type_id INTEGER,
+    poker_type_id TINYINT UNSIGNED,
     max_time INTEGER NOT NULL,
     max_players INTEGER NOT NULL,
-    big_blind DECIMAL(19,2) NOT NULL,
+    big_blind DECIMAL(65,18) NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT UQ_poker_table_name UNIQUE (name),
     FOREIGN KEY (poker_type_id) REFERENCES pokerdb.poker_types(id) ON DELETE CASCADE

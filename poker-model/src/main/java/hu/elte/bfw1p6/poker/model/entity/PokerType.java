@@ -7,15 +7,15 @@ package hu.elte.bfw1p6.poker.model.entity;
  */
 public enum PokerType {
 	
-	HOLDEM(1, "HOLDEM", 5, 2),
-	CLASSIC(2, "CLASSIC", 0, 5);
+	HOLDEM((byte)1, "HOLDEM", 5, 2),
+	CLASSIC((byte)2, "CLASSIC", 0, 5);
 	
-	private int id;
+	private byte id;
 	private String name;
 	private int cardsToHouse;
 	private int cardsToPlayers;
 
-	private PokerType(int id, String name, int cardsToHouse, int cardsToPlayers) {
+	private PokerType(byte id, String name, int cardsToHouse, int cardsToPlayers) {
 		this.id = id;
 		this.name = name;
 		this.cardsToHouse = cardsToHouse;

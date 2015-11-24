@@ -5,9 +5,11 @@
 % Preambulum
 % ---------------------------------------------------
 
-\usepackage[magyar]{babel}	
-\usepackage[latin2]{inputenc}		
-\usepackage{t1enc}							
+\usepackage[latin2]{inputenc}
+\usepackage{t1enc}
+
+\def\magyarOptions{defaults=hu-min}
+\usepackage[magyar]{babel}
 \usepackage{indentfirst}
 \usepackage{graphicx}	
 \usepackage{amsmath}
@@ -16,13 +18,13 @@
 \usepackage{algorithmic} 
 \usepackage{algorithm}
 
-\newtheorem{theorem}{Tétel}
-\newtheorem{definition}{Definíció}
-\newtheorem{proof}{Bizonyítás}
+\newtheorem{theorem}{Tï¿½tel}
+\newtheorem{definition}{Definï¿½ciï¿½}
+\newtheorem{proof}{Bizonyï¿½tï¿½s}
 
 \DeclareMathOperator{\diag}{diag}
 
-%Számhalmazok jelölése%
+%Szï¿½mhalmazok jelï¿½lï¿½se%
 \newcommand{\IN}{\mathbb{N}}
 \newcommand{\IZ}{\mathbb{Z}}
 \newcommand{\IR}{\mathbb{R}}
@@ -30,8 +32,8 @@
 \newcommand{\IP}{\mathbb{P}}
 
 
-\title{Programcsomagok numerikus módszerekben\\ \vspace{3mm} \large Dokumentáció sablon}
-\author{Kovács Péter}
+\title{TÃ¶bbasztalos Ã©s -felhasznÃ¡lÃ³s pÃ³ker jÃ¡tÃ©k adatbÃ¡zis modellezÃ©se\\ \vspace{3mm} \large Dokumentï¿½ciï¿½ sablon}
+\author{Kovï¿½cs Pï¿½ter}
 \date{2012.03.11.}
 
 \begin{document}
@@ -39,26 +41,26 @@
 
 
 % ---------------------------------------------------
-% Bevezetés
+% Bevezetï¿½s
 % ---------------------------------------------------
 
-\section{Bevezetés}
+\section{Bevezetï¿½s}
 
-A tárgy teljesítésének, a legalább elégséges gyakorlati jegynek a feltétele egy összetettebb beadandó feladat elkészítése \textsc{Matlab}-ban. Az elkészített programot és tesztelését részletesen dokumentálni kell. A dokumentáció tartalmazza a feladat szövegét, az alkalmazott numerikus módszer leírását (nem átmásolva egy internetes jegyzetbõl), az implementáció megfontolásait (a felmerült nehézségeket, azok áthidalását, a \textsc{Matlab} lehetõségeihez való igazítását). \par 
+A tÃ¡rgy teljesï¿½tï¿½sï¿½nek, a legalï¿½bb elï¿½gsï¿½ges gyakorlati jegynek a feltï¿½tele egy ï¿½sszetettebb beadandï¿½ feladat elkï¿½szï¿½tï¿½se \textsc{Matlab}-ban. Az elkï¿½szï¿½tett programot ï¿½s tesztelï¿½sï¿½t rï¿½szletesen dokumentï¿½lni kell. A dokumentï¿½ciï¿½ tartalmazza a feladat szï¿½vegï¿½t, az alkalmazott numerikus mï¿½dszer leï¿½rï¿½sï¿½t (nem ï¿½tmï¿½solva egy internetes jegyzetbï¿½l), az implementï¿½ciï¿½ megfontolï¿½sait (a felmerï¿½lt nehï¿½zsï¿½geket, azok ï¿½thidalï¿½sï¿½t, a \textsc{Matlab} lehetï¿½sï¿½geihez valï¿½ igazï¿½tï¿½sï¿½t). \par 
 
-	Ezen túlmenõen a dokumentáció tartalmazza a tesztelés menetét, az egyes teszteseteket, a kapott kimeneteket (ábrákat, mátrixokat, hibaüzeneteket), azok magyarázatát. Természetesen a készítõ neve, \textsc{eha} kódja is szerepeljen benne. A dokumentációt \LaTeX -ben kell elkészíteni és pdf formátumban várjuk, az alábbi mintának megfelelõen.
+	Ezen tï¿½lmenï¿½en a dokumentï¿½ciï¿½ tartalmazza a tesztelï¿½s menetï¿½t, az egyes teszteseteket, a kapott kimeneteket (ï¿½brï¿½kat, mï¿½trixokat, hibaï¿½zeneteket), azok magyarï¿½zatï¿½t. Termï¿½szetesen a kï¿½szï¿½tï¿½ neve, \textsc{eha} kï¿½dja is szerepeljen benne. A dokumentï¿½ciï¿½t \LaTeX -ben kell elkï¿½szï¿½teni ï¿½s pdf formï¿½tumban vï¿½rjuk, az alï¿½bbi mintï¿½nak megfelelï¿½en.
 
 % ---------------------------------------------------
-% Dokumentáció formátuma
+% Dokumentï¿½ciï¿½ formï¿½tuma
 % ---------------------------------------------------
 	
-\section{Dokumentáció formátuma}
+\section{Dokumentï¿½ciï¿½ formï¿½tuma}
 
 \subsection{Alfejezet}
-Alfejezet szövege.
+Alfejezet szï¿½vege.
 
 \begin{theorem}
-Legyenek $x_0,x_1,\ldots,x_n \in [a,b]$ különbözõ alappontok és tekintsük az $y_0, y_1, \ldots, y_n \in \IR$ értékeket. Ekkor $\exists! \; \text{olyan} \; P\in \IP_n$ legfeljebb n-ed fokú polinom\,, melyre 
+Legyenek $x_0,x_1,\ldots,x_n \in [a,b]$ kï¿½lï¿½nbï¿½zï¿½ alappontok ï¿½s tekintsï¿½k az $y_0, y_1, \ldots, y_n \in \IR$ ï¿½rtï¿½keket. Ekkor $\exists! \; \text{olyan} \; P\in \IP_n$ legfeljebb n-ed fokï¿½ polinom\,, melyre 
 \[
 P(x_i)=y_i \quad (i=0,\ldots,n).
 \]
@@ -68,32 +70,32 @@ P(x_i)=y_i \quad (i=0,\ldots,n).
 \end{proof}
 
 \subsubsection{Al-alfejezet}
-Al-alfejezet szövege.
+Al-alfejezet szï¿½vege.
 \begin{definition}
-	Az $x_0,x_1,\ldots,x_n$ alappontok által meghatározott Lagrange--alappolinomokat a következõképpen definiáljuk: 
+	Az $x_0,x_1,\ldots,x_n$ alappontok ï¿½ltal meghatï¿½rozott Lagrange--alappolinomokat a kï¿½vetkezï¿½kï¿½ppen definiï¿½ljuk: 
 \[
 	\ell_{k}(x)=\prod_{ \substack{ j=0 \\ j \neq k }}^n \frac{x-x_j}{x_k-x_j} \quad (k=0,\ldots,n)\;.
 \]
 \end{definition}
 
 % ---------------------------------------------------
-% Matematikai kifejezések
+% Matematikai kifejezï¿½sek
 % ---------------------------------------------------
 
-\section{Matematikai kifejezések}
+\section{Matematikai kifejezï¿½sek}
 
-\subsection{Képletek}
+\subsection{Kï¿½pletek}
 
-Az egy soros egyenleteket a hagyományos \texttt{equation} környezetben definiáljuk:
+Az egy soros egyenleteket a hagyomï¿½nyos \texttt{equation} kï¿½rnyezetben definiï¿½ljuk:
 
 \begin{equation}
-	\label{interpol} %címke
+	\label{interpol} %cï¿½mke
 	P(x)=\sum_{i=0}^{n} a_i x^i \; .
 \end{equation}
 
-	Matematikai képleteket a folyószövegbe is beágyazhatunk a \$ jel segítségével. Használhatunk elõre definiált operátorokat, például $\cos$, $\sin$, $\tan$, $\arctan$ stb. Ugyanakkor saját operátorokat is definiálhatunk: $\diag$. \par
+	Matematikai kï¿½pleteket a folyï¿½szï¿½vegbe is beï¿½gyazhatunk a \$ jel segï¿½tsï¿½gï¿½vel. Hasznï¿½lhatunk elï¿½re definiï¿½lt operï¿½torokat, pï¿½ldï¿½ul $\cos$, $\sin$, $\tan$, $\arctan$ stb. Ugyanakkor sajï¿½t operï¿½torokat is definiï¿½lhatunk: $\diag$. \par
 
-	A többsoros képletek megjelenítésére használhatjuk a \texttt{gather}, \texttt{align} parancsokat:
+	A tï¿½bbsoros kï¿½pletek megjelenï¿½tï¿½sï¿½re hasznï¿½lhatjuk a \texttt{gather}, \texttt{align} parancsokat:
 	
 	\begin{gather}
 		\ell_{k}(x)=\prod_{ \substack{ i=0 \\ i \neq k }}^n \frac{x-x_i}{x_k-x_i} \;, \\ 
@@ -105,8 +107,8 @@ Az egy soros egyenleteket a hagyományos \texttt{equation} környezetben definiálj
 		N_{n}(x) & = f(x_0) + \sum_{k=1}^n f[x_0,\ldots,x_k] \omega_{k-1}(x).
 	\end{align} 
 
-\subsection{Mátrixok}
-Mátrixokat az \texttt{array} környezet segítségével adhatunk meg. Például az $(x_0,\ldots,x_3)$ és $(y_0,\ldots,y_3)$ alappontokhoz tartozó $V\textbf{p}=\textbf{y}$ LER-t, vagyis az interpolációs polinom $\textbf{p}$ együttható vektorát a következõképpen adhatjuk meg:
+\subsection{Mï¿½trixok}
+Mï¿½trixokat az \texttt{array} kï¿½rnyezet segï¿½tsï¿½gï¿½vel adhatunk meg. Pï¿½ldï¿½ul az $(x_0,\ldots,x_3)$ ï¿½s $(y_0,\ldots,y_3)$ alappontokhoz tartozï¿½ $V\textbf{p}=\textbf{y}$ LER-t, vagyis az interpolï¿½ciï¿½s polinom $\textbf{p}$ egyï¿½tthatï¿½ vektorï¿½t a kï¿½vetkezï¿½kï¿½ppen adhatjuk meg:
 \begin{equation}
 	\left[\begin{array}{cccc}
 	   	  1 &  x_0  &  x_0^2  &  x_0^3\\ \vspace{1mm}
@@ -128,7 +130,7 @@ Mátrixokat az \texttt{array} környezet segítségével adhatunk meg. Például az $(x
 	   	  y_3   
 	\end{array}\right]
 \end{equation}
-Ezzel a módszerrel általános $A\in\IR^{m \times n}$ mátrixokat is megadhatunk.
+Ezzel a mï¿½dszerrel ï¿½ltalï¿½nos $A\in\IR^{m \times n}$ mï¿½trixokat is megadhatunk.
 \begin{equation}
 	A = 
 	\left[\begin{array}{ccccc}
@@ -144,17 +146,17 @@ Ezzel a módszerrel általános $A\in\IR^{m \times n}$ mátrixokat is megadhatunk.
 \end{equation}
 
 % ---------------------------------------------------
-% Ábrák, táblázatok
+% ï¿½brï¿½k, tï¿½blï¿½zatok
 % ---------------------------------------------------
 
-\section{Ábrák, táblázatok}
-Képeket az \texttt{graphichx} csomag \texttt{\textbackslash includegraphics} parancsával illeszthetünk a dokumentumba. A szerkesztés során vektorgrafikus képeket kell használni, hogy átméretezés hatására se torzuljanak az ábrák. A \textsc{Matlab} lehetõséget ad arra, hogy a generált ábrákat különbözõ formátumokban menthessük le, többek között eps-ben és pdf-ben is. Ha elkerülhetetlen a raszteres képek használata, akkor ügyeljünk rá, hogy azokat kellõen nagy felbontásban mentsük le.
+\section{ï¿½brï¿½k, tï¿½blï¿½zatok}
+Kï¿½peket az \texttt{graphichx} csomag \texttt{\textbackslash includegraphics} parancsï¿½val illeszthetï¿½nk a dokumentumba. A szerkesztï¿½s sorï¿½n vektorgrafikus kï¿½peket kell hasznï¿½lni, hogy ï¿½tmï¿½retezï¿½s hatï¿½sï¿½ra se torzuljanak az ï¿½brï¿½k. A \textsc{Matlab} lehetï¿½sï¿½get ad arra, hogy a generï¿½lt ï¿½brï¿½kat kï¿½lï¿½nbï¿½zï¿½ formï¿½tumokban menthessï¿½k le, tï¿½bbek kï¿½zï¿½tt eps-ben ï¿½s pdf-ben is. Ha elkerï¿½lhetetlen a raszteres kï¿½pek hasznï¿½lata, akkor ï¿½gyeljï¿½nk rï¿½, hogy azokat kellï¿½en nagy felbontï¿½sban mentsï¿½k le.
 \begin{figure}[htb!]
-  \caption{Az $f(x)=\frac{1}{1+x^2}$ és a 3-adfokú Lagrange-interpolációs polinom képe $[0,1]$-en.}
+  \caption{Az $f(x)=\frac{1}{1+x^2}$ ï¿½s a 3-adfokï¿½ Lagrange-interpolï¿½ciï¿½s polinom kï¿½pe $[0,1]$-en.}
   \label{fig:interpol}
 \end{figure}
 
-Táblázatokat a \texttt{tabular} környezet segítségével adhatunk meg. Erre különösen nagy szükség lesz a teszteredmények összefoglalásakor. A következõ táblázat, az $f(x)=\frac{1}{1+x^2}$ függvényhez és a $(0,0,1,1)$ alappontokhoz tartozó Hermite-interpolációs polinom osztott differenciáit tartalmazza. 
+Tï¿½blï¿½zatokat a \texttt{tabular} kï¿½rnyezet segï¿½tsï¿½gï¿½vel adhatunk meg. Erre kï¿½lï¿½nï¿½sen nagy szï¿½ksï¿½g lesz a teszteredmï¿½nyek ï¿½sszefoglalï¿½sakor. A kï¿½vetkezï¿½ tï¿½blï¿½zat, az $f(x)=\frac{1}{1+x^2}$ fï¿½ggvï¿½nyhez ï¿½s a $(0,0,1,1)$ alappontokhoz tartozï¿½ Hermite-interpolï¿½ciï¿½s polinom osztott differenciï¿½it tartalmazza. 
 \begin{table}[htb]
   \begin{center}
     \begin{tabular}{|c|cccc}
@@ -165,19 +167,19 @@ Táblázatokat a \texttt{tabular} környezet segítségével adhatunk meg. Erre különö
     1 & $\frac{1}{2}$ & $f'(1)=-\frac{1}{2}$          &  0                       &\fbox{$\frac{1}{2}$}           				
     \end{tabular}
   \end{center}
-  \caption{Osztott differencia táblázat.}
+  \caption{Osztott differencia tï¿½blï¿½zat.}
   \label{tbl:hermite}  
 \end{table}
 
 % ---------------------------------------------------
-% Hivatkozások
+% Hivatkozï¿½sok
 % ---------------------------------------------------
 
-\section{Hivatkozások}
-	Az egyenletekre az \texttt{\textbackslash eqref\{\}} paranccsal hivatkozhatunk, például az elsõ képletre az \eqref{interpol} számmal. A kapcsos zárójelbe a megfelelõ hivatkozás címkéje kerül, melyet a \texttt{\textbackslash label} paranccsal adhatunk meg az egyenleteknél, ábráknál, táblázatoknál. Az utóbbi két esetben \texttt{\textbackslash ref\{\}} kulcsszó segítségével tudunk hivatkozni. Ha a dokumentum végén lévõ referenciákat akarjuk idézni, akkor a \texttt{\textbackslash cite\{\}} parancsot kell használni. A kapcsos zárójelbe most is a hivatkozás címkéje kerül. A dokumentumba webcímeket is beszúrhatunk az \texttt{\textbackslash url\{\} } parancs segítségével. Például \url{http://numanal.inf.elte.hu}.\par
+\section{Hivatkozï¿½sok}
+	Az egyenletekre az \texttt{\textbackslash eqref\{\}} paranccsal hivatkozhatunk, pï¿½ldï¿½ul az elsï¿½ kï¿½pletre az \eqref{interpol} szï¿½mmal. A kapcsos zï¿½rï¿½jelbe a megfelelï¿½ hivatkozï¿½s cï¿½mkï¿½je kerï¿½l, melyet a \texttt{\textbackslash label} paranccsal adhatunk meg az egyenleteknï¿½l, ï¿½brï¿½knï¿½l, tï¿½blï¿½zatoknï¿½l. Az utï¿½bbi kï¿½t esetben \texttt{\textbackslash ref\{\}} kulcsszï¿½ segï¿½tsï¿½gï¿½vel tudunk hivatkozni. Ha a dokumentum vï¿½gï¿½n lï¿½vï¿½ referenciï¿½kat akarjuk idï¿½zni, akkor a \texttt{\textbackslash cite\{\}} parancsot kell hasznï¿½lni. A kapcsos zï¿½rï¿½jelbe most is a hivatkozï¿½s cï¿½mkï¿½je kerï¿½l. A dokumentumba webcï¿½meket is beszï¿½rhatunk az \texttt{\textbackslash url\{\} } parancs segï¿½tsï¿½gï¿½vel. Pï¿½ldï¿½ul \url{http://numanal.inf.elte.hu}.\par
 
 % ---------------------------------------------------
-% Referenciák: a referenciák legyenek szerzõ szerint abc sorrendben.
+% Referenciï¿½k: a referenciï¿½k legyenek szerzï¿½ szerint abc sorrendben.
 % ---------------------------------------------------
 
 
@@ -222,9 +224,9 @@ Birkh\"auser, Basel, 1984, 269--276.
 \newpage
 \appendix
 \thesection
-\section{Függelék}	
-	A függelék rendszerint a dokumentum legvégén kap helyet, a referencia lista után. Ide kerülnek a programkódok, pszeudo kódok, stb.\\
-	A programkódok megkülönböztetésére a \texttt{verbatim} környezetet használjuk. Például a \ref{fig:interpol}.~ábrát a következõ \textsc{Matlab} utasítások végrehajtásával kaptuk:
+\section{Fï¿½ggelï¿½k}	
+	A fï¿½ggelï¿½k rendszerint a dokumentum legvÃ©gÃ©n kap helyet, a referencia lista utï¿½n. Ide kerï¿½lnek a programkï¿½dok, pszeudo kï¿½dok, stb.\\
+	A programkï¿½dok megkï¿½lï¿½nbï¿½ztetï¿½sï¿½re a \texttt{verbatim} kï¿½rnyezetet hasznï¿½ljuk. Pï¿½ldï¿½ul a \ref{fig:interpol}.~ï¿½brï¿½t a kï¿½vetkezï¿½ \textsc{Matlab} utasï¿½tï¿½sok vï¿½grehajtï¿½sï¿½val kaptuk:
 	\begin{verbatim}
 		>> f=@(x) 1./(1+x.^2);
 		>> X=linspace(0,1,1000);
@@ -234,7 +236,7 @@ Birkh\"auser, Basel, 1984, 269--276.
 		>> xi=linspace(0,1,4);
 		>> lagrange_alak(xi,f(xi),0.01);
 	\end{verbatim}
-	A pszeudokódokat algoritmusok vázlatos leírásához használhatjuk. Ehhez az \texttt{algorithm}, illetve az \texttt{algorithmic} környezetekre lesz szükségünk.
+	A pszeudokï¿½dokat algoritmusok vï¿½zlatos leï¿½rï¿½sï¿½hoz hasznï¿½lhatjuk. Ehhez az \texttt{algorithm}, illetve az \texttt{algorithmic} kï¿½rnyezetekre lesz szï¿½ksï¿½gï¿½nk.
 \begin{algorithm}[htp] 
 \begin{algorithmic}
 \STATE function [c,s]=givens(a,b)

@@ -1,4 +1,4 @@
-package hu.elte.bfw1p6.poker.model;
+package hu.elte.bfw1p6.poker.session;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

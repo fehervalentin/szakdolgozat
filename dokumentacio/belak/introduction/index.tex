@@ -1,0 +1,63 @@
+% Introduction
+\section{Bevezetés}
+
+\subsection{A témaválasztás indoklása}
+A baráti társaságommal bizonyos időközönként összeültünk beszélgetni és társasjátékozni.
+Ezeken az alkalmakon mindig próbáltunk valamilyen új játékot játszani, de a Cluedo nevű
+detektív társasjáték nagyon gyakran előkerült. Mondhatni ez volt a kedvencünk. Sajnos
+az idők változnak és már nincs lehetőségünk annyiszor találkozni, mert a munka és a
+csapat egy részének külföldön tartózkodása megnehezíti ezt. Emiatt döntöttem úgy, hogy
+elkészítem a játék egy interneten keresztül játszható változatát, így a nagy távolságokat
+leküzdve tudnánk játszani. Ami ugyan nem pótolja a személyes találkozót, de mégis
+több lehetőséget ad, mint amennyi alapvetően a rendelkezésre áll.
+
+\subsection{A megoldandó feladat leírása}
+A játék általam elképzelt reprezentációja egy szerver- és egy kliens alkalmazásból
+áll, melyeknek jól meghatározott feladata van. Ezek egymástól függetlenül kerülnek
+fejlesztése úgy, hogy a kliens csak egy jól megfogalmazott API-t ismer a szervertől,
+melyen keresztül kommunikálni tudnak. Ennek az API-nak a feladata, hogy egy felületet
+biztosítson arra, hogy a felhasználók a kliens alkalmazás használatával:
+
+\begin{itemize}
+  \item be tudjanak jelentkezni a szerverre, vagy arra regisztrálni tudjanak
+  \item megtalálják a szerveren elérhető játékosokat, barátokat
+  \item megtekinthessék a ranglistát
+  \item új játékot tudjanak indítani, vagy egy már megkezdett játékot folytatni, amennyiben az abban játszó összes játékos elérhető
+  \item a játékban lehetséges műveleteket végre tudják hajtani, a változásokról értesítést kaphassanak
+  \item játék közben egymásnak szöveges üzenetet küldhessenek
+  \item egy véget ért játékot le tudjanak menteni
+\end{itemize}
+
+Az API pontos megfogalmazása után a szerver- és a kliens alkalmazást egymástól
+teljesen külön kezelhetjük.
+
+\subsubsection{A szerver alkalmazás leírása}
+A szerver alkalmazás egyrészt egy webes felületet nyújt az adminisztrátorok számára,
+melyen keresztül a felhasználókat és a játékokat, eredményeket valamint a játékhoz
+tartozó naplókat kezelhetik. \\
+Másrészt pedig a szerver alkalmazás a teljes játékot (a játék logikáját és a
+lekérdezett játék aktuális állapotát), mint szolgáltatást nyújtja a fent említett
+API-n keresztül, melyet a kliensek autentikálás után használhatnak. \\
+A szerver párhuzamosan egyszerre több játékot is tud futtatni és egy játék a
+játékosok kérésére bármikor felfüggesztésre, majd később folytatásra kerülhet.\\
+A szerver rendelkezik egy ranglistával is, melyen a játékosok az alábbi módon
+kerülhetnek feljebb:
+
+\begin{itemize}
+  \item 10 pontot kap az a játékos, aki megnyer egy játékot
+  \item  5 pontot kap az a játékos, aki ugyan tudta a megoldást, de egy másik játékos megelőzte a vádolás folyamatában
+\end{itemize}
+
+\subsubsection{A kliens alkalmazás leírása}
+A szakdolgozatom kliens alkalmazása egy olyan asztali alkalmazás, amely egy jól
+átlátható felületet nyújt a játékhoz. Elsődleges célja, hogy a szerver API-ját
+használva lekérdezze a játék állapotát, majd a kapott állapotot megjelenítse,
+valamint, hogy a felhasználói interakciót a szerver felé továbbítsa és az
+eredményt megjelenítse. \\
+Magán a játék felületen kívül a kliens alkalmazáson keresztül a felhasználó
+új játékot hozhat létre barátok, vagy online játékosok kiválasztásával, kezelheti
+saját profilját és beállításait, valamint megtekintheti a szerver ranglistáját.\\
+A kliens alkalmazás ezen felül lehetőséget ad a felhasználónak arra, hogy lementett
+játékokat játsszon vissza.
+
+\cleardoublepage

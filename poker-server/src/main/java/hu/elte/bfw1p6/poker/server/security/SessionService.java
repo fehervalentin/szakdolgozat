@@ -8,9 +8,9 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
-import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.UserDAO;
+import hu.elte.bfw1p6.poker.session.PokerSession;
 
 /**
  * A kliensek sessionjeit tartja nyilván és kezeli.

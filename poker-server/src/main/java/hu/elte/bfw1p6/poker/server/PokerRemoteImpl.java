@@ -22,7 +22,6 @@ import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
-import hu.elte.bfw1p6.poker.model.PokerSession;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.persist.dao.PokerTableDAO;
@@ -30,6 +29,7 @@ import hu.elte.bfw1p6.poker.persist.dao.UserDAO;
 import hu.elte.bfw1p6.poker.properties.PokerProperties;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
 import hu.elte.bfw1p6.poker.server.security.SessionService;
+import hu.elte.bfw1p6.poker.session.PokerSession;
 
 /**
  * A pókerszerver megvalósítása.

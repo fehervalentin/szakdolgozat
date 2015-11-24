@@ -1,0 +1,29 @@
+\documentclass[twoside, a4paper, 12pt]{article}
+\usepackage{thesis-style}
+\usepackage{fancyvrb}
+
+\input{information}
+
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\YEAR}
+
+\begin{document}
+\pagestyle{empty}
+
+% belső fedlap
+\include{cover/index}
+\cleardoublepage
+
+% a belső fedlap utáni lap a témabejelentő
+
+% tartalomjegyzék
+\setcounter{page}{1}
+\tableofcontents
+\cleardoublepage
+
+\pagestyle{plain}
+
+% tartalom
+\input{content}
+\end{document}
