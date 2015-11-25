@@ -454,6 +454,7 @@ public abstract class AbstractMainView {
 
 				int convertedWinnerIndex = ultimateFormula(houseCommand.getWinner());
 				if (convertedWinnerIndex != 0) {
+					//TODO: nullpointerexception
 					for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
 						winnerCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(houseCommand.getCards()[i]) + defaultValues.PICTURE_EXTENSION));
 					}

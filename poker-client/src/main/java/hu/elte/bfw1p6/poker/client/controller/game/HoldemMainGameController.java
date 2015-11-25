@@ -2,9 +2,10 @@ package hu.elte.bfw1p6.poker.client.controller.game;
 
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
-import com.cantero.games.poker.texasholdem.Card;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.model.HoldemMainGameModel;
@@ -12,6 +13,7 @@ import hu.elte.bfw1p6.poker.client.view.HoldemMainView;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
+import javafx.application.Platform;
 
 /**
  * A holdem játékmód kliens oldali controllere.
@@ -38,7 +40,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 		setButtonsDisability(true);
 		modifyQuitButtonDisability(false);
 		setTextArea();
-		textArea.appendText("Felhasználónevem: " + model.getUserName());
+		Platform.runLater(() -> textArea.appendText("Felhasználónevem: " + model.getUserName()));
 	}
 
 	@Override
@@ -131,8 +133,15 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	 * @param houseHoldemCommand az utasítás
 	 */
 	private synchronized void receivedFlopHouseCommand(HoldemHouseCommand houseHoldemCommand) {
-		Card[] cards =  houseHoldemCommand.getCards();
-		textArea.appendText(cards[0] + " " + cards[1] + " " + cards[2]);
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				synchronized (textArea) {
+					textArea.appendText(Arrays.asList(houseHoldemCommand.getCards()).stream().map(Object::toString).collect(Collectors.joining(" ")));
+				}
+			}
+		});
 		((HoldemMainView)mainView).receivedFlopHouseCommand(houseHoldemCommand);
 	}
 
@@ -140,8 +149,10 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	 * A szerver TURN típusú utasítás küldött.
 	 * @param houseHoldemCommand az utasítás
 	 */
-	private synchronized void receivedTurnHouseCommand(HoldemHouseCommand houseHoldemCommand) {
-		textArea.appendText(houseHoldemCommand.getCards()[0].toString());
+	private void receivedTurnHouseCommand(HoldemHouseCommand houseHoldemCommand) {
+		synchronized (textArea) {
+			textArea.appendText(Arrays.asList(houseHoldemCommand.getCards()).stream().map(Object::toString).collect(Collectors.joining(" ")));
+		}
 		((HoldemMainView)mainView).receivedTurnHouseCommand(houseHoldemCommand);
 	}
 
@@ -149,8 +160,10 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	 * A szerver RIVER típusú utasítás küldött.
 	 * @param houseHoldemCommand az utasítás
 	 */
-	private synchronized void receivedRiverHouseCommand(HoldemHouseCommand houseHoldemCommand) {
-		textArea.appendText(houseHoldemCommand.getCards()[0].toString());
+	private void receivedRiverHouseCommand(HoldemHouseCommand houseHoldemCommand) {
+		synchronized (textArea) {
+			textArea.appendText(Arrays.asList(houseHoldemCommand.getCards()).stream().map(Object::toString).collect(Collectors.joining(" ")));
+		}
 		((HoldemMainView)mainView).receivedRiverHouseCommand(houseHoldemCommand);
 	}
 }

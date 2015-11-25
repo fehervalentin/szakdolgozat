@@ -648,8 +648,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		return clients.size() + waitingClients.size();
 	}
 
-	public String getName() {
-		return pokerTable.getName();
+	public Integer getId() {
+		return pokerTable.getId();
 	}
 
 	/**

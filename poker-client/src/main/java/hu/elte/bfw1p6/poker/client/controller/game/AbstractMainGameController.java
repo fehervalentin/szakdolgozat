@@ -5,6 +5,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
@@ -118,13 +119,13 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * A szerver DEAL típusú utasítást küldött.
 	 * @param houseCommand az utasítás
 	 */
-	protected synchronized void receivedDealHouseCommand(HouseCommand houseCommand) {
+	protected void receivedDealHouseCommand(HouseCommand houseCommand) {
 		Platform.runLater(new Runnable() {
 			
 			@Override
 			public void run() {
-				for (int i = 0; i < houseCommand.getCards().length; i++) {
-					textArea.appendText(houseCommand.getCards()[i].toString() + " ");
+				synchronized (textArea) {
+					textArea.appendText(Arrays.asList(houseCommand.getCards()).stream().map(card -> card.toString()).collect(Collectors.joining(" ")));
 				}
 			}
 		});
@@ -137,10 +138,10 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * A szerver WINNER típusú utasítást küldött.
 	 * @param houseCommand az utasítás
 	 */
-	protected synchronized void receivedWinnerHouseCommand(HouseCommand houseCommand) {
-		if (textArea != null) {
+	protected void receivedWinnerHouseCommand(HouseCommand houseCommand) {
+		synchronized (textArea) {
 			textArea.appendText(" Nyertes: " +  mainView.ultimateFormula(houseCommand.getWinner()) + " " +  Arrays.toString(houseCommand.getCards()) + "\n");
-		}
+		}			
 		setButtonsDisability(true);
 		if (houseCommand.getWhosOn() == model.getYouAreNth()) {
 			Platform.runLater(new Runnable() {
@@ -409,7 +410,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * Felhasználó által küldött utasítást logol.
 	 * @param playerCommand az utasítás
 	 */
-	protected synchronized void logPlayerCommand(PlayerCommand playerCommand) {
+	protected void logPlayerCommand(PlayerCommand playerCommand) {
 		Platform.runLater(new Runnable() {
 			
 			@Override
@@ -425,7 +426,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * A ház által küldött utasítást logol.
 	 * @param houseCommand az utasítás
 	 */
-	protected synchronized void logHouseCommand(HouseCommand houseCommand) {
+	protected void logHouseCommand(HouseCommand houseCommand) {
 		Platform.runLater(new Runnable() {
 			
 			@Override

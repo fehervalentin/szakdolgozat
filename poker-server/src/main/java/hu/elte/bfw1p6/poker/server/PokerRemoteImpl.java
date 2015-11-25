@@ -115,12 +115,12 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	@Override
 	public synchronized void deleteTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerTableDeleteException {
 		if (sessionService.isAuthenticated(uuid)) {
-			AbstractPokerTableServer apts = getAbstractPokerTableServerByTableName(t.getName());
+			AbstractPokerTableServer apts = getAbstractPokerTableServerByTableName(t.getId());
 			if (apts.getPlayersCount() > 0) {
 				throw new PokerTableDeleteException(ERR_TABLE_DELETE);
 			} else {
 				pokerTableDAO.delete(t);
-				pokerTableservers.remove(getAbstractPokerTableServerByTableName(t.getName()));
+				pokerTableservers.remove(getAbstractPokerTableServerByTableName(t.getId()));
 				List<PokerTable> tables = getTables(uuid);
 				for (int i = 0; i < clients.size(); i++) {
 					clients.get(i).update(tables);
@@ -155,7 +155,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	@Override
 	public synchronized void modifyTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerTableDeleteException {
 		if (sessionService.isAuthenticated(uuid)) {
-			AbstractPokerTableServer apts = getAbstractPokerTableServerByTableName(t.getName());
+			AbstractPokerTableServer apts = getAbstractPokerTableServerByTableName(t.getId());
 			if (apts.getPlayersCount() > 0) {
 				throw new PokerTableDeleteException(ERR_TABLE_DELETE);
 			} else {
@@ -170,7 +170,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 				default:
 					throw new IllegalArgumentException();
 				}
-				int index = pokerTableservers.indexOf(getAbstractPokerTableServerByTableName(t.getName()));
+				int index = pokerTableservers.indexOf(getAbstractPokerTableServerByTableName(t.getId()));
 				pokerTableservers.set(index, apts);
 				List<PokerTable> tables = getTables(uuid);
 				for (int i = 0; i < clients.size(); i++) {
@@ -255,14 +255,14 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	@Override
 	public synchronized void sendPlayerCommand(UUID uuid, PokerTable t, PokerRemoteObserver client, PlayerCommand playerCommand) throws RemoteException, PokerDataBaseException, PokerUserBalanceException {
 		if (sessionService.isAuthenticated(uuid)) {
-			getAbstractPokerTableServerByTableName(t.getName()).receivedPlayerCommand(client, playerCommand);
+			getAbstractPokerTableServerByTableName(t.getId()).receivedPlayerCommand(client, playerCommand);
 		}
 	}
 
 	@Override
 	public synchronized void connectToTable(UUID uuid, PokerTable t, PokerRemoteObserver client) throws RemoteException, PokerTooMuchPlayerException {
 		if (sessionService.isAuthenticated(uuid)) {
-			AbstractPokerTableServer pts = getAbstractPokerTableServerByTableName(t.getName());
+			AbstractPokerTableServer pts = getAbstractPokerTableServerByTableName(t.getId());
 			pts.join(client, sessionService.lookUpUserName(uuid));
 		}
 	}
@@ -283,13 +283,13 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	@Override
 	public synchronized boolean canSitIn(UUID uuid, PokerTable paramPokerTable) throws RemoteException {
 		if (sessionService.isAuthenticated(uuid)) {
-			return getAbstractPokerTableServerByTableName(paramPokerTable.getName()).canSitIn();
+			return getAbstractPokerTableServerByTableName(paramPokerTable.getId()).canSitIn();
 		}
 		return false;
 	}
 	
-	private AbstractPokerTableServer getAbstractPokerTableServerByTableName(String tableName) {
-		return pokerTableservers.stream().filter(sv -> sv.getName().equals(tableName)).findFirst().get();
+	private AbstractPokerTableServer getAbstractPokerTableServerByTableName(Integer id) {
+		return pokerTableservers.stream().filter(sv -> sv.getId().equals(id)).findFirst().get();
 	}
 
 	@Override

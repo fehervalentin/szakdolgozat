@@ -12,6 +12,7 @@ import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -44,7 +45,9 @@ public class ClassicMainGameController extends AbstractMainGameController {
 		setChangeButtonDisability(true);
 		modifyQuitButtonDisability(false);
 		setTextArea();
-		textArea.appendText("Felhasználónevem: " + model.getUserName());
+		synchronized (textArea) {
+			Platform.runLater(() -> textArea.appendText("Felhasználónevem: " + model.getUserName()));
+		}
 	}
 
 	/**

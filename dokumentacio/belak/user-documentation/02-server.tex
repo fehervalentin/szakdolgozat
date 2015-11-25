@@ -13,15 +13,22 @@ A szakdolgozatomat eclipse fejlesztőkörnyezetben írtam, amelyet végül maven
   \centering
     \includegraphics[width=0.5\textwidth]{user-documentation/images/db_scheme.png}
 \end{figure}
+Az
 \subsection{Modulok}
 A programcsomag 6 fő modult tartalmaz
 \begin{itemize}
   \item poker-server
+  A póker játék szervere, amely magát a játékot szolgáltatja.
   \item poker-client
+  A póker játék kliense, amely segítségével a szerverhez lehet csatlakozni.
   \item poker-shared
+  A póker játék azon modulja, amelytől a szerver és a kliens egyaránt függ.
   \item poker-persist
+  Az adatok letárolásáért felelős modul.
   \item poker-model
+  A póker játék modellezéséért felelős csomag.
   \item javapokertexasholdem
+  Külső könyvtár, amely a nyertes játékos kiértékelési feladatot végzi.
 \end{itemize}
 \begin{figure}[h!]
 	\caption{Kliens modulra bontása}
@@ -34,7 +41,16 @@ A programcsomag 6 fő modult tartalmaz
 	\includegraphics{user-documentation/images/poker-server-deps.png}
 \end{figure}
 A modulok közötti függőséget a ... ábra mutatja. A programcsomag két fő modulra bontható: poker-server és poker-client. A szerver a jelszavak titkosítására bcrypt eljárást alkalmaz, amelynek a biztonságát sózással növeli. Továbbá a szerver felhasznál még egy külső csomagot - mysql-connector-java -, amely az adatbázis kapcsolatért felel.
-A poker-shared modul felel a szerver és a kliens jól definiált kommunikácójáért. A shared modul többek között tartalmazza a közös interfészeket, kivételeket és a póker utasítások megvalósítását.
+A poker-shared modul felel a szerver és a kliens jól definiált kommunikácójáért. A shared modul többek között tartalmazza a közös interfészeket, kivételeket és a póker utasítások megvalósítását. A kliens közvetlenül függ ettől a modultól, azonban a szerver és a shared modul közé beékelődött a poker-persist modul.
+
+\section{Funkciók}
+Ahogy a témabejelentőben is szerepel...... RMI kép wikiről, majd azt megmagyarázni a shared modullal, kliens hívja, jól definiált interfész etc....
+\begin{figure}[h!]
+	\caption{RMI koncepció}
+	\centering
+	\includegraphics[width=14cm, height=2cm]{user-documentation/images/rmi.png}
+\end{figure}
+A szerver vázáért a PokerRemote interface felel, amely a játékon végrehajtható műveletek összefogásáért felel. Itt található az összes funkció, amely megvalósításra került, mint például játék asztal létrehozása, új felhasználó létrehozás, admin jog kiosztása stb. A kliens ezt a vázat tudja elkérni a registryből, mint kliens-oldali szervercsonk, amelyeken a műveletek meg tudja hívni. Az összes megvalósított funkciót le kell írni? Felsorolás szintjén, vagy hogy? Rövid magyarázattal? És amelyik egyértelmű? Pl. felhasználó módosítása... login...
 
 \section{Tovább fejlesztési lehetőségek}
 \begin{itemize}
@@ -51,12 +67,15 @@ A poker-shared modul felel a szerver és a kliens jól definiált kommunikácój
 %\end{figure}
 
 A \ref{fig:lol} képen látható az adatbázis séma.
-
+\section{Tesztelés}
+\subsection{Funkcionális tesztelés}
 \begin{tabular}{| l | c | r |}
 \hline
-  1 & 2 & 3 \\ \hline
-  4 & 5 & 6 \\ \hline
-  7 & 8 & 9 \\ \hline
+  Funkció & Elvárt eredmény & eredmény \\ \hline
+  Regisztráció & A program jelezte a felhasználónak, hogy a regisztráció sikeresen megtörtént, és visszairányította őt a bejelentkezési formhoz. & A felhasználó a regisztrációt követően be tudjon jelentkezni a póker játékba. \\ \hline
+  Bejelentkezés & A formot helyesen kitöltve a program sikeresen autentikálta és beléptette a felhasználót. & Regisztrációt követően be tudjon jelentkezni a felhasználó \\ \hline
+  Tábla módosítás & - & - \\ \hline
+  Tábla törlés & - & - \\ \hline
 \end{tabular}
 
 \clearpage

@@ -37,6 +37,8 @@ public class SQLExceptionTranslator {
 		mappings.put("CONSTRAINT_POKER_TABLES_NAME_LENGHT", "A szerver neve túl hosszú!");
 		
 		mappings.put("UQ_POKER_TYPES_NAME", "Ilyen nevű játéktípus már létezik az adatbázisban!");
+		
+		mappings.put("Data truncation", "Érték hiba! A dokumentáció alapján ellenőrizze a beviteli értékeket");
 	}
 	
 	/**
