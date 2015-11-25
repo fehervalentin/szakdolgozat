@@ -1,5 +1,52 @@
 \subsection{Telepítés}
-Nincs szükség telepítésre.
+\subsubsection{Java SE Runtime Environment 8}
+A programcsomag futtatásához legalább Windows XP operációs rendszer szükséges, amelyen Java SE Runtime Environment 8 futtató környezet \cite{jresite} (a továbbiakban: JRE) fut. A JRE feltelepítését követően manuálisan ellenőrizzük, hogy a rendszer felvette-e környezeti változóként az installációs könyvtárat. Navigáljunk az operációs rendszerben a környezeti változók módosítása panelhez, majd ellenőrizzük le, hogy a PATH nevű környezeti változóhoz hozzá lett-e adva az installációs könyvtár: \path{C:\Program Files\Java\jdk1.8.0_60\bin}. 
+Ha nem, akkor pontosvesszővel (;) elválasztva egészítsük ki a változó értékét, majd indítsuk el a promptot (ha nyitva van, akkor indítsuk újra).
+Ha a
+\begin{verbatim}
+java -version
+\end{verbatim}
+utasítás hatására az 
+\begin{figure}[h!]
+  \caption{JRE verzió}
+  \label{fig:jre_version}
+  \centering
+    \includegraphics{user-documentation/images/java_version.jpg}
+\end{figure}
+ \ref{fig:jre_version}. ábrán látható szöveg jelenik meg a konzolon, akkor sikeres volt a JRE telepítése és beállítása. További instrukciókért ld. melléklet.
+ 
+ \subsubsection{MySQL Community Server 5.6}
+ A programcsomag megköveteli a MySQL Community Server 5.6 adatbázis-kezelő rendszer \cite{mysqlsite} (a továbbiakban: MySQL Server) használatát is. Letöltés után csomagoljuk ki a zip állományt egy tetszőleges könyvtárba, majd a fentiekkel megegyező módon adjuk hozzá a PATH nevű környezeti változó értékéhez a MySQL Server bin könyvtár elérési útvonalát. Ha ezzel végeztünk, akkor nyissük meg a promptot (ha nyitva van, akkor indítsuk újra), majd navigáljunk a MySQL Server bin könyvtárába, ott pedig adjuk ki a
+ \begin{verbatim}
+mysqld --install
+\end{verbatim}
+parancsot. A parancs végrehajtása után navigáljunk a szolgáltatások panelhez, amelyet a legkönnyebben a promptban a
+ \begin{verbatim}
+services.msc
+\end{verbatim}
+\begin{figure}[h!]
+  \caption{MySQL Service}
+  \label{fig:mysql_service}
+  \centering
+    \includegraphics{user-documentation/images/mysql_service.jpg}
+\end{figure}
+kiadott utasítással lehet elérni. Majd járjunk el a \ref{fig:mysql_service}. ábrának megfelelően. Térjünk vissza a konzolra, ahol adjuk ki a 
+ \begin{verbatim}
+mysql -u root -p
+\end{verbatim}
+parancsot, amely jelszót fog kérni. A beviteli sort hagyjuk üresen, nyomjunk entert. Ha sikeresen beléptünk az adatbázis-kezelő rendszerbe, akkor adjuk ki a
+ \begin{verbatim}
+SELECT VERSION();
+\end{verbatim}
+utasítást, és ha a 
+\begin{figure}[h!]
+  \caption{MySQL Service}
+  \label{fig:mysql_service}
+  \centering
+    \includegraphics{user-documentation/images/mysql_version.jpg}
+\end{figure}
+\ref{fig:mysql_service}. ábrának megfelelő képernyőképet kapunk, akkor sikeresen feltelepítettük az adatbázis-kezelő rendszert.
+
 \subsection{Futtatás}
 A program java programozási nyelvben lett megírva, így a kifordított állomány egy jar file, melyet parancssorból az alábbi utasítással tudunk futtatni
 \begin{lstlisting}
