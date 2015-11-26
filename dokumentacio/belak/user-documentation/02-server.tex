@@ -47,13 +47,36 @@ utasítást, és ha a
 \end{figure}
 \ref{fig:mysql_service}. ábrának megfelelő képernyőképet kapunk, akkor sikeresen feltelepítettük az adatbázis-kezelő rendszert.
 
+\subsubsection{Az adatbázis használatba vétele}
+Ha sikeresen elindítottuk a MySQL Servert, akkor szükségünk lesz egy új adatbázis sémára (és demo adatokra), amelyet a \path{X:\poker\release\poker-db.sql} állományban találunk. Ezt a filet kell lefuttatni az adatbázison, a hatása idempotens. A promptban adjuk ki a
+ \begin{verbatim}
+mysql -u root -p < X:\poker\release\poker-db.sql
+\end{verbatim}
+utasítást, amely jelszót fog kérni. A beviteli sort ugyancsak hagyjuk üresen. Ha sikeresen lefutott a parancs, akkor az adatbázis séma ``felhúzása'' megtörtént.
+
+\subsubsection{A póker szerver elindítása}
+A DVD lemezen a \path{\poker\release\} mappában található meg a poker-server-1.0.0.jar file. Nyissunk egy terminált a kijelölt könyvtárban, és adjuk ki a
+ \begin{verbatim}
+java -jar poker-server-1.0.0.jar
+\end{verbatim}
+parancsot. 
+\begin{figure}[h!]
+  \caption{Szerver}
+  \label{fig:server_started}
+  \centering
+    \includegraphics{user-documentation/images/server_started.jpg}
+\end{figure}
+Ha a \ref{fig:server_started}. ábrának megfelelő konzol loglistát látunk, akkor a szervert sikeresen elindítottuk.
+\subsubsection{A póker kliens elindítása}
+A kliens futtatása hasonló módon történik, mint a szerveré. Navigáljunk a \path{\release\poker\kliens} mappába, és a konzolon adjuk ki a megfeleő parancsot.
+Jöhet az ábra, meg a kódot kicsit átírni, hogy logoljon konzolra, mint a szerver...
 \subsection{Futtatás}
 A program java programozási nyelvben lett megírva, így a kifordított állomány egy jar file, melyet parancssorból az alábbi utasítással tudunk futtatni
 \begin{lstlisting}
 java -jar <filenev>
 \end{lstlisting}
 \subsection{Felhasznált technológiák}
-A szakdolgozatomat eclipse fejlesztőkörnyezetben írtam, amelyet végül mavennel - build rendszer - fordítottam ki és csomagoltam be. A szakdolgozat felhasznál egy külső könyvtárat, amely a nyertes kiértékelési feladatát látja el. A programcsomagot meg kellett támogatni egy adatbázissal is - MySQL - , amely az adatok perzisztens tárolásáért felel. A programcsomag szerver-kliens architektúrában került implementálásra, amely tovább bomlik kliens oldalon MVC (Model-View-Controller) tervezési stílusra. A modulok közötti kommunikáció RMI Java API felhasználásával történik.
+A szakdolgozatomat eclipse fejlesztőkörnyezetben írtam, amelyet végül mavennel fordítottam ki és csomagoltam be. A szakdolgozat felhasznál egy külső könyvtárat \cite{hand_eval}, amely a nyertes kiértékelési feladatát látja el. A programcsomagot meg kellett támogatni egy adatbázissal is - MySQL - , amely az adatok perzisztens tárolásáért felel. A programcsomag szerver-kliens architektúrában került implementálásra, amely tovább bomlik kliens oldalon MVC (Model-View-Controller) tervezési stílusra. A modulok közötti kommunikáció RMI Java API felhasználásával történik.
 \subsection{Adatbázis séma}
 \begin{figure}[h!]
   \caption{Adatbázis séma}

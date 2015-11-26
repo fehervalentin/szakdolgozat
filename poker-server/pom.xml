@@ -8,11 +8,13 @@
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>poker-server</name>
+	<name>${poker.server.name}</name>
 	<description>A póker játék szervere</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<poker.server.name>poker-server</poker.server.name>
+		<poker.server.version>1.0-SNAPSHOT</poker.server.version>
 	</properties>
 	
 	<distributionManagement>
@@ -53,6 +55,7 @@
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
+					<outputDirectory>../release/</outputDirectory>
 					<archive>
 						<manifest>
 							<mainClass>hu.elte.bfw1p6.poker.main.ServerMain</mainClass>
@@ -61,6 +64,8 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
+					<finalName>${poker.server.name}-${poker.server.version}</finalName>
+					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 			</plugin>
 		</plugins>

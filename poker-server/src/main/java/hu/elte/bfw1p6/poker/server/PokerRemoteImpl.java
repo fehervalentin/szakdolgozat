@@ -99,16 +99,15 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 			pokerTableservers.add(apts);
 		}
 		try {
-			System.out.println("***POKER SZERVER***");
-			System.out.println(Integer.valueOf(pokerProperties.getProperty("rmiport")));
-			System.out.println(pokerProperties.getProperty("name"));
-			
 			Registry rmiRegistry = LocateRegistry.createRegistry(Integer.valueOf(pokerProperties.getProperty("rmiport")));
 			PokerRemote pokerRemote = (PokerRemote) UnicastRemoteObject.exportObject(this, Integer.valueOf(pokerProperties.getProperty("rmiport")));
 			rmiRegistry.bind(pokerProperties.getProperty("name"), pokerRemote);
 		} catch (RemoteException | AlreadyBoundException e) {
 			e.printStackTrace();
 		}
+		System.out.println("***POKER SZERVER***");
+		System.out.println("Port:" + Integer.valueOf(pokerProperties.getProperty("rmiport")));
+		System.out.println("Szerver név: " + pokerProperties.getProperty("name"));
 		System.out.println("A szerver elindult");
 	}
 
