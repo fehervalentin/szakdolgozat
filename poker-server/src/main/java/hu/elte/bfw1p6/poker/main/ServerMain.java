@@ -14,7 +14,7 @@ public class ServerMain {
 
 	public static void main(String[] args) {
 		try {
-			new PokerRemoteImpl();
+			new PokerRemoteImpl(args);
 		} catch (RemoteException | PokerDataBaseException e) {
 			e.printStackTrace();
 		}

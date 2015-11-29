@@ -23,6 +23,9 @@ public abstract class AbstractPokerClientController implements PokerClientContro
 	
 	private final String ERR_CONN = "Kommunikációs hiba a szerverrel!";
 	
+	private final String ERR_POPUP_TITLE = "Hiba";
+	private final String SUCC_POPUP_TITLE = "Információ";
+	
 	@FXML private AnchorPane rootPane;
 
 	/**
@@ -79,6 +82,8 @@ public abstract class AbstractPokerClientController implements PokerClientContro
 	public void showErrorAlert(String msg) {
 		if (errorAlert == null) {
 			errorAlert = new Alert(AlertType.ERROR);
+			errorAlert.setHeaderText(ERR_POPUP_TITLE);
+			errorAlert.setTitle(ERR_POPUP_TITLE);
 		}
 		errorAlert.setContentText(msg);
 		errorAlert.showAndWait();
@@ -91,6 +96,8 @@ public abstract class AbstractPokerClientController implements PokerClientContro
 	public void showSuccessAlert(String msg) {
 		if (successAlert == null) {
 			successAlert = new Alert(AlertType.INFORMATION);
+			successAlert.setHeaderText(SUCC_POPUP_TITLE);
+			successAlert.setTitle(SUCC_POPUP_TITLE);
 		}
 		successAlert.setContentText(msg);
 		successAlert.showAndWait();

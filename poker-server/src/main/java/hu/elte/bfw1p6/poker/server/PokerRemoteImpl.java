@@ -1,5 +1,6 @@
 package hu.elte.bfw1p6.poker.server;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
@@ -9,6 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.Scanner;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -75,7 +77,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	 */
 	private UserDAO userDAO;
 
-	public PokerRemoteImpl() throws RemoteException, PokerDataBaseException {
+	public PokerRemoteImpl(String[] args) throws RemoteException, PokerDataBaseException {
 		this.pokerProperties = PokerProperties.getInstance();
 		this.pokerTableDAO = new PokerTableDAO();
 		this.userDAO = new UserDAO();
@@ -98,17 +100,34 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 			}
 			pokerTableservers.add(apts);
 		}
-		try {
-			Registry rmiRegistry = LocateRegistry.createRegistry(Integer.valueOf(pokerProperties.getProperty("rmiport")));
-			PokerRemote pokerRemote = (PokerRemote) UnicastRemoteObject.exportObject(this, Integer.valueOf(pokerProperties.getProperty("rmiport")));
-			rmiRegistry.bind(pokerProperties.getProperty("name"), pokerRemote);
-		} catch (RemoteException | AlreadyBoundException e) {
-			e.printStackTrace();
-		}
+		boolean bounded = false;
+		int port = Integer.valueOf(pokerProperties.getProperty("rmiport"));
+		Scanner scanner = null;
+		do {
+			try {
+				exportPokerServer(port);
+				bounded = false;
+			} catch (RemoteException | AlreadyBoundException e) {
+				System.out.println("A port már használatban van." + System.lineSeparator());
+				System.out.println("Kérem a portot: ");
+				if (scanner == null) {
+					scanner = new Scanner(System.in);
+				}
+				port = scanner.nextInt();
+				bounded = true;
+			}
+		} while (bounded);
+		
 		System.out.println("***POKER SZERVER***");
-		System.out.println("Port:" + Integer.valueOf(pokerProperties.getProperty("rmiport")));
+		System.out.println("Port:" + port);
 		System.out.println("Szerver név: " + pokerProperties.getProperty("name"));
 		System.out.println("A szerver elindult");
+	}
+	
+	private void exportPokerServer(int port) throws RemoteException, AlreadyBoundException {
+		Registry rmiRegistry = LocateRegistry.createRegistry(port);
+		PokerRemote pokerRemote = (PokerRemote) UnicastRemoteObject.exportObject(this, port);
+		rmiRegistry.bind(pokerProperties.getProperty("name"), pokerRemote);
 	}
 
 	@Override
