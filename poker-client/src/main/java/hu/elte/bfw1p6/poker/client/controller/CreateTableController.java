@@ -147,13 +147,13 @@ public class CreateTableController extends AbstractPokerClientController {
 				t.setPokerType(pokerType);
 				model.modifyTable(t);
 				showSuccessAlert(SUCC_MODIFY_TABLE_MSG);
+				model.setParameterPokerTable(null);
 				frameController.setTableListerFXML();
 			} catch (PokerDataBaseException | PokerTableDeleteException e) {
 				showErrorAlert(e.getMessage());
 			} catch (RemoteException e) {
 				remoteExceptionHandler();
 			}
-			model.setParameterPokerTable(null);
 		}
 	}
 
