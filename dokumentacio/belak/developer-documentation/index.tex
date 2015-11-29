@@ -1,5 +1,5 @@
 % Developer documentation
-\section{Fejlesztői dokumentáció}
+\part{Fejlesztői dokumentáció}
 
 \subsection{Felhasznált technológiák}
 A szakdolgozatomat eclipse fejlesztőkörnyezetben írtam, amelyet végül mavennel fordítottam ki és csomagoltam be. A szakdolgozat felhasznál egy külső könyvtárat \cite{hand_eval}, amely a nyertes kiértékelési feladatát látja el. A programcsomagot meg kellett támogatni egy adatbázissal is - MySQL - , amely az adatok perzisztens tárolásáért felel. A programcsomag szerver-kliens architektúrában került implementálásra, amely kliens oldalon tovább bomlik MVC (Model-View-Controller) tervezési stílusra. A szerver és a kliens közötti kommunikáció RMI Java API felhasználásával történik. A maven, mint build system nagyban hozzájárult a programcsomag modernkori elvárások megfeleléséhez, mint például a kód dokumentálásához és a programcsomag disztribúciójához. Igyekeztem áttolni a fejlesztési nehézségeket a felhasznált technológiák vállára. Így például, ha valamilyen oknál fogva friss adatbázisra volt szükségem, akkor azt a
@@ -106,6 +106,17 @@ Az AbstractDAO-nak szükséges van tényleges adatbázis kapcsolatra, amelyet a 
 Az AbstractDAO rendelkezik egy SQLExceptionTranslator objektummal is, amely az adatbázisból érkező hibát fordítja át PokerDataBaseException típusú kivételre. A PokerDataBaseException kivétel osztály a felhasználó számára is értelmes hibaszöveget hordoz magában.
 
 \subsubsection{Kliens}
+A kliens modult és annak minden függőségét egy jar fileba csomagolva kell szétterjeszteni a felhasználók között, akik majd ténylegesen használni fogják a programot. A \ref{fig:client_modul}. ábra alapján a jar file tartalmazni fog minden olyan osztályt és interfészt, amelyre ténylegesen szüksége lesz a kliens programnak. Az összecsomagoláshoz igénybe vehetjük a mavent és annak az assembly pluginját. A poker-client könyvtárban a
+ \begin{verbatim}
+mvn clean compile assembly:single
+\end{verbatim}
+paranccsot kiadva a poker-parent/release könyvtár alá csomagolódik be a futtatható jar állomány. \\
+\pokerparagraph{Model-View-Controller \cite{MVC}}
+Az igen közkedvelt tervezési minta alapján valósítottam meg a kliens oldali programot.
+\subparagraph
+Model \\
+lol
+
 
 \subsubsection{Szerver}
 \subsubsection{javapokertexasholdem}
@@ -139,6 +150,7 @@ A szerver vázáért a PokerRemote interface felel, amely a játékon végrehajt
 \item A játék nem képes kezelni olyan eseteket, amikor egynél több játékos nyer az adott körben.
 \item A játék nincs felkészítve arra a szélsőséges esetre, ha valakinek elfogy a zsetonja, akkor pontosan minek (és hogyan) kell történnie.
 \item A kódban viszonylag sok kód duplikáció van jelen, ugyanis az HouseCommandType és a PlayerCommandType enum típusú objektumok szűk keresztmetszetnek tudható be. Ha a PokerCommand interfacet implementáló osztályokat generikusan tudnánk megfogalmazni, akkor jelentősen letisztulna a kód.
+\item Az admin jogot el lehetne távolítani a játékból, és helyette MVC tervezési minta alapján a szerver oldalra is implementálni lehetne egy grafikus interfészt, amelyen keresztül a szerver teljeskörű karbantartása és adminisztrációja elvégezhető lenne.
 \end{itemize}
 
 \subsection{Tesztelés}
