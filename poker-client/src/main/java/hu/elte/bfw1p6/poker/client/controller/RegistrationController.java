@@ -23,8 +23,10 @@ public class RegistrationController extends AbstractPokerClientController {
 	private final String ERR_REG_DIFF_PW = "A két jelszó nem egyezik!";
 	private final String ERR_STYLECLASS = "hiba";
 
-	@FXML private Label pokerLabel;
 	@FXML private Label registrationLabel;
+	@FXML private Label usernameLabel;
+	@FXML private Label passwordLabel;
+	@FXML private Label rePasswordLabel;
 
 	@FXML private TextField usernameField;
 

@@ -17,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 /**
@@ -30,15 +31,18 @@ public class CreateTableController extends AbstractPokerClientController {
 	private final String SUCC_MODIFY_TABLE_MSG = "A táblát sikeresen modosítottad!";
 	private final String ERR_TEXTFIELD_TEXT = "Hibás szám formátum a %s mezőben!";
 	private final String ERR_STYLECLASS = "hiba";
+	
+	@FXML private Label tableNameLabel;
+	@FXML private Label gameTypeLabel;
+	@FXML private Label maxTimeLabel;
+	@FXML private Label maxPlayerLabel;
+	@FXML private Label bigBlindLabel;
 
 	@FXML private ComboBox<String> gameTypeComboBox;
 
 	@FXML private TextField tableNameTextField;
-
 	@FXML private TextField maxTimeField;
-
 	@FXML private TextField maxPlayerTextField;
-
 	@FXML private TextField bigBlindField;
 
 	@FXML private Button createTableButton;
@@ -158,6 +162,7 @@ public class CreateTableController extends AbstractPokerClientController {
 	 * @param event az esemény
 	 */
 	@FXML protected void backHandler(ActionEvent event) {
+		model.setParameterPokerTable(null);
 		frameController.setTableListerFXML();
 	}
 }

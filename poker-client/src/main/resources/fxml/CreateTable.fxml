@@ -16,28 +16,36 @@
 	fx:controller="hu.elte.bfw1p6.poker.client.controller.CreateTableController">
 	<children>
 		<GridPane alignment="center" hgap="10" vgap="10">
-			<Label GridPane.columnIndex="0" GridPane.rowIndex="0"
-				GridPane.columnSpan="2" text="Asztal létrehozása" alignment="center" />
+			<Label fx:id="tableNameLabel" GridPane.columnIndex="7"
+				GridPane.rowIndex="8" styleClass="header-text2" text="Tábla neve:" />
+			<TextField fx:id="tableNameTextField" GridPane.columnIndex="8"
+				GridPane.rowIndex="8" GridPane.columnSpan="2" />
 
-			<TextField fx:id="tableNameTextField" promptText="Tábla neve"
-				GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.columnSpan="2" />
-
-			<ComboBox fx:id="gameTypeComboBox" GridPane.columnIndex="1"
-				GridPane.rowIndex="2" GridPane.columnSpan="2" prefWidth="225.0"
-				promptText="Stílus">
+			<Label fx:id="gameTypeLabel" GridPane.columnIndex="7"
+				GridPane.rowIndex="9" styleClass="header-text2" text="Típus:" />
+			<ComboBox fx:id="gameTypeComboBox" GridPane.columnIndex="8"
+				GridPane.rowIndex="9" GridPane.columnSpan="2" prefWidth="225.0">
 			</ComboBox>
 
-			<TextField fx:id="maxTimeField" promptText="Maximum gondolkodási idő"
-				GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="2" />
-			<TextField fx:id="maxPlayerTextField" promptText="Játékosok maximum száma"
-				GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.columnSpan="2" />
-			<TextField fx:id="bigBlindField" promptText="Nagy vak"
-				GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.columnSpan="2" />
+			<Label fx:id="maxTimeLabel" GridPane.columnIndex="7"
+				GridPane.rowIndex="10" styleClass="header-text2" text="Maximum gondolkodási idő:" />
+			<TextField fx:id="maxTimeField"
+				GridPane.columnIndex="8" GridPane.rowIndex="10" GridPane.columnSpan="2" />
+
+			<Label fx:id="maxPlayerLabel" GridPane.columnIndex="7"
+				GridPane.rowIndex="11" styleClass="header-text2" text="Maximum játékos:" />
+			<TextField fx:id="maxPlayerTextField"
+				GridPane.columnIndex="8" GridPane.rowIndex="11" GridPane.columnSpan="2" />
+
+			<Label fx:id="bigBlindLabel" GridPane.columnIndex="7"
+				GridPane.rowIndex="12" styleClass="header-text2" text="Nagy vak:" />
+			<TextField fx:id="bigBlindField"
+				GridPane.columnIndex="8" GridPane.rowIndex="12" GridPane.columnSpan="2" />
 
 			<Button fx:id="createTableButton" text="OK" onAction="#createTableHandler"
-				styleClass="rich-blue" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+				styleClass="rich-blue" GridPane.columnIndex="7" GridPane.rowIndex="13" />
 			<Button fx:id="backButton" text="Mégsem" onAction="#backHandler"
-				styleClass="rich-blue" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+				styleClass="rich-blue" GridPane.columnIndex="8" GridPane.rowIndex="13" />
 		</GridPane>
 	</children>
 </AnchorPane>

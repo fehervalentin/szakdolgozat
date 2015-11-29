@@ -1,6 +1,5 @@
 package hu.elte.bfw1p6.poker.server;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;

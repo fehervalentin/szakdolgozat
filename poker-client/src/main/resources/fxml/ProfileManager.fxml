@@ -13,47 +13,47 @@
 <AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="hu.elte.bfw1p6.poker.client.controller.ProfileManagerController">
 	<GridPane alignment="center" hgap="10" vgap="10">
-		<Label fx:id="usernameLabel" GridPane.columnIndex="0"
-			styleClass="header-text2" GridPane.rowIndex="1" text="Név:" />
-		<TextField fx:id="userNameField" GridPane.columnIndex="1" GridPane.columnSpan="2"
-			GridPane.rowIndex="1" disable="true" opacity="1" />
+		<Label fx:id="usernameLabel" GridPane.columnIndex="7"
+			styleClass="header-text2" GridPane.rowIndex="8" text="Név:" />
+		<TextField fx:id="userNameField" GridPane.columnIndex="8" GridPane.columnSpan="2"
+			GridPane.rowIndex="8" disable="true" opacity="0.8" />
 
-		<Label fx:id="regDateLabel" GridPane.columnIndex="0" styleClass="header-text2"
-			GridPane.rowIndex="2" GridPane.columnSpan="1" text="Regisztráció dátuma:" />
-		<TextField fx:id="regDateField" GridPane.columnIndex="1" GridPane.columnSpan="2"
-			GridPane.rowIndex="2" disable="true" opacity="1" />
+		<Label fx:id="regDateLabel" GridPane.columnIndex="7" styleClass="header-text2"
+			GridPane.rowIndex="9" GridPane.columnSpan="1" text="Regisztráció dátuma:" />
+		<TextField fx:id="regDateField" GridPane.columnIndex="8" GridPane.columnSpan="2"
+			GridPane.rowIndex="9" disable="true" opacity="0.8" />
 
-		<Label fx:id="balanceLabel" GridPane.columnIndex="0" styleClass="header-text2"
-			GridPane.rowIndex="3" text="Egyenleg:" />
-		<TextField fx:id="balanceField" GridPane.columnIndex="1" GridPane.columnSpan="2"
-			GridPane.rowIndex="3" disable="true" opacity="1" />
+		<Label fx:id="balanceLabel" GridPane.columnIndex="7" styleClass="header-text2"
+			GridPane.rowIndex="10" text="Egyenleg:" />
+		<TextField fx:id="balanceField" GridPane.columnIndex="8" GridPane.columnSpan="2"
+			GridPane.rowIndex="10" disable="true" opacity="0.8" />
 
-		<Label fx:id="balanceLabel" GridPane.columnIndex="0" styleClass="header-text2"
-			GridPane.rowIndex="4" text="Admin jog:" />
-		<CheckBox fx:id="adminCheckBox" disable="true" opacity="1" GridPane.columnSpan="2"
-			GridPane.columnIndex="1" GridPane.rowIndex="4" />
+		<Label fx:id="balanceLabel" GridPane.columnIndex="7" styleClass="header-text2"
+			GridPane.rowIndex="11" text="Admin jog:" />
+		<CheckBox fx:id="adminCheckBox" disable="true" opacity="0.8" GridPane.columnSpan="2"
+			GridPane.columnIndex="8" GridPane.rowIndex="11" />
 
-		<Label fx:id="oldPasswordLabel" GridPane.columnIndex="0"
-			styleClass="header-text2" GridPane.rowIndex="5"
+		<Label fx:id="oldPasswordLabel" GridPane.columnIndex="7"
+			styleClass="header-text2" GridPane.rowIndex="12"
 			alignment="center" text="Jelszó: " />
 		<PasswordField fx:id="oldPasswordField"
-			GridPane.columnSpan="2" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+			GridPane.columnSpan="2" GridPane.columnIndex="8" GridPane.rowIndex="12" />
 
-		<Label fx:id="newPasswordLabel" GridPane.columnIndex="0"
-			styleClass="header-text2" GridPane.rowIndex="6"
+		<Label fx:id="newPasswordLabel" GridPane.columnIndex="7"
+			styleClass="header-text2" GridPane.rowIndex="13"
 			alignment="center" text="Új jelszó: " />
 		<PasswordField fx:id="newPasswordField"
-			GridPane.columnSpan="2" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+			GridPane.columnSpan="2" GridPane.columnIndex="8" GridPane.rowIndex="13" />
 
-		<Label fx:id="reNewPasswordLabel" GridPane.columnIndex="0"
-			styleClass="header-text2" GridPane.rowIndex="7"
+		<Label fx:id="reNewPasswordLabel" GridPane.columnIndex="7"
+			styleClass="header-text2" GridPane.rowIndex="14"
 			alignment="center" text="Új jelszó újra: " />
 		<PasswordField fx:id="rePasswordField"
-			GridPane.columnSpan="2" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+			GridPane.columnSpan="2" GridPane.columnIndex="8" GridPane.rowIndex="14" />
 
 		<Button fx:id="modifyButton" text="Módosít" onAction="#handleModify"
-			styleClass="rich-blue" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+			styleClass="rich-blue" GridPane.columnIndex="7" GridPane.rowIndex="15" />
 		<Button fx:id="backButton" text="Vissza" onAction="#handleBack"
-			styleClass="rich-blue" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+			styleClass="rich-blue" GridPane.columnIndex="8" GridPane.rowIndex="15" />
 	</GridPane>
 </AnchorPane>
