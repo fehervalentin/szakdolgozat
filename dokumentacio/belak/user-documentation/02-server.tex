@@ -54,23 +54,6 @@ mysql -u root -p < X:\poker\release\poker-db.sql
 \end{verbatim}
 utasítást, amely jelszót fog kérni. A beviteli sort ugyancsak hagyjuk üresen. Ha sikeresen lefutott a parancs, akkor az adatbázis séma ``felhúzása'' megtörtént.
 
-\subsubsection{A póker szerver elindítása}
-A DVD lemezen a \path{\poker\release\} mappában található meg a poker-server-1.0.0.jar file. Nyissunk egy terminált a kijelölt könyvtárban, és adjuk ki a
- \begin{verbatim}
-java -jar poker-server-1.0.0.jar
-\end{verbatim}
-parancsot. 
-\begin{figure}[h!]
-  \caption{Szerver}
-  \label{fig:server_started}
-  \centering
-    \includegraphics{user-documentation/images/server_started.jpg}
-\end{figure}
-Ha a \ref{fig:server_started}. ábrának megfelelő konzol loglistát látunk, akkor a szervert sikeresen elindítottuk.
-\subsubsection{A póker kliens elindítása}
-A kliens futtatása hasonló módon történik, mint a szerveré. Navigáljunk a \path{\release\poker\kliens} mappába, és a konzolon adjuk ki a megfeleő parancsot.
-Jöhet az ábra, meg a kódot kicsit átírni, hogy logoljon konzolra, mint a szerver...
-
 \subsection{A póker játékról}
 A póker, mint kártyajáték igen népszerű szerencsejáték. Akár élő tv adásokat is végig lehet követni, ahol hatalmas főnyereményeket osztanak ki a dobogós helyezetteknek. Viszonylag sok fajtája terjedt el szerte a világon, kezdve a klasszikus 5 lapos leosztásokkal egészen az OMAHA-án át a jól ismert Texas Hold'Em játékstílusig. A játékot 52 lapos francia kártyapaklival játszák, amelyben 4 szín és 13 különböző értékű kártyalap található. A játékcélja, hogy minél több zsetont gyűjtsünk össze a partik során.
 
@@ -90,6 +73,25 @@ A klasszikus játékstílus legfőbb ismertető jele, hogy mindenki öt lapot ka
 \pokerparagraph{Texas Hold'Em}
 A klasszikus játékstílussal erősen megegyező játékmenetű stílus. A különbség csupán annyi, hogy a ház 2-2 lapot oszt minden játékosnak, amelyekkel a játékosok a parti végéig rendelkeznek. Illetőleg a nyertes lapok semmilyen esetben sem középen, hanem a játékosoknál jelennek meg.
 
-\subsection{Csatlakozás a játékhoz}
+\subsection{Futtatás}
 
+\subsubsection{A póker szerver elindítása}
+A DVD lemezen a \path{\poker\release\} mappában található meg a poker-server-1.0.0.jar file. Nyissunk egy terminált a kijelölt könyvtárban, és adjuk ki a
+ \begin{verbatim}
+java -jar poker-server-1.0.0.jar
+\end{verbatim}
+parancsot. 
+\begin{figure}[h!]
+  \caption{Szerver}
+  \label{fig:server_started}
+  \centering
+    \includegraphics{user-documentation/images/server_started.jpg}
+\end{figure}
+Ha a \ref{fig:server_started}. ábrának megfelelő konzol loglistát látunk, akkor a szervert sikeresen elindítottuk.
+\subsubsection{A póker kliens elindítása}
+A kliens futtatása hasonló módon történik, mint a szerveré. Navigáljunk a \path{\release\poker\kliens} mappába, és a konzolon adjuk ki a megfeleő parancsot.
+Jöhet az ábra, meg a kódot kicsit átírni, hogy logoljon konzolra, mint a szerver...
+
+\subsection{A póker játék használata} %Csatlakozás a játékhoz
+A játék 
 \clearpage
