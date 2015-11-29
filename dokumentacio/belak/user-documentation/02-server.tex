@@ -1,9 +1,3 @@
-\subsection{Témaválasztás indoklása}
-Mindenképpen egy online, többfelhasználós játékot szerettem volna megvalósítani. Később leszűkítettem a kört kártyajátékokra, és végül az ulti és a póker között vaciláltam. A döntésem a pókerre esett, ugyanis az ulti viszonylag bonyolultabb, mint a póker, több szabály, több megszorítás a partykra vonatkozólag, ráadásul ahány ház annyi szokás alapon könnyen nézet eltérések szoktak keletkezni az ultizás során. Pókerezni egyszerűbb - bár ezt sokan vitatják - és jó formán mindenki könnyen megérti a játék lényegét.
-
-\subsection{Feladat leírás}
-%A feladat egy póker játékprogram megírása, amely hálózaton keresztül is játszható.
-
 \subsection{Telepítés}
 \subsubsection{Java SE Runtime Environment 8}
 A programcsomag futtatásához legalább Windows XP operációs rendszer szükséges, amelyen Java SE Runtime Environment 8 futtató környezet \cite{jresite} (a továbbiakban: JRE) fut. A JRE feltelepítését követően manuálisan ellenőrizzük, hogy a rendszer felvette-e környezeti változóként az installációs könyvtárat. Navigáljunk az operációs rendszerben a környezeti változók módosítása panelhez, majd ellenőrizzük le, hogy a PATH nevű környezeti változóhoz hozzá lett-e adva az installációs könyvtár: \path{C:\Program Files\Java\jdk1.8.0_60\bin}. 
@@ -77,94 +71,23 @@ Ha a \ref{fig:server_started}. ábrának megfelelő konzol loglistát látunk, a
 A kliens futtatása hasonló módon történik, mint a szerveré. Navigáljunk a \path{\release\poker\kliens} mappába, és a konzolon adjuk ki a megfeleő parancsot.
 Jöhet az ábra, meg a kódot kicsit átírni, hogy logoljon konzolra, mint a szerver...
 
-\subsection{Felhasznált technológiák}
-A szakdolgozatomat eclipse fejlesztőkörnyezetben írtam, amelyet végül mavennel fordítottam ki és csomagoltam be. A szakdolgozat felhasznál egy külső könyvtárat \cite{hand_eval}, amely a nyertes kiértékelési feladatát látja el. A programcsomagot meg kellett támogatni egy adatbázissal is - MySQL - , amely az adatok perzisztens tárolásáért felel. A programcsomag szerver-kliens architektúrában került implementálásra, amely kliens oldalon tovább bomlik MVC (Model-View-Controller) tervezési stílusra. A szerver és a kliens közötti kommunikáció RMI Java API felhasználásával történik. A maven, mint build system nagyban hozzájárult a programcsomag modernkori elvárások megfeleléséhez, mint például a kód dokumentálásához és a programcsomag disztribúciójához. Igyekeztem áttolni a fejlesztési nehézségeket a felhasznált technológiák vállára. Így például, ha valamilyen oknál fogva friss adatbázisra volt szükségem, akkor azt a
- \begin{verbatim}
-mvn clean install -Pbootstrap
-\end{verbatim}
-parancs kiadásával érhettem el.
+\subsection{A póker játékról}
+A póker, mint kártyajáték igen népszerű szerencsejáték. Akár élő tv adásokat is végig lehet követni, ahol hatalmas főnyereményeket osztanak ki a dobogós helyezetteknek. Viszonylag sok fajtája terjedt el szerte a világon, kezdve a klasszikus 5 lapos leosztásokkal egészen az OMAHA-án át a jól ismert Texas Hold'Em játékstílusig. A játékot 52 lapos francia kártyapaklival játszák, amelyben 4 szín és 13 különböző értékű kártyalap található. A játékcélja, hogy minél több zsetont gyűjtsünk össze a partik során.
 
-\subsection{Adatbázis séma}
-\begin{figure}[h!]
-  \caption{Adatbázis séma}
-  \centering
-    \includegraphics[width=\textwidth]{user-documentation/images/db_scheme.png}
-\end{figure}
-Az adatbázis (ld. X. ábra) 3 táblából épül fel
-\begin{itemize}[leftmargin=2.7cm]
-\item users
-\item poker\_tables
-\item poker\_types
-\end{itemize}
- Minden tábla rendelkezik elsődleges kulcssal, amelynek típusa UNSIGNED INTEGER, kivétel a poker\_types táblát, ugyanis ennek a táblának az elsődleges kulcsa UNSIGNED TINYINT típusú, amelyet a MySQL Server 4 byteon tárol. Az adatábrázolás mértékének a szűkítése ebben az esetben indokolt, ugyanis a 255 különböző értékű UNSIGNED TINYINT típus kielégíti a játéktípusok által támasztott követelményeket.  A users tábla tartalmazza a regisztrált felhasználókat. A regisztrált felhasználók felhasználónévvel és jelszó párossal tudnak regisztrálni, és ennek megfelelően ezek az adatok tárolásra is kerülnek. A felhasználónév maximális hossza 20 karakter, ameyelet triggerrel ellenőrzök. A jelszót bcrypt függvénnyel nyírom. Só eltárolása nem szükséges a bcrypt implementációjából adódóan. A felhasználóról el kell még tárolni a regisztráció dátumat, amely a szerver ideje alapján számolódik és UNIX timestampként kerül letárolásra, továbbá a jogosultsági (admin) szintet, amely ugyancsak 4 byteon (TINYINT) kerül ábrázolásra. A 0/1 értékek megfeleltethetőek a TRUE/FALSE logikai típusú konstans értékeknek, így tehát, ha az érték 0, vagyis FALSE, akkor az adott felhasználó nem rendelkezik admin jogkörrel, különben igen. Ugyancsak tárolandó érték a felhasználó játékbeli egyenlege, amely BIGDECIMAL típúsként van ábrázolva.
-A játéktáblákat a poker\_tables adatbázis tábla tárolja. Szükségünk van eltárolni a játéktábla nevét, melynek felső korlátja 30 karakter és egyedinek kell lennie. Ezeket a megszorításokat szintén triggerekkel ellenőrzöm. A játék asztal játékstílusát is eltárolom, amely egyben idegenkulcs is a poker\_types táblára nézve. Továbbá minden asztal tulajdonsága, hogy maximum hányan játszhatnak rajta, és hány másodpercig gondolkodhatnak a játékosok. Ezen két érték típusaként ugyancsak UNSIGNED TINYINT van meghatározva, ugyanis az egyes asztaloknál a játékosok száma legfeljebb 5 lehet, míg az egyes játékosok gondolkodási ideje maximum 40, de legalább 5 másodperc.
-
-\subsection{Modulok}
-A programcsomag 6 fő modult tartalmaz
-\begin{description}
-  \item[poker-server] \hfill \\
-  A póker játék szervere, amely magát a játékot szolgáltatja.
-  \item[poker-client] \hfill \\
-  A póker játék kliense, amely segítségével a szerverhez lehet csatlakozni.
-  \item[poker-shared] \hfill \\
-   A póker játék azon modulja, amelytől a szerver és a kliens egyaránt függ.
-   \item[poker-persist] \hfill \\
-   Az adatok letárolásáért felelős modul.
-   \item[poker-model] \hfill \\
-   A póker játék modellezéséért felelős csomag.
-   \item[javapokertexasholdem] \hfill \\
-   Külső könyvtár, amely a nyertes játékos kiértékelési feladatot végzi.
-\end{description}
-\begin{figure}[h!]
-	\caption{Kliens modulra bontása}
-	\label{fig:client_modul}
-	\centering
-	\includegraphics{user-documentation/images/poker-client-deps.png}
-\end{figure}
-\begin{figure}[h!]
-	\caption{Szerver modulra bontása}
-	\label{fig:server_modul}
-	\centering
-	\includegraphics{user-documentation/images/poker-server-deps.png}
-\end{figure}
-A modulok közötti függőséget a \ref{fig:client_modul}. és a \ref{fig:server_modul}. ábra szemlélteti. \\
-A programcsomag két főmodulra bontható
-\begin{itemize}[leftmargin=2.7cm]
-\item poker-server
-\item poker-client
-\end{itemize}
-A szerver feladata a játék biztosítása a kliensek számára.
-A szerver a jelszavak titkosítására bcrypt eljárást alkalmaz, amelynek a biztonságát sózással növeli. Továbbá a szerver felhasznál még egy külső csomagot - mysql-connector-java -, amely az adatbázis kapcsolatért felel.
-A poker-shared modul felel a szerver és a kliens jól definiált kommunikácójáért. A shared modul többek között tartalmazza a közös interfészeket, kivételeket és a póker utasítások megvalósítását. A kliens közvetlenül függ ettől a modultól, azonban a szerver és a shared modul közé beékelődött a poker-persist modul, amely az adatok adatbázisba való írásáért és abból olvasásáért felel.
-
-\subsection{Funkciók}
-Ahogy a témabejelentőben is szerepel...... RMI kép wikiről, majd azt megmagyarázni a shared modullal, kliens hívja, jól definiált interfész etc....
-\begin{figure}[h!]
-	\caption{RMI koncepció}
-	\centering
-	\includegraphics[width=14cm, height=2cm]{user-documentation/images/rmi.png}
-\end{figure}
-A szerver vázáért a PokerRemote interface felel, amely a játékon végrehajtható műveletek összefogásáért felel. Itt található az összes funkció, amely megvalósításra került, mint például játék asztal létrehozása, új felhasználó létrehozás, admin jog kiosztása stb. A kliens ezt a vázat tudja elkérni az RMI registryből, mint kliens-oldali szervercsonk, amelyeken a műveletek meg tudja hívni. Az összes megvalósított funkciót le kell írni? Felsorolás szintjén, vagy hogy? Rövid magyarázattal? És amelyik egyértelmű? Pl. felhasználó módosítása... login...
-
-\section{Tovább fejlesztési lehetőségek}
-\begin{itemize}
-\item Az adatbázis viszonylag alacsony absztrakciós szinten került implementására, azonban mivel néhány tábláról beszélhetünk csak, ezért igyekeztem elkerülni a keretrendszerek általi overheadet. Ugyanakkor ezen a ponton sokat fejlődhet a programcsomag, ha a későbbiek során esetlegesen bonyolultabban kellene modellezni a játékot adatbázis szempontjából. Például dialektusok - akár Liquibase (hivatkozás) - használata elfedheti a tényleges adatbázis-kezelő rendszer általánosságait, így eggyel magasabb szintre helyezhető a megvalósítás.
-\item A felhasználói élményen sokat javíthat az animációk használata. A megjelenítés sokkal lágyabb, folyékonyabb lehetne Transition/Animation (bibliográfiába hivatkozás...) objektumok használatával.
-\item Akár a komplett RMI architektúrát le lehetne váltani, és helyette REST szoftverarchitektúrát alkalmazni, amely modernebb megjelenést (AngularJS, reszponzív design) és modernebb fejlesztői eszközöket, API-kat vonna maga után.
-\item A játék nem képes kezelni olyan eseteket, amikor egynél több játékos nyer az adott körben.
-\item A játék nincs felkészítve arra a szélsőséges esetre, ha valakinek elfogy a zsetonja, akkor pontosan minek (és hogyan) kell történnie.
-\item A kódban viszonylag sok kódduplikáció van jelen, ugyanis az HouseCommandType és a PlayerCommandType enum típusú objektumok szűk keresztmetszetnek tudható be. Ha a PokerCommand interfacet implementáló osztályokat generikusan tudnánk megfogalmazni, akkor jelentősen letisztulna a kód.
+\subsubsection{Játékmenet}
+Minden játékszerver úgy lett konfigurálva, hogy két játékos esetén a parti elkezdődjön. Ha valaki később csatlakozott az asztalhoz, az a megkezdett partiból semmit nem érzékel, mintha üres asztalnál ülne. Csak a következő partiba tud beszállni. Mindkét játékstílus esetén van egy BLIND kör, amikor a szerver bekéri a vakokat a játékosoktól. Az osztótól eggyel balra ülő játékos köteles betenni a kis vakot, a kis vaktól eggyel balra ülő játékos pedig köteles betenni a nagy vakot. Ebból a felhasználó nem lát semmit, köteles beadni a kis- vagy nagyvakot, amelyet egy automatizált eljárás hajt végre. Az osztó gomb  a legelső körben kerül kiosztásra a legelsőként csatlakozott játékoshoz. Az osztó gomb az óramutató járásával megegyező irányban halad. Minden új megkezdett parti esetén az osztó gomb a következő játékoshoz kerül. Minden parti legelső körében a kezdő játékos az osztótól balra ülő harmadik játékos, minden további kört a kis vakra kötelezett játékos kezd meg.  \\
+A játékszerverek nem képesek kezelni, ha egy játékosnak elfogyott, illetve nincs elegendő zsetonja. Ebből kifolyólag esetenként előfordulhat negatív egyenleg, illetve nem definiált viselkedés. A játékosok szigorúan csak egymást követve küldhetnek utasításokat a szervernek, mindig az éppen soron levő játékos. A felhasználói grafikus felületen egyértelmű jelzéssel van ellátva az éppen soron levő játékos. A játékosok megadhatják (CALL), emelhetik (RAISE) a tétet, illetve, ha nem szeretnének az adott körben semmit csinálni, akkor CHECK-elhetnek. Az emelés mértéke a mindenkori játékasztal alaptét felét jelenti. Ugyanakkor lap eldobásra (FOLD) és a játék elhagyására (QUIT) is lehetőség van. A felhasználók (korlátozottan) visszanézhetik a korábbi leosztásokat, és a partiban történt eseményeket (LOG). A játékosok asztalonkénti maximum száma 5 fő. A kliensek a játék elhagyását követően újracsatlakozhatnak az adott játékszerverre a fentieket figyelembe véve. Lehetőség van asztalt váltani, és a játékszerverek (korlátozottan) képesek kezelni, ha a játékossal megszakad a kapcsolat. A kliens alkalmazások is (korlátozott mértékben) fel vannak készítve az esetleg kommunikációs hibákra.
+\subsubsection{Játékstílusok} \label{subsubsec:game_styles}
+A program kettő beépített játékstílust definiál
+\begin{itemize}[leftmargin=2cm]
+\item Classic \cite{five_card_draw}
+\item Texas Hold'Em \cite{texas_holdem}
 \end{itemize}
 
-\section{Tesztelés}
-\subsection{Funkcionális tesztelés}
-\begin{tabular}{| l | c | r |}
-\hline
-  Funkció & Elvárt eredmény & Eredmény \\ \hline
-  Regisztráció & A program jelezte a felhasználónak, hogy a regisztráció sikeresen megtörtént, és visszairányította őt a bejelentkezési formhoz. & A felhasználó a regisztrációt követően be tudjon jelentkezni a póker játékba. \\ \hline
-  Bejelentkezés & A formot helyesen kitöltve a program sikeresen autentikálta és beléptette a felhasználót. & Regisztrációt követően be tudjon jelentkezni a felhasználó \\ \hline
-  Tábla módosítás & - & - \\ \hline
-  Tábla törlés & - & - \\ \hline
-\end{tabular}
+\pokerparagraph{Classic} 
+A klasszikus játékstílus legfőbb ismertető jele, hogy mindenki öt lapot kap kézbe és nincsenek közös lapok. Először is a vakokra kötelezett játékosok rakják be a vakokat (automatizáltan), azután pedig úgynevezett pre-round van, amikor a szerver minden játékosnak öt-öt lapot oszott kézbe, és ezek alapján lehet licitálni. Ha vége a körnek, akkor mindenki kicserélheti a lapjait, amiket saját maga választ ki a grafikus felületen a saját kártyalapjainak rákattintásával. Ha a kártyalap ``feljebb'' csúszott a grafikus megjelenítésen, akkor a kártyalapot cserére jelölte a játékos. A CHANGE feliratú gombbal cserélhetőek a kártyák. Mindenki akkor kapja meg az új kártyalapjait, ha már mindenki nyilatkozott a cseréről. Ezek után új kör indul, amikor is az új lapok birtokában tehetik meg a tétjeiket a játékosok. A kör után a szerver kihirdeti a nyertest, és a nyertes lapokat az asztal közepén jeleníti meg a grafikus felület. A felhasználók a nyertes lapok megtekintését követően kötelesek rákattintani a CHECK feliratú gombra (vagy majd megcsinálom, hogy automatizált quit legyen ez is.... csak most még bugos.... winnercardsnál úgy is van nullpointerexceptionöm....). Ha ebben a körben is mindenki nyilatkozott, akkor a játékasztal új partit indít.
+
+\pokerparagraph{Texas Hold'Em}
+A klasszikus játékstílussal erősen megegyező játékmenetű stílus. A különbség csupán annyi, hogy a ház 2-2 lapot oszt minden játékosnak, amelyekkel a játékosok a parti végéig rendelkeznek.
 
 \clearpage

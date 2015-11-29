@@ -4,6 +4,7 @@
 \usepackage{url}
 \usepackage{indentfirst}
 \usepackage{enumitem}
+\newcommand{\pokerparagraph}[1]{\paragraph{#1}\mbox{}\\}
 
 \input{information}
 
@@ -16,14 +17,15 @@
 
 % belső fedlap
 \include{cover/index}
+\setcounter{page}{1}
 \cleardoublepage
 
 % a belső fedlap utáni lap a témabejelentő
 
 % tartalomjegyzék
-\setcounter{page}{1}
 \tableofcontents
-\cleardoublepage
+\addtocontents{toc}{~\hfill\textbf{Oldal}\par}
+\clearpage
 
 \pagestyle{plain}
 
