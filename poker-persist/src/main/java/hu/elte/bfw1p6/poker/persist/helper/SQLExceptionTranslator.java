@@ -44,7 +44,7 @@ public class SQLExceptionTranslator {
 	/**
 	 * Átfordítja az SQLException paramétert.
 	 * @param e az átofrdítandó SQLException objektum
-	 * @return
+	 * @return az átfordított kivétel
 	 */
 	public PokerDataBaseException interceptException(SQLException e) {
 		String pokerMsg = lookUpMsg(e.getMessage());

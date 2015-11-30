@@ -177,7 +177,7 @@ public interface PokerRemote extends Remote, Serializable {
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
 	 */
-	void modifyUser(UUID id, User u) throws RemoteException, PokerDataBaseException;
+	void modifyUser(UUID uuid, User u) throws RemoteException, PokerDataBaseException;
 
 	/**
 	 * Már meglévő felhasználót töröl
@@ -186,5 +186,5 @@ public interface PokerRemote extends Remote, Serializable {
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
 	 */
-	void deleteUser(UUID id, User u) throws RemoteException, PokerDataBaseException;
+	void deleteUser(UUID uuid, User u) throws RemoteException, PokerDataBaseException;
 }
