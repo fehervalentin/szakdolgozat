@@ -1,6 +1,8 @@
 package hu.elte.bfw1p6.poker.client.view;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,7 +26,7 @@ import javafx.scene.layout.AnchorPane;
  * @author feher
  *
  */
-public abstract class AbstractMainView {
+public abstract class AbstractMainGameView {
 
 	/**
 	 * Beégetett alapértékek, amelyek a megjelenítéshez kellenek.
@@ -106,7 +108,7 @@ public abstract class AbstractMainView {
 	 */
 	private int fixSitPosition;
 	
-	public AbstractMainView(AnchorPane mainGamePane, AbstractDefaultValues defaultValues) {
+	public AbstractMainGameView(AnchorPane mainGamePane, AbstractDefaultValues defaultValues) {
 		this.mainGamePane = mainGamePane;
 		this.defaultValues = defaultValues;
 		this.myCards = new ArrayList<>();
@@ -554,7 +556,7 @@ public abstract class AbstractMainView {
 			
 			@Override
 			public void run() {
-				myBalance.setText(balance.toString());
+				myBalance.setText(balance.setScale(2, RoundingMode.FLOOR).toString());
 			}
 		});
 	}

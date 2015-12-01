@@ -6,11 +6,10 @@ import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.model.ClassicMainGameModel;
-import hu.elte.bfw1p6.poker.client.view.ClassicMainView;
+import hu.elte.bfw1p6.poker.client.view.ClassicMainGameView;
 import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
-import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -28,18 +27,16 @@ public class ClassicMainGameController extends AbstractMainGameController {
 
 	@Override
 	public synchronized void initialize(URL location, ResourceBundle resources) {
-		this.mainView = new ClassicMainView(mainGamePane);
+		this.mainView = new ClassicMainGameView(mainGamePane);
 		
 		try {
 			this.commController = new CommunicatorController(this);
 			this.model = new ClassicMainGameModel(commController);
 			this.model.connectToTable(commController);
 			this.mainView.setUserName(model.getUserName());
+			this.mainView.setBalance(model.getBalance());
 		} catch (RemoteException e) {
 			remoteExceptionHandler();
-		} catch (PokerTooMuchPlayerException e) {
-			showErrorAlert(e.getMessage());
-			frameController.setTableListerFXML();
 		}
 		setButtonsDisability(true);
 		setChangeButtonDisability(true);
@@ -149,7 +146,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	@FXML protected void handleChange(ActionEvent event) {
 		try {
 			setChangeButtonDisability(true);
-			((ClassicMainGameModel)model).sendChangeCommand(((ClassicMainView)mainView).getMarkedCards());
+			((ClassicMainGameModel)model).sendChangeCommand(((ClassicMainGameView)mainView).getMarkedCards());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
 		} catch (RemoteException e) {
@@ -162,7 +159,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	 * @param classicHouseCommand az utasítás
 	 */
 	private void receivedChangeHouseCommand(ClassicHouseCommand classicHouseCommand) {
-		((ClassicMainView)mainView).receivedChangeHouseCommand(classicHouseCommand);
+		((ClassicMainGameView)mainView).receivedChangeHouseCommand(classicHouseCommand);
 		changeState(classicHouseCommand.getWhosOn());
 	}
 
@@ -172,7 +169,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	 */
 	private void receivedDeal2HouseCommand(ClassicHouseCommand classicHouseCommand) {
 		((ClassicMainGameModel)model).receivedDeal2HouseCommand(classicHouseCommand);
-		((ClassicMainView)mainView).receivedDeal2HouseCommand(classicHouseCommand);
+		((ClassicMainGameView)mainView).receivedDeal2HouseCommand(classicHouseCommand);
 		changeButton.setDisable(true);
 	}
 
@@ -181,7 +178,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	 * @param classicPlayerCommand az utasítás
 	 */
 	private void receivedChangePlayerCommand(ClassicPlayerCommand classicPlayerCommand) {
-		((ClassicMainView)mainView).receivedChangePlayerCommand(classicPlayerCommand);
+		((ClassicMainGameView)mainView).receivedChangePlayerCommand(classicPlayerCommand);
 		changeState(classicPlayerCommand.getWhosOn());
 	}
 	

@@ -18,14 +18,14 @@ import javafx.scene.layout.AnchorPane;
  * @author feher
  *
  */
-public class HoldemMainView extends AbstractMainView {
+public class HoldemMainGameView extends AbstractMainGameView {
 
 	/**
 	 * A ház lapjai.
 	 */
 	private List<ImageView> houseCards;
 
-	public HoldemMainView(AnchorPane mainGamePane) {
+	public HoldemMainGameView(AnchorPane mainGamePane) {
 		super(mainGamePane, HoldemDefaultValues.getInstance());
 		setHouseCards();
 	}

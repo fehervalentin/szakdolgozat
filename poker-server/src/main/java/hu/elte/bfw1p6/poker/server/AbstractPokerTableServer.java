@@ -20,7 +20,6 @@ import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.command.PokerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
-import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
@@ -181,9 +180,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Asztalhoz való csatlakozás.
 	 * @param client a csatlakozni kívánó kliens
 	 * @param userName a csatlakozni kívánó játékos neve
-	 * @throws PokerTooMuchPlayerException
 	 */
-	public abstract void join(PokerRemoteObserver client, String userName) throws PokerTooMuchPlayerException;
+	public abstract void join(PokerRemoteObserver client, String userName);
 
 	/**
 	 * A várakozó klienseknek üzen, ha valamelyiknél megszakadt a kapcsolat, akkor kidobja.
@@ -594,9 +592,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Join esetén a két játéktábla-szerver közös része.
 	 * @param client a kliens
 	 * @param userName a kliens felhasználóneve
-	 * @throws PokerTooMuchPlayerException
 	 */
-	protected void preJoin(PokerRemoteObserver client, String userName) throws PokerTooMuchPlayerException {
+	protected void preJoin(PokerRemoteObserver client, String userName) {
 		clients.add(client);
 		clientsNames.add(userName);
 		System.out.println("JOIN: " + client.toString());

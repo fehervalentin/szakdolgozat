@@ -14,7 +14,6 @@ import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import hu.elte.bfw1p6.poker.command.holdem.type.HoldemHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
-import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 
@@ -175,12 +174,9 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 	}
 
 	@Override
-	public synchronized void join(PokerRemoteObserver client, String userName) throws PokerTooMuchPlayerException {
+	public synchronized void join(PokerRemoteObserver client, String userName) {
 		if (!clients.contains(client)) {
 			pingWaitingClients();
-			if (clients.size() + waitingClients.size() >= pokerTable.getMaxPlayers()) {
-				throw new PokerTooMuchPlayerException(ERR_TABLE_FULL);
-			}
 			if (actualHoldemHouseCommandType == HoldemHouseCommandType.BLIND) {
 				preJoin(client, userName);
 				startRound();

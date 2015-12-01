@@ -13,7 +13,6 @@ import hu.elte.bfw1p6.poker.command.classic.ClassicHouseCommand;
 import hu.elte.bfw1p6.poker.command.classic.ClassicPlayerCommand;
 import hu.elte.bfw1p6.poker.command.classic.type.ClassicHouseCommandType;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
-import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
@@ -180,12 +179,9 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 	}
 
 	@Override
-	public synchronized void join(PokerRemoteObserver client, String userName) throws PokerTooMuchPlayerException {
+	public synchronized void join(PokerRemoteObserver client, String userName) {
 		if (!clients.contains(client)) {
 			pingWaitingClients();
-			if (clients.size() + waitingClients.size() >= pokerTable.getMaxPlayers()) {
-				throw new PokerTooMuchPlayerException(ERR_TABLE_FULL);
-			}
 			if (actualClassicHouseCommandType == ClassicHouseCommandType.BLIND) {
 				preJoin(client, userName);
 				startRound();

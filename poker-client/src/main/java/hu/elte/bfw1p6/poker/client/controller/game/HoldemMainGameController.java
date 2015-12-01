@@ -6,13 +6,11 @@ import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.model.HoldemMainGameModel;
-import hu.elte.bfw1p6.poker.client.view.HoldemMainView;
+import hu.elte.bfw1p6.poker.client.view.HoldemMainGameView;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
-import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import javafx.application.Platform;
 
 /**
@@ -24,16 +22,14 @@ public class HoldemMainGameController extends AbstractMainGameController {
 
 	@Override
 	public synchronized void initialize(URL location, ResourceBundle resources) {
-		this.mainView = new HoldemMainView(mainGamePane);
+		this.mainView = new HoldemMainGameView(mainGamePane);
 
 		try {
 			this.commController = new CommunicatorController(this);
 			this.model = new HoldemMainGameModel(commController);
 			this.model.connectToTable(commController);
 			this.mainView.setUserName(model.getUserName());
-		} catch (PokerTooMuchPlayerException e) {
-			showErrorAlert(e.getMessage());
-			frameController.setTableListerFXML();
+			this.mainView.setBalance(model.getBalance());
 		} catch (RemoteException e) {
 			remoteExceptionHandler();
 		}
@@ -142,7 +138,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 				}
 			}
 		});
-		((HoldemMainView)mainView).receivedFlopHouseCommand(houseHoldemCommand);
+		((HoldemMainGameView)mainView).receivedFlopHouseCommand(houseHoldemCommand);
 	}
 
 	/**
@@ -153,7 +149,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 		synchronized (textArea) {
 			textArea.appendText(Arrays.asList(houseHoldemCommand.getCards()).stream().map(Object::toString).collect(Collectors.joining(" ")));
 		}
-		((HoldemMainView)mainView).receivedTurnHouseCommand(houseHoldemCommand);
+		((HoldemMainGameView)mainView).receivedTurnHouseCommand(houseHoldemCommand);
 	}
 
 	/**
@@ -164,6 +160,6 @@ public class HoldemMainGameController extends AbstractMainGameController {
 		synchronized (textArea) {
 			textArea.appendText(Arrays.asList(houseHoldemCommand.getCards()).stream().map(Object::toString).collect(Collectors.joining(" ")));
 		}
-		((HoldemMainView)mainView).receivedRiverHouseCommand(houseHoldemCommand);
+		((HoldemMainGameView)mainView).receivedRiverHouseCommand(houseHoldemCommand);
 	}
 }

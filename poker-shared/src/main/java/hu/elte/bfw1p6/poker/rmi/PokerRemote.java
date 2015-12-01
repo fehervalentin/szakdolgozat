@@ -13,7 +13,6 @@ import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
-import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
@@ -148,9 +147,8 @@ public interface PokerRemote extends Remote, Serializable {
 	 * @param t az asztal amihez csatlakozni szeretne a kliens
 	 * @param observer a kliens
 	 * @throws RemoteException
-	 * @throws PokerTooMuchPlayerException
 	 */
-	void connectToTable(UUID uuid, PokerTable t, PokerRemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException;
+	void connectToTable(UUID uuid, PokerTable t, PokerRemoteObserver observer) throws RemoteException;
 
 	/**
 	 * Az összes regisztrált felhasználót kérdezi le.

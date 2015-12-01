@@ -8,7 +8,6 @@ import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
-import hu.elte.bfw1p6.poker.exception.PokerTooMuchPlayerException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.rmi.PokerRemote;
@@ -77,9 +76,8 @@ public abstract class AbstractMainGameModel {
 	 * Csatlakozás a kijelölt asztalhoz.
 	 * @param observer a csatlakozni kívánó kliens
 	 * @throws RemoteException
-	 * @throws PokerTooMuchPlayerException
 	 */
-	public void connectToTable(PokerRemoteObserver observer) throws RemoteException, PokerTooMuchPlayerException {
+	public void connectToTable(PokerRemoteObserver observer) throws RemoteException {
 		pokerRemote.connectToTable(pokerSession.getId(), pokerTable, observer);
 	}
 

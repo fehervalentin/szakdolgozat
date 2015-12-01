@@ -17,11 +17,11 @@ import javafx.scene.layout.AnchorPane;
  * @author feher
  *
  */
-public class ClassicMainView extends AbstractMainView {
+public class ClassicMainGameView extends AbstractMainGameView {
 	
 	private final int SLIP_OUT_PX = 15;
 
-	public ClassicMainView(AnchorPane mainGamePane) {
+	public ClassicMainGameView(AnchorPane mainGamePane) {
 		super(mainGamePane, ClassicDefaultValues.getInstance());
 	}
 
@@ -65,7 +65,6 @@ public class ClassicMainView extends AbstractMainView {
 
 			@Override
 			public void run() {
-				myCards.forEach(card -> card.setOnMouseClicked(null));
 				loadMyCards(houseCommand);
 				colorNextPlayer(houseCommand);
 			}
@@ -93,6 +92,7 @@ public class ClassicMainView extends AbstractMainView {
 				myCards.get(i).setLayoutY(myCards.get(i).getLayoutY() + SLIP_OUT_PX);
 			}
 		}
+		myCards.forEach(card -> card.setOnMouseClicked(null));
 		return markedCards;
 	}
 }

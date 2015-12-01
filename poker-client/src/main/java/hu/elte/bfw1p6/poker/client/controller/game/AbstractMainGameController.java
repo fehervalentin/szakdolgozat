@@ -12,7 +12,7 @@ import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.AbstractMainGameModel;
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
-import hu.elte.bfw1p6.poker.client.view.AbstractMainView;
+import hu.elte.bfw1p6.poker.client.view.AbstractMainGameView;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
@@ -54,7 +54,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	/**
 	 * A póker játék GUI-ja.
 	 */
-	protected AbstractMainView mainView;
+	protected AbstractMainGameView mainView;
 
 	/**
 	 * A póker játék modelje.
