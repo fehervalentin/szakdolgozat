@@ -286,7 +286,10 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 
 	@Override
 	public synchronized BigDecimal refreshBalance(UUID uuid) throws RemoteException, PokerDataBaseException {
-		return userDAO.findByUserName(sessionService.lookUpUserName(uuid)).getBalance();
+		if (sessionService.isAuthenticated(uuid)) {
+			return userDAO.findByUserName(sessionService.lookUpUserName(uuid)).getBalance();
+		}
+		return null;
 	}
 
 	@Override

@@ -161,14 +161,23 @@ paranccsot kiadva a poker-parent/release könyvtár alá csomagolódik be a futt
 Az igen közkedvelt tervezési minta alapján valósítottam meg a kliens oldali programot.
 
 \pokerparagraph{Model}
-
+A kliens kettő darab model osztályt tartalmaz. Az Model nevű singleton osztály felelős a szerver felé irányuló kapcsolat kiépítésében és fenntartásában. Ez az egyszerű szerver hívásokat végzi el. A kliens indulásakor elkéri a registry-ből a szerver csonkot, és bejelentkezéskor eltárolja a szerver által generált munkamenet objektumot. A model segítségével hívhatóak meg a játék funkcióinak a zöme. Ide sorolható a játék minden olyan funkciója, amely nem játék asztalhoz köthető. Például ennek a modelnek a segítségével lehet bejelentkezni, asztalt és felhasználót módosítani, vagy akár a játékasztalokat elkérni a szervertől. \\
+A kliens tartalmaz egy másik modelt - AbstractMainGameModel -, amely a tényleges játékért felel kliens oldalon. A szerver a parti megkezdésekor leküldi a klienseknek, hogy az adott partiban ki hol ül az asztalnál, hány játékos ül az asztalnál, a játékosok neveit és még néhány inicializációs értéket. Ezen értékek alapján a model el tudja dönteni, hogy az adott kliensnek kötelezően be kell rakni vakot. Minden parti elején minden kliensnek az adóssága a nagy vakkal egyezik meg. A további körökben az adósság leróható.
 
 \pokerparagraph{View}
-
+A megjelenítésért a JavaFX 2 \cite{javafx} felel. Az alapkonstrukció, hogy a GUI-n megjelenő objektumok zömét fxml állományokba szervezzük és a megjelenítés színtérgráffal történik. Minden fxml állományhoz pontosan egy controller tartozik, amely az fxml állomány minden újratöltésekor inicializálódik. A controllert az adott fxml állomány gyökerébe kell bekötni. \\
+A programcsomag által definiált játékstílusok igen hasonlóak, ezért egy AbstractMainView osztályban megfelelően kiszervezhetőek a közös részek, majd ennek az osztálynak a specializációiban (ClassicMainView, HoldemMainView) kerülnek megvalósításra a tényleges játékstílusbeli különbségek. Például eltérő különbség , amely a GUI-n is megjelenik, hogy a játékosok hány darab kártyalapot kapnak kézbe, illetve a Texas Hold'Em játékstílussal ellentétben a classic játékmódban nincsenek közös kártyalapok.
 
 \pokerparagraph{Controller}
+A controller általános szerepét ugyancsak egy abstract osztály, az AbstractMainGameController tölti be. A közös részek nem csak a megjelenítés és a model szintjén figyelhetőek meg, hanem az őket összekötő controller szintjén is. A beérkező utasítások alapján a controller hív tovább a megjelenítési és a model rétegbe.
+
+\subsubsection{Communication controller}
 
 
+\subsubsection{PokerRemoteObserver}
+
+
+\subsubsection{FrameController}
 
 \subsection{Szerver}
 \begin{figure}[h!]
@@ -177,22 +186,58 @@ Az igen közkedvelt tervezési minta alapján valósítottam meg a kliens oldali
   \centering
     \includegraphics[width=\textwidth]{user-documentation/images/server_remote.png}
 \end{figure}
-A szerver feladata a játék biztosítása a kliensek számára. A \ref{fig:server_public}. ábrán látható a szerver jóldefiniált publikus interfésze. A kliensek ezt az interfészt tudják elkérni a registryből \cite{RMI}
-
+A szerver feladata a játék biztosítása a kliensek számára. A \ref{fig:server_public}. ábrán látható a szerver jóldefiniált publikus interfésze. A kliensek ezt az interfészt tudják elkérni a registry-ből \cite{RMI}. A PokerRemote interfészt a PokerRemoteImpl osztály implementálja, ennek egy instanciája a tényleges szerver objektum. A szerveren futnak a játékasztal-szerverek, amelyek egy-egy asztalnak feleltethetőek meg, amelyekhez a kliensek csatlakozni tudnak. Ha egy játékos csatlakozik egy játékasztalhoz, akkor az adott asztal feljegyzi a csatlakozott klienst egy lokális listába. A főszervernek továbbra is van referenciája a klienshez, ugyanis minden klienstől érkező utasítást a főszerver fogad, és irányít a megfelelő játékasztal-szerverhez. Erre az autentikáció miatt van szükség. Azonban ez a fajta megközelítés könnyen szűk keresztmetszetté válhat, hiszen (vagy ezt inkább tovább fejlesztési lehetőségek...) \\
 A szerver a jelszavak titkosítására bcrypt eljárást alkalmaz, amelynek a biztonságát sózással növeli. Továbbá a szerver felhasznál még egy külső csomagot - mysql-connector-java -, amely az adatbázis kapcsolatért felel.
-A poker-shared modul felel a szerver és a kliens jól definiált kommunikácójáért. A shared modul többek között tartalmazza a közös interfészeket, kivételeket és a póker utasítások megvalósítását. A kliens közvetlenül függ ettől a modultól, azonban a szerver és a shared modul közé beékelődött a poker-persist modul, amely az adatok adatbázisba való írásáért és abból olvasásáért felel.
 
 \subsection{javapokertexasholdem}
 Külső könyvtár, amely eredetileg Texas Hold'Em játékstílusban tud kezeket kiértékelni. Az integrációt viszonylag könnyen meg lehetett oldani, ráadásul még általánosítani is sikerült a könyvtárat. Tehát classic és Texas Hold'Em játékstílusra is ugyanezt a könyvtárat használja a szerver a kezek kiértékelésére.
 
 \section{Funkciók}
-Ahogy a témabejelentőben is szerepel...... RMI kép wikiről, majd azt megmagyarázni a shared modullal, kliens hívja, jól definiált interfész etc....
-\begin{figure}[h!]
-	\caption{RMI koncepció}
-	\centering
-	\includegraphics[width=14cm, height=2cm]{user-documentation/images/rmi.png}
-\end{figure}
-A szerver vázáért a PokerRemote interface felel, amely a játékon végrehajtható műveletek összefogásáért felel. Itt található az összes funkció, amely megvalósításra került, mint például játék asztal létrehozása, új felhasználó létrehozás, admin jog kiosztása stb. A kliens ezt a vázat tudja elkérni az RMI registryből, mint kliens-oldali szervercsonk, amelyeken a műveletek meg tudja hívni. Az összes megvalósított funkciót le kell írni? Felsorolás szintjén, vagy hogy? Rövid magyarázattal? És amelyik egyértelmű? Pl. felhasználó módosítása... login...
+A szerver vázáért a PokerRemote interfész felel, amely a játékon végrehajtható műveletek összefogásáért felel. Itt található az összes funkció, amely megvalósításra került, mint például játék asztal létrehozása, új felhasználó létrehozás, admin jog kiosztása stb. A kliens ezt a vázat tudja elkérni az RMI registry-ből, mint kliens-oldali szervercsonk, amelyeken a műveletek meg tudja hívni.
+\subsection{Általános funkciók}
+
+\subsubsection{Regisztráció}
+A játékot csak regisztrált felhasználók tudják használni. A szerver biztosít regisztrációs lehetőséget a felhasználók számára. A regisztráció során felhasználónevet és jelszót köteles megadni a felhasználó, amely tárolásra kerül az adatbázisban. Minden újonnan regisztrált felhasználó 1000 egységnyi egyenleggel rendelkezik. Az adatbázis séma nem engedi, hogy több azonos felhasználónévvel különböző felhasználók regisztrálva legyenek, erre a regisztráció során ügyelnie kell a felhasználónak.
+
+\subsubsection{Bejelentkezés}
+A játék használatához a játékosoknak be kell jelentkezniük. Egy felhasználónévvel egyidőben csak egy munkamenet létezhet. Ha a felhasználó már használatban lévő felhasználónévvel kíván beljelentkezni, akkor a szerver hibás bejelentkezési adatokra hivatkozva megtagadja az utasítást. Sikeres bejelentkezést követően a szerver példányosít egy PokerSerssion objektumot egy UUID \cite{uuid} azonosítóval, amelyet lokálisan eltárol, majd a kliensnek elküld. A kliens a kijelentkezésig megőrzi ezt az objektumot, és a későbbi funkciók hívása során ezzel a munkamenettel azonosítja magát.
+
+\subsubsection{Kijelentkezés}
+A játékosok a kijelentkezés funkcióval hagyhatják el a játékot. A funkció hivása során a kijelentkezni kívánó felhaszáló munkamenetét a szerver érvényteleníti, és a felhasználó visszakerül a bejelentkezési formhoz. A szerver (korlátozott mértékben) fel lett készítve a nem szabályszerű kijelentkezésre, tehát ha például megszakad a kapcsolat a klienssel, akkor a legközelebbi bejelentkezési funkció hívása során a szerver érvényteleníti a megszakadt kliensek munkameneteit, ezzel elérve azt, hogy a foglalt felhasználónevekkel újra be lehessen jelentkezni.
+
+\subsubsection{Asztalok}
+\pokerparagraph{Létrehozás}
+A funkció eléréséhez admin jogosultságra van szükség. Egy új asztalt lehet lérehozni az adatbázis séma (hivatkozás) irányelvei szerint megfelelően paraméterezve. Amikor a kliens asztalt szeretne létrehozni, akkor a szerver egyértelműen tájékoztatja, hogy az asztal létrehozás sikeres volt-e. Ha igen, akkor egy felugró üzenet jelenik meg a képernyőn, hogy az asztal létrehozása sikeres volt, majd a felhasználó vissza lesz irányítva a tábla listázó felületre. Ha az asztal létrehozása sikertelen volt, akkor a felület ugyancsak egyértelműen jelzi a felhasználónak, hogy a művelet miért hiúsult meg. Például előfordulhat hibás beviteli érték, szerverhiba és adatbázishiba is.
+
+\pokerparagraph{Módosítás}
+Egy már meglévő asztalt adminisztrációs joggal rendelkező felhasználó módosíthat. Fontos megjegyezni, hogy a módosítás csak üres asztalokra alkalmazható.
+\pokerparagraph{Törlés}
+A funkcióhoz ismételten adminisztrációs jog szükséges. Már létező asztal törölhető a funkció segítségével. A funkciót csak üres asztalokra lehet alkalamazni.
+\pokerparagraph{Lekérés}
+A bejelentkezést követően a felhasználó a táblalistázó felületre kerül, ahol megtekintheti a létrehozott és elindított játéktábla-szervereket (hivatkozás). A bejelentkezést követően a kliens ezeket az asztalokat elkéri a szervertől. Fontos megjegyezni, hogy ha bármelyik asztal módosításra került, akkor az asztalokat a szerver újra leküldi a klienseknek, így minden kliensnél az asztalok legfrissebb változata lesz elérhető.
+
+\pokerparagraph{Csatlakozás}
+A felhasználók létrehozott játékasztal-szerverekhez csatlakozhatnak. Fontos megjegyezni, hogy egy asztalnál maximum 5 játékos ülhet egyszerre, tehát ha egy asztal tele van (5 játékos ül az asztalnál, beleszámolva a következő partira váró játékosokat is), akkor a szerver PokerTooMuchPlayerException kivételt fog dobni a kliensnek. A kliens ezt a kivételt lekezelve értelmes üzenetet fog megjeleníteni a képernyőn. Ha egy tele asztaltól kilép az egyik játékos (vagy megszakad a kommunikáció), akkor az asztalnál felszabadul egy hely, amelyet egy új felhasználó elfoglalhat, ekkor az asztal ismét tele lesz.
+
+\pokerparagraph{Szabad helyek lekérdezése}
+
+
+\subsubsection{Felhasználók}
+\pokerparagraph{Létrehozás}
+A regisztráció során új felhasználó entitás jön létre, amelyet a szerver letárol az adatbázisban. A funkció külön, direktbe nem hívható, regisztrációhoz kötött.
+
+\pokerparagraph{Módosítás}
+\pokerparagraph{Törlés}
+\pokerparagraph{Lekérés}
+\pokerparagraph{Jelszó csere}
+A felhasználóknak lehetőségük van jelszócserére
+
+\pokerparagraph{Adminisztrációs jog}
+A szerverre beregisztrált felhasználók alapesetben nem rendelkeznek ilyen jogosultsággal. Az adminisztrációs jogot csak adminisztrációs joggal rendelkező felhasználó tudja kiosztani illetve megvonni. Friss adatbázis esetén létezik egy admin nevű felhasználó, aki adminisztrációs joggal rendelkezik. Kezdetben csak ez a felhasználó tud kiosztani adminisztrációs jogot.
+
+\subsection{Játékmenetbeli funkciók}
+\subsubsection{Utasítás küldés}
+\subsubsection{Egyenleg lekérése}
 
 \section{Tovább fejlesztési lehetőségek}
 \begin{itemize}

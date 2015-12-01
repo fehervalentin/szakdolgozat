@@ -37,7 +37,7 @@ public abstract class AbstractMainGameModel {
 	protected PokerTable pokerTable;
 	
 	/**
-	 * A szerver-kliens komminukációért felelős objektum.
+	 * A szerver-kliens kommunikációjáért felelős objektum.
 	 */
 	protected CommunicatorController communicatorController;
 
