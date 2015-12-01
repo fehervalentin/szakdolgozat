@@ -27,6 +27,8 @@ public class UserListerController extends AbstractPokerClientController {
 	private final String SUCC_USER_MODIFY = "Sikeresen módosítottad a felhasználót!";
 	private final String SUCC_USER_DELETE = "Sikeresen törölted a felhasználót!";
 	
+	private final String INITIAL_BALANCE = "1000.00"; // elegánsabb lenne szervertől elkérni...
+	
 	/**
 	 * Egy regisztrált felhasználó oszlopai.
 	 */
@@ -34,6 +36,7 @@ public class UserListerController extends AbstractPokerClientController {
 	
 	@FXML private Button backButton;
 	@FXML private Button modifyAdminButton;
+	@FXML private Button resetBalanceButton;
 	@FXML private Button deleteUserButton;
 
 	@FXML private TableColumn<User, String> userNameColumn;
@@ -84,6 +87,27 @@ public class UserListerController extends AbstractPokerClientController {
 			} catch (RemoteException e) {
 				remoteExceptionHandler();
 			}
+		}
+	}
+	
+	/**
+	 * A RESET gomb click handlerje.
+	 * @param event az esemény
+	 */
+	@FXML protected void handleResetBalance(ActionEvent event) {
+		User selectedUser = getSelectedUser();
+		if (selectedUser != null) {
+			try {
+				selectedUser.setBalance(new BigDecimal(INITIAL_BALANCE));
+				model.modifyUser(selectedUser);
+				showSuccessAlert(SUCC_USER_MODIFY);
+			} catch (PokerDataBaseException e) {
+				showErrorAlert(e.getMessage());
+			} catch (RemoteException e) {
+				remoteExceptionHandler();
+			}
+		} else {
+			showErrorAlert(ERR_USER_SELECTION);
 		}
 	}
 	

@@ -34,13 +34,16 @@
 			<GridPane alignment="CENTER" hgap="10.0" vgap="10.0"
 				GridPane.columnIndex="1" GridPane.rowIndex="1">
 				<Button fx:id="deleteUserButton" text="Felhasználó törlése"
-					onAction="#handledeleteUse" GridPane.columnIndex="1" GridPane.rowIndex="0"
+					onAction="#handledeleteUse" GridPane.columnIndex="1"
+					GridPane.rowIndex="0" styleClass="rich-blue" />
+				<Button fx:id="resetBalanceButton" text="Egyenleg visszaállítása"
+					onAction="#handleResetBalance" GridPane.columnIndex="1" GridPane.rowIndex="1"
 					styleClass="rich-blue" />
 				<Button fx:id="modifyAdminButton" text="Admin jog billentés"
-					onAction="#handleAdmin" GridPane.columnIndex="1" GridPane.rowIndex="1"
+					onAction="#handleAdmin" GridPane.columnIndex="1" GridPane.rowIndex="2"
 					styleClass="rich-blue" />
 				<Button fx:id="backButton" text="Vissza" onAction="#handleBack"
-					GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="rich-blue" />
+					GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="rich-blue" />
 			</GridPane>
 		</GridPane>
 	</children>
