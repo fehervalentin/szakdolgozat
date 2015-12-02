@@ -1,4 +1,4 @@
-CREATE TRIGGER pokerdb.create_table_trigger BEFORE INSERT ON pokerdb.poker_tables
+CREATE TRIGGER pokerdb.TR_BEFORE_CREATE_TABLE BEFORE INSERT ON pokerdb.poker_tables
 	FOR EACH ROW
 	BEGIN
 		IF (CHAR_LENGTH(NEW.name) > 30) THEN
@@ -17,7 +17,7 @@ CREATE TRIGGER pokerdb.create_table_trigger BEFORE INSERT ON pokerdb.poker_table
 	END;
 /
 
-CREATE TRIGGER pokerdb.update_table_trigger BEFORE UPDATE ON pokerdb.poker_tables
+CREATE TRIGGER pokerdb.TR_BEFORE_UPDATE_TABLE BEFORE UPDATE ON pokerdb.poker_tables
 	FOR EACH ROW
 	BEGIN
 		IF (CHAR_LENGTH(NEW.name) > 30) THEN
@@ -36,7 +36,7 @@ CREATE TRIGGER pokerdb.update_table_trigger BEFORE UPDATE ON pokerdb.poker_table
 	END;
 /
 
-CREATE TRIGGER pokerdb.create_user_trigger BEFORE INSERT ON pokerdb.users
+CREATE TRIGGER pokerdb.TR_BEFORE_CREATE_USER BEFORE INSERT ON pokerdb.users
 	FOR EACH ROW
 	BEGIN
 		SET @c = CHAR_LENGTH(NEW.username);
