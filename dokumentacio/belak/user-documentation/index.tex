@@ -1,4 +1,5 @@
 \part{Felhasználói dokumentáció}
+A programcsomagot JAVA programozási nyelven írtam meg, így a program számára biztosítani kell JAVA futtatókörnyezetet, továbbá a program működéséhez adatbázis szerverre is szükség lesz. A telepítés magába foglalja az adatbázis séma elkészítését és az adatbázist demó adatokkal tölti fel, így a telepítést követően extra dolgokra nem lesz szükség.
 
 \section{Telepítés}
 \subsection{Java SE Runtime Environment 8}
@@ -59,6 +60,8 @@ utasítást, amely jelszót fog kérni. A beviteli sort ugyancsak hagyjuk ürese
 \section{A póker játékról}
 A póker, mint kártyajáték igen népszerű szerencsejáték. Akár élő tv adásokat is végig lehet követni, ahol hatalmas főnyereményeket osztanak ki a dobogós helyezetteknek. Viszonylag sok fajtája terjedt el szerte a világon, kezdve a klasszikus 5 lapos leosztásokkal egészen az OMAHA-án át a jól ismert Texas Hold'Em játékstílusig. A játékot 52 lapos francia kártyapaklival játszák, amelyben 4 szín és 13 különböző értékű kártyalap található. A játékcélja, hogy minél több zsetont gyűjtsünk össze a partik során.
 
+\section{Fogalomtár}
+
 \subsection{Játékmenet}
 Minden játékszerver úgy lett konfigurálva, hogy két játékos esetén a parti elkezdődjön. Ha valaki később csatlakozott az asztalhoz, az a megkezdett partiból semmit nem érzékel, mintha üres asztalnál ülne. Csak a következő partiba tud beszállni. Mindkét játékstílus esetén van egy BLIND kör, amikor a szerver bekéri a vakokat a játékosoktól. Az osztótól eggyel balra ülő játékos köteles betenni a kis vakot, a kis vaktól eggyel balra ülő játékos pedig köteles betenni a nagy vakot. Ebból a felhasználó nem lát semmit, köteles beadni a kis- vagy nagyvakot, amelyet egy automatizált eljárás hajt végre. Az osztó gomb  a legelső körben kerül kiosztásra a legelsőként csatlakozott játékoshoz. Az osztó gomb az óramutató járásával megegyező irányban halad. Minden új megkezdett parti esetén az osztó gomb a következő játékoshoz kerül. Minden parti legelső körében a kezdő játékos az osztótól balra ülő harmadik játékos, minden további kört a kis vakra kötelezett játékos kezd meg.  \\
 A játékszerverek nem képesek kezelni, ha egy játékosnak elfogyott, illetve nincs elegendő zsetonja. Ebből kifolyólag esetenként előfordulhat negatív egyenleg, illetve nem definiált viselkedés. A játékosok szigorúan csak egymást követve küldhetnek utasításokat a szervernek, mindig az éppen soron levő játékos. A felhasználói grafikus felületen egyértelmű jelzéssel van ellátva az éppen soron levő játékos. A játékosok megadhatják (CALL), emelhetik (RAISE) a tétet, illetve, ha nem szeretnének az adott körben semmit csinálni, akkor CHECK-elhetnek. Az emelés mértéke a mindenkori játékasztal alaptét felét jelenti. Ugyanakkor lap eldobásra (FOLD) és a játék elhagyására (QUIT) is lehetőség van. A felhasználók (korlátozottan) visszanézhetik a korábbi leosztásokat, és a partiban történt eseményeket (LOG). A játékosok asztalonkénti maximum száma 5 fő. A kliensek a játék elhagyását követően újracsatlakozhatnak az adott játékszerverre a fentieket figyelembe véve. Lehetőség van asztalt váltani, és a játékszerverek (korlátozottan) képesek kezelni, ha a játékossal megszakad a kapcsolat. A kliens alkalmazások is (korlátozott mértékben) fel vannak készítve az esetleg kommunikációs hibákra.
@@ -70,10 +73,10 @@ A program kettő beépített játékstílust definiál
 \item Texas Hold'Em \cite{texas_holdem}
 \end{itemize}
 
-\subsubsection{Classic} 
+\pokerparagraph{Classic} 
 A klasszikus játékstílus legfőbb ismertető jele, hogy mindenki öt lapot kap kézbe és nincsenek közös lapok. Először is a vakokra kötelezett játékosok rakják be a vakokat (automatizáltan), azután pedig úgynevezett pre-round van, amikor a szerver minden játékosnak öt-öt lapot oszott kézbe, és ezek alapján lehet licitálni. Ha vége a körnek, akkor mindenki kicserélheti a lapjait, amiket saját maga választ ki a grafikus felületen a saját kártyalapjainak rákattintásával. Ha a kártyalap ``feljebb'' csúszott a grafikus megjelenítésen, akkor a kártyalapot cserére jelölte a játékos. A CHANGE feliratú gombbal cserélhetőek a kártyák. Mindenki akkor kapja meg az új kártyalapjait, ha már mindenki nyilatkozott a cseréről. Ezek után új kör indul, amikor is az új lapok birtokában tehetik meg a tétjeiket a játékosok. A kör után a szerver kihirdeti a nyertest, és a nyertes lapokat az asztal közepén jeleníti meg a grafikus felület. Kivétel, ha a nyertesek az éppen adott felhasználó, akkor a nyertes kártyalapok maga előtt jelen vannak, más kártyalapok nem kerülnek felfordításra. A felhasználók a nyertes lapok megtekintését követően kötelesek rákattintani a CHECK feliratú gombra (vagy majd megcsinálom, hogy automatizált quit legyen ez is.... csak most még bugos.... winnercardsnál úgy is van nullpointerexceptionöm....). Ha ebben a körben is mindenki nyilatkozott, akkor a játékasztal új partit indít.
 
-\subsubsection{Texas Hold'Em}
+\pokerparagraph{Texas Hold'Em}
 A klasszikus játékstílussal erősen megegyező játékmenetű stílus. A különbség csupán annyi, hogy a ház 2-2 lapot oszt minden játékosnak, amelyekkel a játékosok a parti végéig rendelkeznek. Illetőleg a nyertes lapok semmilyen esetben sem középen, hanem a játékosoknál jelennek meg.
 
 \section{Futtatás}

@@ -1,6 +1,7 @@
 \part{Fejlesztői dokumentáció}
 
 \section{Felhasznált technológiák}
+ide kell egy kis bevezetés
 
 \subsection{Eclipse}
 A szakdolgozatom eclipse Mars \cite{eclipse_mars} fejlesztőkörnyezetben írtam, amelyhez a quick search \cite{quick_search} nevű plugint is letöltöttem. A fejlesztést nagy mértékben megkönnyítette a fejlesztőkörnyezet használata, ugyanis többek között szintaktikus ellenőrzést, classpath ellenőrzést és ... végzett. Továbbá remekül testreszabható a ``keymapping''-je, és rengeteg hasznos billentyű kombinációt használhatunk (pl. típushierarchia, típus keresés, resource keresés, stb.).
@@ -8,7 +9,7 @@ A szakdolgozatom eclipse Mars \cite{eclipse_mars} fejlesztőkörnyezetben írtam
 \subsection{Maven}
 A népszerű buildrendszerből a 3.3.3-as verziót használtam, amelyhez igen sok különböző plugin szerezhető be. Eredetileg csupán a függőségek kezelésére alkalmaztam volna a programot, később egyre több és több pluginnal egészítettem ki, így egyre több feladatot volt képes ellátni a szoftver.
 
-\subsubsection{Adatbázis ``húzás''}
+\pokerparagraph{Adatbázis ``húzás''}
 Az adatbázist a fejlesztés elején kézzel húztam újra, majd rátaláltam a sql-maven-plugin nevezetű pluginra. A maven oldalán megtalálható teljeskörű dokumentáció segítségével bekonfiguráltam a plugint, így csupán a
  \begin{verbatim}
 mvn sql:execute@create-db
@@ -25,7 +26,7 @@ parancsra korlátozni az adatbázis újrahúzását. Próbáltam tovább absztra
  \end{verbatim}
 parannccsal nem csak a lokális repozitorinkba telepíthetjük fel a poker-persist modult, de még egy új adatbázist is kapunk.
 
-\subsubsection{Javadoc}
+\pokerparagraph{Javadoc}
 A mavennel java dokumentációt is lehet generáltatni a
 \begin{verbatim}
  mvn javadoc:javadoc
@@ -100,7 +101,7 @@ A programcsomag két főmodulra bontható
 \item poker-client
 \end{itemize}
 
-\subsection{Model} \label{sec:poker-model}
+\subsection{Model modul} \label{sec:poker-model}
 A poker-model modul felelős a játék modellezésért. A X. ábrán látható a modul felépítése. Az entitásokat össze kellett fogni az EntityWithId interfész segítségével, ezáltal a DAO (későbbi képre hivatkozás...?) objektumot generikusan lehetett megfogalmazni, amely segített a kód duplikációk elkerülésében. A PokerTable és a User osztályok példányai feleltethetőek meg a poker\_tables és a users adattáblák egyes rekordjainak. A PokerType enumeráció a játékstílusokat határozza meg. Ha egy új játékstílust szeretnénk hozzáadni a játékhoz, akkor a kódban egy új PokerType enum objektumot kell felvennünk, és a poker\_schema.sql állományban pedig fel kell venni egy új insert utasítást a poker\_types táblára nézve az új játékstílus nevére vonatkozólag. Természetesen ez a pár sor újonnan hozzáadott kód nem azt jelenti, hogy már használhatjuk is az új játékstílust. A programcsomagot több ponton is ki kell bővíteni
 \begin{itemize}[leftmargin=2cm]
 	\item Szerver oldal
@@ -114,13 +115,13 @@ A poker-model modul felelős a játék modellezésért. A X. ábrán látható a
 		\end{enumerate}
 \end{itemize}
 
-\subsection{Shared}
+\subsection{Shared modul}
 A poker-shared modul olyan közös osztályokat tartalmaz, amelyeket a kliens és a szerver egyaránt használ. Itt helyezkednek el az egyéni kivételek, a kommunikációs rendszer definíciója és a kliens, mint megfigyelő interfésze.
 
-\subsubsection{Kivételek}
+\pokerparagraph{Kivételek}
 A játékcsomagnak szüksége van egyéni kivételekre. Az olyan speciális eseteket, mint például adabázisba írás, illetve abból olvasás közbeni fellépő kivételt saját kivételobjektumokkal célszerű lekezelni. Ehhez hasonló egyéni kivételek fellépthetnek bejelentkezéskor, asztalhoz való csatlakozáskor, hibás jelszó megadás esetén, stb (ld. melléklet, javadoc...).
 
-\subsubsection{Kommunikációs rendszer}
+\pokerparagraph{Kommunikációs rendszer}
 A szerver és a kliens  üzeneteket küldhetnek egymásnak. \\
 Ide jöhet a kép... Az ún. messaging systemet igyekeztem minél absztraktabb módon megfogalmazni, ezzel is elősegítve a későbbi bővíthetőségi nehézségeket. Azonban sajnos helyenként fellelhető kód duplikáció az enumerációkra való építkezés miatt. \\
 Minden utasításnak kötelezően implementálnia kell a PokerCommand interfészt, ezzel is elősegítve az általános megfogalmazást a rendszerben. Két fajta utasítás létezik a játékcsomagban:
@@ -131,35 +132,36 @@ Minden utasításnak kötelezően implementálnia kell a PokerCommand interfész
 Továbbá a játékstílusnak megfelelően tovább szigorodik... (kéne egy jó szó) a küldendő üzenet fajtája. A programcsomag kettő játékstílust fogalmaz meg (ld. \ref{subsubsec:game_styles}). A játékstílusok különböző utasítás fajtákat igényelnek. Értelemszerűen, ha egy Holdem játékstílusban résztvevő kliens üzenetet szeretne küldeni a játék asztal szervernek , akkor egy HoldemPlayerCommand típusú objektumot kell elküldenie a szerver csonkon keresztül. \\
 Az üzeneteknek vannak fajtái, amelyeket a mellékletben meg lehet tekinteni.
 
-\subsubsection{Observer pattern \cite{observer_pattern}}
+\pokerparagraph{Observer pattern \cite{observer_pattern}}
 Az oberserver tervezési minta segítségével megvalósítható RMI API-n keresztül az ún. event driven server. Így nem csak a kliens tud üzenet küldeni a szervernek, hanem a szerver is tudja értesíteni a klienseket. Például, ha egy játékos CHECK típusú utasítást küldött a szervernek (játékstílustól függetlenül), akkor azt az üzentet a szerver minden kliensnek szétszórja (broadcast, üzenetszórás... valahogy jól kéne megfogalmazni).
 
-\subsubsection{Session}
+\pokerparagraph{Session}
 % ez a szöveg lehet, hogy server modulba kéne....
 A szerver a klienseket session objektumokkal azonosítja. Minden kliens kap egy sessiont a bejelentkezéskor. A session addig él, amíg a felhasználó ki nem jelentkezik, akkor ugyanis a munkamenet érvénytelenítésre kerül. Illetőleg a munkamenetet akkor is érvényteleníteni kell, ha a kliens nem jelentkezett ki, de a kapcsolat valamilyen oknál fogva megszakadt. \\
 Amikor egy kliens be szeretne jelentkezni a játékba, akkor a szerver az összes megszakadt kapcsolatú klienst felderíti, és a munkamenetüket érvénytelennek tekinti. A felderítés ún. pingeléssel történik. A szerver minden csatlakozott klienst megpróbál elérni, és amelyik kliensnél megszakadt a kapcsolat, azt eltávolítja a szerverről. Ezután a SessionService ellenőrzi, hogy az adott felhasználónévvel van-e aktív munkamenet, ha van, akkor kivételt dob az eljárás, különben az autentikáció sikeres, és a kliens oldali model eltárolja a loginkor kapott sessiont.
 
-\subsection{Persist}
+\subsection{Persist modul}
 A poker-persist modul látja el az adatbázissal kapcsolatos teendőket. Ez a modul írja és olvassa az adatbázist a bejövő kérések és paraméterek alapján.
 
-\subsubsection{Generikus DAO}
+\pokerparagraph{Generikus DAO}
 A generikusság elengedhetett a kódismétlés elkerülése végett. Általánosan kell megfogalmazni az entitások viselkedését \ref{sec:poker-model} (vagy fordítva...), és ezáltal a persist modul letisztult arculatot kap. A GenericDAO osztály tartalmaz minden olyan elemet, amelykre a specializálódott DAO-knak szükségük lehet.
 
-\subsubsection{Adatbázis menedzser}
+\pokerparagraph{Adatbázis menedzser}
 Az AbstractDAO-nak szükséges van tényleges adatbázis kapcsolatra, amelyet a DBManager osztály szolgáltat.
 
-\subsubsection{Kivételek átfordítása}
+\pokerparagraph{Kivételek átfordítása}
 Az AbstractDAO rendelkezik egy SQLExceptionTranslator objektummal is, amely az adatbázisból érkező hibát fordítja át PokerDataBaseException típusú kivételre. A PokerDataBaseException kivétel osztály a felhasználó számára is értelmes hibaszöveget hordoz magában.
 
-\subsection{Kliens}
+\subsection{Kliens modul}
 A kliens modult és annak minden függőségét egy jar fileba csomagolva kell szétterjeszteni a felhasználók között, akik majd ténylegesen használni fogják a programot. A \ref{fig:client_modul}. ábra alapján a jar file tartalmazni fog minden olyan osztályt és interfészt, amelyre ténylegesen szüksége lesz a kliens programnak. Az összecsomagoláshoz igénybe vehetjük a mavent és annak az assembly pluginját. A poker-client könyvtárban a
  \begin{verbatim}
 mvn clean compile assembly:single
 \end{verbatim}
-paranccsot kiadva a poker-parent/release könyvtár alá csomagolódik be a futtatható jar állomány. \\
-\subsubsection{Model-View-Controller \cite{MVC}}
-Az igen közkedvelt tervezési minta alapján valósítottam meg a kliens oldali programot.
+paranccsot kiadva a poker-parent/release könyvtár alá csomagolódik be a futtatható jar állomány.
 
+\pokerparagraph{Model-View-Controller \cite{MVC}}
+Az igen közkedvelt tervezési minta alapján valósítottam meg a kliens oldali programot.
+%lol2
 \pokerparagraph{Model}
 A kliens kettő darab model osztályt tartalmaz. Az Model nevű singleton osztály felelős a szerver felé irányuló kapcsolat kiépítésében és fenntartásában. Ez az egyszerű szerver hívásokat végzi el. A kliens indulásakor elkéri a registry-ből a szerver csonkot, és bejelentkezéskor eltárolja a szerver által generált munkamenet objektumot. A model segítségével hívhatóak meg a játék funkcióinak a zöme. Ide sorolható a játék minden olyan funkciója, amely nem játék asztalhoz köthető. Például ennek a modelnek a segítségével lehet bejelentkezni, asztalt és felhasználót módosítani, vagy akár a játékasztalokat elkérni a szervertől. \\
 A kliens tartalmaz egy másik modelt - AbstractMainGameModel -, amely a tényleges játékért felel kliens oldalon. A szerver a parti megkezdésekor leküldi a klienseknek, hogy az adott partiban ki hol ül az asztalnál, hány játékos ül az asztalnál, a játékosok neveit és még néhány inicializációs értéket. Ezen értékek alapján a model el tudja dönteni, hogy az adott kliensnek kötelezően be kell rakni vakot. Minden parti elején minden kliensnek az adóssága a nagy vakkal egyezik meg. A további körökben az adósság leróható.
@@ -171,15 +173,15 @@ A programcsomag által definiált játékstílusok igen hasonlóak, ezért egy A
 \pokerparagraph{Controller}
 A controller általános szerepét ugyancsak egy abstract osztály, az AbstractMainGameController tölti be. A közös részek nem csak a megjelenítés és a model szintjén figyelhetőek meg, hanem az őket összekötő controller szintjén is. A beérkező utasítások alapján a controller hív tovább a megjelenítési és a model rétegbe.
 
-\subsubsection{Communication controller}
+\pokerparagraph{Communication controller}
 
 
-\subsubsection{PokerRemoteObserver}
+\pokerparagraph{PokerRemoteObserver}
 
 
-\subsubsection{FrameController}
+\pokerparagraph{FrameController}
 
-\subsection{Szerver}
+\subsection{Szerver modul}
 \begin{figure}[h!]
   \caption{A szerver publikus interfésze}
   \label{fig:server_public}
@@ -189,23 +191,23 @@ A controller általános szerepét ugyancsak egy abstract osztály, az AbstractM
 A szerver feladata a játék biztosítása a kliensek számára. A \ref{fig:server_public}. ábrán látható a szerver jóldefiniált publikus interfésze. A kliensek ezt az interfészt tudják elkérni a registry-ből \cite{RMI}. A PokerRemote interfészt a PokerRemoteImpl osztály implementálja, ennek egy instanciája a tényleges szerver objektum. A szerveren futnak a játékasztal-szerverek, amelyek egy-egy asztalnak feleltethetőek meg, amelyekhez a kliensek csatlakozni tudnak. Ha egy játékos csatlakozik egy játékasztalhoz, akkor az adott asztal feljegyzi a csatlakozott klienst egy lokális listába. A főszervernek továbbra is van referenciája a klienshez, ugyanis minden klienstől érkező utasítást a főszerver fogad, és irányít a megfelelő játékasztal-szerverhez. Erre az autentikáció miatt van szükség. Azonban ez a fajta megközelítés könnyen szűk keresztmetszetté válhat, hiszen (vagy ezt inkább tovább fejlesztési lehetőségek...) \\
 A szerver a jelszavak titkosítására bcrypt eljárást alkalmaz, amelynek a biztonságát sózással növeli. Továbbá a szerver felhasznál még egy külső csomagot - mysql-connector-java -, amely az adatbázis kapcsolatért felel.
 
-\subsection{javapokertexasholdem}
+\subsection{javapokertexasholdem modul}
 Külső könyvtár, amely eredetileg Texas Hold'Em játékstílusban tud kezeket kiértékelni. Az integrációt viszonylag könnyen meg lehetett oldani, ráadásul még általánosítani is sikerült a könyvtárat. Tehát classic és Texas Hold'Em játékstílusra is ugyanezt a könyvtárat használja a szerver a kezek kiértékelésére.
 
 \section{Funkciók}
 A szerver vázáért a PokerRemote interfész felel, amely a játékon végrehajtható műveletek összefogásáért felel. Itt található az összes funkció, amely megvalósításra került, mint például játék asztal létrehozása, új felhasználó létrehozás, admin jog kiosztása stb. A kliens ezt a vázat tudja elkérni az RMI registry-ből, mint kliens-oldali szervercsonk, amelyeken a műveletek meg tudja hívni.
 \subsection{Általános funkciók}
 
-\subsubsection{Regisztráció}
+\pokerparagraph{Regisztráció}
 A játékot csak regisztrált felhasználók tudják használni. A szerver biztosít regisztrációs lehetőséget a felhasználók számára. A regisztráció során felhasználónevet és jelszót köteles megadni a felhasználó, amely tárolásra kerül az adatbázisban. Minden újonnan regisztrált felhasználó 1000 egységnyi egyenleggel rendelkezik. Az adatbázis séma nem engedi, hogy több azonos felhasználónévvel különböző felhasználók regisztrálva legyenek, erre a regisztráció során ügyelnie kell a felhasználónak.
 
-\subsubsection{Bejelentkezés}
+\pokerparagraph{Bejelentkezés}
 A játék használatához a játékosoknak be kell jelentkezniük. Egy felhasználónévvel egyidőben csak egy munkamenet létezhet. Ha a felhasználó már használatban lévő felhasználónévvel kíván beljelentkezni, akkor a szerver hibás bejelentkezési adatokra hivatkozva megtagadja az utasítást. Sikeres bejelentkezést követően a szerver példányosít egy PokerSerssion objektumot egy UUID \cite{uuid} azonosítóval, amelyet lokálisan eltárol, majd a kliensnek elküld. A kliens a kijelentkezésig megőrzi ezt az objektumot, és a későbbi funkciók hívása során ezzel a munkamenettel azonosítja magát.
 
-\subsubsection{Kijelentkezés}
+\pokerparagraph{Kijelentkezés}
 A játékosok a kijelentkezés funkcióval hagyhatják el a játékot. A funkció hivása során a kijelentkezni kívánó felhaszáló munkamenetét a szerver érvényteleníti, és a felhasználó visszakerül a bejelentkezési formhoz. A szerver (korlátozott mértékben) fel lett készítve a nem szabályszerű kijelentkezésre, tehát ha például megszakad a kapcsolat a klienssel, akkor a legközelebbi bejelentkezési funkció hívása során a szerver érvényteleníti a megszakadt kliensek munkameneteit, ezzel elérve azt, hogy a foglalt felhasználónevekkel újra be lehessen jelentkezni.
 
-\subsubsection{Asztalok}
+\pokerparagraph{Asztalok}
 \pokerparagraph{Létrehozás}
 A funkció eléréséhez admin jogosultságra van szükség. Egy új asztalt lehet lérehozni az adatbázis séma (hivatkozás) irányelvei szerint megfelelően paraméterezve. Amikor a kliens asztalt szeretne létrehozni, akkor a szerver egyértelműen tájékoztatja, hogy az asztal létrehozás sikeres volt-e. Ha igen, akkor egy felugró üzenet jelenik meg a képernyőn, hogy az asztal létrehozása sikeres volt, majd a felhasználó vissza lesz irányítva a tábla listázó felületre. Ha az asztal létrehozása sikertelen volt, akkor a felület ugyancsak egyértelműen jelzi a felhasználónak, hogy a művelet miért hiúsult meg. Például előfordulhat hibás beviteli érték, szerverhiba és adatbázishiba is.
 
@@ -222,22 +224,39 @@ A felhasználók létrehozott játékasztal-szerverekhez csatlakozhatnak. Fontos
 \pokerparagraph{Szabad helyek lekérdezése}
 Ha egy kliens be szeretne ülni az egyik játékasztal-szerverhez, akkor előbb le kell kérdeznie, hogy van-e még szabad hely az asztalnál.
 
-\subsubsection{Felhasználók}
+\pokerparagraph{Felhasználók}
 \pokerparagraph{Létrehozás}
 A regisztráció során új felhasználó entitás jön létre, amelyet a szerver letárol az adatbázisban. A funkció külön, direktbe nem hívható, regisztrációhoz kötött.
 
-\pokerparagraph{Módosítás}
+\pokerparagraph{Egyenleg visszaállítás}
+A felhasználók egyenlegét adminisztrációs joggal rendelkező felhasználó vissza tudja állítani alaphelyzetbe, amely 1000 egységnek felel meg.
+
 \pokerparagraph{Törlés}
+Ugyancsak adminisztrációs jogot követel meg egy felhasználó végleges eltávolítása a póker játékból.
+
 \pokerparagraph{Lekérés}
+Az adminisztrációs joggal rendelkező felhasználók lekérdezhetik az adatbázisból az összes regisztrált felhasználót. A felhasználók a képernyőn táblázatos formában jelennek meg, amelyből felhasználót ki lehet választani a további funkciók eléréséhez.
+
 \pokerparagraph{Jelszó csere}
-A felhasználóknak lehetőségük van jelszócserére
+A felhasználóknak lehetőségük van jelszócserére.
 
 \pokerparagraph{Adminisztrációs jog}
 A szerverre beregisztrált felhasználók alapesetben nem rendelkeznek ilyen jogosultsággal. Az adminisztrációs jogot csak adminisztrációs joggal rendelkező felhasználó tudja kiosztani illetve megvonni. Friss adatbázis esetén létezik egy admin nevű felhasználó, aki adminisztrációs joggal rendelkezik. Kezdetben csak ez a felhasználó tud kiosztani adminisztrációs jogot.
 
 \subsection{Játékmenetbeli funkciók}
-\subsubsection{Utasítás küldés}
-\subsubsection{Egyenleg lekérése}
+\pokerparagraph{Utasítás küldés}
+\pokerparagraph{Egyenleg lekérése}
+
+\section{Tesztelés}
+\subsection{Funkcionális tesztelés}
+\begin{tabular}{| C{4.7cm} | C{4.7cm} | C{4.7cm} |}
+\hline
+  Funkció & Elvárt eredmény & Eredmény \\ \hline
+  Regisztráció & A felhaszáló a regisztráció gomb megnyomása után tájékoztatást kapjon afelől, hogy a regisztráció sikeresen megtörtént. & A program az elvártnak megfelelően működik. \\ \hline
+  Bejelentkezés & A bejelentkezési formot helyesen kitöltve és a bejelentkezés gombra kattintva a program sikeresen autentikálta és átirányította a felhasználót a táblalistázó felületre. & A program az elvártnak megfelelően működik  \\ \hline
+  Tábla módosítás & - & - \\ \hline
+  Tábla törlés & - & - \\ \hline
+\end{tabular}
 
 \section{Tovább fejlesztési lehetőségek}
 \begin{itemize}
@@ -249,17 +268,6 @@ A szerverre beregisztrált felhasználók alapesetben nem rendelkeznek ilyen jog
 \item A kódban viszonylag sok kód duplikáció van jelen, ugyanis az HouseCommandType és a PlayerCommandType enum típusú objektumok szűk keresztmetszetnek tudható be. Ha a PokerCommand interfacet implementáló osztályokat generikusan tudnánk megfogalmazni, akkor jelentősen letisztulna a kód.
 \item Az admin jogot el lehetne távolítani a játékból, és helyette MVC tervezési minta alapján a szerver oldalra is implementálni lehetne egy grafikus interfészt, amelyen keresztül a szerver teljeskörű karbantartása és adminisztrációja elvégezhető lenne.
 \end{itemize}
-
-\section{Tesztelés}
-\subsection{Funkcionális tesztelés}
-%\begin{tabulary}{| K{2cm} | K{2cm} | K{2cm} |}
-%\hline
-%  Funkció & Elvárt eredmény & Eredmény \\ \hline
-%  Regisztráció & A felhasználó a regisztrációt követően be tudjon jelentkezni a póker játékba. & A program jelezte a felhasználónak, hogy a regisztráció sikeresen megtörtént, és visszairányította őt a bejelentkezési formhoz, amelyet értelemszerűen kitöltve be tudott jelentkezni. \\ \hline
-%  Bejelentkezés & A formot helyesen kitöltve a program sikeresen autentikálta és beléptette a felhasználót. & Regisztrációt követően be tudjon jelentkezni a felhasználó \\ \hline
-%  Tábla módosítás & - & - \\ \hline
-%  Tábla törlés & - & - \\ \hline
-%\end{tabulary}
 
 
 \clearpage
