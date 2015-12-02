@@ -107,6 +107,7 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 				}
 				nextStep();
 				votedPlayers = 0;
+				startAutomateQuitTask();
 			}
 		}
 	}
@@ -148,7 +149,8 @@ public class ClassicPokerTableServer extends AbstractPokerTableServer {
 			default:
 				throw new IllegalArgumentException();
 			}
-			startAutomateQuitTask(classicPlayerCommand);
+			startAutomateQuitTask();
+			endOfReceivedPlayerCommand(classicPlayerCommand);
 		} else if (waitingClients.contains(client)) {
 			if (playerCommand.getCommandType() == "QUIT") {
 				receivedQuitPlayerCommandFromWaitingPlayer(client);

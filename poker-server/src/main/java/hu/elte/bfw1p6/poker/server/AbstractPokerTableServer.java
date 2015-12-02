@@ -563,10 +563,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 		long count = IntStream.range(0, leftRoundMask.length).filter(i -> leftRoundMask[i]).count();
 		winnerIndex += count;
 		winnerIndex %= leftRoundMask.length;
-		//		System.out.println("Hányan dobták a lapjaikat: " + count);
-		//		System.out.println("A győztes sorszáma: " + winnerIndex);
-		//		System.out.println("A győztes kártyalapjai: " + Arrays.toString(winner.values().iterator().next()));
-		return houseWinnerCommandFactory(winner.get(winnerIndex), winnerIndex, whosOn);
+		return houseWinnerCommandFactory(winner.values().iterator().next(), winnerIndex, whosOn);
 	}
 
 	/**
@@ -622,19 +619,19 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 * Elindítja az automatikus kiléptető feladatot.
 	 * @param playerCommand az utasítás
 	 */
-	protected void startAutomateQuitTask(PlayerCommand playerCommand) {
+	protected void startAutomateQuitTask() {
+		System.out.println("startAutomateQuitTask");
 		if (timerTask != null) {
 			timerTask.cancel();
 		}
 		timer.purge();
 		if (clients.size() > 1 && 1 < playersInRound && votedPlayers < playersInRound) {
 			timerTask = createNewTimerTask();
-			timer.schedule(timerTask, pokerTable.getMaxTime() * 1000);
 			System.out.println("Időzítem a timertaskot!");
+			timer.schedule(timerTask, pokerTable.getMaxTime() * 1000);
 		} else {
 			timerTask = null;
 		}
-		endOfReceivedPlayerCommand(playerCommand);
 	}
 
 	/**

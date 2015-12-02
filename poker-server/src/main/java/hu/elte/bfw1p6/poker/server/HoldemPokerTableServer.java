@@ -106,7 +106,8 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 			default:
 				throw new IllegalArgumentException();
 			}
-			startAutomateQuitTask(holdemPlayerCommand);
+			startAutomateQuitTask();
+			endOfReceivedPlayerCommand(holdemPlayerCommand);
 		} else if (waitingClients.contains(client)) {
 			if (playerCommand.getCommandType() == "QUIT") {
 				receivedQuitPlayerCommandFromWaitingPlayer(client);
@@ -169,6 +170,7 @@ public class HoldemPokerTableServer extends AbstractPokerTableServer {
 				notifyClients(houseHoldemCommand);
 				nextStep();
 				votedPlayers = 0;
+				startAutomateQuitTask();
 			}
 		}
 	}

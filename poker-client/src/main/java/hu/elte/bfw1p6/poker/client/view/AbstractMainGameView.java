@@ -1,11 +1,11 @@
 package hu.elte.bfw1p6.poker.client.view;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 import com.cantero.games.poker.texasholdem.Card;
 import com.cantero.games.poker.texasholdem.CardSuitEnum;
@@ -456,13 +456,9 @@ public abstract class AbstractMainGameView {
 
 				int convertedWinnerIndex = ultimateFormula(houseCommand.getWinner());
 				if (convertedWinnerIndex != 0) {
-					//TODO: nullpointerexception
-					for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
-						winnerCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(houseCommand.getCards()[i]) + defaultValues.PICTURE_EXTENSION));
-					}
-//					IntStream.range(0, defaultValues.MY_CARDS_COUNT).forEach(i -> 
-//						winnerCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(houseCommand.getCards()[i]) + defaultValues.PICTURE_EXTENSION))
-//					);
+					IntStream.range(0, defaultValues.MY_CARDS_COUNT).forEach(i -> 
+						winnerCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(houseCommand.getCards()[i]) + defaultValues.PICTURE_EXTENSION))
+					);
 					setNthPlayersCardsOpacity(0, convertedWinnerIndex);
 					int[] winnerCardsPos = houseCommand instanceof HoldemHouseCommand ? defaultValues.CARD_B1FV_POINTS : defaultValues.MIDDLE_CARD_POINT;
 					for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
