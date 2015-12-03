@@ -1,5 +1,5 @@
 \part{Felhasználói dokumentáció}
-A programcsomagot JAVA programozási nyelven írtam meg, így a program számára biztosítani kell JAVA futtatókörnyezetet, továbbá a program működéséhez adatbázis szerverre is szükség lesz. A telepítés magába foglalja az adatbázis séma elkészítését és az adatbázis demó adatokkal való feltöltését is, így a telepítést követően extra dolgokra nem lesz szükség a szoftver használatához.
+A programcsomagot JAVA programozási nyelven írtam meg, így a program számára biztosítani kell JAVA futtatókörnyezetet, továbbá a program működéséhez adatbázis szerverre is szükség lesz. A telepítés magába foglalja az adatbázis séma elkészítését és az adatbázis demó adatokkal való feltöltését is, így a telepítést követően extra dolgokra nem lesz szükség a szoftver használatához. A telepítés közben a számítógépet újraindítani nem szükséges.
 
 \section{Telepítés}
 \subsection{Java SE Runtime Environment 8}
@@ -50,14 +50,7 @@ parancsot, amely jelszót fog kérni. A beviteli sort hagyjuk üresen, nyomjunk 
  \begin{verbatim}
 SELECT VERSION();
 \end{verbatim}
-utasítást, és ha a 
-\begin{figure}[h!]
-  \caption{MySQL Service}
-  \label{fig:mysql_service}
-  \centering
-    \includegraphics{user-documentation/images/mysql_version.jpg}
-\end{figure}
-\ref{fig:mysql_service}. ábrának megfelelő képernyőképet kapunk, akkor sikeresen feltelepítettük az adatbázis-kezelő rendszert.
+utasítást, és ha a \ref{fig:mysql_service}. ábrának megfelelő képernyőképet kapunk, akkor sikeresen feltelepítettük az adatbázis-kezelő rendszert.
 
 \subsection{Az adatbázis használatba vétele}
 Ha sikeresen elindítottuk a MySQL Servert, akkor szükségünk lesz egy új adatbázis sémára és demó adatokra, amelyet a \path{X:\poker\release\poker-db.sql} állományban találunk. Ezt a filet kell lefuttatni az adatbázison, a hatása idempotens. A promptban adjuk ki a

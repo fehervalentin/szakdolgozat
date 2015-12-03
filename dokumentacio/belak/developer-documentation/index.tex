@@ -62,7 +62,26 @@ A játéktáblákat a poker\_tables adatbázis tábla tárolja. Szükségünk va
 
 \section{Megoldási terv}
 \subsection{Probléma}
+Lásd témabejelentő.
 \subsection{Tervezés}
+A probléma leírásából fakadóan egyértelműen kiderül, hogy legalább kettő darab modulra lesz szükségünk, egy kliens modulra és egy szerver modulra. 
+A tervezés során végig kell gondolni, hogy mik azok az igen fontos nagyvonalú (nagy horderejű, ... valahogy meg kéne fogalmazni) események amelyek a program futása során bekövetkeznek, illetve bekövetkezhetnek. A szerver és a kliens hálózaton keresztül fognak kommunikálni, így kínálkozik a lehetőség az RMI architektúrára való építkezésre. Ha RMI, akkor egy jóldefiniált publikus interfészt kell elkészíteni, amely a szerver vázáért felel. A kliensek ezen az interfészen keresztül hívnak be a szerverhez. A probléma megfogalmazásából kiderül, hogy melyek azok az alapvető funkciók és szolgáltatások, amelyeket a szervernek biztosítania kell. Ezen megfogalmazás alapján már körvonalazódik a szerver modul feladata. A probléma leírásából egy igen fontos ... nem feltétlenül magától értetődő ... nem derül ki, ez pedig a kommunikációs rendszer. Hogyan és miként, illetőleg milyen szekvencia szerint fognak egymással kommunikálni a modulok. Az implementáció során ügyelni kell arra is, hogy párhuzamosan akár több kliens is csatlakozhatva lehet a szerverhez, illetve az egyes játék asztalokhoz. Az üzenetek egy előre meghatározott sorrend alapján küldhetőek és fogadhatóak. Fontos megjegyezni, hogy nem csak a kliensek küldhetnek üzeneteket a szervernek, hanem a szerver is értesítheti a klienseket a szerveren történő eseményekre, mint például, ha egy adott asztalnál egy játékos CALL utasítást küld a szervernek, akkor a szerver az asztalnál ülő játékosokat értesíti a bekövetkezett eseményről. Ennek megfelelően a kliensek mindig értesítést kapnak az őket érintő eseményekről. Továbbá a kliens modulnak is meg kell fogalmazni egy publikus interfészt, amelyet a szerver fog felhasználni. Fontos megjegyezni, hogy a kliensek közvetlenül egymásnak nem küldhetnek üzeneteket. A szervert úgy kell implementálni, hogy a béerkező üzenetek alapján az összes megfelelő klienst értesítse. \\
+Az üzeneteknek kettő fajtáját különböztetjük meg
+ \begin{itemize}[leftmargin=2.7cm]
+\item Szerver által küldött üzenet
+\item Kliens által küldött üzenet
+\end{itemize}
+A megfelelő absztrakció elérése érdekében a \ref{fig:messaging}. ábrán látható PokerCommand interfésszel össze kell fogni az üzenet fajtákat.
+\begin{figure}[h!]
+	\caption{Póker üzenetek felépítése}
+	\label{fig:messaging}
+	\centering
+	\includegraphics[width=\linewidth]{developer-documentation/images/messaging.png}
+\end{figure}
+A \ref{fig:messaging}. ábráról leolvasható, hogy minden üzenetnek van egy típusa. Az üzenet típusa függ az üzenet fajtájától és specializációjától is. Például ha egy HOLDEM játékstílusú asztal be szeretné kérni a vakokat a játékosoktól, akkor egy HoldemHouseCommand típusú HouseCommandType::BLIND típusú új objektum példányt kell szétküldenie az asztalnál ülő összes játékosnak. Ezt az üzenetküldést a szerver a kliensek publikus interfészén keresztül teheti meg. \\
+A kliensnek az üzenetet fogadnia kell. Az üzenet fogadására egy új, ezt a funkciót ellátó objektumot kell definiálni. \\
+A kliens oldal architektúrális felépítésének az alapját a Model-View-Controller tervezési minta adja. A beérkezett üzenetet az erre kijelölt objektum fogadja, majd továbbítja a kliens oldali vezérlő rétegnek. A vezérlő réteg értelmezi a bejövő üzenetet, majd ennek megfelelően a model rétegnek és a megjelenítési rétegnek is továbbítja a beérkezett üzenetet további feldolgozásra.
+
 \subsection{Implementálás}
 \subsection{Elemzés}
 
