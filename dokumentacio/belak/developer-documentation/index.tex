@@ -80,8 +80,22 @@ A megfelelő absztrakció elérése érdekében a \ref{fig:messaging}. ábrán l
 \end{figure}
 A \ref{fig:messaging}. ábráról leolvasható, hogy minden üzenetnek van egy típusa. Az üzenet típusa függ az üzenet fajtájától és specializációjától is. Például ha egy HOLDEM játékstílusú asztal be szeretné kérni a vakokat a játékosoktól, akkor egy HoldemHouseCommand típusú HouseCommandType::BLIND típusú új objektum példányt kell szétküldenie az asztalnál ülő összes játékosnak. Ezt az üzenetküldést a szerver a kliensek publikus interfészén keresztül teheti meg. \\
 A kliensnek az üzenetet fogadnia kell. Az üzenet fogadására egy új, ezt a funkciót ellátó objektumot kell definiálni. \\
-A kliens oldal architektúrális felépítésének az alapját a Model-View-Controller tervezési minta adja. A beérkezett üzenetet az erre kijelölt objektum fogadja, majd továbbítja a kliens oldali vezérlő rétegnek. A vezérlő réteg értelmezi a bejövő üzenetet, majd ennek megfelelően a model rétegnek és a megjelenítési rétegnek is továbbítja a beérkezett üzenetet további feldolgozásra.
-
+A kliens oldal architektúrális felépítésének az alapját a Model-View-Controller tervezési minta adja. A beérkezett üzenetet az erre kijelölt objektum fogadja, majd továbbítja a kliens oldali vezérlő rétegnek. A vezérlő réteg értelmezi a bejövő üzenetet, majd ennek megfelelően a model rétegnek és a megjelenítési rétegnek is továbbítja a beérkezett üzenetet további feldolgozásra. \\
+A szakdolgozati témabejelentőben szerepel adatbázissal való kommunikáció is. Erre ugyancsak egy új modult kell bevezetni, amely az adatbázissal történő kommunikációt bonyolítja le. Entitás osztályokat is kell írni és olvasni az adtbázisból, így ezeket az osztályokat általánosan kell megfogalmazni a kód duplikációk elkerülése végett. Ezen modul vázlatát a \ref{fig:persist}. ábra szemlélteti. \\
+\begin{figure}[h!]
+	\caption{Az adatbázissal kommunikáló modul}
+	\label{fig:persist}
+	\centering
+	\includegraphics[width=\linewidth]{developer-documentation/images/dao.png}
+\end{figure}
+A szervernek szerves része egy objektum, amely a munkamenetek kezeléséért felelős. Az autentikált felhasználók egy-egy munkamenettel azonosíthatóak. Az autentikációért felelős részmodult a \ref{fig:sessionservice}. ábra vázolja fel.
+\begin{figure}[h!]
+	\caption{A munkamenetek tárolása szerver szinten}
+	\label{fig:sessionservice}
+	\centering
+	\includegraphics[width=\linewidth]{developer-documentation/images/session.png}
+\end{figure}
+A SessionService tartja nyilván a munkameneteket. Egy felhasználóhoz legfeljebb egy munkamenet rendelhető egy adott időben. Továbbá egy munkamenethez pontosan egy felhasználó tartozik. Ha a felhasználó kijelentkezik a póker játékból, akkor a felhasználó munkamenetét érvényteleníteni kell. Ugyanaz a munkamenet többször nem osztható ki, törölni kell. Ugyanakkor egy felhasználó különböző időpillanatokban rendelkezhet különböző munkamenetekkel. Tehát ha az imént kijelentkezett felhasználó újból be szeretne jelentkezni a játékba, akkor egy új munkamenettel kell azonosítani. A szervernek bizotsítania kell, hogy a kliensek rendelkezzenek munkamenet objektumokkal, ugyanis bármilyen funkció hívása esetén a kliensek ezzel az objektummal azonosítják magukat. Pontosabban fogalmazva minden munkamenet egy-egy UUID értékkel van ellátva, és a klienseknek elég csak ezt az egyedi értéket elküldeni a szervernek.
 \subsection{Implementálás}
 \subsection{Elemzés}
 
