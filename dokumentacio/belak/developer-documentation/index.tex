@@ -9,18 +9,18 @@ A szakdolgozatom eclipse Mars \cite{eclipse_mars} fejlesztőkörnyezetben írtam
 \subsection{Maven}
 A népszerű buildrendszerből a 3.3.3-as verziót használtam, amelyhez igen sok különböző plugin szerezhető be. Eredetileg csupán a függőségek kezelésére alkalmaztam volna a programot, később egyre több és több pluginnal egészítettem ki, így egyre több feladatot volt képes ellátni a szoftver.
 
-\pokerparagraph{Adatbázis ``húzás''}
-Az adatbázist a fejlesztés elején kézzel húztam újra, majd rátaláltam a sql-maven-plugin nevezetű pluginra. A maven oldalán megtalálható teljeskörű dokumentáció segítségével bekonfiguráltam a plugint, így csupán a
+\pokerparagraph{Adatbázis séma létrehozása és demó adatokkal való feltöltése}
+Az adatbázis sémát a fejlesztés elején mindig manuálisan készítettem el, majd rátaláltam a sql-maven-plugin nevezetű pluginra. A maven honlapján megtalálható teljeskörű dokumentáció segítségével bekonfiguráltam a plugint, így csupán a
  \begin{verbatim}
 mvn sql:execute@create-db
 mvn sql:execute@create-triggers
 mvn sql:execute@fill-db
 \end{verbatim}
-utasításokat kellett kiadnom parancssorból, hogy friss adatbázissal dolgozhassam tovább. Igyekeztem a felesleges parancsismétléseket eliminálni, vagyis letöltöttem az exec-maven-plugin nevű plugint, amelynek segítségével sikerült a 
+utasításokat kellett kiadnom parancssorból, hogy friss adatbázissal dolgozhassam tovább. Igyekeztem a felesleges parancsismétléseket elkerülni, vagyis letöltöttem az exec-maven-plugin nevű plugint, amelynek segítségével sikerült a 
  \begin{verbatim}
 mvn exec:exec
 \end{verbatim}
-parancsra korlátozni az adatbázis újrahúzását. Próbáltam tovább absztrahálni a feladatot, majd végül egy profilt készítettem el, amely az install fázissal együtt oldja meg az adatbázis kérdést. A 
+parancsra korlátozni az adatbázis újboli létrehozását. Próbáltam tovább általánosítani a feladatot, majd végül egy profilt készítettem el, amely az install fázissal együtt oldja meg az adatbázis kérdést. A 
  \begin{verbatim}
  mvn clean install -Pbootstrap
  \end{verbatim}
@@ -48,24 +48,64 @@ A tervezés során igen nagy hasznát vettem ennek a szoftvernek. Rengeteg beál
 \section{Adatbázis séma}
 \begin{figure}[h!]
   \caption{Adatbázis séma}
+  \label{fig:db_scheme}
   \centering
     \includegraphics[width=\textwidth]{user-documentation/images/db_scheme2.png}
 \end{figure}
-Az adatbázis (ld. X. ábra) 3 táblából épül fel
-\begin{itemize}[leftmargin=2.7cm]
-\item users
-\item poker\_tables
-\item poker\_types
-\end{itemize}
- Minden tábla rendelkezik elsődleges kulcssal, amelynek típusa UNSIGNED INTEGER, kivétel a poker\_types táblát, ugyanis ennek a táblának az elsődleges kulcsa UNSIGNED TINYINT típusú, amelyet a MySQL Server 4 byteon tárol. Az adatábrázolás mértékének a szűkítése ebben az esetben indokolt, ugyanis a 255 különböző értékű UNSIGNED TINYINT típus kielégíti a játéktípusok által támasztott követelményeket. A játékstílusok neveit is el kell tárolni, amelynek a maximális hossza 10 karakterben lett meghatározva, amely triggerrel van védve. A users tábla tartalmazza a regisztrált felhasználókat. A regisztrált felhasználók felhasználónévvel és jelszó párossal tudnak regisztrálni, és ennek megfelelően ezek az adatok tárolásra is kerülnek. A felhasználónév maximális hossza 20 karakter, ameyelet triggerrel ellenőrzök. A jelszót bcrypt függvénnyel nyírom. Só eltárolása nem szükséges a bcrypt implementációjából adódóan. A felhasználóról el kell még tárolni a regisztráció dátumat, amely a szerver ideje alapján számolódik és UNIX timestampként kerül letárolásra, továbbá a jogosultsági (admin) szintet, amely ugyancsak 4 byteon (TINYINT) kerül ábrázolásra. A 0/1 értékek megfeleltethetőek a TRUE/FALSE logikai típusú konstans értékeknek, így tehát, ha az érték 0, vagyis FALSE, akkor az adott felhasználó nem rendelkezik admin jogkörrel, különben igen. Ugyancsak tárolandó érték a felhasználó játékbeli egyenlege, amely BIGDECIMAL típúsként van ábrázolva.
-A játéktáblákat a poker\_tables adatbázis tábla tárolja. Szükségünk van eltárolni a játéktábla nevét, melynek felső korlátja 30 karakter és egyedinek kell lennie. Ezeket a megszorításokat szintén triggerekkel ellenőrzöm. A játék asztal játékstílusát is eltárolom, amely egyben idegenkulcs is a poker\_types táblára nézve. Továbbá minden asztal tulajdonsága, hogy maximum hányan játszhatnak rajta, és hány másodpercig gondolkodhatnak a játékosok. Ezen két érték típusaként ugyancsak UNSIGNED TINYINT van meghatározva, ugyanis az egyes asztaloknál a játékosok száma legfeljebb 5 lehet, míg az egyes játékosok gondolkodási ideje maximum 40, de legalább 5 másodperc.
+Az adatbázis három darab táblából épül fel, amelyet a \ref{fig:db_scheme}. ábra szemléltet.
+
+\subsection{Póker játék asztal tábla}
+\begin{tabular}{| C{4.7cm} | C{4.7cm} | C{4.7cm} |}
+\hline
+  \thead{Oszlopnév} & \thead{Típus} & \thead{Megszorítás} \\ \hline
+  ID & UNSIGNED INT & Elsődleges kulcs a táblára nézve. \\ \hline
+  NAME & VARCHAR & Az oszlopban szereplő értékeknek egyedinek kell lenniük és legfeljebb 30 karakter hosszúak lehetnek.  \\ \hline
+  POKER\_TYPE\_ID & UNSIGNED TINYINT & Az oszlop idegen kulcs a poker\_types táblára nézve. \\ \hline
+  MAX\_TIME & UNSIGNED TINYINT & Az értéknek bele kell esnie a [5-40] intervallumba. \\ \hline
+  MAX\_PLAYERS & UNSIGNED TINYINT & Az értéknek bele kelle esnie a [2-5] intervallumba. \\ \hline
+  BIG\_BLIND & DECIMAL & - \\ \hline
+\end{tabular}
+
+\subsection{Felhasználók tábla}
+\begin{tabular}{| C{4.7cm} | C{4.7cm} | C{4.7cm} |}
+\hline
+  \thead{Oszlopnév} & \thead{Típus} & \thead{Megszorítás} \\ \hline
+  ID & UNSIGNED INT & Elsődleges kulcs a táblára nézve. \\ \hline
+  USERNAME & VARCHAR & Az oszlopban szereplő értékeknek egyedinek kell lenniük és legfeljebb 20 karakter hosszúak lehetnek.  \\ \hline
+  BALANCE & DECIMAL & - \\ \hline
+  REG\_DATE & BIGINT & - \\ \hline
+  PASSWORD & VARCHAR & Az értéknek pontosan 64 hosszúnak kell lennie. \\ \hline
+  ADMIN & UNSIGNED TINYINT & Az érték csak 0 vagy 1 lehet. \\ \hline
+\end{tabular}
+
+\subsection{Játékstílus tábla}
+\begin{tabular}{| C{4.7cm} | C{4.7cm} | C{4.7cm} |}
+\hline
+  \thead{Oszlopnév} & \thead{Típus} & \thead{Megszorítás} \\ \hline
+  ID & UNSIGNED INT & Elsődleges kulcs a táblára nézve. \\ \hline
+  NAME & VARCHAR & Az oszlopban szereplő értékeknek egyedinek kell lenniük és legfeljebb 10 karakter hosszúak lehetnek.  \\ \hline
+\end{tabular}
+
+%\begin{itemize}[leftmargin=2.7cm]
+%\item users
+%\item poker\_tables
+%\item poker\_types
+%\end{itemize}
+
+
+
+% Minden tábla rendelkezik elsődleges kulcssal, amelynek típusa UNSIGNED INTEGER, kivétel a poker\_types táblát, ugyanis ennek a táblának az elsődleges kulcsa UNSIGNED TINYINT típusú, amelyet a MySQL Server 4 byteon tárol. Az adatábrázolás mértékének a szűkítése ebben az esetben indokolt, ugyanis a 255 különböző értékű UNSIGNED TINYINT típus kielégíti a játéktípusok által támasztott követelményeket. A játékstílusok neveit is el kell tárolni, amelynek a maximális hossza 10 karakterben lett meghatározva, amely triggerrel van védve. A users tábla tartalmazza a regisztrált felhasználókat. A regisztrált felhasználók felhasználónévvel és jelszó párossal tudnak regisztrálni, és ennek megfelelően ezek az adatok tárolásra is kerülnek. A felhasználónév maximális hossza 20 karakter, ameyelet triggerrel ellenőrzök. A jelszót bcrypt függvénnyel nyírom. Só eltárolása nem szükséges a bcrypt implementációjából adódóan. A felhasználóról el kell még tárolni a regisztráció dátumat, amely a szerver ideje alapján számolódik és UNIX timestampként kerül letárolásra, továbbá a jogosultsági (admin) szintet, amely ugyancsak 4 byteon (TINYINT) kerül ábrázolásra. A 0/1 értékek megfeleltethetőek a TRUE/FALSE logikai típusú konstans értékeknek, így tehát, ha az érték 0, vagyis FALSE, akkor az adott felhasználó nem rendelkezik admin jogkörrel, különben igen. Ugyancsak tárolandó érték a felhasználó játékbeli egyenlege, amely BIGDECIMAL típúsként van ábrázolva.
+%A játéktáblákat a poker\_tables adatbázis tábla tárolja. Szükségünk van eltárolni a játéktábla nevét, melynek felső korlátja 30 karakter és egyedinek kell lennie. Ezeket a megszorításokat szintén triggerekkel ellenőrzöm. A játék asztal játékstílusát is eltárolom, amely egyben idegenkulcs is a poker\_types táblára nézve. Továbbá minden asztal tulajdonsága, hogy maximum hányan játszhatnak rajta, és hány másodpercig gondolkodhatnak a játékosok. Ezen két érték típusaként ugyancsak UNSIGNED TINYINT van meghatározva, ugyanis az egyes asztaloknál a játékosok száma legfeljebb 5 lehet, míg az egyes játékosok gondolkodási ideje maximum 40, de legalább 5 másodperc.
 
 \section{Megoldási terv}
 \subsection{Probléma}
-Lásd témabejelentő.
+Egy hálózaton keresztül működő póker játékot szolgáltató kliens-szerver programcsomagot fogok megvalósítani JAVA programozási nyelven. A felhasználói és szolgáltatással kapcsolatos adatokat egy adatbázisban helyezem el, így is biztosítva a játék menet konzisztenciáját és konkurencia vezérlését. Az említett adatabázis többek között rögzíti az olyan profil adatokat, mint a felhasználói név, a jelszó vagy a regisztráció dátuma.
+Az alkalmazás szerver-oldali komponensei több olyan asztal szimultán futtatását biztosítja, amelyek különböző paraméterezésűek lehetnek. Ugyanis felhasználói oldalról különböző igények léphetnek fel (pl.: a tapasztaltabb játékosok rövidebb idő alatt tudnak reagálni egy leosztásra). Az asztalok leglényegesebb paraméterei a játék stílus, a játék gyorsasága, illetve az elfoglalható helyek száma lesz, de ezeken felül további paraméterek is megadhatóak egy konkrét asztal instancia létrehozásakor. Ezen műveletek ellátására, azaz az asztalok konfigurálására, egy grafikus interfészt valósít meg a programcsomag. \\
+A játékban a felhasználók jogok alapján is megkülönböztethetőek lesznek, így a magasabb jogkörrel rendelkező felhasználók speciális műveleteket hajthatnak végre a játékon és az adatbázison egyaránt. Ebből kifolyólag külön adminisztrációs felület is megvalósításra kerül majd, amelyen keresztül adott esetben akár rendezni (név, regisztráció dátuma, stb. alapján), ill. törölni is lehet majd felhasználókat, sőt a különböző felhasználóknak különböző jogokat is itt lehet majd kiosztani. Továbbá a felhasználók könnyen tudják majd menedzselni a saját felhasználói fiókjukat, ugyancsak egy grafikus interfész segítségével.
+
 \subsection{Tervezés}
 A probléma leírásából fakadóan egyértelműen kiderül, hogy legalább kettő darab modulra lesz szükségünk, egy kliens modulra és egy szerver modulra. 
-A tervezés során végig kell gondolni, hogy mik azok az igen fontos nagyvonalú (nagy horderejű, ... valahogy meg kéne fogalmazni) események amelyek a program futása során bekövetkeznek, illetve bekövetkezhetnek. A szerver és a kliens hálózaton keresztül fognak kommunikálni, így kínálkozik a lehetőség az RMI architektúrára való építkezésre. Ha RMI, akkor egy jóldefiniált publikus interfészt kell elkészíteni, amely a szerver vázáért felel. A kliensek ezen az interfészen keresztül hívnak be a szerverhez. A probléma megfogalmazásából kiderül, hogy melyek azok az alapvető funkciók és szolgáltatások, amelyeket a szervernek biztosítania kell. Ezen megfogalmazás alapján már körvonalazódik a szerver modul feladata. A probléma leírásából egy igen fontos ... nem feltétlenül magától értetődő ... nem derül ki, ez pedig a kommunikációs rendszer. Hogyan és miként, illetőleg milyen szekvencia szerint fognak egymással kommunikálni a modulok. Az implementáció során ügyelni kell arra is, hogy párhuzamosan akár több kliens is csatlakozhatva lehet a szerverhez, illetve az egyes játék asztalokhoz. Az üzenetek egy előre meghatározott sorrend alapján küldhetőek és fogadhatóak. Fontos megjegyezni, hogy nem csak a kliensek küldhetnek üzeneteket a szervernek, hanem a szerver is értesítheti a klienseket a szerveren történő eseményekre, mint például, ha egy adott asztalnál egy játékos CALL utasítást küld a szervernek, akkor a szerver az asztalnál ülő játékosokat értesíti a bekövetkezett eseményről. Ennek megfelelően a kliensek mindig értesítést kapnak az őket érintő eseményekről. Továbbá a kliens modulnak is meg kell fogalmazni egy publikus interfészt, amelyet a szerver fog felhasználni. Fontos megjegyezni, hogy a kliensek közvetlenül egymásnak nem küldhetnek üzeneteket. A szervert úgy kell implementálni, hogy a béerkező üzenetek alapján az összes megfelelő klienst értesítse. \\
+A tervezés során végig kell gondolni, hogy mik azok az igen fontos nagyvonalú (nagy horderejű, ... valahogy meg kéne fogalmazni) események amelyek a program futása során bekövetkeznek, illetve bekövetkezhetnek. A szerver és a kliens hálózaton keresztül fognak kommunikálni, így kínálkozik a lehetőség az RMI architektúrára való építkezésre. Ha RMI, akkor egy jóldefiniált publikus interfészt kell elkészíteni, amely a szerver vázáért felel. A kliensek ezen az interfészen keresztül hívnak be a szerverhez. A probléma megfogalmazásából kiderül, hogy melyek azok az alapvető funkciók és szolgáltatások, amelyeket a szervernek biztosítania kell. Ezen megfogalmazás alapján már körvonalazódik a szerver modul feladata. A probléma leírásából a szerver és a kliens között kiépített kommunikációs rendszer csak implicit megfogalmazásban szerepel. Az, hogy hogyan és miként, illetőleg milyen szekvencia szerint fognak egymással kommunikálni a modulok az explicite nincs felvázolva. Az implementáció során ügyelni kell arra is, hogy párhuzamosan akár több kliens is csatlakozhatva lehet a szerverhez, illetve az egyes játék asztalokhoz. Az üzenetek egy előre meghatározott sorrend alapján küldhetőek és fogadhatóak. Fontos megjegyezni, hogy nem csak a kliensek küldhetnek üzeneteket a szervernek, hanem a szerver is értesítheti a klienseket a szerveren történő eseményekről, mint például, ha egy adott asztalnál egy játékos CALL utasítást küld a szervernek, akkor a szerver az asztalnál ülő játékosokat értesíti a bekövetkezett eseményről. Ennek megfelelően a kliensek mindig értesítést kapnak az őket érintő eseményekről. Ezáltal a kliens modulnak is meg kell fogalmazni egy publikus interfészt, amelyet a szerver fog felhasználni. Fontos megjegyezni, hogy a kliensek közvetlenül egymásnak nem küldhetnek üzeneteket. A szervert úgy kell implementálni, hogy a béerkező üzenetek alapján az összes megfelelő klienst értesítse. \\
 Az üzeneteknek kettő fajtáját különböztetjük meg
  \begin{itemize}[leftmargin=2.7cm]
 \item Szerver által küldött üzenet
@@ -78,16 +118,17 @@ A megfelelő absztrakció elérése érdekében a \ref{fig:messaging}. ábrán l
 	\centering
 	\includegraphics[width=\linewidth]{developer-documentation/images/messaging.png}
 \end{figure}
-A \ref{fig:messaging}. ábráról leolvasható, hogy minden üzenetnek van egy típusa. Az üzenet típusa függ az üzenet fajtájától és specializációjától is. Például ha egy HOLDEM játékstílusú asztal be szeretné kérni a vakokat a játékosoktól, akkor egy HoldemHouseCommand típusú HouseCommandType::BLIND típusú új objektum példányt kell szétküldenie az asztalnál ülő összes játékosnak. Ezt az üzenetküldést a szerver a kliensek publikus interfészén keresztül teheti meg. \\
+A \ref{fig:messaging}. ábráról leolvasható, hogy minden üzenetnek van egy típusa. Az üzenet típusa függ az üzenet fajtájától és specializációjától is. Például ha egy HOLDEM játékstílusú asztal be szeretné kérni a vakokat a játékosoktól, akkor egy HoldemHouseCommand típusú HouseCommandType::BLIND utasítástípusú új objektum példányt kell szétküldenie az asztalnál ülő összes játékosnak. Ezt az üzenetküldést a szerver a kliensek publikus interfészén keresztül teheti meg. \\
 A kliensnek az üzenetet fogadnia kell. Az üzenet fogadására egy új, ezt a funkciót ellátó objektumot kell definiálni. \\
-A kliens oldal architektúrális felépítésének az alapját a Model-View-Controller tervezési minta adja. A beérkezett üzenetet az erre kijelölt objektum fogadja, majd továbbítja a kliens oldali vezérlő rétegnek. A vezérlő réteg értelmezi a bejövő üzenetet, majd ennek megfelelően a model rétegnek és a megjelenítési rétegnek is továbbítja a beérkezett üzenetet további feldolgozásra. \\
-A szakdolgozati témabejelentőben szerepel adatbázissal való kommunikáció is. Erre ugyancsak egy új modult kell bevezetni, amely az adatbázissal történő kommunikációt bonyolítja le. Entitás osztályokat is kell írni és olvasni az adtbázisból, így ezeket az osztályokat általánosan kell megfogalmazni a kód duplikációk elkerülése végett. Ezen modul vázlatát a \ref{fig:persist}. ábra szemlélteti. \\
+A kliens oldal architektúrális felépítésének az alapját a Model-View-Controller tervezési minta adja. A beérkezett üzenetet az erre kijelölt objektum fogadja, majd továbbítja a kliens oldali vezérlő rétegnek. A vezérlő réteg értelmezi a bejövő üzenetet, majd ennek megfelelően a model rétegnek és a megjelenítési rétegnek is továbbítja a beérkezett üzenetet további feldolgozásra. A probléma különböző funkciók leírását is tartalmazza. Célszerű, hogy a különböző funkcióknak különböző grafikus interfészt biztosítsunk. Ugyanakkor új felület létrehozásakor új vezérlő objektumot is létre kell hoznunk, viszont a model rétegnek statikusnak kell lennie. Ugyanaz a model objektum lássa el például a bejelentkezési és regisztrációs kérelmeknek a továbbítását a szerver. Tehát különböző funkciók elérése esetén a vezérlési és megjelenítési réteget ki kell cserélni, viszont a modelt nem. Illetőleg kettő darab modelt kell megfogalmaznunk, az egyik látja el például a fentebb említett egyszerűbb funkciók meghívását a szerveren, a másik pedig a tényleges játék közbeni model, amelyet a vezérlői réteg értesíteni tud a beérkezett üzenetekkel kapcsolatban és kliens oldalon biztosítja a játék menetet.  \\
+A probléma leírásában szerepel adatbázissal való kommunikáció is. Erre ugyancsak egy új modult kell bevezetni, amely az adatbázissal történő kommunikációt bonyolítja le. Entitás osztályokat is kell írni és olvasni az adtbázisból, így ezeket az osztályokat általánosan kell megfogalmazni a kód duplikációk elkerülése végett. Ezen modul vázlatát a \ref{fig:persist}. ábra szemlélteti. \\
 \begin{figure}[h!]
 	\caption{Az adatbázissal kommunikáló modul}
 	\label{fig:persist}
 	\centering
 	\includegraphics[width=\linewidth]{developer-documentation/images/dao.png}
 \end{figure}
+Az adatbázissal való kommunikációért felelős modul nem csak entitásokat tartalmaz, hanem további kettő darab objektumra is szükség lesz. Az SQLExceptionTranslator fontos része a modulnak. Az adatbázis triggerek és megszorítások által definiált hibaüzeneteket fordítja át JAVA kivételobjektumokra, amelyek a kódbeli feldolgozást könnyítik meg, továbbá ezek a saját kivételobjektumok már a felhasználó számára is értelmes hibaüzenetekkel bírnak. A DBManger osztály felelős az adatbázissal kiépített kapcsolat fenntartásáért és lezárásáért. \\
 A szervernek szerves része egy objektum, amely a munkamenetek kezeléséért felelős. Az autentikált felhasználók egy-egy munkamenettel azonosíthatóak. Az autentikációért felelős részmodult a \ref{fig:sessionservice}. ábra vázolja fel.
 \begin{figure}[h!]
 	\caption{A munkamenetek tárolása szerver szinten}
@@ -95,8 +136,11 @@ A szervernek szerves része egy objektum, amely a munkamenetek kezeléséért fe
 	\centering
 	\includegraphics[width=\linewidth]{developer-documentation/images/session.png}
 \end{figure}
-A SessionService tartja nyilván a munkameneteket. Egy felhasználóhoz legfeljebb egy munkamenet rendelhető egy adott időben. Továbbá egy munkamenethez pontosan egy felhasználó tartozik. Ha a felhasználó kijelentkezik a póker játékból, akkor a felhasználó munkamenetét érvényteleníteni kell. Ugyanaz a munkamenet többször nem osztható ki, törölni kell. Ugyanakkor egy felhasználó különböző időpillanatokban rendelkezhet különböző munkamenetekkel. Tehát ha az imént kijelentkezett felhasználó újból be szeretne jelentkezni a játékba, akkor egy új munkamenettel kell azonosítani. A szervernek bizotsítania kell, hogy a kliensek rendelkezzenek munkamenet objektumokkal, ugyanis bármilyen funkció hívása esetén a kliensek ezzel az objektummal azonosítják magukat. Pontosabban fogalmazva minden munkamenet egy-egy UUID értékkel van ellátva, és a klienseknek elég csak ezt az egyedi értéket elküldeni a szervernek.
+A SessionService tartja nyilván a munkameneteket. Egy felhasználóhoz legfeljebb egy munkamenet rendelhető egy adott időben. Továbbá egy munkamenethez pontosan egy felhasználó tartozik. Ha a felhasználó kijelentkezik a póker játékból, akkor a felhasználó munkamenetét érvényteleníteni kell. Ugyanaz a munkamenet többször nem osztható ki, törölni kell. Ugyanakkor egy felhasználó különböző időpillanatokban rendelkezhet különböző munkamenetekkel. Tehát ha az imént kijelentkezett felhasználó újból be szeretne jelentkezni a játékba, akkor egy új munkamenettel kell azonosítani. A szervernek biztosítania kell, hogy a kliensek rendelkezzenek munkamenet objektumokkal, ugyanis bármilyen funkció hívása esetén a kliensek ezzel az objektummal azonosítják magukat. Pontosabban fogalmazva minden munkamenet egy-egy UUID értékkel van ellátva, és a klienseknek elég csak ezt az egyedi értéket elküldeni a szervernek. A felhasználóknak nem engedhetjük meg, hogy egy felhasználónevet konkurensen használhassanak. Ez a felügyelet ugyancsak a SessionService objektum feladata. \\
+A szerver és a kliens közötti bárminemű tevékenység, illetve kommunikáció egy közös modult kell, hogy felhasználjon. Például ha kivételobjektumot szeretnénk dobni szerver oldalon és azt kliens oldalon szeretnénk lekezelni, akkor értelemszerűen mind szerver mind a kliens classpathján szerepelnie kell az adott kivételobjektumnak. A közös modulban kell szerepelnie a szerver és a kliens publikus interfészeknek, a kommunikációs rendszert alkotó osztályok összessége és a saját kivételosztályok definíciói. \\
+Külön modul fogalmazható meg a játékosok lapjainak a kiértékelésére is. Ez a modul nem kerül implementálásra, hanem külső könyvtárként kerül felhasználásra.
 \subsection{Implementálás}
+Az implementálást a kliens oldali megjelenítéssel kezdtem egy maven archetype generator segítségével. Így generálódott egy megfelelő kiindulási alap, amiből elkezdtem építkezni. Legelőször a bejelentkezési és a regisztrációs formot állítottam össze. Ezekután pedig a szerver publikus interfészének egy részét fogalmaztam meg kód szinten. Ezt az interfészt a kliens már el tudta kérni az RMI registry-ből, és sikeresen be tudott hívni a szerverhez. A szerver és a kliens kommunikációjának az alapjának a kiépítése után az adatbázis feltelepítése, elindítása majd elérése volt a legfőbb célom. 
 \subsection{Elemzés}
 
 \section{Modulok}
@@ -285,8 +329,10 @@ A szerverre beregisztrált felhasználók alapesetben nem rendelkeznek ilyen jog
 \begin{tabular}{| C{4.7cm} | C{4.7cm} | C{4.7cm} |}
 \hline
   Funkció & Elvárt eredmény & Eredmény \\ \hline
-  Regisztráció & A felhaszáló a regisztráció gomb megnyomása után tájékoztatást kapjon afelől, hogy a regisztráció sikeresen megtörtént. & A program az elvártnak megfelelően működik. \\ \hline
-  Bejelentkezés & A bejelentkezési formot helyesen kitöltve és a bejelentkezés gombra kattintva a program sikeresen autentikálta és átirányította a felhasználót a táblalistázó felületre. & A program az elvártnak megfelelően működik  \\ \hline
+  Regisztráció & A felhaszáló a regisztráció gomb megnyomása után tájékoztatást kapjon afelől, hogy a regisztráció sikeresen megtörtént. & A program az elvártnak megfelelően működött. \\ \hline
+  Bejelentkezés & A bejelentkezési formot helyesen kitöltve és a bejelentkezés gombra kattintva a program sikeresen autentikálta és átirányította a felhasználót a táblalistázó felületre. & A program az elvártnak megfelelően működött  \\ \hline
+  Játék asztalhoz való beülés egyedüli játékosként & Az asztal betöltődik és a felhasználó profilján kívül a grafikus interfészen más profilkép nem jelenik meg. Tetszőleges idő eltelte után sem indulhat el a játék, kivétel ha legalább egy másik felhasználó csatlakozik az adott játék asztalhoz  & A program az elvártnak megfelelően működött. \\ \hline
+  Játék asztalhoz való beülés nem egyedüli játékosként & Ha az asztalnál éppen parti zajlik, akkor ebből az újonnan csatlakozott játékos semmit nem érzékel. A játékos a következő partiba szállhat be. A következő parti megkezdődik, ha legalább kettő darab játékos ül az asztalnál. & A program az elvártnak megfelelően működött. \\ \hline
   Tábla módosítás & - & - \\ \hline
   Tábla törlés & - & - \\ \hline
 \end{tabular}
@@ -300,6 +346,7 @@ A szerverre beregisztrált felhasználók alapesetben nem rendelkeznek ilyen jog
 \item A játék nincs felkészítve arra a szélsőséges esetre, ha valakinek elfogy a zsetonja, akkor pontosan minek (és hogyan) kell történnie.
 \item A kódban viszonylag sok kód duplikáció van jelen, ugyanis az HouseCommandType és a PlayerCommandType enum típusú objektumok szűk keresztmetszetnek tudható be. Ha a PokerCommand interfacet implementáló osztályokat generikusan tudnánk megfogalmazni, akkor jelentősen letisztulna a kód.
 \item Az admin jogot el lehetne távolítani a játékból, és helyette MVC tervezési minta alapján a szerver oldalra is implementálni lehetne egy grafikus interfészt, amelyen keresztül a szerver teljeskörű karbantartása és adminisztrációja elvégezhető lenne.
+\item A programcsomag a váratlan adatbázis hibákat nem tudja megfelelően lekezelni. Ezek javításra szorulnak.
 \end{itemize}
 
 

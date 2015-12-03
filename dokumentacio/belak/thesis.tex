@@ -11,6 +11,8 @@
 \newcommand{\pokerparagraph}[1]{\paragraph{#1}\mbox{}\\}
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
+\newcommand*{\thead}[1]{\multicolumn{1}{c}{\bfseries #1}}
+
 \input{information}
 
 \title{\TITLE}
@@ -23,6 +25,7 @@
 % belső fedlap
 \include{cover/index}
 \setcounter{page}{1}
+
 \cleardoublepage
 
 % a belső fedlap utáni lap a témabejelentő
