@@ -40,7 +40,7 @@ public class SessionService {
 	
 	public synchronized PokerSession authenticate(String userName, String password) throws PokerInvalidUserException, PokerDataBaseException {
 		User u = userDAO.findByUserName(userName);
-		if (u == null || !BCrypt.checkpw(password, u.getPassword()) || sessions.stream().anyMatch(session -> session.getUser().getUserName().equals(userName))) {
+		if (u == null || !BCrypt.checkpw(password, u.getPassword()) || sessions.stream().anyMatch(session -> session.getUser().getUserName().toLowerCase().equals(userName.toLowerCase()))) {
 			throw new PokerInvalidUserException(ERR_BAD_AUTH);
 		}
 		UUID uuid = UUID.randomUUID();
