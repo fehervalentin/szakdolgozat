@@ -66,8 +66,9 @@ mysql -u root -p < X:\poker\release\poker-db.sql
 utasítást, amely jelszót fog kérni. A beviteli sort ugyancsak hagyjuk üresen. Ha sikeresen lefutott a parancs, akkor az adatbázis séma elkészült és a program demó adatokkal is feltöltötte.
 
 \section{Fogalomtár}
-Az alábbi parancsokat a felhasználók tudják kiadni. A szerver biztosítja, hogy csak a megfelelő parancsok legyenek hívhatóak a póker partik során.
+Itt helyezkedik el minden olyan fogalom, amely a játék használatához feltétlenül szükséges. A dokumentáció későbbi fejezetei ezekre a fogalmakra támaszkodnak.
 \subsection{Parancsok}
+Az alábbi parancsokat a felhasználók tudják kiadni. A szerver biztosítja, hogy csak a megfelelő parancsok legyenek hívhatóak a póker partik során.
 \pokerparagraph{CALL}
 A felhasználó ezt a parancsot adja ki, ha a tartozását ki szeretné egyenlíteni az asztal felé.
 \pokerparagraph{CHECK}
@@ -77,7 +78,7 @@ Olyan parancs, amelyet a kliens oldali program automatikusan hív meg. Ha a szer
 \pokerparagraph{RAISE}
 Olyan speciális parancs, amely hatására a felhasználó tartozása kiegyenlítésre kerül az asztal felé és még emel a téten az asztal alaptétjének megfelelő értékkel.
 \pokerparagraph{QUIT}
-Asztal elhagyására szolgáló parancs. A kilépését követően a program visszairányítja a felhasználót a táblalistázó oldalra.
+Asztal elhagyására szolgáló parancs. A kilépését követően a program visszairányítja a felhasználót a táblalistázó oldalra. Ha bármilyen oknál fogva a szerver hibájából fakadóan a gomb letiltásra kerül és a játékos nem tudja elhagyni az asztalt, ezesetben a billentyűzeten a Q gombot megnyomva visszakerül a játékos a táblalistázó felületre. Ha az asztal megfelelően működik és a játékos mégis úgy dönt, hogy ezt a funkciót kihasználva hagyja el a játékasztalt, akkor a gondolkodási idő lejárta után az asztal eltávolítja a játékost az asztaltól és a parti folytatódik tovább. A kliensnél ekkor a táblalistázó felület töltődik be.
 \pokerparagraph{CHANGE}
 A parancs csak a classic játékstílusban érhető el. A parancs meghívásával a felhasználó utasítja a programot, hogy a cserére megjelölt kártyalapokat a szerver új kártyalapokkal helyettesítse.
 \pokerparagraph{LOG}
@@ -90,7 +91,7 @@ Texas Hold'Em játékstílusú játékban a szerver kiosztja a negyedikközös l
 \pokerparagraph{RIVER}
 Texas Hold'Em játékstílusú játékban a szerver kiosztja az ötödik közös lapot.
 \pokerparagraph{Dealer}
-Magyarul osztó. A játék során az osztó gomb az óramutató járásával megegyező irányban halad körbe az asztalon, így minden parti esetén más felhasználó tölti be az a osztó szerepét.
+Magyarul osztó. A játék során az osztó gomb, amely a grafikus felületen D betűvel van jelezve az óramutató járásával megegyező irányban halad körbe az asztalon, így minden parti esetén más felhasználó tölti be az a osztó szerepét.
 
 \section{A póker játékról \cite{poker_game}}
 A póker, mint kártyajáték igen népszerű szerencsejáték. Akár élő tv adásokat is végig lehet követni, ahol hatalmas főnyereményeket osztanak ki a dobogós helyezetteknek. Viszonylag sok fajtája terjedt el szerte a világon, kezdve a klasszikus 5 lapos leosztásokkal egészen az OMAHA-án át a jól ismert Texas Hold'Em játékstílusig. A játékot 52 lapos francia kártyapaklival játszák, amelyben 4 szín és 13 különböző értékű kártyalap található. A játékstílusok igen különbözőek tudnak lenni. Megkölönböztetünk ante, illetve blind alaptétet. Ante alaptét esetén az asztalnál ülő összes játékos előre meghatározott tétet rak be. Blind alaptét esetén megkülönböztetünk kis és nagy vakot, amelyet körönként más és más játékosok raknak be. Minden esetben az osztótól közvetlenül balra ülő játékosnak kell beraknia a kis vakot. Az osztótól kettővel balra ülő játékosnak pedig a nagy vakot. Amíg az alaptétek nem kerültek be az asztalra, addig a ház nem kezdi meg a lapok kiosztását. \\
