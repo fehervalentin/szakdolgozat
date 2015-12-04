@@ -50,10 +50,16 @@ parancsot, amely jelszót fog kérni. A beviteli sort hagyjuk üresen, nyomjunk 
  \begin{verbatim}
 SELECT VERSION();
 \end{verbatim}
-utasítást, és ha a \ref{fig:mysql_service}. ábrának megfelelő képernyőképet kapunk, akkor sikeresen feltelepítettük az adatbázis-kezelő rendszert.
+utasítást, és ha a \ref{fig:mysql_version}. ábrának megfelelő képernyőképet kapunk, akkor sikeresen feltelepítettük az adatbázis-kezelő rendszert.
+\begin{figure}[h!]
+  \caption{MySQL Server verzió}
+  \label{fig:mysql_version}
+  \centering
+    \includegraphics{user-documentation/images/mysql_version.jpg}
+\end{figure}
 
 \subsection{Az adatbázis használatba vétele}
-Ha sikeresen elindítottuk a MySQL Servert, akkor szükségünk lesz egy új adatbázis sémára és demó adatokra, amelyet a \path{X:\poker\release\poker-db.sql} állományban találunk. Ezt a filet kell lefuttatni az adatbázison, a hatása idempotens. A promptban adjuk ki a
+Ha sikeresen elindítottuk a MySQL Servert, akkor szükségünk lesz egy új adatbázis sémára és demó adatokra, amelyet a \path{X:\poker\release\poker-db.sql} állományban találunk. Ezt a filet kell lefuttatni az adatbázis szerveren. Egymás után többszöri futtatás esetén is ugyanazt az eredményt adja. A promptban adjuk ki a
  \begin{verbatim}
 mysql -u root -p < X:\poker\release\poker-db.sql
 \end{verbatim}
@@ -65,9 +71,9 @@ Az alábbi parancsokat a felhasználók tudják kiadni. A szerver biztosítja, h
 \pokerparagraph{CALL}
 A felhasználó ezt a parancsot adja ki, ha a tartozását ki szeretné egyenlíteni az asztal felé.
 \pokerparagraph{CHECK}
-Játékos által kiadható parancs, mely akkor adható ki, amikor a felhasználó nem tartozik az asztal felé, és emelni sem szeretne az adott játékos.
+Játékos által kiadható parancs, melyet akkor kell kiadnia, amikor a játékos nem tartozik az asztal felé, és emelni sem szeretné a tétet.
 \pokerparagraph{BLIND}
-Olyan parancs, amelyet a kliens oldali program automatikusan hív meg. Ha a szerver BLIND típusú utasítást küld, akkor a kliens automatikusan beteszi a kis vagy nagy vakot az asztalra attól függően, hogy a szerver mire kötelezte az adott felhasználót. A kis vak, vagy angol nevén small blind az asztalnál érvényben lévő alaptét felét, míg a nagy vak, vagy angolul big blind az alaptét egészét jelenti.
+Olyan parancs, amelyet a kliens oldali program automatikusan hív meg. Ha a szerver BLIND típusú utasítást küld, akkor a kliens automatikusan beteszi a kis vagy nagy vakot az asztalra attól függően, hogy a szerver mire kötelezte az adott felhasználót. A kis vak, vagy angol nevén small blind az asztalnál érvényben lévő alaptét felét, míg a nagy vak, vagy angolul big blind az asztalra vonatkozó alaptét egészét jelenti.
 \pokerparagraph{RAISE}
 Olyan speciális parancs, amely hatására a felhasználó tartozása kiegyenlítésre kerül az asztal felé és még emel a téten az asztal alaptétjének megfelelő értékkel.
 \pokerparagraph{QUIT}
@@ -75,14 +81,20 @@ Asztal elhagyására szolgáló parancs. A kilépését követően a program vis
 \pokerparagraph{CHANGE}
 A parancs csak a classic játékstílusban érhető el. A parancs meghívásával a felhasználó utasítja a programot, hogy a cserére megjelölt kártyalapokat a szerver új kártyalapokkal helyettesítse.
 \pokerparagraph{LOG}
-A felhasználó játék közben vissza tudja nézni a már megtörtént főbb eseményeket. Például az előző játékos milyen parancsot hajtott végre.
+A felhasználó játék közben korlátozott mértékben vissza tudja nézni a már megtörtént főbb eseményeket. Például az előző játékos milyen parancsot hajtott végre.
 \subsection{Egyéb...?}
+\pokerparagraph{FLOP}
+Texas Hold'Em játékstílusú játékban a szerver kiosztja az első három közös lapot.
+\pokerparagraph{TURN}
+Texas Hold'Em játékstílusú játékban a szerver kiosztja a negyedikközös lapot.
+\pokerparagraph{RIVER}
+Texas Hold'Em játékstílusú játékban a szerver kiosztja az ötödik közös lapot.
 \pokerparagraph{Dealer}
 Magyarul osztó. A játék során az osztó gomb az óramutató járásával megegyező irányban halad körbe az asztalon, így minden parti esetén más felhasználó tölti be az a osztó szerepét.
 
-\section{A póker játékról}
+\section{A póker játékról \cite{poker_game}}
 A póker, mint kártyajáték igen népszerű szerencsejáték. Akár élő tv adásokat is végig lehet követni, ahol hatalmas főnyereményeket osztanak ki a dobogós helyezetteknek. Viszonylag sok fajtája terjedt el szerte a világon, kezdve a klasszikus 5 lapos leosztásokkal egészen az OMAHA-án át a jól ismert Texas Hold'Em játékstílusig. A játékot 52 lapos francia kártyapaklival játszák, amelyben 4 szín és 13 különböző értékű kártyalap található. A játékstílusok igen különbözőek tudnak lenni. Megkölönböztetünk ante, illetve blind alaptétet. Ante alaptét esetén az asztalnál ülő összes játékos előre meghatározott tétet rak be. Blind alaptét esetén megkülönböztetünk kis és nagy vakot, amelyet körönként más és más játékosok raknak be. Minden esetben az osztótól közvetlenül balra ülő játékosnak kell beraknia a kis vakot. Az osztótól kettővel balra ülő játékosnak pedig a nagy vakot. Amíg az alaptétek nem kerültek be az asztalra, addig a ház nem kezdi meg a lapok kiosztását. \\
-A \ref{fig:omaha}. ábrán látható az OMAHA játékstílus. A Texas Hold'Em játékstílushoz igen hasonló póker játék változat. A játékosok a kezükbe négy darab kártyalapot kapnak a vakok betétele után, majd megkezdődik az első licitkör, amelynek a végén három közös lap kerül ki az asztal közepére. Újabb licitkör kezdődik, amelynek a végén egy, majd az újabb licitkör végén, még egy újabb kártyalap kerül az asztal közepére, mint közöslap. A felhasználóknak maximum öt lapot lehet felhasználiuk a legjobb kéz előállítására. Az öt lapból kötelezően kettő a saját kézből történik a maradék három pedig a közös lapokból. Értelemszerűen a legerősebb kéz nyer \cite{card_combinations}. A játék célja, hogy minél több zsetont gyűjtsünk össze a partik során.
+A \ref{fig:omaha}. ábrán látható az OMAHA \cite{omaha_poker} játékstílus. A Texas Hold'Em játékstílushoz igen hasonló póker játék változat. A játékosok a kezükbe négy darab kártyalapot kapnak a vakok betétele után, majd megkezdődik az első licitkör, amelynek a végén három közös lap kerül ki az asztal közepére. Újabb licitkör kezdődik, amelynek a végén egy, majd az újabb licitkör végén, még egy újabb kártyalap kerül az asztal közepére, mint közöslap. A felhasználóknak maximum öt lapot lehet felhasználiuk a legjobb kéz előállítására. Az öt lapból kötelezően kettő a saját kézből történik a maradék három pedig a közös lapokból. Értelemszerűen a legerősebb kéz nyer \cite{card_combinations}. A játék célja, hogy minél több zsetont gyűjtsünk össze a partik során.
 \begin{figure}[h!]
   \caption{OMAHA póker játék}
   \label{fig:omaha}
@@ -127,14 +139,21 @@ Ha a \ref{fig:server_started}. ábrának megfelelő konzol loglistát látunk, a
 A kliens futtatása hasonló módon történik, mint a szerveré. Navigáljunk a \path{\release\poker\kliens} mappába, és a konzolon adjuk ki a megfeleő parancsot.
 Jöhet az ábra, meg a kódot kicsit átírni, hogy logoljon konzolra, mint a szerver...
 
-\section{A póker játék használata} %Csatlakozás a játékhoz
+\section{A póker játék használata}
 \begin{figure}[h!]
   \caption{Bejelentkezési form}
   \label{fig:client_login}
   \centering
     \includegraphics[width=\textwidth]{user-documentation/images/login.jpg}
 \end{figure}
-A játék indítása után az \ref{fig:client_login}. ábrán látható bejelentkező felületet kapjuk. Ha még nem regisztráltuk magunkat a játékba, akkor kattinstunk a Regisztráció nevű gombra, amely felület a X. ábrán szerepel. Adjuk meg a regisztrálni kívánt felhasználó nevünket és jelszavunkat, majd regisztráljunk.  (Képek kellenek ide, error, info?) A szerver értesít minket, hogy a művelet sikeres, vagy sikertelen volt. Ügyeljünk arra, hogy névütközéseket a szerver nem enged. Tehát, ha valaki XYZ névvel már regisztrálva van, akkor még egy ugyanolyan nevű felhasználót nem enged regisztrálni a szerver. Továbbá győződjünk meg arról, hogy a megadott jelszavak megegyeznek.  \\
+A játék indítása után az \ref{fig:client_login}. ábrán látható bejelentkező felületet kapjuk. Ha még nem regisztráltuk magunkat a játékba, akkor kattinstunk a Regisztráció nevű gombra. Adjuk meg a regisztrálni kívánt felhasználó nevünket és jelszavunkat, majd regisztráljunk. A szerver értesít minket, hogy a művelet sikeres, vagy sikertelen volt. A \ref{fig:reg_succ}. ábra egy sikeres regisztrációt szemléltet.
+\begin{figure}[h!]
+  \caption{Sikeres regisztráció}
+  \label{fig:reg_succ}
+  \centering
+    \includegraphics[width=\textwidth]{user-documentation/images/succ_reg.jpg}
+\end{figure}
+Ügyeljünk arra, hogy névütközéseket a szerver nem enged. Tehát, ha valaki XYZ névvel már regisztrálva van, akkor még egy ugyanolyan nevű felhasználót nem enged regisztrálni a szerver. Továbbá győződjünk meg arról, hogy a megadott jelszavak megegyeznek.  \\
 Sikeres regisztrációt követően a program visszairányít minket a bejelentkezési formhoz, amelyet értelemszerűen kitöltve be tudunk jelentkezni a programba.
 A sikeres bejelentkezést követően a
 \begin{figure}[h!]
@@ -143,20 +162,42 @@ A sikeres bejelentkezést követően a
   \centering
     \includegraphics[width=\textwidth]{user-documentation/images/tables.jpg}
 \end{figure}
-\ref{fig:poker_tables}. ábrán látható felület fogad minket, ahol például asztalhoz csatlakozhatunk. Tetszőlegesen válasszunk ki egy asztalt, majd kattintsunk a Csatlakozás feliratú gombra.
+\ref{fig:poker_tables}. ábrán látható felület fogad minket, ahol például asztalhoz csatlakozhatunk. Tetszőlegesen válasszunk ki egy Texas Hold'Em játékstílusú asztalt, majd kattintsunk a Csatlakozás feliratú gombra.
 \begin{figure}[h!]
   \caption{Üres játékasztal}
-  \label{fig:empty_table}
+  \label{fig:parti_1}
   \centering
-    \includegraphics[width=\textwidth]{user-documentation/images/empty_table.jpg}
+    \includegraphics[width=\textwidth]{user-documentation/images/parti/parti_1.jpg}
 \end{figure}
-A program átirányított minket a \ref{fig:empty_table}. ábrán jelölt felületre. Az üres játék asztal (optimális esetben) két dolgot jelenthet, vagy azt, hogy az asztalnál éppen játszanak, vagy pedig azt, hogy az asztalnál mi vagyunk az egyedüli játékosok. Indítsunk el egy második klienst (hivatkozás?) is, majd csatlakozzunk ugyanahhoz az asztalhoz, amelyiknél az előző kliens helyet foglalt. A játék (optimális esetben) elindult, és ha az asztal klasszikus játékstílusú, akkor
+A program átirányított minket a \ref{fig:empty_table}. ábrán jelölt felületre. Az üres játék két dolgot jelenthet, vagy azt, hogy az asztalnál éppen játszanak, vagy pedig azt, hogy az asztalnál mi vagyunk az egyedüli játékosok, jelen esetben egyedüliként ülünk az asztalnál. Indítsunk el egy második kliens programot is, majd a fenti utasításokat követve csatlakozzunk az előbbi játék asztalhoz. Miután csatlakoztunk, azután indítsunk el még további három darab kliens programot és csatlakozzunk az előbbi játék asztalhoz. A \ref{fig:sv_log}. árbán láthatjuk a szerver naplózását, amelyről leolvasható, hogy az imént csatlakozott három darab felhasználó váró listára került. \\
 \begin{figure}[h!]
-  \caption{Klasszikus játékstílusú asztal}
-  \label{fig:classic_table}
+  \caption{Szerver naplózása}
+  \label{fig:sv_log}
   \centering
-    \includegraphics[width=\textwidth]{user-documentation/images/classic_game.jpg}
+    \includegraphics[width=\textwidth]{user-documentation/images/sv_log.jpg}
 \end{figure}
-\ref{fig:classic_table}. ábrán látható felület fogad minket.
+
+ A térjünk vissza a játékban lévő kliens programokhoz és játszuk le a megkezdett partit. A következő parti elindulásakor a várólistán szereplő kliensek teljesértékű játékosként csatlakoznak be az éppen elindult partiba, így az asztalnál a \ref{parti_2}. ábra alapján már öt darab játékos fog ülni.
+ \begin{figure}[h!]
+  \caption{Parti kezdete}
+  \label{fig:parti_2}
+  \centering
+    \includegraphics[width=\textwidth]{user-documentation/images/parti/parti_2.jpg}
+\end{figure}
+Az asztal Texas Hold'Em játékstílusú, így mindenki kettő darab kártyalapot kap kézbe. A kis és nagy vakokat az asztal bekérte, a beadott zsetonok meg is jelentek az asztalon. Jelenleg pipajani következik. Az ADMIN2 nevű játékosnál van az osztó gomb, tehát a test2 nevű játékos a kis és a test3 nevű játékos pedig a nagy vak. Pipajaninak az asztal felé nagy vaknyi tartozása van, amelyet az egyenlege alapján meg tud adni. \\
+A \ref{fig:parti_3}. ábrán látható, hogy a szerver már kiosztotta, mind az öt darab közös lapot és a még senki sem dobta el a lapjait.
+ \begin{figure}[h!]
+  \caption{RIVER}
+  \label{fig:parti_3}
+  \centering
+    \includegraphics[width=\textwidth]{user-documentation/images/parti/parti_3.jpg}
+\end{figure}
+A \ref{fig:parti_4}. ábrán már az látható, amikor a parti hamarosan véget ér. A szerver ebben a körben hirdette ki a nyertes lapokat a játékosok között. A test3 nevű játékos eldobta a lapjait, azonban értelemszerűen ő is láthatja a nyertes lapokat. Jelenleg a test2 nevű játékos következik. Ha az asztalnál ülő partiban maradt játékosok mindegyikre megnyomta a Check feliratú gombot, akkor a játék asztalon új parti kezdődik. A várakozó litsán szereplő játékosok teljes értékű játékosként szerepelnek az asztalnál, továbbá azok a játékosok is kapnak kártyalapokat, akik az előző partiban eldobták a lapjaikat.
+ \begin{figure}[h!]
+  \caption{Nyertes lapok kihirdetése}
+  \label{fig:parti_4}
+  \centering
+    \includegraphics[width=\textwidth]{user-documentation/images/parti/parti_4.jpg}
+\end{figure}
 
 \clearpage

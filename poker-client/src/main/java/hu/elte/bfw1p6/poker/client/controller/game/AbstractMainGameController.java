@@ -346,6 +346,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	 * @param event az esemény
 	 */
 	@FXML protected void handleLog(ActionEvent event) {
+		textArea.toFront();
 		textArea.setOpacity(textArea.getOpacity() == 1 ? 0 : 1);
 	}
 

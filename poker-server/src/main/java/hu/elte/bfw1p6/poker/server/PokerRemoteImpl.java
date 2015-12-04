@@ -43,7 +43,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	private final String ERR_BAD_PW = "Hibás jelszó!";
 	private final String ERR_TABLE_DELETE = "Az asztal nem törölhető/módosítható: nem üres!";
 	
-	private final String INITIAL_BALANCE = "1000.00";
+	private final String INITIAL_BALANCE = "10000.00";
 
 	/**
 	 * A szerver hálózati beállításai. (Melyik porton és milyen néven kell elérhetővé tenni a szervert.)

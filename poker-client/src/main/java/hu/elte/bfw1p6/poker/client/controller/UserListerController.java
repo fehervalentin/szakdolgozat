@@ -27,7 +27,7 @@ public class UserListerController extends AbstractPokerClientController {
 	private final String SUCC_USER_MODIFY = "Sikeresen módosítottad a felhasználót!";
 	private final String SUCC_USER_DELETE = "Sikeresen törölted a felhasználót!";
 	
-	private final String INITIAL_BALANCE = "1000.00"; // elegánsabb lenne szervertől elkérni...
+	private final String INITIAL_BALANCE = "10000.00"; // elegánsabb lenne szervertől elkérni...
 	
 	/**
 	 * Egy regisztrált felhasználó oszlopai.
