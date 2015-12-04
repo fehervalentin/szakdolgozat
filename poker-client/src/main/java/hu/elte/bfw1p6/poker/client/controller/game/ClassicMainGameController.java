@@ -15,6 +15,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 
 /**
  * A classic játékmód kliens oldali controllere.
@@ -35,6 +36,13 @@ public class ClassicMainGameController extends AbstractMainGameController {
 			this.model.connectToTable(commController);
 			this.mainView.setUserName(model.getUserName());
 			this.mainView.setBalance(model.getBalance());
+			
+			//ha bármilyen bug esetén a QUIT gomb letiltva marad, akkor az asztalt nem lehet elhagyni...
+			mainGamePane.setOnKeyPressed(key -> {
+				if (key.getCode() == KeyCode.Q) {
+					frameController.setTableListerFXML();
+				}
+			});
 		} catch (RemoteException e) {
 			remoteExceptionHandler();
 		}

@@ -294,6 +294,9 @@ public abstract class AbstractMainGameView {
 	 * @return a konvertált érték
 	 */
 	public int ultimateFormula(int whosOn) {
+		if (clientsCount < 1) {
+			clientsCount = 1;
+		}
 		int value = (whosOn - fixSitPosition) % clientsCount;
 		value += value < 0 ? clientsCount : 0;
 		return value;
@@ -433,13 +436,15 @@ public abstract class AbstractMainGameView {
 					winnerCards.forEach(card -> card.setOpacity(0));
 					dealerButtonImageView.setVisible(false);
 					clearChips();
+					profileImages.forEach(profile -> profile.getStyleClass().remove(defaultValues.MARKER_STYLECLASS));
+					
 				} else {
 					double opacity = 0.0;
 					int convertedWhoQuit = ultimateFormula(playerCommand.getWhosQuit());
 					setNthPlayersCardsOpacity(opacity, convertedWhoQuit);
 					profileImages.get(convertedWhoQuit).setOpacity(opacity);
 					userNameLabels.get(convertedWhoQuit).setOpacity(opacity);
-					colorNextPlayer(playerCommand);
+//					colorNextPlayer(playerCommand);
 				}
 			}
 		});
@@ -474,8 +479,10 @@ public abstract class AbstractMainGameView {
 							winnerCards.get(i).setLayoutY(defaultValues.MIDDLE_CARD_POINT[i * 2 + 1]);
 						}
 					}
-					winnerCards.forEach(card -> card.setVisible(true));
-					winnerCards.forEach(card -> card.setOpacity(1));
+					winnerCards.forEach(card -> {
+						card.setVisible(true);
+						card.setOpacity(1);
+					});
 				}
 			}
 		});
@@ -487,6 +494,9 @@ public abstract class AbstractMainGameView {
 	 * @param convertedValue az i. ellenfél
 	 */
 	private void setNthPlayersCardsOpacity(double opacity, int convertedValue) {
+		if (convertedValue < 1) {
+			convertedValue = 1;
+		}
 		opponentsCards.get(convertedValue - 1).setOpacity(opacity);
 		for (int i = (convertedValue - 1) * (defaultValues.MY_CARDS_COUNT - 1), counter = 0; counter < defaultValues.MY_CARDS_COUNT - 1; i++, counter++) {
 			opponentsCardSides.get(i).setOpacity(opacity);

@@ -157,14 +157,10 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 			@Override
 			public void run() {
 				try {
-					//TODO: Exception in thread "Timer-1" java.lang.IndexOutOfBoundsException: Index: 4, Size: 3
-//					at java.util.ArrayList.rangeCheck(ArrayList.java:653)
-//					at java.util.ArrayList.get(ArrayList.java:429)
-//					at hu.elte.bfw1p6.poker.server.AbstractPokerTableServer$1.run(AbstractPokerTableServer.java:160)
-//					at java.util.TimerThread.mainLoop(Timer.java:555)
-//					at java.util.TimerThread.run(Timer.java:505)
-//					++whosOn;
-//					whosOn = (findNextValidClient(whosOn) % leftRoundMask.length);
+					whosOn %= playersInRound;
+//					if (whosOn < 1) {
+//						++whosOn;
+//					}
 					receivedPlayerCommand(clients.get(whosOn), playerQuitCommandFactory(clientsNames.get(whosOn)));
 				} catch (PokerDataBaseException | PokerUserBalanceException e) {
 					e.printStackTrace();

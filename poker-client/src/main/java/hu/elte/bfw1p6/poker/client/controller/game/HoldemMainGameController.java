@@ -12,6 +12,7 @@ import hu.elte.bfw1p6.poker.client.view.HoldemMainGameView;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemHouseCommand;
 import hu.elte.bfw1p6.poker.command.holdem.HoldemPlayerCommand;
 import javafx.application.Platform;
+import javafx.scene.input.KeyCode;
 
 /**
  * A holdem játékmód kliens oldali controllere.
@@ -30,6 +31,13 @@ public class HoldemMainGameController extends AbstractMainGameController {
 			this.model.connectToTable(commController);
 			this.mainView.setUserName(model.getUserName());
 			this.mainView.setBalance(model.getBalance());
+			
+			// ha bármilyen bug esetén a QUIT gomb letiltva marad, akkor az asztalt nem lehet elhagyni...
+			mainGamePane.setOnKeyPressed(key -> {
+				if (key.getCode() == KeyCode.Q) {
+					frameController.setTableListerFXML();
+				}
+			});
 		} catch (RemoteException e) {
 			remoteExceptionHandler();
 		}
