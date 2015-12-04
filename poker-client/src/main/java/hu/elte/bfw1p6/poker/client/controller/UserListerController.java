@@ -67,7 +67,7 @@ public class UserListerController extends AbstractPokerClientController {
 	}
 
 	@Override
-	public void setDelegateController(FrameController frameController) {
+	public void setFrameController(FrameController frameController) {
 		this.frameController = frameController;
 	}
 	

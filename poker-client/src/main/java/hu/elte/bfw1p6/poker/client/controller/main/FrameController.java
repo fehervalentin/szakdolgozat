@@ -148,7 +148,7 @@ public class FrameController extends UnicastRemoteObject {
 						scene.setRoot(loader.load());
 					}
 					PokerClientController controller = loader.<PokerClientController>getController();
-					controller.setDelegateController(fc);
+					controller.setFrameController(fc);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

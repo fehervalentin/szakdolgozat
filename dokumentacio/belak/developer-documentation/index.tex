@@ -250,13 +250,14 @@ A programcsomag által definiált játékstílusok igen hasonlóak, ezért egy A
 \pokerparagraph{Controller}
 A controller általános szerepét ugyancsak egy abstract osztály, az AbstractMainGameController tölti be. A közös részek nem csak a megjelenítés és a model szintjén figyelhetőek meg, hanem az őket összekötő controller szintjén is. A beérkező utasítások alapján a controller hív tovább a megjelenítési és a model rétegbe.
 
-\pokerparagraph{Communication controller}
+\pokerparagraph{FrameController}
+Alapvetőleg a vezérlő réteg objektumai között nincs egy egységes kapocs, amely összefogná őket. Az egyes vezérlő réteg objektumok nem ismernek más vezérlő rétegbeli objektumot, továbbá aktuálisan mindig pontosan egy controller van betöltve, így párhuzamosan sem futhatnak. Ugyanakkor bizonyos esetekben szükség van más megjelnítési és vezérlési réteg betöltésére az éppen aktuálisan betöltött controller által. A FrameController eggyel magasabb absztrakciós szinten helyezkedik el, így oldva meg a fenti problémát. Amikor egy új vezérlő rétegbeli objektumot töltünk be, akkor az objektumnak át kell adni egy FrameController objektum példányt, mint amolyan delegált objektumot, amelynek segítségével az egyes controllerek ki tudják cserélni a megjelenítési és vezérlési réteget. Fontos megjegyezni, hogy a csere a model réteget nem érinti.
 
+\pokerparagraph{CommunicatorController}
+A szervernek értesíteni kell a klienseket az adott asztalnál történő eseményekről. A kliensek ennek elérése végett egy publikus interfészt biztosítanak és feliratkoznak a szerverhez. A szerver a kliensek beregisztrált objektumait nyilván tartja, és ezeken keresztül tudja értesíteni őket. A kliensek erre a feladatra egy külön objektumot - CommunicatorController - hoznak létre, és küldenek el a szerverhez. Az üzenetváltó objektumok az éppen betöltött kliens oldali vezérlő rétegbeli objektumot delegált objektumként konstruktori paraméterként kapják meg, így a szerver által küldött üzenetek fogadása után az üzeneteket tovább tudják küldeni a vezérlő rétegnek.
 
 \pokerparagraph{PokerRemoteObserver}
 
-
-\pokerparagraph{FrameController}
 
 \subsection{Szerver modul}
 \begin{figure}[h!]

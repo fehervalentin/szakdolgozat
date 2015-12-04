@@ -72,7 +72,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 	}
 
 	@Override
-	public void setDelegateController(FrameController frameController) {
+	public void setFrameController(FrameController frameController) {
 		this.frameController = frameController;
 		try {
 			List<PokerTable> tables = null;

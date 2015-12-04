@@ -61,7 +61,7 @@ public abstract class AbstractPokerClientController implements PokerClientContro
 	public abstract void initialize(URL location, ResourceBundle resources);
 
 	@Override
-	public void setDelegateController(FrameController frameController) {
+	public void setFrameController(FrameController frameController) {
 		this.frameController = frameController;
 	}
 	

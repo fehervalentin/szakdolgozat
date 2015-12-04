@@ -82,7 +82,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 	protected Alert errorAlert;
 
 	@Override
-	public void setDelegateController(FrameController frameController) {
+	public void setFrameController(FrameController frameController) {
 		this.frameController = frameController;
 		this.scene = this.frameController.getScene();
 	}
