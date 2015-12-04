@@ -439,6 +439,7 @@ public abstract class AbstractMainGameView {
 					setNthPlayersCardsOpacity(opacity, convertedWhoQuit);
 					profileImages.get(convertedWhoQuit).setOpacity(opacity);
 					userNameLabels.get(convertedWhoQuit).setOpacity(opacity);
+					colorNextPlayer(playerCommand);
 				}
 			}
 		});
@@ -460,13 +461,21 @@ public abstract class AbstractMainGameView {
 						winnerCards.get(i).setImage(new Image(defaultValues.CARD_IMAGE_PREFIX + mapCard(houseCommand.getCards()[i]) + defaultValues.PICTURE_EXTENSION))
 					);
 					setNthPlayersCardsOpacity(0, convertedWinnerIndex);
-					int[] winnerCardsPos = houseCommand instanceof HoldemHouseCommand ? defaultValues.CARD_B1FV_POINTS : defaultValues.MIDDLE_CARD_POINT;
-					for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
-						winnerCards.get(i).setLayoutX(winnerCardsPos[(convertedWinnerIndex-1) * 2] + i * defaultValues.CARD_WIDTH);
-						winnerCards.get(i).setLayoutY(winnerCardsPos[(convertedWinnerIndex-1) * 2 + 1]);
-						winnerCards.get(i).setVisible(true);
-						winnerCards.get(i).setOpacity(1);
+					if (houseCommand instanceof HoldemHouseCommand ? true : false) {
+						for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
+							winnerCards.get(i).setLayoutX(defaultValues.CARD_B1FV_POINTS[(convertedWinnerIndex-1) * 2] + i * defaultValues.CARD_WIDTH);
+							winnerCards.get(i).setLayoutY(defaultValues.CARD_B1FV_POINTS[(convertedWinnerIndex-1) * 2 + 1]);
+						}
+					} else {
+						int gap = 0;
+						for (int i = 0; i < defaultValues.MY_CARDS_COUNT; i++) {
+//							gap = i == 0 ? 0 : defaultValues.CARD_WIDTH;
+							winnerCards.get(i).setLayoutX(defaultValues.MIDDLE_CARD_POINT[i * 2] + gap);
+							winnerCards.get(i).setLayoutY(defaultValues.MIDDLE_CARD_POINT[i * 2 + 1]);
+						}
 					}
+					winnerCards.forEach(card -> card.setVisible(true));
+					winnerCards.forEach(card -> card.setOpacity(1));
 				}
 			}
 		});

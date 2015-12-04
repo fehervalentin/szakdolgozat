@@ -26,6 +26,7 @@ public class AbstractDefaultValues {
 	 * A tábla közepén elhelyezkedő kártyalapok pozíciói.
 	 */
 	public final int[] MIDDLE_CARD_POINT = {525, 300, 601, 300, 677, 300, 753, 300, 829, 300};
+//	public final int[] MIDDLE_CARD_POINT = {457, 300, 533, 300, 609, 300, 685, 300, 761, 300};
 	
 	/**
 	 * A GUI-n objektumok megjelölésére szolgáló styleclass.
