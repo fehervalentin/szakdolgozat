@@ -47,7 +47,7 @@ public abstract class HouseCommand implements PokerCommand {
 	 * A nyertes játékos sorszáma.
 	 */
 	protected int winner;
-
+	
 	/**
 	 * A fixen elfoglalt ülőhely az asztalnál.
 	 */

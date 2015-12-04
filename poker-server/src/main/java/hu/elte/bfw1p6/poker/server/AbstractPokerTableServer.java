@@ -560,9 +560,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	protected HouseCommand winner() {
 		HashMap<Integer, Card[]> winner = getWinner(houseCards);
 		int winnerIndex = winner.keySet().iterator().next();
-		long count = IntStream.range(0, leftRoundMask.length).filter(i -> leftRoundMask[i]).count();
-		winnerIndex += count;
-		winnerIndex %= leftRoundMask.length;
 		return houseWinnerCommandFactory(winner.values().iterator().next(), winnerIndex, whosOn);
 	}
 
