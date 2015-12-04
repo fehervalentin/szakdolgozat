@@ -60,4 +60,10 @@ public class LoginController extends AbstractPokerClientController {
 	@FXML protected void navigateToRegistrationForm(ActionEvent event) {
 		frameController.setRegistrationFXML();
 	}
+
+	@Override
+	public void update(Object msg) {
+		// TODO Auto-generated method stub
+		
+	}
 }

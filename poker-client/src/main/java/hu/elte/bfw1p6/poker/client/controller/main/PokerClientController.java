@@ -10,4 +10,5 @@ import javafx.fxml.Initializable;
  */
 public interface PokerClientController extends Initializable {
 	public void setFrameController(FrameController frameController);
+	public void update(Object msg);
 }

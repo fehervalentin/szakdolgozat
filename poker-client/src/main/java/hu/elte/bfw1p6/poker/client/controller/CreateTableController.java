@@ -165,4 +165,10 @@ public class CreateTableController extends AbstractPokerClientController {
 		model.setParameterPokerTable(null);
 		frameController.setTableListerFXML();
 	}
+
+	@Override
+	public void update(Object msg) {
+		// TODO Auto-generated method stub
+		
+	}
 }

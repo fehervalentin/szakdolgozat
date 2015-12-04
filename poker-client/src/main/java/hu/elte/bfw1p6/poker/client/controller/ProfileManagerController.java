@@ -95,4 +95,10 @@ public class ProfileManagerController extends AbstractPokerClientController {
 	@FXML protected void handleBack(ActionEvent event) {
 		frameController.setTableListerFXML();
 	}
+
+	@Override
+	public void update(Object msg) {
+		// TODO Auto-generated method stub
+		
+	}
 }

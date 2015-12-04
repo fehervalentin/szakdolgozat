@@ -212,7 +212,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void update(Object updateMsg) throws RemoteException {
+	public void update(Object updateMsg) {
 		if (updateMsg instanceof List<?>) {
 			tableView.getItems().setAll((List<PokerTable>)updateMsg);
 		}

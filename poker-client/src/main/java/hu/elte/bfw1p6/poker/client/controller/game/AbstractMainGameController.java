@@ -11,7 +11,6 @@ import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
 import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.controller.main.PokerClientController;
 import hu.elte.bfw1p6.poker.client.model.AbstractMainGameModel;
-import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.client.view.AbstractMainGameView;
 import hu.elte.bfw1p6.poker.command.HouseCommand;
 import hu.elte.bfw1p6.poker.command.PlayerCommand;
@@ -33,7 +32,7 @@ import javafx.scene.layout.AnchorPane;
  * @author feher
  *
  */
-public abstract class AbstractMainGameController implements PokerClientController, PokerRemoteObserver {
+public abstract class AbstractMainGameController implements PokerClientController {
 
 	protected final String ERR_CONN = "Megszakadt a kommunikáció a szerverrel!";
 	

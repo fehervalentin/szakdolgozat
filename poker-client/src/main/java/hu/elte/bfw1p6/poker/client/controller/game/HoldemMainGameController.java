@@ -40,7 +40,7 @@ public class HoldemMainGameController extends AbstractMainGameController {
 	}
 
 	@Override
-	public void update(Object updateMsg) throws RemoteException {
+	public void update(Object updateMsg) {
 		// ha a ház küld utasítást
 		int whosOn = -1;
 		if (updateMsg instanceof HoldemHouseCommand) {

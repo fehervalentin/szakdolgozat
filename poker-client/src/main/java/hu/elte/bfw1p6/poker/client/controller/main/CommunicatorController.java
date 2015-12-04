@@ -17,9 +17,9 @@ public class CommunicatorController extends UnicastRemoteObject implements Poker
 	/**
 	 * Az értesítendő kliens oldali controller
 	 */
-	private PokerRemoteObserver contr;
+	private PokerClientController contr;
 	
-	public CommunicatorController(PokerRemoteObserver contr) throws RemoteException {
+	public CommunicatorController(PokerClientController contr) throws RemoteException {
 		this.contr = contr;
 	}
 

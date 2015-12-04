@@ -73,4 +73,10 @@ public class ConnectorController extends AbstractPokerClientController {
 			remoteExceptionHandler();
 		}
 	}
+
+	@Override
+	public void update(Object msg) {
+		// TODO Auto-generated method stub
+		
+	}
 }
