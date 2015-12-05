@@ -13,7 +13,6 @@ import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
-import hu.elte.bfw1p6.poker.exception.PokerTableResetException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
@@ -192,7 +191,6 @@ public interface PokerRemote extends Remote, Serializable {
 	 * @param uuid a kliens egyedi session azonosítója
 	 * @param t a játékasztal
 	 * @throws RemoteException
-	 * @throws PokerTableResetException 
 	 */
-	void resetTable(UUID uuid, PokerTable t) throws RemoteException, PokerTableResetException;
+	void resetTable(UUID uuid, PokerTable t) throws RemoteException;
 }

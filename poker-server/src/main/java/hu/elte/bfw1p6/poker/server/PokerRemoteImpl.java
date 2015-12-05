@@ -21,7 +21,6 @@ import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
-import hu.elte.bfw1p6.poker.exception.PokerTableResetException;
 import hu.elte.bfw1p6.poker.exception.PokerUserBalanceException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
@@ -43,7 +42,6 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 
 	private final String ERR_BAD_PW = "Hibás jelszó!";
 	private final String ERR_TABLE_DELETE = "Az asztal nem törölhető/módosítható: nem üres!";
-	private final String ERR_TABLE_RESET = "Az asztal nem indítható újra: nem üres!";
 	
 	private final String INITIAL_BALANCE = "10000.00";
 
@@ -328,14 +326,9 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 	}
 
 	@Override
-	public void resetTable(UUID uuid, PokerTable t) throws RemoteException, PokerTableResetException {
+	public void resetTable(UUID uuid, PokerTable t) throws RemoteException {
 		if (sessionService.isAuthenticated(uuid)) {
-			AbstractPokerTableServer apts = getAbstractPokerTableServerByTableName(t.getId());
-			if (apts.getPlayersCount() > 0) {
-				throw new PokerTableResetException(ERR_TABLE_RESET);
-			} else {
-				apts.reset();
-			}
+			getAbstractPokerTableServerByTableName(t.getId()).reset();
 		}
 	}
 }

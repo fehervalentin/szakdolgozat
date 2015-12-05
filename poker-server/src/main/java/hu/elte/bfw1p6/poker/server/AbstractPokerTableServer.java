@@ -39,8 +39,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	private final String ERR_BALANCE = "Nincs elég zsetonod!";
 	protected final String ERR_TABLE_FULL = "Az asztal betelt, nem tudsz csatlakozni!";
 	
-	protected Object myMonitorObject = new Object();
-
 	/**
 	 * Szálak megfelelő végrehajtási sorrendjét biztosítja.
 	 */
@@ -75,22 +73,22 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	/**
 	 * Kliensek (observerek).
 	 */
-	protected List<PokerRemoteObserver> clients;
+	protected volatile List<PokerRemoteObserver> clients;
 	
 	/**
 	 * A kliensek username-jei (mert a PokerPlayerben a userName-re nincs setter! (perzisztálást védi...)
 	 */
-	protected List<String> clientsNames;
+	protected volatile List<String> clientsNames;
 	
 	/**
 	 * A kliensek, akik várakoznak a következő partyra (körre).
 	 */
-	protected List<PokerRemoteObserver> waitingClients;
+	protected volatile List<PokerRemoteObserver> waitingClients;
 	
 	/**
 	 * A kliensek nevei, akik várakoznak a következő partyra (körre).
 	 */
-	protected List<String> waitingClientsNames;
+	protected volatile List<String> waitingClientsNames;
 
 	/**
 	 * Maguk a játékosok.
@@ -105,7 +103,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	/**
 	 * Hány játékos játszik az adott körben.
 	 */
-	protected int playersInRound;
+	protected volatile int playersInRound;
 
 	/**
 	 * Ki az osztó az adott körben.
@@ -115,7 +113,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	/**
 	 * Ki van soron éppen.
 	 */
-	protected int whosOn;
+	protected volatile int whosOn;
 
 	/**
 	 * Hány játékos adott már le voksot az adott körben (RAISE-nél = 1).

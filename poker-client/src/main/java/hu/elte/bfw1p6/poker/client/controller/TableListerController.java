@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import hu.elte.bfw1p6.poker.client.controller.main.CommunicatorController;
@@ -11,12 +12,14 @@ import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
-import hu.elte.bfw1p6.poker.exception.PokerTableResetException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -37,6 +40,9 @@ public class TableListerController extends AbstractPokerClientController impleme
 	private final String SUCC_TABLE_DELETE = "Sikeresen kitörölted a táblát!";
 	private final String SUCC_TABLE_RESET = "Sikeresen újraindítottad a táblát!";
 	private final String ERR_TABLE_FULL = "Nincs szabad hely az asztalnál!";
+	private final String WRNG_TABLE_RESET = "Biztosan újra szeretnéd indítani a játékasztalt? Csak akkor tedd meg, ha megbizonyosodtál róla, hogy senki nem játszik az adott játákasztalnál!";
+	
+	private Alert confirmAlert;
 
 	/**
 	 * Egy pókerasztal oszlopai.
@@ -97,6 +103,10 @@ public class TableListerController extends AbstractPokerClientController impleme
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		confirmAlert = new Alert(AlertType.CONFIRMATION);
+		confirmAlert.setContentText(WRNG_TABLE_RESET);
+		confirmAlert.setHeaderText("Figyelem");
+		
 		tableName.setCellValueFactory(new PropertyValueFactory<PokerTable, String>(COLUMNS[0]));
 		pokerType.setCellValueFactory(new PropertyValueFactory<PokerTable, PokerType>(COLUMNS[1]));
 		maxTime.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>(COLUMNS[2]));
@@ -222,11 +232,12 @@ public class TableListerController extends AbstractPokerClientController impleme
 		PokerTable selectedPokerTable = getSelectedPokerTable();
 		if (selectedPokerTable != null) {
 			try {
-				model.resetTable(selectedPokerTable);
-				showSuccessAlert(SUCC_TABLE_RESET);
-			} catch(PokerTableResetException e) {
-				showErrorAlert(e.getMessage());
-			} catch (RemoteException e) {
+				Optional<ButtonType> result = confirmAlert.showAndWait();
+				if (result.get() == ButtonType.OK) {
+					model.resetTable(selectedPokerTable);
+					showSuccessAlert(SUCC_TABLE_RESET);
+				}
+			}  catch (RemoteException e) {
 				remoteExceptionHandler();
 			}
 		} else {
