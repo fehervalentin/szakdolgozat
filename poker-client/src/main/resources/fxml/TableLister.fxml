@@ -58,6 +58,9 @@
 				<Button fx:id="viewUsersbutton" text="Userek megtekintése"
 					styleClass="rich-blue" onAction="#handleViewUsers"
 					GridPane.columnIndex="1" GridPane.rowIndex="7" />
+				<Button fx:id="resetTableButton" text="Szerver újraindítása"
+					styleClass="rich-blue" onAction="#handleResetServer"
+					GridPane.columnIndex="1" GridPane.rowIndex="8" />
 			</GridPane>
 		</GridPane>
 	</children>

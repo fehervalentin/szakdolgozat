@@ -11,6 +11,7 @@ import hu.elte.bfw1p6.poker.client.controller.main.FrameController;
 import hu.elte.bfw1p6.poker.client.observer.PokerRemoteObserver;
 import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
+import hu.elte.bfw1p6.poker.exception.PokerTableResetException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.PokerType;
 import javafx.event.ActionEvent;
@@ -34,6 +35,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 	
 	private final String ERR_TABLE_SELECTION = "Nem választottál ki egy táblát sem!";
 	private final String SUCC_TABLE_DELETE = "Sikeresen kitörölted a táblát!";
+	private final String SUCC_TABLE_RESET = "Sikeresen újraindítottad a táblát!";
 	private final String ERR_TABLE_FULL = "Nincs szabad hely az asztalnál!";
 
 	/**
@@ -61,6 +63,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 	@FXML private Button deleteTableButton;
 	@FXML private Button profileManagerButton;
 	@FXML private Button viewUsersbutton;
+	@FXML private Button resetTableButton;
 
 
 	public TableListerController() {
@@ -106,6 +109,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 				modifyTableButton.setVisible(false);
 				deleteTableButton.setVisible(false);
 				viewUsersbutton.setVisible(false);
+				resetTableButton.setVisible(false);
 			}
 		} catch (PokerDataBaseException e) {
 			showErrorAlert(e.getMessage());
@@ -208,6 +212,26 @@ public class TableListerController extends AbstractPokerClientController impleme
 	 */
 	@FXML protected void handleProfileManager(ActionEvent event) {
 		frameController.setProfileManagerFXML();
+	}
+	
+	/**
+	 * A RESET SERVER gomb click handlerje.
+	 * @param event az esemény
+	 */
+	@FXML protected void handleResetServer(ActionEvent event) {
+		PokerTable selectedPokerTable = getSelectedPokerTable();
+		if (selectedPokerTable != null) {
+			try {
+				model.resetTable(selectedPokerTable);
+				showSuccessAlert(SUCC_TABLE_RESET);
+			} catch(PokerTableResetException e) {
+				showErrorAlert(e.getMessage());
+			} catch (RemoteException e) {
+				remoteExceptionHandler();
+			}
+		} else {
+			showErrorAlert(ERR_TABLE_SELECTION);
+		}
 	}
 
 	@SuppressWarnings("unchecked")

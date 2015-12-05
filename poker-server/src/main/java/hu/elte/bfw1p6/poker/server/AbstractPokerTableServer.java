@@ -38,6 +38,8 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 
 	private final String ERR_BALANCE = "Nincs elég zsetonod!";
 	protected final String ERR_TABLE_FULL = "Az asztal betelt, nem tudsz csatlakozni!";
+	
+	protected Object myMonitorObject = new Object();
 
 	/**
 	 * Szálak megfelelő végrehajtási sorrendjét biztosítja.
@@ -653,5 +655,16 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	 */
 	public void setPokerTable(PokerTable pokerTable) {
 		this.pokerTable = pokerTable;
+	}
+
+	public void reset() {
+		this.deck = new Deck();
+		this.clients.clear();
+		this.users.clear();
+		this.clientsNames.clear();
+		this.waitingClients.clear();
+		this.waitingClientsNames.clear();
+		this.moneyStack = BigDecimal.ZERO;
+		this.timer = new Timer();
 	}
 }

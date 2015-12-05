@@ -1,7 +1,7 @@
 package hu.elte.bfw1p6.poker.exception;
 
 /**
- * Póker játéktábla nem törölhető exception.
+ * Póker játéktábla nem törölhető kivétel.
  * @author feher
  *
  */

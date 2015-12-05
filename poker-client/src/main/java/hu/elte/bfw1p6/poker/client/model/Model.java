@@ -11,6 +11,7 @@ import hu.elte.bfw1p6.poker.exception.PokerDataBaseException;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidPassword;
 import hu.elte.bfw1p6.poker.exception.PokerInvalidUserException;
 import hu.elte.bfw1p6.poker.exception.PokerTableDeleteException;
+import hu.elte.bfw1p6.poker.exception.PokerTableResetException;
 import hu.elte.bfw1p6.poker.model.entity.PokerTable;
 import hu.elte.bfw1p6.poker.model.entity.User;
 import hu.elte.bfw1p6.poker.properties.PokerProperties;
@@ -230,5 +231,15 @@ public class Model {
 	 */
 	public void deleteUser(User u) throws RemoteException, PokerDataBaseException {
 		pokerRemote.deleteUser(pokerSession.getId(), u);
+	}
+
+	/**
+	 * Kijelölt játékasztal újraindítása.
+	 * @param t az újraindítandó asztal
+	 * @throws RemoteException
+	 * @throws PokerTableResetException 
+	 */
+	public void resetTable(PokerTable t) throws RemoteException, PokerTableResetException {
+		pokerRemote.resetTable(pokerSession.getId(), t);
 	}
 }
