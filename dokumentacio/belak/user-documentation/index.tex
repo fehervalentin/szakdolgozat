@@ -1,6 +1,20 @@
 \part{Felhasználói dokumentáció}
 A programcsomagot JAVA programozási nyelven írtam meg, így a program számára biztosítani kell JAVA futtatókörnyezetet, továbbá a program működéséhez adatbázis szerverre is szükség lesz. A telepítés magába foglalja az adatbázis séma elkészítését és az adatbázis demó adatokkal való feltöltését is, így a telepítést követően extra dolgokra nem lesz szükség a szoftver használatához. A telepítés közben a számítógépet újraindítani nem szükséges.
 
+\section{Követelmények}
+\subsection{Szoftver}
+\begin{itemize}
+\item Legalább Windows XP operációs rendszer
+\item Java SE Runtime Environment 8
+\item MySQL Community Server 5.6
+\end{itemize}
+\subsection{Hardver}
+\begin{itemize}
+\item Legalább Intel® Pentium® 4 Processor 2.80 GHz
+\item Legalább 1GB RAM
+\item Legalább 50MB háttértárhely
+\end{itemize}
+
 \section{Telepítés}
 \subsection{Java SE Runtime Environment 8}
 A programcsomag futtatásához legalább Windows XP operációs rendszer szükséges, amelyen Java SE Runtime Environment 8 futtató környezet \cite{jresite} (a továbbiakban: JRE) fut. A JRE feltelepítését követően manuálisan ellenőrizzük, hogy a rendszer felvette-e környezeti változóként az installációs könyvtárat. Navigáljunk az operációs rendszerben a környezeti változók módosítása panelhez, majd ellenőrizzük le, hogy a PATH nevű környezeti változóhoz hozzá lett-e adva az installációs könyvtár, mint például: \path{C:\Program Files\Java\jre1.8.0_66\bin}. A telepítési könyvtár operációs rendszerenként eltérhet.
