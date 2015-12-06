@@ -618,7 +618,6 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 
 	/**
 	 * Elindítja az automatikus kiléptető feladatot.
-	 * @param playerCommand az utasítás
 	 */
 	protected void startAutomateQuitTask() {
 		System.out.println("startAutomateQuitTask");

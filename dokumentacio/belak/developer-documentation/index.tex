@@ -1,10 +1,10 @@
 \part{Fejlesztői dokumentáció}
 
 \section{Felhasznált technológiák}
-A fejlesztés során fejlesztőkörnyezetet használtam, így viszonylag sok probléma már a fordítás és futtatás előtt kiderült. Ahogy korábban is leírtam, a programcsomagnak szüksége van MySQL Serverre az adatbázis kérdése miatt. A kódot verziókkal is el kellett látnom, így egy verziókezelő rendszert is felhasználtam. Az osztály- és moduldiagramok szerkesztésére ugyancsak külső szoftvercsomagot használtam fel. A programcsomag több modulból épül fel, ezért ugyancsak szükségessé vált egy buildrendszer használata, amely a modulok közötti függőségek kezelésért felelős.
+A fejlesztés során fejlesztőkörnyezetet használtam, így viszonylag sok probléma már a fordítás és futtatás előtt kiderült. Ahogy korábban is leírtam, a programcsomagnak szüksége van MySQL Serverre az adatbázis kérdése miatt. A kódot verziókkal is el kellett látnom, így egy verziókezelő rendszert is felhasználtam. Az osztály- és moduldiagramok szerkesztésére ugyancsak külső szoftvercsomagot használtam fel. A programcsomag több modulból épül fel, ezért ugyancsak szükségessé vált egy buildrendszer használata, amely a modulok közötti függőségek kezeléséért felelős.
 
 \subsection{Eclipse}
-A szakdolgozatom eclipse Mars \cite{eclipse_mars} fejlesztőkörnyezetben írtam, amelyhez a quick search \cite{quick_search} nevű plugint is letöltöttem. A fejlesztést nagy mértékben megkönnyítette a fejlesztőkörnyezet használata, ugyanis többek között szintaktikus ellenőrzést, classpath ellenőrzést és ... végzett. Továbbá remekül testreszabható a ``keymapping''-je, és rengeteg hasznos billentyű kombinációt használhatunk (pl. típushierarchia, típus keresés, resource keresés, stb.).
+A szakdolgozatom eclipse Mars \cite{eclipse_mars} fejlesztőkörnyezetben írtam, amelyhez a quick search \cite{quick_search} nevű plugint is letöltöttem. A fejlesztést nagy mértékben megkönnyítette a fejlesztőkörnyezet használata, ugyanis többek között szintaktikus és classpath ellenőrzést is végzett. Továbbá remekül paraméterezhető jóformán tetszőleges billentyűkombinációkkal.
 
 \subsection{Maven}
 A népszerű buildrendszerből a 3.3.3-as verziót használtam, amelyhez igen sok különböző plugin szerezhető be. Eredetileg csupán a függőségek kezelésére alkalmaztam volna a programot, később egyre több és több pluginnal egészítettem ki, így egyre több feladatot volt képes ellátni a szoftver.
@@ -24,26 +24,30 @@ parancsra korlátozni az adatbázis újboli létrehozását. Próbáltam tovább
  \begin{verbatim}
  mvn clean install -Pbootstrap
  \end{verbatim}
-parannccsal nem csak a lokális repozitorinkba telepíthetjük fel a poker-persist modult, de még egy új adatbázist is kapunk.
+paranccsal nem csak a lokális repozitorinkba telepíthetjük fel a poker-persist modult, de még egy új adatbázist is kapunk.
 
 \pokerparagraph{Javadoc}
-A mavennel java dokumentációt is lehet generáltatni a
+A mavennel java dokumentációt is lehet generáltatni. Navigáljunk a poker könyvtárba és adjuk ki a
 \begin{verbatim}
  mvn javadoc:javadoc
 \end{verbatim}
- parancs segítségével. Sőt, akár modul dokumentációt is lehet készíteni a 
+ parancsot. Aggregált java dokumentációra is lehetőség van a 
+ \begin{verbatim}
+ mvn javadoc:aggregate
+\end{verbatim}
+ Sőt, akár modul dokumentációt is lehet készíteni a 
 \begin{verbatim}
  mvn site:site
  mvn site:stage
 \end{verbatim}
-utasításokkal. Az elkészült dokumentációk a modul \path{modulnév\target\staging} könyvtárba kerülnek. Kettő darab index.html állományt kell keresnünk, az egyik a gyökérkönyvtárban található a másik pedig az \path{apidocs} könyvtár gyökerében.
+utasításokkal. Az elkészült dokumentációk a modul \path{poker\target\staging} könyvtárba kerülnek. Kettő darab index.html állományt kell keresnünk, az egyik a gyökérkönyvtárban található a másik pedig az \path{apidocs} könyvtár gyökerében.
  
 \subsection{MySQL}
 \subsection{Git}
-A fejlesztés során előfordult, hogy internet kapcsolat nélkül kellett verzióznom a kódomat. A git egyik legnagyobb előnye, hogy internet kapcsolat nélkül is lehet commit parancsot végrehajtani. A commit parancs hatására a lokális repozitorinkba egy új snapshot (pillanatfelvétel) készül a working directory tartalmáról, amelyet később push utasítással feltölthetünk egy távoli repozitoriba. A fejlesztéshez több branchet is használtam, így ha valami balul sült volna el, akkor egyszerűen visszaálltam volna a masterre.
+A fejlesztés során előfordult, hogy internet kapcsolat nélkül kellett verzióznom a kódomat. A git egyik legnagyobb előnye, hogy internet kapcsolat nélkül is lehet commit parancsot végrehajtani. A commit parancs hatására a lokális repozitorinkba egy új pillanatfelvétel készül az aktuális munkakönyvtárunk tartalmáról, amelyet később push utasítással feltölthetünk egy távoli repozitoriba. A fejlesztéshez több branchet is használtam, így ha valami balul sült volna el, akkor egyszerűen visszaálltam volna a masterre.
 
 \subsection{Enterprise Architect}
-A tervezés során igen nagy hasznát vettem ennek a szoftvernek. Rengeteg beállítás, funkció megtalálható a programban. Szinte minden testreszabható az UML diagramokat érintő .... a segítségével. Az elkészült UML diagramokból pedig JAVA kódot tud generálni a program. A dokumentációban fellelhető osztály hiearchiák és UML diagramok ennek a szoftvernek a segítségével készültek el.
+A tervezés során igen nagy hasznát vettem ennek a szoftvernek. Rengeteg beállítás, funkció megtalálható a programban. Szinte minden testreszabható az UML diagramokat érintő kérdések körében. Az elkészült UML diagramokból pedig JAVA kódot tud generálni a program. A dokumentációban fellelhető osztály hiearchiák és UML diagramok ennek a szoftvernek a segítségével készültek el.
 
 \section{Adatbázis séma}
 \begin{figure}[h!]
@@ -94,7 +98,16 @@ Az adatbázis három darab táblából épül fel, amelyet a \ref{fig:db_scheme}
 
 
 
-% Minden tábla rendelkezik elsődleges kulcssal, amelynek típusa UNSIGNED INTEGER, kivétel a poker\_types táblát, ugyanis ennek a táblának az elsődleges kulcsa UNSIGNED TINYINT típusú, amelyet a MySQL Server 4 byteon tárol. Az adatábrázolás mértékének a szűkítése ebben az esetben indokolt, ugyanis a 255 különböző értékű UNSIGNED TINYINT típus kielégíti a játéktípusok által támasztott követelményeket. A játékstílusok neveit is el kell tárolni, amelynek a maximális hossza 10 karakterben lett meghatározva, amely triggerrel van védve. A users tábla tartalmazza a regisztrált felhasználókat. A regisztrált felhasználók felhasználónévvel és jelszó párossal tudnak regisztrálni, és ennek megfelelően ezek az adatok tárolásra is kerülnek. A felhasználónév maximális hossza 20 karakter, ameyelet triggerrel ellenőrzök. A jelszót bcrypt függvénnyel nyírom. Só eltárolása nem szükséges a bcrypt implementációjából adódóan. A felhasználóról el kell még tárolni a regisztráció dátumat, amely a szerver ideje alapján számolódik és UNIX timestampként kerül letárolásra, továbbá a jogosultsági (admin) szintet, amely ugyancsak 4 byteon (TINYINT) kerül ábrázolásra. A 0/1 értékek megfeleltethetőek a TRUE/FALSE logikai típusú konstans értékeknek, így tehát, ha az érték 0, vagyis FALSE, akkor az adott felhasználó nem rendelkezik admin jogkörrel, különben igen. Ugyancsak tárolandó érték a felhasználó játékbeli egyenlege, amely BIGDECIMAL típúsként van ábrázolva.
+Minden tábla rendelkezik elsődleges kulcssal, amelynek típusait a fentebb látható táblázat tartalmazza. A poker\_types tábla elsődleges kulcsa UNSIGNED TINYINT, melyet a MySQL Server 4 byteon tárol. Az adatábrázolás mértékének a szűkítése ebben az esetben indokolt, ugyanis a 255 különböző értékű UNSIGNED TINYINT típus kielégíti a játéktípusok által támasztott követelményeket. \\
+Az adatbázis sémában három darab trigger van definiálva:
+\begin{itemize}
+\item Tábla beszúrás előtti
+\item Tábla módosítás előtti
+\item Felhasználó beszúrás előtti
+\end{itemize}
+
+
+%A játékstílusok neveit is el kell tárolni, amelynek a maximális hossza 10 karakterben lett meghatározva, amely triggerrel van védve. A users tábla tartalmazza a regisztrált felhasználókat. A regisztrált felhasználók felhasználónévvel és jelszó párossal tudnak regisztrálni, és ennek megfelelően ezek az adatok tárolásra is kerülnek. A felhasználónév maximális hossza 20 karakter, ameyelet triggerrel ellenőrzök. A jelszót bcrypt függvénnyel nyírom. Só eltárolása nem szükséges a bcrypt implementációjából adódóan. A felhasználóról el kell még tárolni a regisztráció dátumat, amely a szerver ideje alapján számolódik és UNIX timestampként kerül letárolásra, továbbá a jogosultsági (admin) szintet, amely ugyancsak 4 byteon (TINYINT) kerül ábrázolásra. A 0/1 értékek megfeleltethetőek a TRUE/FALSE logikai típusú konstans értékeknek, így tehát, ha az érték 0, vagyis FALSE, akkor az adott felhasználó nem rendelkezik admin jogkörrel, különben igen. Ugyancsak tárolandó érték a felhasználó játékbeli egyenlege, amely BIGDECIMAL típúsként van ábrázolva.
 %A játéktáblákat a poker\_tables adatbázis tábla tárolja. Szükségünk van eltárolni a játéktábla nevét, melynek felső korlátja 30 karakter és egyedinek kell lennie. Ezeket a megszorításokat szintén triggerekkel ellenőrzöm. A játék asztal játékstílusát is eltárolom, amely egyben idegenkulcs is a poker\_types táblára nézve. Továbbá minden asztal tulajdonsága, hogy maximum hányan játszhatnak rajta, és hány másodpercig gondolkodhatnak a játékosok. Ezen két érték típusaként ugyancsak UNSIGNED TINYINT van meghatározva, ugyanis az egyes asztaloknál a játékosok száma legfeljebb 5 lehet, míg az egyes játékosok gondolkodási ideje maximum 40, de legalább 5 másodperc.
 
 \section{Megoldási terv}

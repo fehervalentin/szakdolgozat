@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>hu.elte.bfw1p6.poker</groupId>
 		<artifactId>poker-parent</artifactId>
-		<version>1.0</version>
+		<version>1.0.0</version>
 	</parent>
 
 	<artifactId>poker-model</artifactId>
@@ -14,14 +14,6 @@
 
 	<name>poker-model</name>
 	<description>A póker játék adatbázis modelje</description>
-
-	<distributionManagement>
-		<site>
-			<id>${project.artifactId}-site</id>
-			<name>Poker site</name>
-			<url>D:/temp/site</url>
-		</site>
-	</distributionManagement>
 
 	<dependencies>
 		<dependency>

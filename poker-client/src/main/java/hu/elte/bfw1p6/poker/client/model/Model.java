@@ -212,7 +212,6 @@ public class Model {
 
 	/**
 	 * Már meglévő felhasználó módosítása
-	 * @param uuid a kliens egyedi session azonosítója
 	 * @param u a módosítandó felhasználó
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException
@@ -223,7 +222,6 @@ public class Model {
 
 	/**
 	 * Már meglévő felhasználót töröl
-	 * @param uuid a kliens egyedi session azonosítója
 	 * @param u a törlendő felhasználó
 	 * @throws RemoteException
 	 * @throws PokerDataBaseException

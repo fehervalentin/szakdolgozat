@@ -5,7 +5,7 @@
 
 	<groupId>hu.elte.bfw1p6.poker</groupId>
 	<artifactId>poker-parent</artifactId>
-	<version>1.0</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 
 	<name>poker-parent</name>
@@ -23,9 +23,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.release.folder>../release/</project.release.folder>
 
-		<poker-model.version>1.0</poker-model.version>
-		<poker-persist.version>1.0</poker-persist.version>
-		<poker-shared.version>1.0</poker-shared.version>
+		<poker-model.version>1.0.0</poker-model.version>
+		<poker-persist.version>1.0.0</poker-persist.version>
+		<poker-shared.version>1.0.0</poker-shared.version>
 	</properties>
 
 	<dependencyManagement>
@@ -55,13 +55,6 @@
 			<url>D:/temp/site</url>
 		</site>
 	</distributionManagement>
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>croche-releases</id>
-			<url>http://croche.googlecode.com/svn/repository/releases</url>
-		</pluginRepository>
-	</pluginRepositories>
 
 	<build>
 		<plugins>

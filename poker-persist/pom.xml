@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>hu.elte.bfw1p6.poker</groupId>
 		<artifactId>poker-parent</artifactId>
-		<version>1.0</version>
+		<version>1.0.0</version>
 	</parent>
 
 	<artifactId>poker-persist</artifactId>
@@ -23,14 +23,6 @@
 		<create.triggers.file.path>${sql.file.path.prefix}/poker-triggers.sql</create.triggers.file.path>
 		<fill.db.file.path>${sql.file.path.prefix}/poker.sql</fill.db.file.path>
 	</properties>
-
-	<distributionManagement>
-		<site>
-			<id>${project.artifactId}-site</id>
-			<name>Poker site</name>
-			<url>D:/temp/site</url>
-		</site>
-	</distributionManagement>
 
 	<profiles>
 		<profile>
