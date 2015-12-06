@@ -2,38 +2,36 @@ DROP DATABASE IF EXISTS pokerdb;
 CREATE DATABASE pokerdb;
 
 CREATE TABLE pokerdb.poker_types (
-	id TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
-	name VARCHAR(10) NOT NULL,
-	PRIMARY KEY (id),
-	CONSTRAINT UQ_POKER_TYPES_NAME UNIQUE (name)
+	ID TINYINT UNSIGNED AUTO_INCREMENT,
+	NAME VARCHAR(10) NOT NULL,
+	PRIMARY KEY (ID),
+	CONSTRAINT UQ_POKER_TYPES_NAME UNIQUE (NAME)
 );
 
 CREATE TABLE pokerdb.users (
-	id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-	username VARCHAR(20) NOT NULL,
-	balance DECIMAL(65,18) NOT NULL,
-	reg_date BIGINT,
-	password VARCHAR(64) NOT NULL,
-	admin BOOLEAN DEFAULT FALSE,
-	PRIMARY KEY (id),
-	CONSTRAINT UQ_users_username UNIQUE (username)
+	ID INTEGER UNSIGNED AUTO_INCREMENT,
+	USERNAME VARCHAR(20) NOT NULL,
+	BALANCE DECIMAL(65,18) NOT NULL,
+	REG_DATE BIGINT,
+	PASSWORD VARCHAR(64) NOT NULL,
+	ADMIN BOOLEAN DEFAULT FALSE,
+	PRIMARY KEY (ID),
+	CONSTRAINT UQ_USERS_USERNAME UNIQUE (USERNAME)
 );
 	
 CREATE TABLE pokerdb.poker_tables (
-    id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-    name VARCHAR(30) NOT NULL,
-    poker_type_id TINYINT UNSIGNED,
-    max_time TINYINT UNSIGNED NOT NULL,
-    max_players TINYINT UNSIGNED NOT NULL,
-    big_blind DECIMAL(65,18) NOT NULL,
-    PRIMARY KEY (id),
-    CONSTRAINT UQ_poker_table_name UNIQUE (name),
-    FOREIGN KEY (poker_type_id) REFERENCES pokerdb.poker_types(id) ON DELETE CASCADE
+    ID INTEGER UNSIGNED AUTO_INCREMENT,
+    NAME VARCHAR(30) NOT NULL,
+    POKER_TYPE_ID TINYINT UNSIGNED,
+    MAX_TIME TINYINT UNSIGNED NOT NULL,
+    MAX_PLAYERS TINYINT UNSIGNED NOT NULL,
+    BIG_BLIND DECIMAL(65,18) NOT NULL,
+    PRIMARY KEY (ID),
+    CONSTRAINT UQ_POKER_TABLE_NAME UNIQUE (NAME),
+    FOREIGN KEY (POKER_TYPE_ID) REFERENCES POKERDB.POKER_TYPES(ID) ON DELETE CASCADE
 );
 
-DELIMITER /
-
-CREATE TRIGGER pokerdb.create_table_trigger BEFORE INSERT ON pokerdb.poker_tables
+CREATE TRIGGER pokerdb.TR_BEFORE_CREATE_TABLE BEFORE INSERT ON pokerdb.poker_tables
 	FOR EACH ROW
 	BEGIN
 		IF (CHAR_LENGTH(NEW.name) > 30) THEN
@@ -52,7 +50,7 @@ CREATE TRIGGER pokerdb.create_table_trigger BEFORE INSERT ON pokerdb.poker_table
 	END;
 /
 
-CREATE TRIGGER pokerdb.update_table_trigger BEFORE UPDATE ON pokerdb.poker_tables
+CREATE TRIGGER pokerdb.TR_BEFORE_UPDATE_TABLE BEFORE UPDATE ON pokerdb.poker_tables
 	FOR EACH ROW
 	BEGIN
 		IF (CHAR_LENGTH(NEW.name) > 30) THEN
@@ -71,7 +69,7 @@ CREATE TRIGGER pokerdb.update_table_trigger BEFORE UPDATE ON pokerdb.poker_table
 	END;
 /
 
-CREATE TRIGGER pokerdb.create_user_trigger BEFORE INSERT ON pokerdb.users
+CREATE TRIGGER pokerdb.TR_BEFORE_CREATE_USER BEFORE INSERT ON pokerdb.users
 	FOR EACH ROW
 	BEGIN
 		SET @c = CHAR_LENGTH(NEW.username);
@@ -89,74 +87,19 @@ CREATE TRIGGER pokerdb.create_user_trigger BEFORE INSERT ON pokerdb.users
 	END;
 /
 
+INSERT INTO POKERDB.USERS (BALANCE, USERNAME, PASSWORD, ADMIN) VALUES(10000.00,'ADMIN','$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq',TRUE);
+INSERT INTO POKERDB.USERS (BALANCE, USERNAME, PASSWORD, ADMIN) VALUES(10000.00,'ADMIN2','$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq',TRUE);
+INSERT INTO POKERDB.USERS (BALANCE, USERNAME, PASSWORD, ADMIN) VALUES(10000.00,'test','$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq',FALSE);
+INSERT INTO POKERDB.USERS (BALANCE, USERNAME, PASSWORD, ADMIN) VALUES(10000.00,'test2','$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq',FALSE);
+INSERT INTO POKERDB.USERS (BALANCE, USERNAME, PASSWORD, ADMIN) VALUES(10000.00,'test3','$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq',FALSE);
+INSERT INTO POKERDB.USERS (BALANCE, USERNAME, PASSWORD, ADMIN) VALUES(10000.00,'test4','$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq',FALSE);
+	
+INSERT INTO POKERDB.POKER_TYPES (NAME) VALUES('HOLDEM');
+INSERT INTO POKERDB.POKER_TYPES (NAME) VALUES('CLASSIC');
 
-DELIMITER ;
-
-insert into pokerdb.users (balance, username, password, admin)
-	values(
-		10000.00,
-		'asd',
-		'$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq',
-		TRUE
-	);
-	
-insert into pokerdb.users (balance, username, password, admin)
-	values(
-		10000.00,
-		'asd2',
-		'$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq',
-		TRUE
-	);
-	
-insert into pokerdb.users (balance, username, password, admin)
-	values(
-		10000.00,
-		'asd3',
-		'$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq',
-		FALSE
-	);
-	
-insert into pokerdb.users (balance, username, password, admin)
-	values(
-		10000.00,
-		'asd4',
-		'$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq',
-		FALSE
-	);
-	
-insert into pokerdb.users (balance, username, password, admin)
-	values(
-		10000.00,
-		'asd5',
-		'$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq',
-		FALSE
-	);
-	
-insert into pokerdb.users (balance, username, password, admin)
-	values(
-		10000.00,
-		'asd6',
-		'$2a$10$PVuC8V/XNVdaIcSQxQSBQ.x5DeVSOrql11mbFRUG1wZq2dlplFosq',
-		FALSE
-	);
-	
-insert into pokerdb.poker_types (name) values('HOLDEM');
-insert into pokerdb.poker_types (name) values('CLASSIC');
-
-insert into pokerdb.poker_tables (name, poker_type_id, max_time, max_players, big_blind)
-	values('szerver1', 1, 5, 5, 100);
-	
-insert into pokerdb.poker_tables (name, poker_type_id, max_time, max_players, big_blind)
-	values('#PL_125Q', 2, 39, 5, 200);
-	
-insert into pokerdb.poker_tables (name, poker_type_id, max_time, max_players, big_blind)
-	values('Holdem fun', 1, 15, 5, 100);
-	
-insert into pokerdb.poker_tables (name, poker_type_id, max_time, max_players, big_blind)
-	values('Classic fun', 2, 5, 5, 20);
-	
-insert into pokerdb.poker_tables (name, poker_type_id, max_time, max_players, big_blind)
-	values('?^xW!', 2, 23, 3, 1);
-	
-insert into pokerdb.poker_tables (name, poker_type_id, max_time, max_players, big_blind)
-	values('ûáûúüüéáûúõöüóÍ', 1, 33, 2, 10);
+INSERT INTO POKERDB.POKER_TABLES (NAME, POKER_TYPE_ID, MAX_TIME, MAX_PLAYERS, BIG_BLIND) VALUES('szerver1',1,5,5,100);
+INSERT INTO POKERDB.POKER_TABLES (NAME, POKER_TYPE_ID, MAX_TIME, MAX_PLAYERS, BIG_BLIND) VALUES('#PL_125Q',2,39,5,200);
+INSERT INTO POKERDB.POKER_TABLES (NAME, POKER_TYPE_ID, MAX_TIME, MAX_PLAYERS, BIG_BLIND) VALUES('Holdem fun',1,15,5,100);
+INSERT INTO POKERDB.POKER_TABLES (NAME, POKER_TYPE_ID, MAX_TIME, MAX_PLAYERS, BIG_BLIND) VALUES('Classic fun',2,5,5,20);
+INSERT INTO POKERDB.POKER_TABLES (NAME, POKER_TYPE_ID, MAX_TIME, MAX_PLAYERS, BIG_BLIND) VALUES('?^xW!',2,23,3,1);
+INSERT INTO POKERDB.POKER_TABLES (NAME, POKER_TYPE_ID, MAX_TIME, MAX_PLAYERS, BIG_BLIND) VALUES('ûáûúüüéáûúõöüóÍ',1,33,2,10);

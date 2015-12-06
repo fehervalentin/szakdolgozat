@@ -3,12 +3,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>hu.elte.bfw1p6.poker</groupId>
+	<parent>
+		<groupId>hu.elte.bfw1p6.poker</groupId>
+		<artifactId>poker-parent</artifactId>
+		<version>1.0</version>
+	</parent>
+
 	<artifactId>poker-persist</artifactId>
-	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>poker-persist</name>
+	<name>${project.artifactId}</name>
 	<description>A póker játék letárolásáért felelős modul</description>
 
 	<properties>
@@ -19,7 +23,7 @@
 		<create.triggers.file.path>${sql.file.path.prefix}/poker-triggers.sql</create.triggers.file.path>
 		<fill.db.file.path>${sql.file.path.prefix}/poker.sql</fill.db.file.path>
 	</properties>
-	
+
 	<distributionManagement>
 		<site>
 			<id>${project.artifactId}-site</id>
@@ -63,7 +67,6 @@
 		<dependency>
 			<groupId>hu.elte.bfw1p6.poker</groupId>
 			<artifactId>poker-shared</artifactId>
-			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<!-- specify the dependent jdbc driver here -->
 		<dependency>

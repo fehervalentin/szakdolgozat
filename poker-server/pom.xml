@@ -3,20 +3,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>hu.elte.bfw1p6.poker</groupId>
+	<parent>
+		<groupId>hu.elte.bfw1p6.poker</groupId>
+		<artifactId>poker-parent</artifactId>
+		<version>1.0</version>
+	</parent>
+
 	<artifactId>poker-server</artifactId>
-	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>${poker.server.name}</name>
+	<name>${project.artifactId}</name>
 	<description>A póker játék szervere</description>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<poker.server.name>poker-server</poker.server.name>
-		<poker.server.version>1.0-SNAPSHOT</poker.server.version>
-	</properties>
-	
 	<distributionManagement>
 		<site>
 			<id>${project.artifactId}-site</id>
@@ -29,7 +27,6 @@
 		<dependency>
 			<groupId>hu.elte.bfw1p6.poker</groupId>
 			<artifactId>poker-persist</artifactId>
-			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mindrot</groupId>
@@ -64,7 +61,7 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
-					<finalName>${poker.server.name}-${poker.server.version}</finalName>
+					<finalName>${project.artifactId}-${project.version}</finalName>
 					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 			</plugin>

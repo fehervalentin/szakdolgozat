@@ -348,6 +348,7 @@ A szerverre beregisztrált felhasználók alapesetben nem rendelkeznek ilyen jog
 \item A kódban viszonylag sok kód duplikáció van jelen, ugyanis az HouseCommandType és a PlayerCommandType enum típusú objektumok szűk keresztmetszetnek tudható be. Ha a PokerCommand interfacet implementáló osztályokat generikusan tudnánk megfogalmazni, akkor jelentősen letisztulna a kód.
 \item Az admin jogot el lehetne távolítani a játékból, és helyette MVC tervezési minta alapján a szerver oldalra is implementálni lehetne egy grafikus interfészt, amelyen keresztül a szerver teljeskörű karbantartása és adminisztrációja elvégezhető lenne.
 \item A programcsomag a váratlan adatbázis hibákat nem tudja megfelelően lekezelni. Ezek javításra szorulnak.
+\item A programcsomag szerver oldali kódja a konkurens helyzeteket nem mindig kezeli le helyesen. Például ha egy játékasztalhoz a kliensek gyorsan fel-lecsatlakoznak. Ebből fakadóan előfordulnak bugok és szükség volt kliens oldalon és szerver oldalon is egy-egy mentőövet implementálni. Kliens oldalon a Q betű segíti a felhasználókat a hibás játékasztal elhagyásában, szerver oldalon pedig egy reset nevű metódus került implementálásra, amit adminisztrációs joggal lehet meghívni.
 \end{itemize}
 
 

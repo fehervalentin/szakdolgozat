@@ -12,8 +12,7 @@ A programcsomag futtatásához legalább Windows XP operációs rendszer szüks�
     \includegraphics{user-documentation/images/path_env.jpg}
 \end{figure}
 
-Ha a JRE installációs könyvtár gyökerében található bin könyvtár nincs behivatkozva a PATH nevű környezeti változó értékéhez, akkor az \ref{fig:path_env}. ábrán látható módon egészítsük ki az értéket, majd mentsük el a változtatásokat és indítsuk újra a promptot. \\
-Ha sikeresen jártunk el, akkor a
+Ha a JRE installációs könyvtár gyökerében található bin könyvtár nincs behivatkozva a PATH nevű környezeti változó értékéhez, akkor az \ref{fig:path_env}. ábrán látható módon egészítsük ki az értéket, majd mentsük el a változtatásokat és indítsuk újra a promptot. Ha sikeresen jártunk el, akkor a
 
 \begin{verbatim}
 java -version
@@ -28,7 +27,7 @@ utasítás hatására a
  \ref{fig:jre_version}. ábrán látható szöveg jelenik meg a konzolon, akkor sikeres volt a JRE telepítése és beállítása.
  
  \subsection{MySQL Community Server 5.6}
- A programcsomag megköveteli a MySQL Community Server 5.6 adatbázis-kezelő rendszer \cite{mysqlsite} (a továbbiakban: MySQL Server) használatát is. Letöltés után csomagoljuk ki a zip állományt egy tetszőleges könyvtárba, majd a fentiekkel megegyező módon adjuk hozzá a PATH nevű környezeti változó értékéhez a MySQL Server bin könyvtár elérési útvonalát. Ha ezzel végeztünk, akkor nyissük meg a promptot (ha nyitva van, akkor indítsuk újra), majd navigáljunk a MySQL Server bin könyvtárába, ott pedig adjuk ki a
+ A programcsomag megköveteli a MySQL Community Server 5.6 adatbázis-kezelő rendszer \cite{mysqlsite} (a továbbiakban: MySQL Server) használatát is. Letöltés után csomagoljuk ki a zip állományt egy tetszőleges könyvtárba, majd az előbiekkel megegyező módon adjuk hozzá a PATH nevű környezeti változó értékéhez a MySQL Server bin könyvtár elérési útvonalát. Ha a prompt nyitva van, akkor zárjuk be és indítsuk el újra, majd navigáljunk a MySQL Server bin könyvtárába, ott pedig adjuk ki a
  \begin{verbatim}
 mysqld --install
 \end{verbatim}
