@@ -16,11 +16,11 @@ mvn sql:execute@create-db
 mvn sql:execute@create-triggers
 mvn sql:execute@fill-db
 \end{verbatim}
-utasításokat kellett kiadnom parancssorból, hogy friss adatbázissal dolgozhassam tovább. Igyekeztem a felesleges parancsismétléseket elkerülni, vagyis letöltöttem az exec-maven-plugin nevű plugint, amelynek segítségével sikerült a 
+utasításokat kellett kiadnom parancssorból, hogy friss adatbázissal dolgozhassam tovább. A felesleges parancsismétlések elkerülése végett letöltöttem az exec-maven-plugin nevű plugint, amelynek segítségével sikerült a 
  \begin{verbatim}
 mvn exec:exec
 \end{verbatim}
-parancsra korlátozni az adatbázis újboli létrehozását. Próbáltam tovább általánosítani a feladatot, majd végül egy profilt készítettem el, amely az install fázissal együtt oldja meg az adatbázis kérdést. A 
+parancsra korlátozni az adatbázis újboli létrehozását. A feladatot tovább általánosítottam, majd végül egy profilt készítettem el, amely az install fázissal együtt oldja meg az adatbázis kérdését. A 
  \begin{verbatim}
  mvn clean install -Pbootstrap
  \end{verbatim}
@@ -43,6 +43,8 @@ A mavennel java dokumentációt is lehet generáltatni. Navigáljunk a poker kö
 utasításokkal. Az elkészült dokumentációk a modul \path{poker\target\staging} könyvtárba kerülnek. Kettő darab index.html állományt kell keresnünk, az egyik a gyökérkönyvtárban található a másik pedig az \path{apidocs} könyvtár gyökerében.
  
 \subsection{MySQL}
+Az adatok perzisztens tárolásáért egyértelműen relációs adatbázisra volt szükség. A MySQL adatbázissal már korábban is találkoztam, ismert technológiát szerettem volna flehasználni.
+
 \subsection{Git}
 A fejlesztés során előfordult, hogy internet kapcsolat nélkül kellett verzióznom a kódomat. A git egyik legnagyobb előnye, hogy internet kapcsolat nélkül is lehet commit parancsot végrehajtani. A commit parancs hatására a lokális repozitorinkba egy új pillanatfelvétel készül az aktuális munkakönyvtárunk tartalmáról, amelyet később push utasítással feltölthetünk egy távoli repozitoriba. A fejlesztéshez több branchet is használtam, így ha valami balul sült volna el, akkor egyszerűen visszaálltam volna a masterre.
 
@@ -98,7 +100,8 @@ Az adatbázis három darab táblából épül fel, amelyet a \ref{fig:db_scheme}
 
 
 
-Minden tábla rendelkezik elsődleges kulcssal, amelynek típusait a fentebb látható táblázat tartalmazza. A poker\_types tábla elsődleges kulcsa UNSIGNED TINYINT, melyet a MySQL Server 4 byteon tárol. Az adatábrázolás mértékének a szűkítése ebben az esetben indokolt, ugyanis a 255 különböző értékű UNSIGNED TINYINT típus kielégíti a játéktípusok által támasztott követelményeket. \\
+\hfill \break
+Minden tábla rendelkezik elsődleges kulccsal, amelynek típusait a fentebb látható táblázat tartalmazza. A poker\_types tábla elsődleges kulcsa UNSIGNED TINYINT, melyet a MySQL Server 4 byteon tárol. Az adatábrázolás mértékének a szűkítése ebben az esetben indokolt, ugyanis a 255 különböző értékű UNSIGNED TINYINT típus kielégíti a játéktípusok által támasztott követelményeket. \\
 Az adatbázis sémában három darab trigger van definiálva:
 \begin{itemize}
 \item Tábla beszúrás előtti
@@ -131,7 +134,7 @@ A megfelelő absztrakció elérése érdekében a \ref{fig:messaging}. ábrán l
 	\centering
 	\includegraphics[width=\linewidth]{developer-documentation/images/messaging.png}
 \end{figure}
-A \ref{fig:messaging}. ábráról leolvasható, hogy minden üzenetnek van egy típusa. Az üzenet típusa függ az üzenet fajtájától és specializációjától is. Például ha egy HOLDEM játékstílusú asztal be szeretné kérni a vakokat a játékosoktól, akkor egy HoldemHouseCommand típusú HouseCommandType::BLIND utasítástípusú új objektum példányt kell szétküldenie az asztalnál ülő összes játékosnak. Ezt az üzenetküldést a szerver a kliensek publikus interfészén keresztül teheti meg. \\
+A \ref{fig:messaging}. ábráról leolvasható, hogy minden üzenetnek van egy típusa. Az üzenet típusa függ az üzenet fajtájától és specializációjától is. Például ha egy HOLDEM játékstílusú asztal be szeretné kérni a vakokat a játékosoktól, akkor egy HoldemHouseCommand típusú \texttt{HouseCommandType::BLIND} utasítástípusú új objektum példányt kell szétküldenie az asztalnál ülő összes játékosnak. Ezt az üzenetküldést a szerver a kliensek publikus interfészén keresztül teheti meg. \\
 A kliensnek az üzenetet fogadnia kell. Az üzenet fogadására egy új, ezt a funkciót ellátó objektumot kell definiálni. \\
 A kliens oldal architektúrális felépítésének az alapját a Model-View-Controller tervezési minta adja. A beérkezett üzenetet az erre kijelölt objektum fogadja, majd továbbítja a kliens oldali vezérlő rétegnek. A vezérlő réteg értelmezi a bejövő üzenetet, majd ennek megfelelően a model rétegnek és a megjelenítési rétegnek is továbbítja a beérkezett üzenetet további feldolgozásra. A probléma különböző funkciók leírását is tartalmazza. Célszerű, hogy a különböző funkcióknak különböző grafikus interfészt biztosítsunk. Ugyanakkor új felület létrehozásakor új vezérlő objektumot is létre kell hoznunk, viszont a model rétegnek statikusnak kell lennie. Ugyanaz a model objektum lássa el például a bejelentkezési és regisztrációs kérelmeknek a továbbítását a szerver. Tehát különböző funkciók elérése esetén a vezérlési és megjelenítési réteget ki kell cserélni, viszont a modelt nem. Illetőleg kettő darab modelt kell megfogalmaznunk, az egyik látja el például a fentebb említett egyszerűbb funkciók meghívását a szerveren, a másik pedig a tényleges játék közbeni model, amelyet a vezérlői réteg értesíteni tud a beérkezett üzenetekkel kapcsolatban és kliens oldalon biztosítja a játék menetet.  \\
 A probléma leírásában szerepel adatbázissal való kommunikáció is. Erre ugyancsak egy új modult kell bevezetni, amely az adatbázissal történő kommunikációt bonyolítja le. Entitás osztályokat is kell írni és olvasni az adtbázisból, így ezeket az osztályokat általánosan kell megfogalmazni a kód duplikációk elkerülése végett. Ezen modul vázlatát a \ref{fig:persist}. ábra szemlélteti. \\
@@ -151,26 +154,26 @@ A szervernek szerves része egy objektum, amely a munkamenetek kezeléséért fe
 \end{figure}
 A SessionService tartja nyilván a munkameneteket. Egy felhasználóhoz legfeljebb egy munkamenet rendelhető egy adott időben. Továbbá egy munkamenethez pontosan egy felhasználó tartozik. Ha a felhasználó kijelentkezik a póker játékból, akkor a felhasználó munkamenetét érvényteleníteni kell. Ugyanaz a munkamenet többször nem osztható ki, törölni kell. Ugyanakkor egy felhasználó különböző időpillanatokban rendelkezhet különböző munkamenetekkel. Tehát ha az imént kijelentkezett felhasználó újból be szeretne jelentkezni a játékba, akkor egy új munkamenettel kell azonosítani. A szervernek biztosítania kell, hogy a kliensek rendelkezzenek munkamenet objektumokkal, ugyanis bármilyen funkció hívása esetén a kliensek ezzel az objektummal azonosítják magukat. Pontosabban fogalmazva minden munkamenet egy-egy UUID értékkel van ellátva, és a klienseknek elég csak ezt az egyedi értéket elküldeni a szervernek. A felhasználóknak nem engedhetjük meg, hogy egy felhasználónevet konkurensen használhassanak. Ez a felügyelet ugyancsak a SessionService objektum feladata. \\
 A szerver és a kliens közötti bárminemű tevékenység, illetve kommunikáció egy közös modult kell, hogy felhasználjon. Például ha kivételobjektumot szeretnénk dobni szerver oldalon és azt kliens oldalon szeretnénk lekezelni, akkor értelemszerűen mind szerver mind a kliens classpathján szerepelnie kell az adott kivételobjektumnak. A közös modulban kell szerepelnie a szerver és a kliens publikus interfészeknek, a kommunikációs rendszert alkotó osztályok összessége és a saját kivételosztályok definíciói. \\
-Külön modul fogalmazható meg a játékosok lapjainak a kiértékelésére is. Ez a modul nem kerül implementálásra, hanem külső könyvtárként kerül felhasználásra.
+Külön modul fogalmazható meg a játékosok lapjainak a kiértékelésére is. Ez a modul nem kerül implementálásra, külső könyvtárként kerül felhasználásra.
 \subsection{Implementálás}
 Az implementálást a kliens oldali megjelenítéssel kezdtem egy maven archetype generator segítségével. Így generálódott egy megfelelő kiindulási alap, amiből elkezdtem építkezni. Legelőször a bejelentkezési és a regisztrációs formot állítottam össze. Ezekután pedig a szerver publikus interfészének egy részét fogalmaztam meg kód szinten. Ezt az interfészt a kliens már el tudta kérni az RMI registry-ből, és sikeresen be tudott hívni a szerverhez. A szerver és a kliens kommunikációjának az alapjának a kiépítése után az adatbázis feltelepítése, elindítása majd elérése volt a legfőbb célom. 
 \subsection{Elemzés}
 
 \section{Modulok}
-A programcsomag 6 fő modult tartalmaz
+A programcsomag 6 darab főmodult tartalmaz
 \begin{description}
   \item[poker-server] \hfill \\
-  A póker játék szervere, amely magát a játékot szolgáltatja.
+  A póker játék szervere, amely magát a játékot szolgáltatja. A kliensek ennek a modulnak egy instanciájához csatlakoznak.
   \item[poker-client] \hfill \\
   A póker játék kliense, amely segítségével a szerverhez lehet csatlakozni.
   \item[poker-shared] \hfill \\
-   A póker játék azon modulja, amelytől a szerver és a kliens egyaránt függ.
+   A póker játék azon modulja, amelytől a szerver és a kliens egyaránt függ. Olyan közös objektumdefiníciók találhatók itt, mint például az üzenetek és a kivételek leírása.
    \item[poker-persist] \hfill \\
-   Az adatok letárolásáért felelős modul.
+   Az adatok letárolásáért felelős modul. Az adatbázissal lebonyolított kommunikációt teljes egészében elvégzi.
    \item[poker-model] \hfill \\
-   A póker játék modellezéséért felelős csomag.
+   A póker játék modellezéséért felelős csomag. Ebben a modulban találhatóak a POJO \cite{pojo} osztálydefiníciók, amelyeken a poker-persist modul ORM-et \cite{orm} hajt végre.
    \item[javapokertexasholdem] \hfill \\
-   Külső könyvtár, amely a nyertes játékos kiértékelési feladatot végzi.
+   Külső könyvtár, amely a nyertes játékos kiértékelési feladatot végzi. Eredetileg csak Texas Hold'Em játékstílus esetén volt képes kezeket kiértékelni, így a modulimplementációt bizonyos mértékben általánosítani kellett, hogy a poker-server modul teljeskörűen fel tudja használni.
 \end{description}
 \begin{figure}[h!]
 	\caption{Kliens modulra bontása}
