@@ -114,7 +114,7 @@ Texas Hold'Em játékstílusú játékban a szerver kiosztja az ötödik közös
 Magyarul osztó. A játék során az osztógomb, amely a grafikus felületen \texttt{D} betűvel van jelezve. Az óramutató járásával megegyező irányban halad körbe az asztalon, így minden parti esetén más felhasználó tölti be az a osztó szerepét.
 
 \section{A póker játékról}
-A póker \cite{poker_game}, mint kártyajáték igen népszerű szerencsejáték. Akár élő tv adásokat is végig lehet követni, ahol hatalmas főnyereményeket osztanak ki a dobogós helyezetteknek. Viszonylag sokfajtája terjedt el szerte a világon, kezdve a klasszikus 5 lapos leosztásokkal egészen az OMAHA-án át a jól ismert Texas Hold'Em játékstílusig. A játékot 52 lapos francia kártyapaklival játszák, amelyben 4 szín és 13 különböző értékű kártyalap található. A játékstílusok igen különbözőek tudnak lenni. Megkölönböztetünk ante, illetve blind alaptétet. Ante alaptét esetén az asztalnál ülő összes játékos előre meghatározott tétet rak be. Blind alaptét esetén megkülönböztetünk kis és nagy vakot, amelyet körönként más és más játékosok raknak be. Minden esetben az osztótól közvetlenül balra ülő játékosnak kell beraknia a kis vakot. Az osztótól kettővel balra ülő játékosnak pedig a nagy vakot. Amíg az alaptétek nem kerültek be az asztalra, addig a ház nem kezdi meg a lapok kiosztását. \\
+A póker \cite{poker_game}, mint kártyajáték igen népszerű szerencsejáték. Akár élő tv adásokat is végig lehet követni, ahol hatalmas főnyereményeket osztanak ki a dobogós helyezetteknek. Viszonylag sokfajtája terjedt el szerte a világon, kezdve a klasszikus 5 lapos leosztásokkal egészen az OMAHA játékstíluson át a jól ismert Texas Hold'Em játékstílusig. A játékot 52 lapos francia kártyapaklival játszák, amelyben 4 szín és 13 különböző értékű kártyalap található. A játékstílusok igen különbözőek tudnak lenni. Megkölönböztetünk ante, illetve blind alaptétet. Ante alaptét esetén az asztalnál ülő összes játékos előre meghatározott tétet rak be. Blind alaptét esetén megkülönböztetünk kis és nagy vakot, amelyet körönként más és más játékosok raknak be. Minden esetben az osztótól közvetlenül balra ülő játékosnak kell beraknia a kis vakot. Az osztótól kettővel balra ülő játékosnak pedig a nagy vakot. Amíg az alaptétek nem kerültek be az asztalra, addig a ház nem kezdi meg a lapok kiosztását. \\
 A \ref{fig:omaha}. ábrán látható az OMAHA \cite{omaha_poker} játékstílus. A Texas Hold'Em játékstílushoz igen hasonló pókerjáték változat. A játékosok a kezükbe négy darab kártyalapot kapnak a vakok betétele után, majd megkezdődik az első licitkör, amelynek a végén három közös lap kerül ki az asztal közepére. Újabb licitkör kezdődik, amelynek a végén egy, majd az újabb licitkör végén, még egy újabb kártyalap kerül az asztal közepére, mint közöslap. A felhasználóknak maximum öt lapot lehet felhasználniuk a legjobb kéz előállítására. Az öt lapból kötelezően kettő a saját kézből történik a maradék három pedig a közös lapokból. Értelemszerűen a legerősebb kéz nyer \cite{card_combinations}. A játék célja, hogy minél több zsetont gyűjtsünk össze a partik során.
 \begin{figure}[h!]
   \caption{OMAHA póker játék}
@@ -136,10 +136,10 @@ A póker játék meglehetősen sok játékstílusban terjedt el szerte a világo
 A két játékstílus közötti legfőbb különbség, hogy a klasszikus játékstílus esetén nincsenek közös lapok, míg Texas Hold'Em játékstílus esetén vannak.
 
 \pokerparagraph{Classic} 
-A klasszikus játékstílus legfőbb ismertető jele, hogy mindenki öt lapot kap kézbe és nincsenek közös lapok. Először is a vakokra kötelezett játékosok automatizált formában rakják be a vakokat, azután pedig úgynevezett előkör van, amikor a szerver minden játékosnak öt-öt lapot oszt kézbe és ezek alapján lehet licitálni. Ha vége a körnek, akkor mindenki kicserélheti a lapjait, amiket saját maga választ ki a grafikus felületen a saját kártyalapjainak rákattintásával. Ha a kártyalap feljebb csúszott a grafikus megjelenítésen, akkor a kártyalapot cserére jelölte a játékos. A Change feliratú gombbal cserélhetőek a kártyák. Mindenki akkor kapja meg az új kártyalapjait, ha már mindenki nyilatkozott a cseréről. Ezek után új kör indul, amikor is az új lapok birtokában tehetik meg a tétjeiket a játékosok. A kör után a szerver kihirdeti a nyertest, és a nyertes lapokat az asztal közepén jeleníti meg a grafikus felület. Kivétel, ha az éppen adott felhasználó a nyertes, akkor a nyertes kártyalapok maga előtt jelennek meg, iyenkor más kártyalapok nem kerülnek felfordításra. A felhasználók a nyertes lapok megtekintését követően kötelesek rákattintani a Check feliratú gombra, illetőleg ha kifutnak az időből, akkor a játék asztal kilépteti őket. Ha ebben a körben is mindenki nyilatkozott, akkor a játékasztal új partit indít.
+A klasszikus játékstílus legfőbb ismertető jele, hogy mindenki öt lapot kap kézbe és nincsenek közös lapok. Először is a vakokra kötelezett játékosok automatizált formában rakják be a vakokat, azután pedig úgynevezett előkör van, amikor a szerver minden játékosnak 5-5 darab kártyalapot oszt kézbe és ezek alapján lehet licitálni. Ha vége a körnek, akkor mindenki kicserélheti a lapjait, amiket saját maga választ ki a grafikus felületen a saját kártyalapjainak rákattintásával. Ha a kártyalap feljebb csúszott a grafikus megjelenítésen, akkor a kártyalapot cserére jelölte a játékos. A Change feliratú gombbal cserélhetőek a kártyák. Mindenki akkor kapja meg az új kártyalapjait, ha már mindenki nyilatkozott a cseréről. Ezek után új kör indul, amikor is az új lapok birtokában tehetik meg a tétjeiket a játékosok. A kör után a szerver kihirdeti a nyertest, és a nyertes lapokat az asztal közepén jeleníti meg a grafikus felület. Kivétel, ha az éppen adott felhasználó a nyertes, akkor a nyertes kártyalapok maga előtt jelennek meg, iyenkor más kártyalapok nem kerülnek felfordításra. A felhasználók a nyertes lapok megtekintését követően kötelesek rákattintani a Check feliratú gombra, illetőleg ha kifutnak az időből, akkor a játék asztal kilépteti őket. Ha ebben a körben is mindenki nyilatkozott, akkor a játékasztal új partit indít.
 
 \pokerparagraph{Texas Hold'Em}
-A klasszikus játékstílussal erősen megegyező játékmenetű stílus. A különbség csupán annyi, hogy a ház 2-2 lapot oszt minden játékosnak a kezébe, amelyekkel a játékosok a parti végéig rendelkeznek. Illetőleg a nyertes lapok semmilyen esetben sem középen, hanem a játékosoknál jelennek meg.
+A klasszikus játékstílussal erősen megegyező játékmenetű stílus. A különbség csupán annyi, hogy a ház 2-2 darab kártyalapot oszt minden játékosnak a kezébe, amelyekkel a játékosok a parti végéig rendelkeznek. Illetőleg a nyertes lapok semmilyen esetben sem középen, hanem a játékosoknál jelennek meg.
 
 \section{Futtatás}
 
@@ -166,7 +166,7 @@ A kliens futtatása hasonló módon történik, mint a szerveré. Navigáljunk a
   \centering
     \includegraphics[width=\textwidth]{user-documentation/images/login.jpg}
 \end{figure}
-A játék indítása után az \ref{fig:client_login}. ábrán látható bejelentkező felületet kapjuk. Ha még nem regisztráltuk magunkat a játékba, akkor kattinstunk a Regisztráció nevű gombra. Adjuk meg a regisztrálni kívánt felhasználó nevünket és jelszavunkat, majd regisztráljunk. A szerver értesít minket, hogy a művelet sikeres, vagy sikertelen volt. A \ref{fig:reg_succ}. ábra egy sikeres regisztrációt szemléltet.
+Ha még nem regisztráltuk magunkat a játékba, akkor kattinstunk a Regisztráció nevű gombra. Adjuk meg a regisztrálni kívánt felhasználó nevünket és jelszavunkat, majd regisztráljunk. A szerver értesít minket, hogy a művelet sikeres, vagy sikertelen volt. A \ref{fig:reg_succ}. ábra egy sikeres regisztrációt szemléltet.
 \begin{figure}[h!]
   \caption{Sikeres regisztráció}
   \label{fig:reg_succ}
@@ -175,21 +175,21 @@ A játék indítása után az \ref{fig:client_login}. ábrán látható bejelent
 \end{figure}
 Ügyeljünk arra, hogy névütközéseket a szerver nem enged. Tehát, ha valaki XYZ névvel már regisztrálva van, akkor még egy ugyanolyan nevű felhasználót nem enged regisztrálni a szerver. Továbbá győződjünk meg arról, hogy a megadott jelszavak megegyeznek.  \\
 Sikeres regisztrációt követően a program visszairányít minket a bejelentkezési formhoz, amelyet értelemszerűen kitöltve be tudunk jelentkezni a programba.
-A sikeres bejelentkezést követően a
+A sikeres bejelentkezést követően a \ref{fig:poker_tables}. ábrán látható felület fogad minket, ahol például asztalhoz csatlakozhatunk. Tetszőlegesen válasszunk ki egy Texas Hold'Em játékstílusú asztalt, majd kattintsunk a Csatlakozás feliratú gombra.
 \begin{figure}[h!]
   \caption{Játékasztalok}
   \label{fig:poker_tables}
   \centering
-    \includegraphics[width=\textwidth]{user-documentation/images/tables.jpg}
+    \includegraphics[width=12cm]{user-documentation/images/tables.jpg}
 \end{figure}
-\ref{fig:poker_tables}. ábrán látható felület fogad minket, ahol például asztalhoz csatlakozhatunk. Tetszőlegesen válasszunk ki egy Texas Hold'Em játékstílusú asztalt, majd kattintsunk a Csatlakozás feliratú gombra.
+
 \begin{figure}[h!]
   \caption{Üres játékasztal}
   \label{fig:parti_1}
   \centering
-    \includegraphics[width=\textwidth]{user-documentation/images/parti/parti_1.jpg}
+    \includegraphics[width=12cm]{user-documentation/images/parti/parti_1.jpg}
 \end{figure}
-A program átirányított minket a \ref{fig:parti_1}. ábrán jelölt felületre. Az üres játék két dolgot jelenthet, vagy azt, hogy az asztalnál éppen játszanak, vagy pedig azt, hogy az asztalnál mi vagyunk az egyedüli játékosok, jelen esetben egyedüliként ülünk az asztalnál. Indítsunk el egy második kliens programot is, majd a fenti utasításokat követve csatlakozzunk az előbbi játék asztalhoz. Miután csatlakoztunk, azután indítsunk el még további három darab kliens programot és csatlakozzunk az előbbi játék asztalhoz. A \ref{fig:sv_log}. árbán láthatjuk a szerver naplózását, amelyről leolvasható, hogy az imént csatlakozott három darab felhasználó váró listára került. \\
+A program átirányított minket a \ref{fig:parti_1}. ábrán jelölt felületre. Az üres játékasztal két dolgot jelenthet, vagy azt, hogy az asztalnál éppen játszanak, vagy pedig azt, hogy az asztalnál mi vagyunk az egyedüli játékosok, jelen esetben egyedüliként ülünk az asztalnál. Indítsunk el egy második kliens programot is, majd a fenti utasításokat követve csatlakozzunk az előbbi játék asztalhoz. Miután csatlakoztunk, azután indítsunk el még további három darab kliens programot és csatlakozzunk az előbbi játék asztalhoz. A \ref{fig:sv_log}. árbán láthatjuk a szerver naplózását, amelyről leolvasható, hogy az imént csatlakozott három darab felhasználó várólistára került. \\
 \begin{figure}[h!]
   \caption{Szerver naplózása}
   \label{fig:sv_log}
@@ -197,7 +197,7 @@ A program átirányított minket a \ref{fig:parti_1}. ábrán jelölt felületre
     \includegraphics[width=\textwidth]{user-documentation/images/sv_log.jpg}
 \end{figure}
 
- A térjünk vissza a játékban lévő kliens programokhoz és játszuk le a megkezdett partit. A következő parti elindulásakor a várólistán szereplő kliensek teljesértékű játékosként csatlakoznak be az éppen elindult partiba, így az asztalnál a \ref{fig:parti_2}. ábra alapján már öt darab játékos fog ülni.
+Térjünk vissza a játékban lévő kliens programokhoz és játszuk le a megkezdett partit. A következő parti elindulásakor a várólistán szereplő kliensek teljesértékű játékosként csatlakoznak be az éppen elindult partiba, így az asztalnál a \ref{fig:parti_2}. ábra alapján már öt darab játékos fog ülni.
  \begin{figure}[h!]
   \caption{Parti kezdete}
   \label{fig:parti_2}
@@ -212,7 +212,7 @@ A \ref{fig:parti_3}. ábrán látható, hogy a szerver már kiosztotta mind az �
   \centering
     \includegraphics[width=\textwidth]{user-documentation/images/parti/parti_3.jpg}
 \end{figure}
-A \ref{fig:parti_4}. ábrán már az látható, amikor a parti hamarosan véget ér. A szerver ebben a körben hirdette ki a nyertes lapokat a játékosok között. A test3 nevű játékos eldobta a lapjait, azonban értelemszerűen ő is láthatja a nyertes lapokat. Jelenleg a test2 nevű játékos következik. Ha az asztalnál ülő partiban maradt játékosok mindegyikre megnyomta a Check feliratú gombot, akkor a játék asztalon új parti kezdődik. A várakozó listán szereplő játékosok teljes értékű játékosként szerepelnek az asztalnál, továbbá azok a játékosok is kapnak kártyalapokat, akik az előző partiban eldobták a lapjaikat.
+A \ref{fig:parti_4}. ábrán már az látható, amikor a parti hamarosan véget ér. A szerver ebben a körben hirdette ki a nyertes lapokat a játékosok között. A test3 nevű játékos eldobta a lapjait, azonban értelemszerűen ő is láthatja a nyertes lapokat. Jelenleg a nyertes test2 nevű játékos következik. Ha az asztalnál ülő partiban maradt játékosok mindegyikre megnyomta a Check feliratú gombot, akkor a játékasztalon új parti kezdődik. A várakozólistán szereplő játékosok teljes értékű játékosként szerepelnek az asztalnál, továbbá azok a játékosok is kapnak kártyalapokat, akik az előző partiban eldobták a lapjaikat.
  \begin{figure}[h!]
   \caption{Nyertes lapok kihirdetése}
   \label{fig:parti_4}
