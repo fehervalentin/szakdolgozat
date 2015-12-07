@@ -1,0 +1,42 @@
+\documentclass[twoside, a4paper, 12pt]{article}
+\usepackage{thesis-style}
+\usepackage{fancyvrb}
+\usepackage{url}
+\usepackage{indentfirst}
+\usepackage{enumitem}
+\usepackage{tabulary}
+\usepackage{array}
+\usepackage{varwidth}
+
+\newcommand{\pokerparagraph}[1]{\paragraph{#1}\mbox{}\\}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+\newcommand*{\thead}[1]{\multicolumn{1}{c}{\bfseries #1}}
+
+\input{information}
+
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\YEAR}
+
+\begin{document}
+\pagestyle{empty}
+
+% belső fedlap
+\include{cover/index}
+
+\clearpage
+
+% a belső fedlap utáni lap a témabejelentő
+
+% tartalomjegyzék
+\setcounter{page}{1}
+\tableofcontents
+\addtocontents{toc}{~\hfill\textbf{Oldal}\par}
+\clearpage
+
+\pagestyle{plain}
+
+% tartalom
+\input{content}
+\end{document}
