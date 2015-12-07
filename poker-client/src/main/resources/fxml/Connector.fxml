@@ -18,12 +18,21 @@
 			<Label fx:id="pokerLabel" GridPane.columnIndex="0"
 				GridPane.rowIndex="0" GridPane.columnSpan="20" text="Szerver keresés"
 				styleClass="header-text" alignment="center" />
+
+			<Label fx:id="serverNameLabel" GridPane.columnIndex="7"
+				GridPane.rowIndex="10" styleClass="header-text2" text="Szerver neve:" />
 			<TextField fx:id="serverNameField" GridPane.columnIndex="8"
-				promptText="Szerver neve" GridPane.columnSpan="2" GridPane.rowIndex="10" />
-			<TextField fx:id="serverIPField" promptText="Szerver IP címe"
-				GridPane.columnSpan="2" GridPane.columnIndex="8" GridPane.rowIndex="11" />
-			<TextField fx:id="serverPortField" promptText="Szerver portja"
-				GridPane.columnSpan="2" GridPane.columnIndex="8" GridPane.rowIndex="12" />
+				GridPane.columnSpan="2" GridPane.rowIndex="10" />
+
+			<Label fx:id="serverIPLabel" GridPane.columnIndex="7"
+				GridPane.rowIndex="11" styleClass="header-text2" text="Szerver IP:" />
+			<TextField fx:id="serverIPField" GridPane.columnSpan="2"
+				GridPane.columnIndex="8" GridPane.rowIndex="11" />
+
+			<Label fx:id="serverPortLabel" GridPane.columnIndex="7"
+				GridPane.rowIndex="12" styleClass="header-text2" text="Szerver port:" />
+			<TextField fx:id="serverPortField" GridPane.columnSpan="2"
+				GridPane.columnIndex="8" GridPane.rowIndex="12" />
 			<Button fx:id="connectButton" text="Csatlakozás" onAction="#connectHandler"
 				styleClass="rich-blue" GridPane.columnIndex="8" GridPane.rowIndex="13" />
 		</GridPane>

@@ -22,6 +22,9 @@ import javafx.scene.control.TextField;
 public class ConnectorController extends AbstractPokerClientController {
 	
 	@FXML private Label pokerLabel;
+	@FXML private Label serverNameLabel;
+	@FXML private Label serverIPLabel;
+	@FXML private Label serverPortLabel;
 	
 	@FXML private TextField serverNameField;
 	@FXML private TextField serverIPField;

@@ -1,18 +1,18 @@
 \part{Felhasználói dokumentáció}
-A programcsomagot JAVA programozási nyelven írtam meg, így a program számára biztosítani kell JAVA futtatókörnyezetet, továbbá a program működéséhez adatbázis szerverre is szükség lesz. A telepítés magába foglalja az adatbázis séma elkészítését és az adatbázis demó adatokkal való feltöltését is, így a telepítést követően extra dolgokra nem lesz szükség a szoftver használatához. A telepítés közben a számítógépet újraindítani nem szükséges.
+A programcsomagot JAVA programozási nyelven írtam meg, így a program számára biztosítani kell JAVA futtatókörnyezetet, továbbá a program működéséhez adatbázisszerverre is szükség lesz. A telepítés magába foglalja az adatbázisséma elkészítését és az adatbázis demóadatokkal való feltöltését is, így a telepítést követően extra dolgokra nem lesz szükség a szoftver használatához. A telepítés közben a számítógépet újraindítani nem szükséges.
 
 \section{Követelmények}
+\subsection{Hardver}
+\begin{itemize}
+\item Legalább Intel® Pentium® 4 Processor 2.80 GHz
+\item Legalább 1GB RAM
+\item Legalább 50MB szabad lemezterület
+\end{itemize}
 \subsection{Szoftver}
 \begin{itemize}
 \item Legalább Windows XP operációs rendszer
 \item Java SE Runtime Environment 8
 \item MySQL Community Server 5.6
-\end{itemize}
-\subsection{Hardver}
-\begin{itemize}
-\item Legalább Intel® Pentium® 4 Processor 2.80 GHz
-\item Legalább 1GB RAM
-\item Legalább 50MB háttértárhely
 \end{itemize}
 
 \section{Telepítés}
@@ -31,31 +31,34 @@ Ha a JRE installációs könyvtár gyökerében található bin könyvtár nincs
 \begin{verbatim}
 java -version
 \end{verbatim}
-utasítás hatására a
+utasítás hatására a \ref{fig:jre_version}. ábrán látható szöveg jelenik meg a konzolon, akkor sikeres volt a JRE telepítése és beállítása.
 \begin{figure}[h!]
   \caption{JRE verzió}
   \label{fig:jre_version}
   \centering
     \includegraphics{user-documentation/images/java_version.jpg}
 \end{figure}
- \ref{fig:jre_version}. ábrán látható szöveg jelenik meg a konzolon, akkor sikeres volt a JRE telepítése és beállítása.
  
  \subsection{MySQL Community Server 5.6}
- A programcsomag megköveteli a MySQL Community Server 5.6 adatbázis-kezelő rendszer \cite{mysqlsite} (a továbbiakban: MySQL Server) használatát is. Letöltés után csomagoljuk ki a zip állományt egy tetszőleges könyvtárba, majd az előbiekkel megegyező módon adjuk hozzá a PATH nevű környezeti változó értékéhez a MySQL Server bin könyvtár elérési útvonalát. Ha a prompt nyitva van, akkor zárjuk be és indítsuk el újra, majd navigáljunk a MySQL Server bin könyvtárába, ott pedig adjuk ki a
+ A programcsomag megköveteli a MySQL Community Server 5.6 \cite{mysqlsite} adatbázis-kezelő rendszer (a továbbiakban: MySQL Server) használatát is. Letöltés után csomagoljuk ki a zip állományt egy tetszőleges könyvtárba, majd az előbiekkel megegyező módon adjuk hozzá a PATH nevű környezeti változó értékéhez a MySQL Server \texttt{bin} könyvtár elérési útvonalát. Ha a prompt nyitva van, akkor zárjuk be és indítsuk el újra, majd navigáljunk a MySQL Server \texttt{bin} könyvtárába, ott pedig adjuk ki a
  \begin{verbatim}
 mysqld --install
 \end{verbatim}
-parancsot. A parancs végrehajtása után navigáljunk a szolgáltatások panelhez, amelyet a legkönnyebben a promptban a
+parancsot. A parancs végrehajtása után navigáljunk a szolgáltatások panelhez, amelyet legkönnyebben a promptban a
  \begin{verbatim}
 services.msc
 \end{verbatim}
+kiadott utasítással lehet elérni. Majd járjunk el a \ref{fig:mysql_service}. ábrának megfelelően. 
+
+\clearpage
+
 \begin{figure}[h!]
   \caption{MySQL Service}
   \label{fig:mysql_service}
   \centering
     \includegraphics{user-documentation/images/mysql_service.jpg}
 \end{figure}
-kiadott utasítással lehet elérni. Majd járjunk el a \ref{fig:mysql_service}. ábrának megfelelően. Térjünk vissza a konzolra, ahol adjuk ki a 
+Térjünk vissza a konzolra, ahol adjuk ki a 
  \begin{verbatim}
 mysql -u root -p
 \end{verbatim}
@@ -72,11 +75,15 @@ utasítást, és ha a \ref{fig:mysql_version}. ábrának megfelelő képernyők�
 \end{figure}
 
 \subsection{Az adatbázis használatba vétele}
-Ha sikeresen elindítottuk a MySQL Servert, akkor szükségünk lesz egy új adatbázis sémára és demó adatokra, amelyet a \path{X:\poker\release\poker-db.sql} állományban találunk. Ezt a filet kell lefuttatni az adatbázis szerveren. Egymás után többszöri futtatás esetén is ugyanazt az eredményt adja. A promptban adjuk ki a
+Ha sikeresen elindítottuk a MySQL Servert, akkor szükségünk lesz egy új adatbázissémára és demóadatokra, amelyet a \path{X:\poker\release\poker-db.sql} állományban találunk. Az \path{X} kötetcímke jelöli jelenleg és a későbbiek során is a DVD meghajtót, amelybe a DVD lemezt helyeztük. Ezt a fájlt kell lefuttatni az adatbázis szerveren. Egymás után többszöri futtatás esetén is ugyanazt az eredményt kapjuk. Az adatbázis-kezelő rendszerből lépjünk ki a 
+\begin{verbatim}
+quit
+\end{verbatim}
+paranccsal, majd a promptban adjuk ki a
  \begin{verbatim}
 mysql -u root -p < X:\poker\release\poker-db.sql
 \end{verbatim}
-utasítást, amely jelszót fog kérni. A beviteli sort ugyancsak hagyjuk üresen. Ha sikeresen lefutott a parancs, akkor az adatbázis séma elkészült és a program demó adatokkal is feltöltötte.
+utasítást. A parancs kiadását követően az adatbázis-kezelő rendszer jelszót fog kérni. A beviteli sort ugyancsak hagyjuk üresen. Ha sikeresen lefutott a parancs, akkor az adatbázisséma elkészült és a program demóadatokkal is feltöltötte.
 
 \section{Fogalomtár}
 Itt helyezkedik el minden olyan fogalom, amely a játék használatához feltétlenül szükséges. A dokumentáció későbbi fejezetei ezekre a fogalmakra támaszkodnak.
@@ -91,12 +98,12 @@ Olyan parancs, amelyet a kliens oldali program automatikusan hív meg. Ha a szer
 \pokerparagraph{RAISE}
 Olyan speciális parancs, amely hatására a felhasználó tartozása kiegyenlítésre kerül az asztal felé és még emel a téten az asztal alaptétjének megfelelő értékkel.
 \pokerparagraph{QUIT}
-Asztal elhagyására szolgáló parancs. A kilépését követően a program visszairányítja a felhasználót a táblalistázó oldalra. Ha bármilyen oknál fogva a szerver hibájából fakadóan a gomb letiltásra kerül és a játékos nem tudja elhagyni az asztalt, ez esetben a billentyűzeten a Q gombot megnyomva visszakerül a játékos a táblalistázó felületre. Ha az asztal megfelelően működik és a játékos mégis úgy dönt, hogy ezt a funkciót kihasználva hagyja el a játékasztalt, akkor a gondolkodási idő lejárta után az asztal eltávolítja a játékost az asztaltól és a parti folytatódik tovább. A kliensnél ekkor a táblalistázó felület töltődik be.
+Asztal elhagyására szolgáló parancs. A kilépését követően a program visszairányítja a felhasználót a táblalistázó oldalra. Ha bármilyen oknál fogva a gomb letiltásra kerül és a játékos nem tudja elhagyni az asztalt, ez esetben a billentyűzeten a \texttt{Q} gombot megnyomva visszakerül a játékos a táblalistázó felületre. Fontos megjegyezni, hogy a gomb a póker partik közben csak akkor van engedélyezve, ha éppen az adott felhasználó következik. Ha az asztal megfelelően működik és a játékos mégis úgy dönt, hogy ezt a funkciót kihasználva hagyja el a játékasztalt, akkor a gondolkodási idő lejárta után az asztal eltávolítja a játékost az asztaltól és a parti folytatódik tovább. A kliensnél ekkor a táblalistázó felület töltődik be.
 \pokerparagraph{CHANGE}
-A parancs csak a classic játékstílusban érhető el. A parancs meghívásával a felhasználó utasítja a programot, hogy a cserére megjelölt kártyalapokat a szerver új kártyalapokkal helyettesítse.
+A parancs csak a classic játékstílusban érhető el. A parancs meghívásával a felhasználó utasítja a programot, hogy a cserére megjelölt kártyalapokat a szerver új kártyalapokkal helyettesítse. Az új kártyalapok csak akkor kerülnek kiosztásra, ha minden játékos nyilatkozott az adott körben.
 \pokerparagraph{LOG}
 A felhasználó játék közben korlátozott mértékben vissza tudja nézni a már megtörtént főbb eseményeket. Például az előző játékos milyen parancsot hajtott végre.
-\subsection{Egyéb...?}
+\subsection{Fogalmak}
 \pokerparagraph{FLOP}
 Texas Hold'Em játékstílusú játékban a szerver kiosztja az első három közös lapot.
 \pokerparagraph{TURN}
@@ -104,11 +111,11 @@ Texas Hold'Em játékstílusú játékban a szerver kiosztja a negyedik közös 
 \pokerparagraph{RIVER}
 Texas Hold'Em játékstílusú játékban a szerver kiosztja az ötödik közös lapot.
 \pokerparagraph{Dealer}
-Magyarul osztó. A játék során az osztógomb, amely a grafikus felületen D betűvel van jelezve az óramutató járásával megegyező irányban halad körbe az asztalon, így minden parti esetén más felhasználó tölti be az a osztó szerepét.
+Magyarul osztó. A játék során az osztógomb, amely a grafikus felületen \texttt{D} betűvel van jelezve. Az óramutató járásával megegyező irányban halad körbe az asztalon, így minden parti esetén más felhasználó tölti be az a osztó szerepét.
 
-\section{A póker játékról \cite{poker_game}}
-A póker, mint kártyajáték igen népszerű szerencsejáték. Akár élő tv adásokat is végig lehet követni, ahol hatalmas főnyereményeket osztanak ki a dobogós helyezetteknek. Viszonylag sok fajtája terjedt el szerte a világon, kezdve a klasszikus 5 lapos leosztásokkal egészen az OMAHA-án át a jól ismert Texas Hold'Em játékstílusig. A játékot 52 lapos francia kártyapaklival játszák, amelyben 4 szín és 13 különböző értékű kártyalap található. A játékstílusok igen különbözőek tudnak lenni. Megkölönböztetünk ante, illetve blind alaptétet. Ante alaptét esetén az asztalnál ülő összes játékos előre meghatározott tétet rak be. Blind alaptét esetén megkülönböztetünk kis és nagy vakot, amelyet körönként más és más játékosok raknak be. Minden esetben az osztótól közvetlenül balra ülő játékosnak kell beraknia a kis vakot. Az osztótól kettővel balra ülő játékosnak pedig a nagy vakot. Amíg az alaptétek nem kerültek be az asztalra, addig a ház nem kezdi meg a lapok kiosztását. \\
-A \ref{fig:omaha}. ábrán látható az OMAHA \cite{omaha_poker} játékstílus. A Texas Hold'Em játékstílushoz igen hasonló póker játék változat. A játékosok a kezükbe négy darab kártyalapot kapnak a vakok betétele után, majd megkezdődik az első licitkör, amelynek a végén három közös lap kerül ki az asztal közepére. Újabb licitkör kezdődik, amelynek a végén egy, majd az újabb licitkör végén, még egy újabb kártyalap kerül az asztal közepére, mint közöslap. A felhasználóknak maximum öt lapot lehet felhasználniuk a legjobb kéz előállítására. Az öt lapból kötelezően kettő a saját kézből történik a maradék három pedig a közös lapokból. Értelemszerűen a legerősebb kéz nyer \cite{card_combinations}. A játék célja, hogy minél több zsetont gyűjtsünk össze a partik során.
+\section{A póker játékról}
+A póker \cite{poker_game}, mint kártyajáték igen népszerű szerencsejáték. Akár élő tv adásokat is végig lehet követni, ahol hatalmas főnyereményeket osztanak ki a dobogós helyezetteknek. Viszonylag sokfajtája terjedt el szerte a világon, kezdve a klasszikus 5 lapos leosztásokkal egészen az OMAHA-án át a jól ismert Texas Hold'Em játékstílusig. A játékot 52 lapos francia kártyapaklival játszák, amelyben 4 szín és 13 különböző értékű kártyalap található. A játékstílusok igen különbözőek tudnak lenni. Megkölönböztetünk ante, illetve blind alaptétet. Ante alaptét esetén az asztalnál ülő összes játékos előre meghatározott tétet rak be. Blind alaptét esetén megkülönböztetünk kis és nagy vakot, amelyet körönként más és más játékosok raknak be. Minden esetben az osztótól közvetlenül balra ülő játékosnak kell beraknia a kis vakot. Az osztótól kettővel balra ülő játékosnak pedig a nagy vakot. Amíg az alaptétek nem kerültek be az asztalra, addig a ház nem kezdi meg a lapok kiosztását. \\
+A \ref{fig:omaha}. ábrán látható az OMAHA \cite{omaha_poker} játékstílus. A Texas Hold'Em játékstílushoz igen hasonló pókerjáték változat. A játékosok a kezükbe négy darab kártyalapot kapnak a vakok betétele után, majd megkezdődik az első licitkör, amelynek a végén három közös lap kerül ki az asztal közepére. Újabb licitkör kezdődik, amelynek a végén egy, majd az újabb licitkör végén, még egy újabb kártyalap kerül az asztal közepére, mint közöslap. A felhasználóknak maximum öt lapot lehet felhasználniuk a legjobb kéz előállítására. Az öt lapból kötelezően kettő a saját kézből történik a maradék három pedig a közös lapokból. Értelemszerűen a legerősebb kéz nyer \cite{card_combinations}. A játék célja, hogy minél több zsetont gyűjtsünk össze a partik során.
 \begin{figure}[h!]
   \caption{OMAHA póker játék}
   \label{fig:omaha}
@@ -117,8 +124,8 @@ A \ref{fig:omaha}. ábrán látható az OMAHA \cite{omaha_poker} játékstílus.
 \end{figure}
 
 \subsection{Játékmenet}
-Minden játékszerver úgy lett konfigurálva, hogy két játékos esetén a parti elkezdődjön. Ha valaki később csatlakozott az asztalhoz, az a megkezdett partiból semmit nem érzékel, mintha üres asztalnál ülne. Csak a következő partiba tud beszállni. Mindkét játékstílus esetén van egy BLIND kör, amikor a szerver bekéri a vakokat a játékosoktól. Az osztótól eggyel balra ülő játékos köteles betenni a kis vakot, a kis vaktól eggyel balra ülő játékos pedig köteles betenni a nagy vakot. Ebból a felhasználó nem lát semmit, köteles beadni a kis- vagy nagyvakot, amelyet egy automatizált eljárás hajt végre. Az osztógomb  a legelső körben kerül kiosztásra a legelsőként csatlakozott játékoshoz. Az osztógomb az óramutató járásával megegyező irányban halad. Minden új megkezdett parti esetén az osztógomb a következő játékoshoz kerül. Minden parti legelső körében a kezdő játékos az osztótól balra ülő harmadik játékos, minden további kört a kis vakra kötelezett játékos kezd meg.  \\
-A játékszerverek nem képesek kezelni, ha egy játékosnak elfogyott, illetve nincs elegendő zsetonja. Ebből kifolyólag esetenként előfordulhat negatív egyenleg, illetve nem definiált viselkedés. A játékosok szigorúan csak egymást követve küldhetnek utasításokat a szervernek, mindig az éppen soron levő játékos. A felhasználói grafikus felületen egyértelmű jelzéssel van ellátva az éppen soron levő játékos. A játékosok megadhatják, emelhetik a tétet, illetve, ha nem szeretnének az adott körben semmit csinálni, akkor CHECK-elhetnek. Az emelés mértéke a mindenkori játékasztal alaptét felét jelenti. Ugyanakkor lap eldobásra és a játék elhagyására is lehetőség van. A felhasználók korlátozottan visszanézhetik a korábbi leosztásokat, és a partiban történt eseményeket. A játékosok asztalonkénti maximum száma 5 fő. A kliensek a játék elhagyását követően újracsatlakozhatnak az adott játékszerverre a fentieket figyelembe véve. Lehetőség van asztalt váltani, és a játékszerverek korlátozottan képesek kezelni, ha a játékossal megszakad a kapcsolat. A kliens alkalmazások is korlátozott mértékben fel vannak készítve az esetleg kommunikációs hibákra.
+Minden játékszerver úgy lett konfigurálva, hogy két játékos esetén a parti elkezdődjön. Ha valaki később csatlakozott az asztalhoz, az a megkezdett partiból semmit nem érzékel, mintha üres asztalnál ülne. Csak a következő partiba tud beszállni. Mindkét játékstílus esetén van egy BLIND kör, amikor a szerver bekéri a vakokat a játékosoktól. Az osztótól eggyel balra ülő játékos köteles betenni a kis vakot, a kis vaktól eggyel balra ülő játékos pedig köteles betenni a nagy vakot. Ebból a felhasználó nem lát semmit, egy automatizált eljárás hajtja végre a vakok beadását. Az osztógomb  a legelső körben kerül kiosztásra a legelsőként csatlakozott játékoshoz. Az osztógomb az óramutató járásával megegyező irányban halad. Minden új megkezdett parti esetén az osztógomb a következő játékoshoz kerül. Minden parti legelső körében a kezdő játékos az osztótól balra ülő harmadik játékos, minden további kört a kis vakra kötelezett játékos kezd meg.  \\
+A játékszerverek nem képesek kezelni, ha egy játékosnak elfogyott, illetve nincs elegendő zsetonja. Ebből kifolyólag esetenként előfordulhat negatív egyenleg, illetve nem definiált viselkedés. A játékosok szigorúan csak egymást követve küldhetnek utasításokat a szervernek. A felhasználói grafikus felületen egyértelmű jelzéssel van ellátva az éppen soron levő játékos. A játékosok megadhatják, emelhetik a tétet, illetve, ha nem szeretnének az adott körben semmit csinálni, akkor CHECK típusú üzenetet is küldhetnek a szervernek. Az emelés mértéke a mindenkori játékasztal alaptét felét jelenti. Ugyanakkor lap eldobásra és a játék elhagyására is lehetőség van. A felhasználók korlátozottan visszanézhetik a korábbi leosztásokat, és a partiban történt eseményeket. A játékosok asztalonkénti maximum száma 5 fő. A kliensek a játék elhagyását követően újracsatlakozhatnak az adott játékszerverre a fentieket figyelembe véve. Lehetőség van asztalt váltani, és a játékszerverek korlátozottan képesek kezelni, ha a játékossal megszakad a kapcsolat. A kliens alkalmazások is korlátozott mértékben fel vannak készítve az esetleg kommunikációs hibákra.
 
 \subsection{Játékstílusok} \label{subsubsec:game_styles}
 A póker játék meglehetősen sok játékstílusban terjedt el szerte a világon. Régebben még a kártyapakli is eltért a ma használatos 52 lapos francia kártyapaklitól. A játékstílusok közül kettőt valósít meg a programcsomag
@@ -126,10 +133,10 @@ A póker játék meglehetősen sok játékstílusban terjedt el szerte a világo
 \item Classic \cite{five_card_draw}
 \item Texas Hold'Em \cite{texas_holdem}
 \end{itemize}
-A két játékstílus közötti legfőbb különbség, hogy az classic játékstílus esetén nincsenek közös lapok, míg Texas Hold'Em játékstílus esetén vannak.
+A két játékstílus közötti legfőbb különbség, hogy a klasszikus játékstílus esetén nincsenek közös lapok, míg Texas Hold'Em játékstílus esetén vannak.
 
 \pokerparagraph{Classic} 
-A klasszikus játékstílus legfőbb ismertető jele, hogy mindenki öt lapot kap kézbe és nincsenek közös lapok. Először is a vakokra kötelezett játékosok automatizált formában rakják be a vakokat, azután pedig úgynevezett előkör van, amikor a szerver minden játékosnak öt-öt lapot oszt kézbe, és ezek alapján lehet licitálni. Ha vége a körnek, akkor mindenki kicserélheti a lapjait, amiket saját maga választ ki a grafikus felületen a saját kártyalapjainak rákattintásával. Ha a kártyalap feljebb csúszott a grafikus megjelenítésen, akkor a kártyalapot cserére jelölte a játékos. A CHANGE feliratú gombbal cserélhetőek a kártyák. Mindenki akkor kapja meg az új kártyalapjait, ha már mindenki nyilatkozott a cseréről. Ezek után új kör indul, amikor is az új lapok birtokában tehetik meg a tétjeiket a játékosok. A kör után a szerver kihirdeti a nyertest, és a nyertes lapokat az asztal közepén jeleníti meg a grafikus felület. Kivétel, ha az éppen adott felhasználó a nyertes, akkor a nyertes kártyalapok maga előtt jelennek meg, más kártyalapok nem kerülnek felfordításra. A felhasználók a nyertes lapok megtekintését követően kötelesek rákattintani a CHECK feliratú gombra, illetőleg ha kifutnak az időből, akkor a játék asztal kilépteti őket. Ha ebben a körben is mindenki nyilatkozott, akkor a játékasztal új partit indít.
+A klasszikus játékstílus legfőbb ismertető jele, hogy mindenki öt lapot kap kézbe és nincsenek közös lapok. Először is a vakokra kötelezett játékosok automatizált formában rakják be a vakokat, azután pedig úgynevezett előkör van, amikor a szerver minden játékosnak öt-öt lapot oszt kézbe és ezek alapján lehet licitálni. Ha vége a körnek, akkor mindenki kicserélheti a lapjait, amiket saját maga választ ki a grafikus felületen a saját kártyalapjainak rákattintásával. Ha a kártyalap feljebb csúszott a grafikus megjelenítésen, akkor a kártyalapot cserére jelölte a játékos. A Change feliratú gombbal cserélhetőek a kártyák. Mindenki akkor kapja meg az új kártyalapjait, ha már mindenki nyilatkozott a cseréről. Ezek után új kör indul, amikor is az új lapok birtokában tehetik meg a tétjeiket a játékosok. A kör után a szerver kihirdeti a nyertest, és a nyertes lapokat az asztal közepén jeleníti meg a grafikus felület. Kivétel, ha az éppen adott felhasználó a nyertes, akkor a nyertes kártyalapok maga előtt jelennek meg, iyenkor más kártyalapok nem kerülnek felfordításra. A felhasználók a nyertes lapok megtekintését követően kötelesek rákattintani a Check feliratú gombra, illetőleg ha kifutnak az időből, akkor a játék asztal kilépteti őket. Ha ebben a körben is mindenki nyilatkozott, akkor a játékasztal új partit indít.
 
 \pokerparagraph{Texas Hold'Em}
 A klasszikus játékstílussal erősen megegyező játékmenetű stílus. A különbség csupán annyi, hogy a ház 2-2 lapot oszt minden játékosnak a kezébe, amelyekkel a játékosok a parti végéig rendelkeznek. Illetőleg a nyertes lapok semmilyen esetben sem középen, hanem a játékosoknál jelennek meg.
@@ -137,21 +144,20 @@ A klasszikus játékstílussal erősen megegyező játékmenetű stílus. A kül
 \section{Futtatás}
 
 \subsection{A póker szerver elindítása}
-A DVD lemezen a \path{\poker\release\} mappában található meg a poker-server-1.0.0.jar file. Nyissunk egy terminált a kijelölt könyvtárban, és adjuk ki a
+Az \path{X:\poker\release} nevű mappában található meg  a poker-server-1.0.0.jar fájl. Nyissunk egy terminált a kijelölt könyvtárban, és adjuk ki a
  \begin{verbatim}
 java -jar poker-server-1.0.0.jar
 \end{verbatim}
-parancsot. 
+parancsot. Ha a \ref{fig:server_started}. ábrának megfelelő konzol naplózást látunk, akkor a szervert sikeresen elindítottuk.
 \begin{figure}[h!]
-  \caption{Szerver}
+  \caption{Szerver naplózása}
   \label{fig:server_started}
   \centering
-    \includegraphics{user-documentation/images/server_started.jpg}
+    \includegraphics[width=\linewidth]{user-documentation/images/server_started.jpg}
 \end{figure}
-Ha a \ref{fig:server_started}. ábrának megfelelő konzol naplózást látunk, akkor a szervert sikeresen elindítottuk.
 
 \subsection{A póker kliens elindítása}
-A kliens futtatása hasonló módon történik, mint a szerveré. Navigáljunk a \path{\release\poker\kliens} mappába, és a konzolon adjuk ki a megfeleő parancsot. Ha a kliens sikeresen elindult, akkor a \ref{fig:client_login}. ábrának megfelelő képernyőképet kapunk.
+A kliens futtatása hasonló módon történik, mint a szerveré. Navigáljunk a \path{X:\poker\release} mappába, és a konzolon adjuk ki a megfeleő parancsot. Ha a kliens sikeresen elindult, akkor a \ref{fig:client_login}. ábrának megfelelő képernyőképet kapunk.
 
 \section{A póker játék használata}
 \begin{figure}[h!]

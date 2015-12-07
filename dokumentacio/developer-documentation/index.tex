@@ -167,6 +167,7 @@ A refaktorálást követően nekiállhattam a klasszikus játékstílus implemen
 Az implementáció az eredeti, enum alapú megoldásra támaszkodik, ezáltal kód duplikáció figyelhető. A kód duplikációk egészen a póker játék asztal szerverekig  gyűrűznek fel. Az \texttt{AbstractPokerTableServer} jónéhány absztrakt metódusának implementációja csupán 1-1 sorban tér el, ez pedig a kérdéses enum objektumok értékadása.
 
 \subsection{Elemzés}
+A tervezési fázisban viszonylag sok dolgot sikerült átgondolnom, ugyanakkor kód duplikációk figyelhetők meg a kódbázisban szerver és kliens oldalon egyaránt. A fentebb vázoltak alapján teljesmértékű absztrakció nem valósult meg.
 
 \section{Modulok}
 A programcsomag 6 darab főmodult tartalmaz
@@ -209,7 +210,7 @@ A poker-model modul felelős a játék modellezéséért. A \ref{fig:model} ábr
 	\caption{A model felépítése}
 	\label{fig:model}
 	\centering
-	\includegraphics[width=\linewidth]{developer-documentation/images/model.png}
+	\includegraphics[width=11cm]{developer-documentation/images/model.png}
 \end{figure}
 Az entitásokat össze kellett fogni az \texttt{EntityWithId} interfész segítségével, ezáltal a DAO objektumot generikusan lehetett megfogalmazni, amely segített a kód duplikációk elkerülésében. A\texttt{PokerTable} és a \texttt{User} osztályok példányai feleltethetőek meg a \texttt{poker\_tables} és a \texttt{users} adattáblák egyes rekordjainak. A \texttt{PokerType} enumeráció a játékstílusokat határozza meg. Ha egy új játékstílust szeretnénk hozzáadni a játékhoz, akkor a kódban egy új \texttt{PokerType} enum objektumot kell felvennünk, és a \texttt{poker\_schema.sql} állományban pedig fel kell venni egy új insert utasítást a \texttt{poker\_types} táblára nézve az új játékstílus nevére vonatkozólag. Természetesen ez a pár sor újonnan hozzáadott kód nem azt jelenti, hogy már használhatjuk is az új játékstílust. A programcsomagot több ponton is ki kell bővíteni
 \begin{itemize}[leftmargin=2cm]
