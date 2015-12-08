@@ -157,21 +157,23 @@ parancsot. Ha a \ref{fig:server_started}. ábrának megfelelő konzol naplózás
 \end{figure}
 
 \subsection{A póker kliens elindítása}
-A kliens futtatása hasonló módon történik, mint a szerveré. Navigáljunk a \path{X:\poker\release} mappába, és a konzolon adjuk ki a megfeleő parancsot. Ha a kliens sikeresen elindult, akkor a \ref{fig:client_login}. ábrának megfelelő képernyőképet kapunk.
+A kliens futtatása hasonló módon történik, mint a szerveré. Navigáljunk a \path{X:\poker\release} mappába, és a konzolon adjuk ki a megfeleő parancsot. Ha a kliens sikeresen elindult, akkor a \ref{fig:server_search}. ábrának megfelelő képernyőképet kapunk. Ha a szervert lokálisan indítottuk, akkor a beállításokat ne módosítsuk. A sikeres csatlakozást követően a program egy bejelentkező felületre irányítja a felhasználót. \\
+
+\begin{figure}[h!]
+  \caption{Szerver keresés}
+  \label{fig:server_search}
+  \centering
+    \includegraphics[width=12cm]{user-documentation/images/server-search.jpg}
+\end{figure}
 
 \section{A póker játék használata}
-\begin{figure}[h!]
-  \caption{Bejelentkezési form}
-  \label{fig:client_login}
-  \centering
-    \includegraphics[width=\textwidth]{user-documentation/images/login.jpg}
-\end{figure}
-Ha még nem regisztráltuk magunkat a játékba, akkor kattinstunk a Regisztráció nevű gombra. Adjuk meg a regisztrálni kívánt felhasználó nevünket és jelszavunkat, majd regisztráljunk. A szerver értesít minket, hogy a művelet sikeres, vagy sikertelen volt. A \ref{fig:reg_succ}. ábra egy sikeres regisztrációt szemléltet.
+
+Ha még nem regisztráltuk magunkat a játékba, akkor kattinstunk a Regisztráció nevű gombra. Adjuk meg a regisztrálni kívánt felhasználó nevünket és jelszavunkat, majd regisztráljunk. A szerver értesít minket, hogy a művelet sikeres, vagy sikertelen volt. A \ref{fig:reg_succ}. ábra egy sikeres regisztrációt szemléltet. Azonban ha játékadminisztrátorként szeretnénk belépni a játékba, azt az \texttt{admin/admin} felhaszálónév-jelszó párossal tehetjük meg. Továbbá vannak előre definiált játékosok is, amelyekhez a \texttt{test} jelszóval tudunk belépni. A felhasználónevek pedig test1, test2, test3 és test4.
 \begin{figure}[h!]
   \caption{Sikeres regisztráció}
   \label{fig:reg_succ}
   \centering
-    \includegraphics[width=\textwidth]{user-documentation/images/succ_reg.jpg}
+    \includegraphics[width=12cm]{user-documentation/images/succ_reg.jpg}
 \end{figure}
 Ügyeljünk arra, hogy névütközéseket a szerver nem enged. Tehát, ha valaki XYZ névvel már regisztrálva van, akkor még egy ugyanolyan nevű felhasználót nem enged regisztrálni a szerver. Továbbá győződjünk meg arról, hogy a megadott jelszavak megegyeznek.  \\
 Sikeres regisztrációt követően a program visszairányít minket a bejelentkezési formhoz, amelyet értelemszerűen kitöltve be tudunk jelentkezni a programba.
