@@ -1,45 +1,45 @@
 \part{Fejlesztői dokumentáció}
 
 \section{Felhasznált technológiák}
-A fejlesztés során fejlesztőkörnyezetet használtam, így viszonylag sok probléma már a fordítás és futtatás előtt kiderült. Ahogy korábban is leírtam, a programcsomagnak szüksége van MySQL Serverre az adatbázis kérdése miatt. A kódot verziókkal is el kellett látnom, így egy verziókezelő rendszert is felhasználtam. Az osztály-- és moduldiagramok szerkesztésére ugyancsak külső szoftvercsomagot használtam fel. A programcsomag több modulból épül fel, ezért ugyancsak szükségessé vált egy buildrendszer használata, amely a modulok közötti függőségek kezeléséért felelős.
+A fejlesztés során fejlesztőkörnyezetet használtam, így viszonylag sok probléma már a fordítás és futtatás előtt kiderült. Ahogy korábban is leírtam, a programcsomagnak szüksége van MySQL szerverre az adatbázis kérdése miatt. A kódot verziókkal is el kellett látnom, így egy verziókezelő rendszert is felhasználtam. Az osztály-- és moduldiagramok szerkesztésére ugyancsak külső szoftvercsomagot használtam fel. A programcsomag több modulból épül fel, ezért ugyancsak szükségessé vált egy buildrendszer használata, amely a modulok közötti függőségek kezeléséért felelős.
 
 \subsection{Eclipse}
 A szakdolgozatom eclipse Mars \cite{eclipse_mars} fejlesztőkörnyezetben írtam, amelyhez a quick search \cite{quick_search} nevű plugint is letöltöttem. A fejlesztést nagy mértékben megkönnyítette a fejlesztőkörnyezet használata, ugyanis többek között szintaktikus és classpath ellenőrzést is végzett. Továbbá remekül paraméterezhető jóformán tetszőleges billentyűkombinációkkal.
 
 \subsection{Maven}
-A népszerű buildrendszerből a 3.3.3-as verziót használtam, amelyhez igen sok különböző plugin szerezhető be. Eredetileg csupán a függőségek kezelésére alkalmaztam volna a programot, később egyre több pluginnal egészítettem ki, így egyre több feladatot volt képes ellátni a szoftver.
+A népszerű build rendszerből a 3.3.3-as verziót használtam, amelyhez igen sok különböző plugin szerezhető be. Eredetileg csupán a függőségek kezelésére alkalmaztam volna a programot, később egyre több pluginnal egészítettem ki, így egyre több feladatot volt képes ellátni a szoftver.
 
 \pokerparagraph{Adatbázisséma létrehozása és demóadatokkal való feltöltése}
 Az adatbázissémát a fejlesztés elején mindig manuálisan készítettem el, majd rátaláltam a sql-maven-plugin nevezetű pluginra. A maven honlapján megtalálható teljeskörű dokumentáció segítségével bekonfiguráltam a plugint, így csupán a
- \begin{verbatim}
+ \begin{Verbatim}[xleftmargin=.5in]
 mvn sql:execute@create-db
 mvn sql:execute@create-triggers
 mvn sql:execute@fill-db
-\end{verbatim}
+\end{Verbatim}
 utasításokat kellett kiadnom parancssorból, hogy friss adatbázissal dolgozhassam tovább. A felesleges parancsismétlések elkerülése végett letöltöttem az exec-maven-plugin nevű plugint, amelynek segítségével sikerült a 
- \begin{verbatim}
+ \begin{Verbatim}[xleftmargin=.5in]
 mvn exec:exec
-\end{verbatim}
+\end{Verbatim}
 parancsra korlátozni az adatbázis újboli létrehozását. A feladatot tovább általánosítottam, majd végül egy profilt készítettem el, amely az install fázissal együtt oldja meg az adatbázis kérdését. A 
- \begin{verbatim}
+ \begin{Verbatim}[xleftmargin=.5in]
  mvn clean install -Pbootstrap
- \end{verbatim}
+ \end{Verbatim}
 paranccsal nem csak a lokális repozitorinkba telepíthetjük fel a poker-persist modult, de még egy új adatbázist is kapunk.
 
 \pokerparagraph{Javadoc}
 A mavennel java dokumentációt is lehet generáltatni. Navigáljunk a poker könyvtárba és adjuk ki a
-\begin{verbatim}
+\begin{Verbatim}[xleftmargin=.5in]
  mvn javadoc:javadoc
-\end{verbatim}
+\end{Verbatim}
  parancsot. Aggregált java dokumentációra is lehetőség van a 
- \begin{verbatim}
+ \begin{Verbatim}[xleftmargin=.5in]
  mvn javadoc:aggregate
-\end{verbatim}
+\end{Verbatim}
 segítségével. Sőt, akár modul dokumentációt is lehet készíteni a 
-\begin{verbatim}
+\begin{Verbatim}[xleftmargin=.5in]
  mvn site:site
  mvn site:stage
-\end{verbatim}
+\end{Verbatim}
 utasításokkal. Az elkészült dokumentációk a \path{poker\target\staging} könyvtárba kerülnek. Kettő darab index.html állományt kell keresnünk, az egyik a gyökérkönyvtárban található a másik pedig az \path{apidocs} könyvtár gyökerében.
  
 \subsection{MySQL}
@@ -60,7 +60,7 @@ A tervezés során igen nagy hasznát vettem ennek a szoftvernek. Rengeteg beál
 \end{figure}
 Az adatbázis három darab táblából épül fel, amelyet a \ref{fig:db_scheme}. ábra szemléltet.
 
-\subsection{Játékstílus tábla}
+\subsection{Játékstílus táblázat}
 \begin{tabular}{| C{3.8cm} | C{4.2cm} | C{6.1cm} |}
 \hline
  \textbf{Oszlopnév} & \textbf{Típus} & \textbf{Megszorítás} \\ \hline
@@ -68,7 +68,7 @@ Az adatbázis három darab táblából épül fel, amelyet a \ref{fig:db_scheme}
   NAME & VARCHAR & Az oszlopban szereplő értékeknek egyedinek kell lenniük és legfeljebb 10 karakter hosszúak lehetnek.  \\ \hline
 \end{tabular}
 
-\subsection{Póker játék asztal tábla }
+\subsection{Póker játék asztal táblázat}
 \begin{tabular}{| C{3.8cm} | C{4.2cm} | C{6.1cm} |}
 \hline
  \textbf{Oszlopnév} & \textbf{Típus} & \textbf{Megszorítás} \\ \hline
@@ -80,7 +80,7 @@ Az adatbázis három darab táblából épül fel, amelyet a \ref{fig:db_scheme}
   BIG\_BLIND & DECIMAL & - \\ \hline
 \end{tabular}
 
-\subsection{Felhasználók tábla}
+\subsection{Felhasználók táblázat}
 \begin{tabular}{| C{3.8cm} | C{4.2cm} | C{6.1cm} |}
 \hline
  \textbf{Oszlopnév} & \textbf{Típus} & \textbf{Megszorítás} \\ \hline
@@ -94,7 +94,7 @@ Az adatbázis három darab táblából épül fel, amelyet a \ref{fig:db_scheme}
 
 \hfill \break
 
-A \texttt{poker\_types} tábla elsődleges kulcsa UNSIGNED TINYINT, melyet a MySQL Server 4 byteon tárol. Az adatábrázolás mértékének a szűkítése ebben az esetben indokolt, ugyanis a 255 különböző értékű UNSIGNED TINYINT típus kielégíti a játéktípusok által támasztott követelményeket. Az adatbázis sémában három darab trigger van definiálva:
+A \texttt{poker\_types} tábla elsődleges kulcsa UNSIGNED TINYINT, melyet a MySQL szerver 4 byteon tárol. Az adatábrázolás mértékének a szűkítése ebben az esetben indokolt, ugyanis a 255 különböző értékű UNSIGNED TINYINT típus kielégíti a játéktípusok által támasztott követelményeket. Az adatbázis sémában három darab trigger van definiálva:
 \begin{itemize}
 \item Tábla beszúrás előtti
 \item Tábla módosítás előtti
@@ -106,7 +106,7 @@ A \texttt{poker\_types} tábla elsődleges kulcsa UNSIGNED TINYINT, melyet a MyS
 %A játéktáblákat a poker\_tables adatbázis tábla tárolja. Szükségünk van eltárolni a játéktábla nevét, melynek felső korlátja 30 karakter és egyedinek kell lennie. Ezeket a megszorításokat szintén triggerekkel ellenőrzöm. A játék asztal játékstílusát is eltárolom, amely egyben idegenkulcs is a poker\_types táblára nézve. Továbbá minden asztal tulajdonsága, hogy maximum hányan játszhatnak rajta, és hány másodpercig gondolkodhatnak a játékosok. Ezen két érték típusaként ugyancsak UNSIGNED TINYINT van meghatározva, ugyanis az egyes asztaloknál a játékosok száma legfeljebb 5 lehet, míg az egyes játékosok gondolkodási ideje maximum 40, de legalább 5 másodperc.
 
 \section{Megoldási terv}
-\subsection{Probléma}
+\subsection{Probléma megfogalmazása}
 Egy hálózaton keresztül működő póker játékot szolgáltató kliens-szerver programcsomagot fogok megvalósítani JAVA programozási nyelven. A felhasználói és szolgáltatással kapcsolatos adatokat egy adatbázisban helyezem el, így is biztosítva a játék menet konzisztenciáját és konkurencia vezérlését. Az említett adatabázis többek között rögzíti az olyan profil adatokat, mint a felhasználói név, a jelszó vagy a regisztráció dátuma.
 Az alkalmazás szerver-oldali komponensei több olyan asztal szimultán futtatását biztosítja, amelyek különböző paraméterezésűek lehetnek. Ugyanis felhasználói oldalról különböző igények léphetnek fel (pl.: a tapasztaltabb játékosok rövidebb idő alatt tudnak reagálni egy leosztásra). Az asztalok leglényegesebb paraméterei a játék stílus, a játék gyorsasága, illetve az elfoglalható helyek száma lesz, de ezeken felül további paraméterek is megadhatóak egy konkrét asztal instancia létrehozásakor. Ezen műveletek ellátására, azaz az asztalok konfigurálására, egy grafikus interfészt valósít meg a programcsomag. \\
 A játékban a felhasználók jogok alapján is megkülönböztethetőek lesznek, így a magasabb jogkörrel rendelkező felhasználók speciális műveleteket hajthatnak végre a játékon és az adatbázison egyaránt. Ebből kifolyólag külön adminisztrációs felület is megvalósításra kerül majd, amelyen keresztül adott esetben akár rendezni (név, regisztráció dátuma, stb. alapján), ill. törölni is lehet majd felhasználókat, sőt a különböző felhasználóknak különböző jogokat is itt lehet majd kiosztani. Továbbá a felhasználók könnyen tudják majd menedzselni a saját felhasználói fiókjukat, ugyancsak egy grafikus interfész segítségével.
@@ -149,7 +149,7 @@ Külön modul fogalmazható meg a játékosok lapjainak a kiértékelésére is.
 
 \subsection{Implementálás}
 Az implementálást a kliens oldali megjelenítéssel kezdtem egy maven archetype generator segítségével. Így generálódott egy megfelelő kiindulási alap, amiből elkezdtem építkezni. Legelőször a bejelentkezési és a regisztrációs formot állítottam össze. Ezekután pedig a szerver publikus interfészének egy részét fogalmaztam meg kód szinten. Ezt az interfészt a kliens már el tudta kérni az RMI registry-ből \cite{RMI} és sikeresen be tudott hívni a szerverhez. A szerver és a kliens kommunikációjának az alapjának a kiépítése után az adatbázis feltelepítése, elindítása majd elérése volt a legfőbb célom. \\
-Miután sikerült promptból becsatlakoznom a MySQL Serverre, azután manuálisan létrehoztam egy kezdetleges adatbázis sémát és néhány egyszerű INSERT műveletet hajtottam végre az adatbázison. A kezdetleges demóadatokat a szerver oldali kóddal, \texttt{PreparedStatement} objektumok segítségével olvastam ki. Ugyanezen objektumok segítségével írtam az adatbázisba. A későbbiek során kialakult a jóformán végleges adatbázisséma, amelyet egy sql állományban tároltam el és ezt az állományt pusztán alkalmazni kellett az adatbázisra, ha új adatbázissémát szerettem volna elérni. A későbbiek során az adatbázisba letárolt értékekre megszorításokat kellett alkalmaznom, amelyet akár triggerekkel, akár constraintekkel valósítok meg. Így az adatbázissémát generáló sql állomány mellé létre kellett hoznom egy olyan sql állományt, amely triggereket aggat a meglévő adatbázisbeli adattáblákra. Továbbá a fejlesztés haladtával demóadatokat is kellett biztosítanom az adatbázis számára, ezzel is lerövidítve a fejlesztési időt. \\
+Miután sikerült promptból becsatlakoznom a MySQL szerverre, azután manuálisan létrehoztam egy kezdetleges adatbázis sémát és néhány egyszerű INSERT műveletet hajtottam végre az adatbázison. A kezdetleges demóadatokat a szerver oldali kóddal, \texttt{PreparedStatement} objektumok segítségével olvastam ki. Ugyanezen objektumok segítségével írtam az adatbázisba. A későbbiek során kialakult a jóformán végleges adatbázisséma, amelyet egy sql állományban tároltam el és ezt az állományt pusztán alkalmazni kellett az adatbázisra, ha új adatbázissémát szerettem volna elérni. A későbbiek során az adatbázisba letárolt értékekre megszorításokat kellett alkalmaznom, amelyet akár triggerekkel, akár constraintekkel valósítok meg. Így az adatbázissémát generáló sql állomány mellé létre kellett hoznom egy olyan sql állományt, amely triggereket aggat a meglévő adatbázisbeli adattáblákra. Továbbá a fejlesztés haladtával demóadatokat is kellett biztosítanom az adatbázis számára, ezzel is lerövidítve a fejlesztési időt. \\
 Miután a szerver már képes volt az adatbázissal való kommunikációra, azután a már meglévő sql kódok és a tervezési fázisban felvázoltak alapján a poker-model modult el lehetett készíteni. Szükség volt egy közös interfészre, amely összefogja az entitásokat. Az interfész alapján el lehetett készíteni a \texttt{GenericDAO} osztályt, amely típusparaméterrel van ellátva. A típusparaméterre vonatkozó kritérium, hogy az \texttt{EntityWithId} interfészt implementálnia kell a paraméterül adott típusnak. A poker-persist modulnak rendelkeznie kell egy kapcsolatkezelő objektummal is. Ennek megvalósítása nem jelentett különösebb gondot, viszont a kapcsolat paraméterezésére utólag került sor. A már megírt triggerek alapján az \texttt{SQLExceptionTranslator} osztály implementációja ugyancsak könnyűnek mondható. A tervezett 6 darab modulból 2 darab már implementálásra került. \\
 Mivel a szerver és a kliens közötti kapcsolat kiépítésre került, továbbá a szerver már az adatbázist is eléri, ezért a felhasználók bejelentkezése és regisztrációja következett. Ezen funkciók lefejlesztése után a további funkciók kerültek implementálásra. Többek között a játékasztal entitások létrehozása, módosítása, már meglévő felhasználók jelszavának módosítása, felhasználók törlése, adminisztrációs jogok kezelése. \\
 A fejlesztési folyamat itt erősen megakadt, ugyanis nem tartottam egyszerűnek a tényleges póker játék szerverek implementációját és a hozzájuk tartozó kliens oldali kód megírását. Így a már meglévő funkciókat kezdtem el tesztelni és tovább fejleszteni. Lefejlesztésre került a \texttt{SessionService} osztály is, amely a kliensek munkameneteinek kezeléséért felel. A fejlesztés korai fázisában volt egy hetedik, poker-security modul, amely a kliensek autentikálását és autorizációját végezte volna. Azonban a fejlesztés előrehaladtával és a kód refaktorálásával a modult fel kellett számolni és a modul végül egyetlen osztályként szerepel a poker-server modulban. \\
@@ -157,9 +157,6 @@ Az eddigi lefejlesztett funkciókon további fejlesztési lehetőségek nem kín
 A póker játék asztal szerverek implementációja következett. Legelőször a kliens oldali grafikus interfészt fejlesztettem le. Viszonylag hamar rá kellett jönnöm, hogy szükségem lesz egy olyan osztályra, amely a játék és a grafikus felület konstans értékeit szolgáltatja. Az fxml állományok nem kerülnek kifordításra, így ha módosítani kellett őket, akkor nem kellett a futó programot újraindítani, elég volt az adott fxml állományt újra betölteni és a változások érvénybe léptek, így a fejlesztés ugyancsak felgyorsult. A póker asztalok pontos működésének a megfogalmazása és implementálása volt az első olyan pont a fejlesztés során, amelyet többször át kellett dolgoznom. A tervezési fázisban felváltoztak kód szinten közel sem triviálisnak mondható dolgok. A póker játék szerver implementálása során absztrakciós szintre nem gondoltam, így először minden a Texas Hold'Em játékstílus követelményei alapján került implementálásra. Ezután egy refaktorálás oldotta meg a fejlesztési fázis továbblépését, mind szerver, mind kliens oldalon. A refaktorálással és a hiányos tervezéssel viszonylag sok idő elúszott, pláne a Test Driven Development megközelítés mellőzése miatt is. Az eddig implementált funkciókat és működésbeli viselkedéseket refaktorálás után és közben folyamatosan manuálisan kellett tesztelni. \\
 A refaktorálást követően nekiállhattam a klasszikus játékstílus implementálásának. Az új játékstílus implementálása során további osztályok absztrakciójára volt szükségem, így még több refaktorálást kellett elvégeznem a kódbázison. A refaktorálást követően a kódbázis sokkal letisztultabbá vált. Ugyanakkor az utasítások típusait enum objektumokként definiáltam, így az utasításokat nem tudtam kellően általánosan megfogalmazni. Később az utasítások típusait egy interfésszel összefogtam, majd a \texttt{GenericDAO} mintájára típusparaméterrel láttam el a \texttt{PokerCommand} interfészt. A megközelítés sikertelenül zárult. A típusparamétert eggyel lejjebbi szintre süllyesztettem, tehát a következőkben a \texttt{HouseCommand} és \texttt{PlayerCommand} osztálydefiníciókat láttam el típusparaméterrel, és az utasítások típusait másmilyen formában csoportosítottam. A második megközelítés ugyancsak sikertelenül zárult. Ezekután az enumokat felszámoltam és külön osztályokat definiáltam az utasítások típusainak. Már az első lépéseknél kiderült, hogy a kódbázis jelentős részét át kéne alakítani az előzőleg felvázolt elképzelés integrációjához. Ismét sikertelen kísérlet. Viszonylag sok időt emésztettek fel a próbálkozások, ugyanakkor szerencsére a verziókezelő rendszer hasznomra vált. Könnyen vissza tudtam állni korábbi commitokra, illetve a branchek használata is előtérbe került. \\
 Az implementáció az eredeti, enum alapú megoldásra támaszkodik, ezáltal kód duplikációk figyelhetők. A kód duplikációk egészen a póker játék asztal szerverekig  gyűrűznek fel. Az \texttt{AbstractPokerTableServer} jó néhány absztrakt metódusának implementációja csupán 1-1 sorban tér el, ez pedig a kérdéses enum objektumok értékadása.
-
-\subsection{Elemzés}
-A tervezési fázisban viszonylag sok dolgot sikerült átgondolnom, ugyanakkor kód duplikációk figyelhetők meg a kódbázisban szerver és kliens oldalon egyaránt. A fentebb vázoltak alapján teljesmértékű absztrakció nem valósult meg. Szöveg-szöveg.......
 
 \section{Modulok}
 A programcsomag 6 darab főmodult tartalmaz
@@ -249,9 +246,9 @@ Az \texttt{AbstractDAO} rendelkezik egy \texttt{SQLExceptionTranslator} objektum
 
 \subsection{Kliens modul}
 A kliens modult és annak minden függőségét egy jar fileba csomagolva kell szétterjeszteni a felhasználók között, akik majd ténylegesen használni fogják a programot. A \ref{fig:client_modul}. ábra alapján a jar file tartalmazni fog minden olyan osztályt és interfészt, amelyre ténylegesen szüksége lesz a kliens programnak. Az összecsomagoláshoz igénybe vehetjük a mavent és annak az assembly pluginját. A poker-client könyvtárban a
- \begin{verbatim}
+ \begin{Verbatim}[xleftmargin=.5in]
 mvn clean compile assembly:single
-\end{verbatim}
+\end{Verbatim}
 paranccsot kiadva a \path{poker\release} könyvtár alá csomagolódik be a futtatható jar állomány.
 
 \pokerparagraph{Model-View-Controller \cite{MVC}}
@@ -339,7 +336,7 @@ A felhasználóknak lehetőségük van jelszócserére.
 \pokerparagraph{Adminisztrációs jog}
 A szerverre beregisztrált felhasználók alapesetben nem rendelkeznek ilyen jogosultsággal. Az adminisztrációs jogot csak adminisztrációs joggal rendelkező felhasználó tudja kiosztani illetve megvonni. Friss adatbázis esetén létezik egy admin nevű felhasználó, aki adminisztrációs joggal rendelkezik. Kezdetben csak ez a felhasználó tud kiosztani adminisztrációs jogot.
 
-\subsection{Játékmenetbeli funkciók}
+\subsection{Interaktív funkciók}
 \pokerparagraph{Utasítás küldés}
 A szerver és a kliens kommunikációja a programcsomag által definiált üzenetobjektumokkal történik. Bármilyen játékközbeni utasítást szeretne küldeni a kliens a szervernek, vagy éppenséggel a szerver a kliensnek, azt be kell csomagolnia egy \texttt{PokerCommand} interfészt implementáló osztályba. A szerver és a kliens parti közben csak ilyen típusú üzenetek fogadására alkalmas. Pontosabban fogalmazva az implementációs nehézségeken túllendülve a klienseket fel kellett készíteni arra, hogy a szerver adott esetben megpingelheti őket.
 
