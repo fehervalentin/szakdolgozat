@@ -1,10 +1,11 @@
 \part{Fejlesztői dokumentáció}
 
+
 \section{Felhasznált technológiák}
-A fejlesztés során fejlesztőkörnyezetet használtam, így viszonylag sok probléma már a fordítás és futtatás előtt kiderült. Ahogy korábban is leírtam, a programcsomagnak szüksége van MySQL szerverre az adatbázis kérdése miatt. A kódot verziókkal is el kellett látnom, így egy verziókezelő rendszert is felhasználtam. Az osztály-- és moduldiagramok szerkesztésére ugyancsak külső szoftvercsomagot használtam fel. A programcsomag több modulból épül fel, ezért ugyancsak szükségessé vált egy buildrendszer használata, amely a modulok közötti függőségek kezeléséért felelős.
+A fejlesztést fejlesztőkörnyezet segítette, így viszonylag sok probléma már a fordítás és futtatás előtt kiderült. Ahogy már korábban is említésre került a \ref{subsec:mysql_server} alfejezeteben, a programcsomagnak szüksége van MySQL szerverre az adatbázis kérdése miatt. A kód verziókkal is el lett látva.. Az osztály-- és moduldiagramok létrehozása és szerkesztése ugyancsak külső szoftvercsomaggal történt . A programcsomag több modulból épül fel, ezért szükségessé vált egy build rendszer használata, amely a modulok közötti függőségek kezeléséért felelős.
 
 \subsection{Eclipse}
-A szakdolgozatom eclipse Mars \cite{eclipse_mars} fejlesztőkörnyezetben írtam, amelyhez a quick search \cite{quick_search} nevű plugint is letöltöttem. A fejlesztést nagy mértékben megkönnyítette a fejlesztőkörnyezet használata, ugyanis többek között szintaktikus és classpath ellenőrzést is végzett. Továbbá remekül paraméterezhető jóformán tetszőleges billentyűkombinációkkal.
+A szakdolgozatom \texttt{eclipse Mars} \cite{eclipse_mars} fejlesztőkörnyezetben írtam, amelyhez a \texttt{quick search} \cite{quick_search} nevű plugint is letöltöttem. A fejlesztést nagy mértékben megkönnyítette a fejlesztőkörnyezet használata, ugyanis többek között szintaktikus és classpath ellenőrzést is végzett. Továbbá remekül paraméterezhető jóformán tetszőleges billentyűkombinációkkal.
 
 \subsection{Maven}
 A népszerű build rendszerből a 3.3.3-as verziót használtam, amelyhez igen sok különböző plugin szerezhető be. Eredetileg csupán a függőségek kezelésére alkalmaztam volna a programot, később egyre több pluginnal egészítettem ki, így egyre több feladatot volt képes ellátni a szoftver.
@@ -43,10 +44,10 @@ segítségével. Sőt, akár modul dokumentációt is lehet készíteni a
 utasításokkal. Az elkészült dokumentációk a \path{poker\target\staging} könyvtárba kerülnek. Kettő darab index.html állományt kell keresnünk, az egyik a gyökérkönyvtárban található a másik pedig az \path{apidocs} könyvtár gyökerében.
  
 \subsection{MySQL}
-Az adatok perzisztens tárolásáért egyértelműen relációs adatbázisra volt szükség. A MySQL adatbázissal már korábban is találkoztam, ismert technológiát szerettem volna felhasználni.
+Az adatok perzisztens tárolásáért egyértelműen relációs adatbázisra volt szükség. A \texttt{MySQL} adatbázissal már korábban is találkoztam, ismert technológiát szerettem volna felhasználni.
 
 \subsection{Git}
-A fejlesztés során előfordult, hogy internet kapcsolat nélkül kellett verzióznom a kódomat. A git egyik legnagyobb előnye, hogy internet kapcsolat nélkül is lehet commit parancsot végrehajtani. A commit parancs hatására a lokális repozitorinkba egy új pillanatfelvétel készül az aktuális munkakönyvtárunk tartalmáról, amelyet később push utasítással feltölthetünk egy távoli repozitoriba. A fejlesztéshez több branchet is használtam, így ha valami balul sült volna el, akkor egyszerűen visszaálltam volna a masterre.
+A fejlesztés során előfordult, hogy internet kapcsolat nélkül kellett verzióznom a kódomat. A git egyik legnagyobb előnye, hogy internet kapcsolat nélkül is lehet commit parancsot végrehajtani. A \texttt{commit} parancs hatására a lokális repozitorinkba egy új pillanatfelvétel készül az aktuális munkakönyvtárunk tartalmáról, amelyet később \texttt{push} utasítással feltölthetünk egy távoli repozitoriba. A fejlesztéshez több \texttt{branchet} is használtam, így ha valami balul sült volna el, akkor egyszerűen visszaálltam volna a \texttt{master} ágra.
 
 \subsection{Enterprise Architect}
 A tervezés során igen nagy hasznát vettem ennek a szoftvernek. Rengeteg beállítás, funkció megtalálható a programban. Szinte minden testreszabható az UML diagramokat érintő kérdések körében. Az elkészült UML diagramokból pedig JAVA kódot tud generálni a program. A dokumentációban fellelhető osztály hiearchiák és UML diagramok ennek a szoftvernek a segítségével készültek el.
@@ -113,7 +114,7 @@ A játékban a felhasználók jogok alapján is megkülönböztethetőek lesznek
 
 \subsection{Tervezés}
 A probléma leírásából fakadóan egyértelműen kiderül, hogy legalább kettő darab modulra lesz szükségünk, egy kliens modulra és egy szerver modulra. 
-A tervezés során végig kellett gondolni, hogy mik azok az igen fontos események amelyek a program futása során bekövetkeznek, illetve bekövetkezhetnek. A szerver és a kliens hálózaton keresztül fognak kommunikálni, így kínálkozik a lehetőség az RMI architektúrára való építkezésre. Ha RMI, akkor egy jóldefiniált publikus interfészt kell elkészíteni, amely a szerver vázáért felel. A kliensek ezen az interfészen keresztül hívnak be a szerverhez. A probléma megfogalmazásából kiderül, hogy melyek azok az alapvető funkciók és szolgáltatások, amelyeket a szervernek biztosítania kell. Ezen megfogalmazás alapján már körvonalazódik a szerver modul feladata. A probléma leírásából a szerver és a kliens között kiépített kommunikációs rendszer csak implicit megfogalmazásban szerepel. Az, hogy hogyan és miként, illetőleg milyen szekvencia szerint fognak egymással kommunikálni a modulok az explicite nincs felvázolva. Az implementáció során ügyelni kell arra is, hogy párhuzamosan akár több kliens is csatlakozhatva lehet a szerverhez, illetve az egyes játékasztalokhoz. Az üzenetek egy előre meghatározott sorrend alapján küldhetőek és fogadhatóak. Fontos megjegyezni, hogy nem csak a kliensek küldhetnek üzeneteket a szervernek, hanem a szerver is értesítheti a klienseket a szerveren történő eseményekről, mint például, ha egy adott asztalnál egy játékos CALL típusú utasítást küld a szervernek, akkor a szerver az asztalnál ülő játékosokat értesíti a bekövetkezett eseményről. Ennek megfelelően a kliensek mindig értesítést kapnak az őket érintő eseményekről. Ezáltal a kliens modulnak is meg kell fogalmazni egy publikus interfészt, amelyet a szerver fog felhasználni. Fontos megjegyezni, hogy a kliensek közvetlenül nem küldhetnek egymásnak üzeneteket. A játékasztal szervereket úgy kell implementálni, hogy a béerkező üzenetek alapján az összes megfelelő klienst értesítsék. \\
+A tervezés során végig kellett gondolni, hogy mik azok az igen fontos események amelyek a program futása során bekövetkeznek, illetve bekövetkezhetnek. A szerver és a kliens hálózaton keresztül fognak kommunikálni, így kínálkozik a lehetőség az RMI architektúrára való építkezésre. Ha RMI, akkor egy jóldefiniált publikus interfészt kell elkészíteni, amely a szerver vázáért felel. A kliensek ezen az interfészen keresztül hívnak be a szerverhez. A probléma megfogalmazásából kiderül, hogy melyek azok az alapvető funkciók és szolgáltatások, amelyeket a szervernek biztosítania kell. Ezen megfogalmazás alapján már körvonalazódik a szerver modul feladata. A probléma leírásából a szerver és a kliens között kiépített kommunikációs rendszer csak implicit megfogalmazásban szerepel. Az, hogy hogyan és miként, illetőleg milyen szekvencia szerint fognak egymással kommunikálni a modulok az explicite nincs felvázolva. Az implementáció során ügyelni kell arra is, hogy párhuzamosan akár több kliens is csatlakozhatva lehet a szerverhez, illetve az egyes játékasztalokhoz. Az üzenetek egy előre meghatározott sorrend alapján küldhetőek és fogadhatóak. Fontos megjegyezni, hogy nem csak a kliensek küldhetnek üzeneteket a szervernek, hanem a szerver is értesítheti a klienseket a szerveren történő eseményekről, mint például, ha egy adott asztalnál egy játékos \texttt{CALL} típusú utasítást küld a szervernek, akkor a szerver az asztalnál ülő játékosokat értesíti a bekövetkezett eseményről. Ennek megfelelően a kliensek mindig értesítést kapnak az őket érintő eseményekről. Ezáltal a kliens modulnak is meg kell fogalmazni egy publikus interfészt, amelyet a szerver fog felhasználni. Fontos megjegyezni, hogy a kliensek közvetlenül nem küldhetnek egymásnak üzeneteket. A játékasztal szervereket úgy kell implementálni, hogy a béerkező üzenetek alapján az összes megfelelő klienst értesítsék. \\
 Az üzeneteknek kettő fajtáját különböztetjük meg
  \begin{itemize}[leftmargin=2.7cm]
 \item Szerver által küldött üzenet
@@ -144,11 +145,11 @@ A szervernek szerves része egy objektum, amely a munkamenetek kezeléséért fe
 	\includegraphics[width=8cm]{developer-documentation/images/session.png}
 \end{figure}
 A \texttt{SessionService} tartja nyilván a munkameneteket. Egy felhasználóhoz legfeljebb egy munkamenet rendelhető egy adott időben. Továbbá egy munkamenethez pontosan egy felhasználó tartozik. Ha a felhasználó kijelentkezik a póker játékból, akkor a felhasználó munkamenetét érvényteleníteni kell. Ugyanaz a munkamenet többször nem osztható ki, törölni kell. Ugyanakkor egy felhasználó különböző időpillanatokban rendelkezhet különböző munkamenetekkel. Tehát ha az imént kijelentkezett felhasználó újból be szeretne jelentkezni a játékba, akkor egy új munkamenettel kell azonosítani. A szervernek biztosítania kell, hogy a kliensek rendelkezzenek munkamenet objektumokkal, ugyanis bármilyen funkció hívása esetén a kliensek ezzel az objektummal azonosítják magukat. Pontosabban fogalmazva minden munkamenet egy-egy UUID értékkel van ellátva, és a klienseknek elég csak ezt az egyedi értéket elküldeni a szervernek. A felhasználóknak nem engedhetjük meg, hogy egy felhasználónevet konkurensen használhassanak. Ez a felügyelet ugyancsak a \texttt{SessionService} objektum feladata. \\
-A szerver és a kliens közötti bárminemű tevékenység, illetve kommunikáció egy közös modult kell hogy felhasználjon. Például ha kivételobjektumot szeretnénk dobni szerver oldalon és azt kliens oldalon szeretnénk lekezelni, akkor értelemszerűen mind szerver mind a kliens classpathján szerepelnie kell az adott kivételobjektumnak. A közös modulban kell szerepelnie a szerver és a kliens publikus interfészeknek, a kommunikációs rendszert alkotó osztályok összességének és a saját kivételosztályok definícióinak. \\
+A szerver és a kliens közötti kommunikáció egy közös modult kell hogy felhasználjon. Például ha kivételobjektumot szeretnénk dobni szerver oldalon és azt kliens oldalon szeretnénk lekezelni, akkor értelemszerűen mind szerver mind a kliens classpathján szerepelnie kell az adott kivételobjektumnak. A közös modulban kell szerepelnie a szerver és a kliens publikus interfészeknek, a kommunikációs rendszert alkotó osztályok összességének és a saját kivételosztályok definícióinak. \\
 Külön modul fogalmazható meg a játékosok lapjainak a kiértékelésére is. Ez a modul nem kerül implementálásra, külső könyvtárként kerül felhasználásra.
 
 \subsection{Implementálás}
-Az implementálást a kliens oldali megjelenítéssel kezdtem egy maven archetype generator segítségével. Így generálódott egy megfelelő kiindulási alap, amiből elkezdtem építkezni. Legelőször a bejelentkezési és a regisztrációs formot állítottam össze. Ezekután pedig a szerver publikus interfészének egy részét fogalmaztam meg kód szinten. Ezt az interfészt a kliens már el tudta kérni az RMI registry-ből \cite{RMI} és sikeresen be tudott hívni a szerverhez. A szerver és a kliens kommunikációjának az alapjának a kiépítése után az adatbázis feltelepítése, elindítása majd elérése volt a legfőbb célom. \\
+Az implementálást a kliens oldali megjelenítéssel kezdtem egy \texttt{maven archetype generator} segítségével. Így generálódott egy megfelelő kiindulási alap, amiből elkezdtem építkezni. Legelőször a bejelentkezési és a regisztrációs formot állítottam össze. Ezekután pedig a szerver publikus interfészének egy részét fogalmaztam meg kód szinten. Ezt az interfészt a kliens már el tudta kérni az RMI registry-ből \cite{RMI} és sikeresen be tudott hívni a szerverhez. A szerver és a kliens kommunikációjának az alapjának a kiépítése után az adatbázis feltelepítése, elindítása majd elérése volt a legfőbb célom. \\
 Miután sikerült promptból becsatlakoznom a MySQL szerverre, azután manuálisan létrehoztam egy kezdetleges adatbázis sémát és néhány egyszerű INSERT műveletet hajtottam végre az adatbázison. A kezdetleges demóadatokat a szerver oldali kóddal, \texttt{PreparedStatement} objektumok segítségével olvastam ki. Ugyanezen objektumok segítségével írtam az adatbázisba. A későbbiek során kialakult a jóformán végleges adatbázisséma, amelyet egy sql állományban tároltam el és ezt az állományt pusztán alkalmazni kellett az adatbázisra, ha új adatbázissémát szerettem volna elérni. A későbbiek során az adatbázisba letárolt értékekre megszorításokat kellett alkalmaznom, amelyet akár triggerekkel, akár constraintekkel valósítok meg. Így az adatbázissémát generáló sql állomány mellé létre kellett hoznom egy olyan sql állományt, amely triggereket aggat a meglévő adatbázisbeli adattáblákra. Továbbá a fejlesztés haladtával demóadatokat is kellett biztosítanom az adatbázis számára, ezzel is lerövidítve a fejlesztési időt. \\
 Miután a szerver már képes volt az adatbázissal való kommunikációra, azután a már meglévő sql kódok és a tervezési fázisban felvázoltak alapján a poker-model modult el lehetett készíteni. Szükség volt egy közös interfészre, amely összefogja az entitásokat. Az interfész alapján el lehetett készíteni a \texttt{GenericDAO} osztályt, amely típusparaméterrel van ellátva. A típusparaméterre vonatkozó kritérium, hogy az \texttt{EntityWithId} interfészt implementálnia kell a paraméterül adott típusnak. A poker-persist modulnak rendelkeznie kell egy kapcsolatkezelő objektummal is. Ennek megvalósítása nem jelentett különösebb gondot, viszont a kapcsolat paraméterezésére utólag került sor. A már megírt triggerek alapján az \texttt{SQLExceptionTranslator} osztály implementációja ugyancsak könnyűnek mondható. A tervezett 6 darab modulból 2 darab már implementálásra került. \\
 Mivel a szerver és a kliens közötti kapcsolat kiépítésre került, továbbá a szerver már az adatbázist is eléri, ezért a felhasználók bejelentkezése és regisztrációja következett. Ezen funkciók lefejlesztése után a további funkciók kerültek implementálásra. Többek között a játékasztal entitások létrehozása, módosítása, már meglévő felhasználók jelszavának módosítása, felhasználók törlése, adminisztrációs jogok kezelése. \\
@@ -188,7 +189,7 @@ A programcsomag 6 darab főmodult tartalmaz
 \end{figure}
 A poker-server és poker-client főmodulok felépítését és függőségeit a \ref{fig:client_modul}. és a \ref{fig:server_modul}. ábra szemlélteti.
 
-\subsection{Model modul} \label{sec:poker-model}
+\subsection{poker-model modul} \label{sec:poker-model}
 A poker-model modul felelős a játék modellezéséért. A \ref{fig:model} ábrán látható a modul felépítése. 
 \begin{figure}[h!]
 	\caption{A model felépítése}
@@ -209,7 +210,7 @@ Az entitásokat össze kellett fogni az \texttt{EntityWithId} interfész segíts
 		\end{enumerate}
 \end{itemize}
 
-\subsection{Shared modul}
+\subsection{poker-shared modul}
 A poker-shared modul olyan közös osztályokat tartalmaz, amelyeket a kliens és a szerver egyaránt használ. Itt helyezkednek el az egyéni kivételek, a kommunikációs rendszer definíciója és a kliens, mint megfigyelő interfésze.
 
 \pokerparagraph{Kivételek}
@@ -217,26 +218,22 @@ A játékcsomagnak szüksége van egyéni kivételekre. Az olyan speciális eset
 
 \pokerparagraph{Kommunikációs rendszer}
 A szerver és a kliens üzeneteket küldhetnek egymásnak. A kommunikációs rendszer viszonylag absztrakt módon került implemenetálásra ezzel is elősegítve a későbbi bővíthetőségi nehézségeket. Azonban sajnos helyenként fellelhető kód duplikáció az enumerációkra való építkezés miatt. \\
-Minden utasításnak kötelezően implementálnia kell a \texttt{PokerCommand} interfészt, ezzel is elősegítve az általános megfogalmazást a rendszerben. Két fajta utasítás létezik a játékcsomagban:
-\begin{itemize}[leftmargin=2cm]
-	\item Szerver utasítás
-	\item Kliens utasítás
-\end{itemize}
-Továbbá a játékstílusnak megfelelően tovább specializálódik a küldendő üzenet fajtája. A programcsomag kettő játékstílust fogalmaz meg \ref{subsubsec:game_styles}. A játékstílusok különböző utasítás fajtákat igényelnek. Értelemszerűen, ha egy Holdem játékstílusban résztvevő kliens üzenetet szeretne küldeni a játék asztal szervernek , akkor egy \texttt{HoldemPlayerCommand} típusú objektumot kell elküldenie a szerver csonkon keresztül.
+Minden utasításnak kötelezően implementálnia kell a \texttt{PokerCommand} interfészt, ezzel is elősegítve az általános megfogalmazást a rendszerben. Két fajta utasítás létezik a játékcsomagban: szerver utasítás, kliens utasítás.
+Továbbá a játékstílusnak megfelelően tovább specializálódik a küldendő üzenet fajtája. A programcsomag kettő játékstílust fogalmaz meg a \ref{subsubsec:game_styles} alfejezet alapján. A játékstílusok különböző utasítás fajtákat igényelnek. Értelemszerűen, ha egy Holdem játékstílusban résztvevő kliens üzenetet szeretne küldeni a játék asztal szervernek , akkor egy \texttt{HoldemPlayerCommand} típusú objektumot kell elküldenie a szerver csonkon keresztül.
 
 \pokerparagraph{Observer pattern \cite{observer_pattern}}
-Az oberserver tervezési minta segítségével megvalósítható RMI API-n keresztül az úgynevezett eseményvezérelt szerver. Így nem csak a kliens tud üzenet küldeni a szervernek, hanem a szerver is tudja értesíteni a klienseket. Például, ha egy játékos játékstílustól függetlenül CHECK típusú utasítást küldött a szervernek, akkor azt az üzentet a szerver minden kliensnek szétszórja.
+Az oberserver tervezési minta segítségével megvalósítható RMI API-n keresztül az úgynevezett eseményvezérelt szerver. Így nem csak a kliens tud üzenet küldeni a szervernek, hanem a szerver is tudja értesíteni a klienseket. Például, ha egy játékos játékstílustól függetlenül \texttt{CHECK} típusú utasítást küldött a szervernek, akkor azt az üzentet a szerver minden kliensnek szétszórja.
 
 \pokerparagraph{Munkamenet}
 % ez a szöveg lehet, hogy server modulba kéne....
 A szerver a klienseket munkamenet objektumokkal azonosítja. Minden kliens kap egy munkamenet objektumot a bejelentkezéskor. A munkamenet addig él, amíg a felhasználó ki nem jelentkezik, akkor ugyanis a munkamenet érvénytelenítésre kerül. Illetőleg a munkamenetet akkor is érvényteleníteni kell, ha a kliens nem jelentkezett ki, de a kapcsolat valamilyen oknál fogva megszakadt. \\
-Amikor egy kliens be szeretne jelentkezni a játékba, akkor a szerver az összes megszakadt kapcsolatú klienst felderíti, és a munkamenetüket érvénytelennek tekinti. A felderítés úgynevezett pingeléssel történik. A szerver minden csatlakozott klienst megpróbál elérni, és amelyik kliensnél megszakadt a kapcsolat, azt eltávolítja a szerverről. Ezután a \texttt{SessionService} ellenőrzi, hogy az adott felhasználónévvel van-e aktív munkamenet, ha van, akkor kivételt dob az eljárás, különben az autentikáció sikeres, és a kliens oldali model eltárolja a loginkor kapott munkamenet objektumot.
+Amikor egy kliens be szeretne jelentkezni a játékba, akkor a szerver az összes megszakadt kapcsolatú klienst felderíti, és a munkamenetüket érvénytelennek tekinti. A felderítés úgynevezett pingeléssel történik. A szerver minden csatlakozott klienst megpróbál elérni, és amelyik kliensnél megszakadt a kapcsolat, azt eltávolítja a szerverről. Ezután a \texttt{SessionService} ellenőrzi, hogy az adott felhasználónévvel van-e aktív munkamenet, ha van, akkor kivételt dob az eljárás, különben az autentikáció sikeres, és a kliens oldali model eltárolja a bejelentkezéskor kapott munkamenet objektumot.
 
-\subsection{Persist modul}
+\subsection{poker-persist modul}
 A poker-persist modul látja el az adatbázissal kapcsolatos teendőket. Ez a modul írja és olvassa az adatbázist a bejövő kérések és paraméterek alapján.
 
 \pokerparagraph{Generikus DAO}
-A generikusság elengedhetett a kódismétlés elkerülése végett. Általánosan kell megfogalmazni az entitások viselkedését \ref{sec:poker-model} és ezáltal a persist modul letisztult arculatot kap. A \texttt{GenericDAO} osztály tartalmaz minden olyan elemet, amelyekre a specializálódott DAO-knak szükségük lehet.
+A generikusság révén a kódismétlés erősen redukálható. Általánosan kell megfogalmazni az entitások viselkedését, ezáltal a persist modul letisztult arculatot kap. A \texttt{GenericDAO} osztály tartalmaz minden olyan elemet, amelyekre a specializálódott DAO-knak szükségük lehet.
 
 \pokerparagraph{Adatbázis menedzser}
 Az \texttt{AbstractDAO}-nak szükséges van tényleges adatbázis kapcsolatra, amelyet a \texttt{DBManager} osztály szolgáltat.
@@ -244,7 +241,7 @@ Az \texttt{AbstractDAO}-nak szükséges van tényleges adatbázis kapcsolatra, a
 \pokerparagraph{Kivételek átfordítása}
 Az \texttt{AbstractDAO} rendelkezik egy \texttt{SQLExceptionTranslator} objektummal is, amely az adatbázisból érkező hibát fordítja át \texttt{PokerDataBaseException} típusú kivételre. A \texttt{PokerDataBaseException} kivételosztály a felhasználó számára is értelmes hibaszöveget hordoz magában.
 
-\subsection{Kliens modul}
+\subsection{poker-client modul}
 A kliens modult és annak minden függőségét egy jar fileba csomagolva kell szétterjeszteni a felhasználók között, akik majd ténylegesen használni fogják a programot. A \ref{fig:client_modul}. ábra alapján a jar file tartalmazni fog minden olyan osztályt és interfészt, amelyre ténylegesen szüksége lesz a kliens programnak. Az összecsomagoláshoz igénybe vehetjük a mavent és annak az assembly pluginját. A poker-client könyvtárban a
  \begin{Verbatim}[xleftmargin=.5in]
 mvn clean compile assembly:single
@@ -274,7 +271,7 @@ A póker játék asztal szervernek értesítenie kell a klienseket az adott aszt
 \pokerparagraph{PokerRemoteObserver}
 Minden olyan kliens oldali vezérlői rétegbeli objektumnak implementálnia kell ezt az interfészt, amely működése során üzenetet fogad a szervertől, amelyet továbbít a kliens további rétegeinek.
 
-\subsection{Szerver modul}
+\subsection{poker-server modul}
 \begin{figure}[h!]
   \caption{A szerver publikus interfésze}
   \label{fig:server_public}
