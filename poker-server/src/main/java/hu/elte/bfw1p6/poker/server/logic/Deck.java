@@ -54,7 +54,7 @@ public class Deck {
     }
 	
 	/**
-	 * Húz egy kártyát a kártyapakli tetejéről
+	 * Húz egy kártyát a kártyapakli tetejéről.
 	 * @return a húzott kártya
 	 */
 	public Card popCard() {
@@ -64,7 +64,7 @@ public class Deck {
 	}
 	
 	/**
-	 * Megkeveri a kártyapaklit
+	 * Megkeveri a kártyapaklit.
 	 */
 	public void reset() {
 		stackPointer = 0;

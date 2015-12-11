@@ -53,10 +53,19 @@ public class SessionService {
 		sessions.remove(i);
 	}
 	
+	/**
+	 * Érvényteleníti a paraméterül kapott uuid objektumhoz tartozó munkamenetet.
+	 * @param uuid a kliens egyedi session azonosítója
+	 */
 	public synchronized void invalidate(UUID uuid) {
 		sessions.removeIf(session -> session.getId().equals(uuid));
 	}
 	
+	/**
+	 * Megkeresi a paraméterül kapott uuid objektumhoz tartozó munkamenet-objektumot, majd abból kiszedi a felhasználónevet.
+	 * @param uuid a kliens egyedi session azonosítója
+	 * @return a munkamenethez tartozó felhasználónév
+	 */
 	public String lookUpUserName(UUID uuid) {
 		return sessions.stream().filter(session -> session.getId().equals(uuid)).findFirst().get().getUser().getUserName();
 	}

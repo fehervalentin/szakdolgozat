@@ -166,40 +166,6 @@ public class Model {
 	public void modifyPassword(String oldPassword, String newPassword) throws RemoteException, PokerDataBaseException, PokerInvalidPassword {
 		pokerRemote.modifyPassword(pokerSession.getId(), oldPassword, newPassword);
 	}
-	
-	/**
-	 * A bejelentkezett felhasználó admin jogkörrel rendelekezik-e.
-	 * @return ha a bejelentkezett felhasználó admin jogkörrel rendelkezik, akkor true, különben false
-	 * @throws RemoteException
-	 * @throws PokerDataBaseException
-	 */
-	public boolean isAdmin() throws RemoteException, PokerDataBaseException {
-		return pokerRemote.isAdmin(pokerSession.getId());
-	}
-	
-	public User getUser() {
-		return pokerSession.getUser();
-	}
-
-	public List<User> getUsers() throws PokerDataBaseException, RemoteException {
-		return pokerRemote.getUsers(pokerSession.getId());
-	}
-	
-	public static PokerTable getParamPokerTable() {
-		return paramPokerTable;
-	}
-	
-	public static PokerSession getPokerSession() {
-		return pokerSession;
-	}
-
-	public static PokerRemote getPokerRemote() {
-		return pokerRemote;
-	}
-	
-	public void setParameterPokerTable(PokerTable paramPokerTable) {
-		Model.paramPokerTable = paramPokerTable;
-	}
 
 	/**
 	 * Van-e még hely az asztalnál.
@@ -248,5 +214,39 @@ public class Model {
 	public void refreshUserDetails() throws RemoteException, PokerDataBaseException {
 		pokerSession.getUser().setAdmin(pokerRemote.isAdmin(pokerSession.getId()));
 		pokerSession.refreshBalance(pokerRemote.refreshBalance(pokerSession.getId()));
+	}
+	
+	/**
+	 * A bejelentkezett felhasználó admin jogkörrel rendelekezik-e.
+	 * @return ha a bejelentkezett felhasználó admin jogkörrel rendelkezik, akkor true, különben false
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 */
+	public boolean isAdmin() throws RemoteException, PokerDataBaseException {
+		return pokerRemote.isAdmin(pokerSession.getId());
+	}
+	
+	public User getUser() {
+		return pokerSession.getUser();
+	}
+
+	public List<User> getUsers() throws PokerDataBaseException, RemoteException {
+		return pokerRemote.getUsers(pokerSession.getId());
+	}
+	
+	public static PokerTable getParamPokerTable() {
+		return paramPokerTable;
+	}
+	
+	public static PokerSession getPokerSession() {
+		return pokerSession;
+	}
+
+	public static PokerRemote getPokerRemote() {
+		return pokerRemote;
+	}
+	
+	public void setParameterPokerTable(PokerTable paramPokerTable) {
+		Model.paramPokerTable = paramPokerTable;
 	}
 }

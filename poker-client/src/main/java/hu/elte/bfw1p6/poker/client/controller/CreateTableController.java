@@ -68,7 +68,7 @@ public class CreateTableController extends AbstractPokerClientController {
 	}
 
 	/**
-	 * Ha a TableLister controllernél tábla módosításra kattintottam, akkor kiveszem a paramétert. (A kiválasztott táblát, amolyan ThreadContext...)
+	 * Ha a TableListerControllernél tábla módosításra kattintottam, akkor kiveszem a paramétert. (Amolyan ThreadContext...)
 	 */
 	private void setParamPokerTable() {
 		PokerTable pokerTable = Model.getParamPokerTable();
@@ -98,7 +98,6 @@ public class CreateTableController extends AbstractPokerClientController {
 			showErrorAlert(ERR_TABLE_NAME_EMPTY);
 			return;
 		}
-
 		PokerType pokerType = null;
 		Integer maxTime = null;
 		Integer maxPlayers = null;
