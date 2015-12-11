@@ -75,11 +75,10 @@ public class UserListerController extends AbstractPokerClientController {
 	 * A DELETE gomb click handlerje.
 	 * @param event az esemény
 	 */
-	@FXML protected void handledeleteUse(ActionEvent event) {
+	@FXML protected void handleDeleteUser(ActionEvent event) {
 		User selectedUser = getSelectedUser();
 		if (selectedUser != null) {
 			try {
-				selectedUser.setAdmin(!selectedUser.getAdmin());
 				model.deleteUser(selectedUser);
 				showSuccessAlert(SUCC_USER_DELETE);
 			} catch (PokerDataBaseException e) {

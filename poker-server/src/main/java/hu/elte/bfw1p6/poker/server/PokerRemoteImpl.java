@@ -127,27 +127,31 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 		PokerRemote pokerRemote = (PokerRemote) UnicastRemoteObject.exportObject(this, port);
 		rmiRegistry.bind(pokerProperties.getProperty("name"), pokerRemote);
 	}
+	
+	private void notifyTableListerObservers(UUID uuid) throws RemoteException, PokerDataBaseException {
+		List<PokerTable> tables = getTables(uuid);
+		for (int i = 0; i < clients.size(); i++) {
+			clients.get(i).update(tables);
+		}
+	}
 
 	@Override
 	public synchronized void deleteTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerTableDeleteException {
-		if (sessionService.isAuthenticated(uuid)) {
+		if (sessionService.isAuthenticated(uuid) && isAdmin(uuid)) {
 			AbstractPokerTableServer apts = getAbstractPokerTableServerByTableName(t.getId());
 			if (apts.getPlayersCount() > 0) {
 				throw new PokerTableDeleteException(ERR_TABLE_DELETE);
 			} else {
 				pokerTableDAO.delete(t);
 				pokerTableservers.remove(getAbstractPokerTableServerByTableName(t.getId()));
-				List<PokerTable> tables = getTables(uuid);
-				for (int i = 0; i < clients.size(); i++) {
-					clients.get(i).update(tables);
-				}
+				notifyTableListerObservers(uuid);
 			}
 		}
 	}
 
 	@Override
 	public synchronized void createTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException {
-		if (sessionService.isAuthenticated(uuid)) {
+		if (sessionService.isAuthenticated(uuid) && isAdmin(uuid)) {
 			pokerTableDAO.save(t);
 			List<PokerTable> tables = pokerTableDAO.findAll();
 			AbstractPokerTableServer apts;
@@ -163,14 +167,13 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 				throw new IllegalArgumentException();
 			}
 			pokerTableservers.add(apts);
-			this.setChanged();
-			this.notifyObservers(getTables(uuid));
+			notifyTableListerObservers(uuid);
 		}
 	}
 
 	@Override
 	public synchronized void modifyTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException, PokerTableDeleteException {
-		if (sessionService.isAuthenticated(uuid)) {
+		if (sessionService.isAuthenticated(uuid) && isAdmin(uuid)) {
 			AbstractPokerTableServer apts = getAbstractPokerTableServerByTableName(t.getId());
 			if (apts.getPlayersCount() > 0) {
 				throw new PokerTableDeleteException(ERR_TABLE_DELETE);
@@ -188,10 +191,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 				}
 				int index = pokerTableservers.indexOf(getAbstractPokerTableServerByTableName(t.getId()));
 				pokerTableservers.set(index, apts);
-				List<PokerTable> tables = getTables(uuid);
-				for (int i = 0; i < clients.size(); i++) {
-					clients.get(i).update(tables);
-				}
+				notifyTableListerObservers(uuid);
 			}
 		}
 	}

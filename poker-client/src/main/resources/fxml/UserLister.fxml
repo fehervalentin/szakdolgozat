@@ -34,7 +34,7 @@
 			<GridPane alignment="CENTER" hgap="10.0" vgap="10.0"
 				GridPane.columnIndex="1" GridPane.rowIndex="1">
 				<Button fx:id="deleteUserButton" text="Felhasználó törlése"
-					onAction="#handledeleteUse" GridPane.columnIndex="1"
+					onAction="#handleDeleteUser" GridPane.columnIndex="1"
 					GridPane.rowIndex="0" styleClass="rich-blue" />
 				<Button fx:id="resetBalanceButton" text="Egyenleg visszaállítása"
 					onAction="#handleResetBalance" GridPane.columnIndex="1" GridPane.rowIndex="1"

@@ -259,6 +259,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 	public void update(Object updateMsg) {
 		if (updateMsg instanceof List<?>) {
 			tableView.getItems().setAll((List<PokerTable>)updateMsg);
+			tableView.refresh();
 		}
 	}
 }

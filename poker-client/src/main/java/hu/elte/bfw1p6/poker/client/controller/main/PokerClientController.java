@@ -9,6 +9,16 @@ import javafx.fxml.Initializable;
  *
  */
 public interface PokerClientController extends Initializable {
+	
+	/**
+	 * A kliens oldali vezérlő rétegbeli objektumok ezen delegált objektum segítségével tudnak másik controllert beállítani.
+	 * @param frameController a delegált objektum
+	 */
 	public void setFrameController(FrameController frameController);
+	
+	/**
+	 * A szerver ezen a metóduson keresztül tudja frissíteni a klienseket.
+	 * @param msg a szerver által küldött üzenet
+	 */
 	public void update(Object msg);
 }

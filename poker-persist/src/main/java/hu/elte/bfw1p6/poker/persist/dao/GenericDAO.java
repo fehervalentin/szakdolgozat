@@ -16,6 +16,7 @@ import hu.elte.bfw1p6.poker.persist.helper.SQLExceptionTranslator;
  * A póker játék táblák letárolásáért felelős generikus osztály.
  * @author feher
  *
+ * @param <T> Az entitás típusa.
  */
 public abstract class GenericDAO<T extends EntityWithId> {
 	

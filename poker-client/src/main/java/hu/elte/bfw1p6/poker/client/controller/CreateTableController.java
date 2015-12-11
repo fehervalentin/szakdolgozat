@@ -29,7 +29,9 @@ public class CreateTableController extends AbstractPokerClientController {
 
 	private final String SUCC_CREATE_TABLE_MSG = "A táblát sikeresen létrehoztad!";
 	private final String SUCC_MODIFY_TABLE_MSG = "A táblát sikeresen modosítottad!";
-	private final String ERR_TEXTFIELD_TEXT = "Hibás szám formátum a %s mezőben!";
+	private final String ERR_TEXTFIELD_TEXT = "Hibás számformátum a %s mezőben!";
+	private final String ERR_TABLE_NAME_EMPTY = "A táblának kötelező nevet adni!";
+	private final String ERR_GAMESTYLE = "Hibás játék mód!";
 	private final String ERR_STYLECLASS = "hiba";
 	
 	@FXML private Label tableNameLabel;
@@ -87,8 +89,15 @@ public class CreateTableController extends AbstractPokerClientController {
 		maxTimeField.getStyleClass().remove(ERR_STYLECLASS);
 		maxPlayerTextField.getStyleClass().remove(ERR_STYLECLASS);
 		bigBlindField.getStyleClass().remove(ERR_STYLECLASS);
+		tableNameTextField.getStyleClass().remove(ERR_STYLECLASS);
 
 		String tableName = tableNameTextField.getText();
+		
+		if (tableName == null || tableName.length() < 1) {
+			tableNameTextField.getStyleClass().add(ERR_STYLECLASS);
+			showErrorAlert(ERR_TABLE_NAME_EMPTY);
+			return;
+		}
 
 		PokerType pokerType = null;
 		Integer maxTime = null;
@@ -96,8 +105,8 @@ public class CreateTableController extends AbstractPokerClientController {
 		BigDecimal bigBlind = null;
 		try {
 			pokerType = PokerType.valueOf(gameTypeComboBox.getSelectionModel().getSelectedItem());
-		} catch (IllegalArgumentException ex) {
-			showErrorAlert("Hibás játék mód!");
+		} catch (IllegalArgumentException | NullPointerException e) {
+			showErrorAlert(ERR_GAMESTYLE);
 			return;
 		}
 		try {
@@ -108,7 +117,7 @@ public class CreateTableController extends AbstractPokerClientController {
 			return;
 		}
 		try {
-			maxPlayers = Integer.valueOf(maxPlayerTextField.getText());
+			maxPlayers = new Integer(maxPlayerTextField.getText());
 		} catch (NumberFormatException ex) {
 			maxPlayerTextField.getStyleClass().add(ERR_STYLECLASS);
 			showErrorAlert(String.format(ERR_TEXTFIELD_TEXT, "maximum játékos"));
@@ -169,6 +178,5 @@ public class CreateTableController extends AbstractPokerClientController {
 	@Override
 	public void update(Object msg) {
 		// TODO Auto-generated method stub
-		
 	}
 }

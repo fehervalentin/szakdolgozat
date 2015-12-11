@@ -85,6 +85,12 @@ public abstract class AbstractPokerClientController implements PokerClientContro
 			errorAlert.setHeaderText(ERR_POPUP_TITLE);
 			errorAlert.setTitle(ERR_POPUP_TITLE);
 		}
+		// különben nem fér ki a teljes szöveg
+		if (msg.contains("Érték hiba")) {
+			errorAlert.setWidth(500);
+		} else {
+			errorAlert.setWidth(367);
+		}
 		errorAlert.setContentText(msg);
 		errorAlert.showAndWait();
 	}
