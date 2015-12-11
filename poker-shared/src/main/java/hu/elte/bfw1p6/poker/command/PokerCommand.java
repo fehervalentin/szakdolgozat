@@ -9,6 +9,16 @@ import java.io.Serializable;
  *
  */
 public interface PokerCommand extends Serializable {
+	
+	/**
+	 * Az utasítástól lekérdezhető, hogy ki következik.
+	 * @return a soron következő játékos sorszáma
+	 */
 	int getWhosOn();
+	
+	/**
+	 * Az utasítás típusa lekérdezhető.
+	 * @return az utasítás típusa
+	 */
 	String getCommandType();
 }
