@@ -609,7 +609,7 @@ public abstract class AbstractPokerTableServer extends UnicastRemoteObject {
 	}
 
 	/**
-	 * Van-e még hely az asztalnál.
+	 * Van-e még szabad hely az asztalnál.
 	 * @return ha igen, akkor true, különben false
 	 */
 	public boolean canSitIn() {

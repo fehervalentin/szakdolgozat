@@ -191,6 +191,7 @@ public interface PokerRemote extends Remote, Serializable {
 	 * @param uuid a kliens egyedi session azonosítója
 	 * @param t a játékasztal
 	 * @throws RemoteException
+	 * @throws PokerDataBaseException 
 	 */
-	void resetTable(UUID uuid, PokerTable t) throws RemoteException;
+	void resetTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException;
 }

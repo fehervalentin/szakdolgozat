@@ -234,8 +234,19 @@ public class Model {
 	 * Kijelölt játékasztal újraindítása.
 	 * @param t az újraindítandó asztal
 	 * @throws RemoteException
+	 * @throws PokerDataBaseException 
 	 */
-	public void resetTable(PokerTable t) throws RemoteException {
+	public void resetTable(PokerTable t) throws RemoteException, PokerDataBaseException {
 		pokerRemote.resetTable(pokerSession.getId(), t);
+	}
+	
+	/**
+	 * A felhasználó egyenlegét frissíti.
+	 * @throws RemoteException
+	 * @throws PokerDataBaseException
+	 */
+	public void refreshUserDetails() throws RemoteException, PokerDataBaseException {
+		pokerSession.getUser().setAdmin(pokerRemote.isAdmin(pokerSession.getId()));
+		pokerSession.refreshBalance(pokerRemote.refreshBalance(pokerSession.getId()));
 	}
 }

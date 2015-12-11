@@ -30,25 +30,25 @@ import javafx.scene.control.cell.PropertyValueFactory;
  *
  */
 public class TableListerController extends AbstractPokerClientController implements PokerRemoteObserver {
-	
+
 	/**
 	 * A szervernél csak egyszer regisztráljam be magam.
 	 */
 	private static boolean registered = false;
-	
+
 	private final String ERR_TABLE_SELECTION = "Nem választottál ki egy táblát sem!";
 	private final String SUCC_TABLE_DELETE = "Sikeresen kitörölted a táblát!";
 	private final String SUCC_TABLE_RESET = "Sikeresen újraindítottad a táblát!";
 	private final String ERR_TABLE_FULL = "Nincs szabad hely az asztalnál!";
 	private final String WRNG_TABLE_RESET = "Biztosan újra szeretnéd indítani a játékasztalt? Csak akkor tedd meg, ha megbizonyosodtál róla, hogy senki nem játszik az adott játákasztalnál!";
-	
+
 	private Alert confirmAlert;
 
 	/**
 	 * Egy pókerasztal oszlopai.
 	 */
 	private final String[] COLUMNS = {"name", "pokerType", "maxTime", "maxPlayers", "bigBlind"};
-	
+
 	/**
 	 * Hálózati kommunikációért felelős controller.
 	 */
@@ -106,7 +106,7 @@ public class TableListerController extends AbstractPokerClientController impleme
 		confirmAlert = new Alert(AlertType.CONFIRMATION);
 		confirmAlert.setContentText(WRNG_TABLE_RESET);
 		confirmAlert.setHeaderText("Figyelem");
-		
+
 		tableName.setCellValueFactory(new PropertyValueFactory<PokerTable, String>(COLUMNS[0]));
 		pokerType.setCellValueFactory(new PropertyValueFactory<PokerTable, PokerType>(COLUMNS[1]));
 		maxTime.setCellValueFactory(new PropertyValueFactory<PokerTable, Integer>(COLUMNS[2]));
@@ -221,9 +221,16 @@ public class TableListerController extends AbstractPokerClientController impleme
 	 * @param event az esemény
 	 */
 	@FXML protected void handleProfileManager(ActionEvent event) {
+		try {
+			model.refreshUserDetails();
+		} catch (RemoteException e) {
+			remoteExceptionHandler();
+		} catch (PokerDataBaseException e) {
+			showErrorAlert(e.getMessage());
+		}
 		frameController.setProfileManagerFXML();
 	}
-	
+
 	/**
 	 * A RESET SERVER gomb click handlerje.
 	 * @param event az esemény
@@ -239,6 +246,8 @@ public class TableListerController extends AbstractPokerClientController impleme
 				}
 			}  catch (RemoteException e) {
 				remoteExceptionHandler();
+			} catch (PokerDataBaseException e) {
+				showErrorAlert(e.getMessage());
 			}
 		} else {
 			showErrorAlert(ERR_TABLE_SELECTION);

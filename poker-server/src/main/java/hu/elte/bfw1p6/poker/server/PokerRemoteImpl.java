@@ -293,7 +293,7 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 
 	@Override
 	public List<User> getUsers(UUID uuid) throws RemoteException, PokerDataBaseException {
-		if (sessionService.isAuthenticated(uuid)) {
+		if (sessionService.isAuthenticated(uuid) && isAdmin(uuid)) {
 			return userDAO.findAll().stream().collect(Collectors.toList());
 		}
 		return null;
@@ -313,21 +313,27 @@ public class PokerRemoteImpl extends Observable implements PokerRemote {
 
 	@Override
 	public void modifyUser(UUID uuid, User u) throws RemoteException, PokerDataBaseException {
-		if (sessionService.isAuthenticated(uuid)) {
+		if (sessionService.isAuthenticated(uuid) && isAdmin(uuid)) {
 			userDAO.modify(u);
 		}
 	}
 
 	@Override
 	public void deleteUser(UUID uuid, User u) throws RemoteException, PokerDataBaseException {
-		if (sessionService.isAuthenticated(uuid)) {
-			userDAO.delete(u);
+		if (sessionService.isAuthenticated(uuid) && isAdmin(uuid)) {
+//			if (!sessionService.isAuthenicated(u.getUserName())) {
+				userDAO.delete(u);
+//			} else {
+//				mi van akkor, ha be van jelentkezve? egy admin nem törölhet egy játékost addig,
+//				amíg az ki nem jelentkezik? megkerüli a szerver logikát... közvetlenül db-t módosít.
+//				arra nincs felkészítve a programcsomag, hogy egy bejelentkezett felhasználót eltávolítunk a játékból.
+//			}
 		}
 	}
 
 	@Override
-	public void resetTable(UUID uuid, PokerTable t) throws RemoteException {
-		if (sessionService.isAuthenticated(uuid)) {
+	public void resetTable(UUID uuid, PokerTable t) throws RemoteException, PokerDataBaseException {
+		if (sessionService.isAuthenticated(uuid) && isAdmin(uuid)) {
 			getAbstractPokerTableServerByTableName(t.getId()).reset();
 		}
 	}
