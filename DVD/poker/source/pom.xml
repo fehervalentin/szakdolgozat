@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>hu.elte.bfw1p6.poker</groupId>
+	<artifactId>poker-parent</artifactId>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+
+	<name>poker-parent</name>
+	<description>ELTE-IK BSc szakdolgozat - BFW1P6</description>
+
+	<modules>
+		<module>poker-server</module>
+		<module>poker-client</module>
+		<module>poker-model</module>
+		<module>poker-persist</module>
+		<module>poker-shared</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.release.folder>../release/</project.release.folder>
+
+		<poker-model.version>1.0.0</poker-model.version>
+		<poker-persist.version>1.0.0</poker-persist.version>
+		<poker-shared.version>1.0.0</poker-shared.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>hu.elte.bfw1p6.poker</groupId>
+				<artifactId>poker-model</artifactId>
+				<version>${poker-model.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>hu.elte.bfw1p6.poker</groupId>
+				<artifactId>poker-persist</artifactId>
+				<version>${poker-persist.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>hu.elte.bfw1p6.poker</groupId>
+				<artifactId>poker-shared</artifactId>
+				<version>${poker-shared.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<distributionManagement>
+		<site>
+			<id>${project.artifactId}-site</id>
+			<name>Poker site</name>
+			<url>D:/temp/site</url>
+		</site>
+	</distributionManagement>
+</project>

@@ -1,0 +1,908 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.11.22)  11 DEC 2015 10:38
+entering extended mode
+**D:/projects/szakdolgozat/poker/dokumentacio/thesis.tex
+(D:/projects/szakdolgozat/poker/dokumentacio/thesis.tex
+LaTeX2e <2015/01/01> patch level 2
+Babel <3.9m> and hyphenation patterns for 69 languages loaded.
+("C:\cuccok\MiKTeX 2.9\tex\latex\base\article.cls"
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+("C:\cuccok\MiKTeX 2.9\tex\latex\base\size12.clo"
+File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (thesis-style.sty
+Package: thesis-style 
+
+("C:\cuccok\MiKTeX 2.9\tex\latex\base\fontenc.sty"
+Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+
+("C:\cuccok\MiKTeX 2.9\tex\latex\base\t1enc.def"
+File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
+))
+("C:\cuccok\MiKTeX 2.9\tex\latex\base\inputenc.sty"
+Package: inputenc 2015/03/17 v1.2c Input encoding file
+\inpenc@prehook=\toks14
+\inpenc@posthook=\toks15
+
+("C:\cuccok\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2015/06/27 v1.1n UTF-8 support for inputenc
+Now handling font encoding OML ...
+... no UTF-8 mapping file for font encoding OML
+Now handling font encoding T1 ...
+... processing UTF-8 mapping file for font encoding T1
+
+("C:\cuccok\MiKTeX 2.9\tex\latex\base\t1enc.dfu"
+File: t1enc.dfu 2015/06/27 v1.1n UTF-8 support for inputenc
+   defining Unicode char U+00A1 (decimal 161)
+   defining Unicode char U+00A3 (decimal 163)
+   defining Unicode char U+00AB (decimal 171)
+   defining Unicode char U+00BB (decimal 187)
+   defining Unicode char U+00BF (decimal 191)
+   defining Unicode char U+00C0 (decimal 192)
+   defining Unicode char U+00C1 (decimal 193)
+   defining Unicode char U+00C2 (decimal 194)
+   defining Unicode char U+00C3 (decimal 195)
+   defining Unicode char U+00C4 (decimal 196)
+   defining Unicode char U+00C5 (decimal 197)
+   defining Unicode char U+00C6 (decimal 198)
+   defining Unicode char U+00C7 (decimal 199)
+   defining Unicode char U+00C8 (decimal 200)
+   defining Unicode char U+00C9 (decimal 201)
+   defining Unicode char U+00CA (decimal 202)
+   defining Unicode char U+00CB (decimal 203)
+   defining Unicode char U+00CC (decimal 204)
+   defining Unicode char U+00CD (decimal 205)
+   defining Unicode char U+00CE (decimal 206)
+   defining Unicode char U+00CF (decimal 207)
+   defining Unicode char U+00D0 (decimal 208)
+   defining Unicode char U+00D1 (decimal 209)
+   defining Unicode char U+00D2 (decimal 210)
+   defining Unicode char U+00D3 (decimal 211)
+   defining Unicode char U+00D4 (decimal 212)
+   defining Unicode char U+00D5 (decimal 213)
+   defining Unicode char U+00D6 (decimal 214)
+   defining Unicode char U+00D8 (decimal 216)
+   defining Unicode char U+00D9 (decimal 217)
+   defining Unicode char U+00DA (decimal 218)
+   defining Unicode char U+00DB (decimal 219)
+   defining Unicode char U+00DC (decimal 220)
+   defining Unicode char U+00DD (decimal 221)
+   defining Unicode char U+00DE (decimal 222)
+   defining Unicode char U+00DF (decimal 223)
+   defining Unicode char U+00E0 (decimal 224)
+   defining Unicode char U+00E1 (decimal 225)
+   defining Unicode char U+00E2 (decimal 226)
+   defining Unicode char U+00E3 (decimal 227)
+   defining Unicode char U+00E4 (decimal 228)
+   defining Unicode char U+00E5 (decimal 229)
+   defining Unicode char U+00E6 (decimal 230)
+   defining Unicode char U+00E7 (decimal 231)
+   defining Unicode char U+00E8 (decimal 232)
+   defining Unicode char U+00E9 (decimal 233)
+   defining Unicode char U+00EA (decimal 234)
+   defining Unicode char U+00EB (decimal 235)
+   defining Unicode char U+00EC (decimal 236)
+   defining Unicode char U+00ED (decimal 237)
+   defining Unicode char U+00EE (decimal 238)
+   defining Unicode char U+00EF (decimal 239)
+   defining Unicode char U+00F0 (decimal 240)
+   defining Unicode char U+00F1 (decimal 241)
+   defining Unicode char U+00F2 (decimal 242)
+   defining Unicode char U+00F3 (decimal 243)
+   defining Unicode char U+00F4 (decimal 244)
+   defining Unicode char U+00F5 (decimal 245)
+   defining Unicode char U+00F6 (decimal 246)
+   defining Unicode char U+00F8 (decimal 248)
+   defining Unicode char U+00F9 (decimal 249)
+   defining Unicode char U+00FA (decimal 250)
+   defining Unicode char U+00FB (decimal 251)
+   defining Unicode char U+00FC (decimal 252)
+   defining Unicode char U+00FD (decimal 253)
+   defining Unicode char U+00FE (decimal 254)
+   defining Unicode char U+00FF (decimal 255)
+   defining Unicode char U+0102 (decimal 258)
+   defining Unicode char U+0103 (decimal 259)
+   defining Unicode char U+0104 (decimal 260)
+   defining Unicode char U+0105 (decimal 261)
+   defining Unicode char U+0106 (decimal 262)
+   defining Unicode char U+0107 (decimal 263)
+   defining Unicode char U+010C (decimal 268)
+   defining Unicode char U+010D (decimal 269)
+   defining Unicode char U+010E (decimal 270)
+   defining Unicode char U+010F (decimal 271)
+   defining Unicode char U+0110 (decimal 272)
+   defining Unicode char U+0111 (decimal 273)
+   defining Unicode char U+0118 (decimal 280)
+   defining Unicode char U+0119 (decimal 281)
+   defining Unicode char U+011A (decimal 282)
+   defining Unicode char U+011B (decimal 283)
+   defining Unicode char U+011E (decimal 286)
+   defining Unicode char U+011F (decimal 287)
+   defining Unicode char U+0130 (decimal 304)
+   defining Unicode char U+0131 (decimal 305)
+   defining Unicode char U+0132 (decimal 306)
+   defining Unicode char U+0133 (decimal 307)
+   defining Unicode char U+0139 (decimal 313)
+   defining Unicode char U+013A (decimal 314)
+   defining Unicode char U+013D (decimal 317)
+   defining Unicode char U+013E (decimal 318)
+   defining Unicode char U+0141 (decimal 321)
+   defining Unicode char U+0142 (decimal 322)
+   defining Unicode char U+0143 (decimal 323)
+   defining Unicode char U+0144 (decimal 324)
+   defining Unicode char U+0147 (decimal 327)
+   defining Unicode char U+0148 (decimal 328)
+   defining Unicode char U+014A (decimal 330)
+   defining Unicode char U+014B (decimal 331)
+   defining Unicode char U+0150 (decimal 336)
+   defining Unicode char U+0151 (decimal 337)
+   defining Unicode char U+0152 (decimal 338)
+   defining Unicode char U+0153 (decimal 339)
+   defining Unicode char U+0154 (decimal 340)
+   defining Unicode char U+0155 (decimal 341)
+   defining Unicode char U+0158 (decimal 344)
+   defining Unicode char U+0159 (decimal 345)
+   defining Unicode char U+015A (decimal 346)
+   defining Unicode char U+015B (decimal 347)
+   defining Unicode char U+015E (decimal 350)
+   defining Unicode char U+015F (decimal 351)
+   defining Unicode char U+0160 (decimal 352)
+   defining Unicode char U+0161 (decimal 353)
+   defining Unicode char U+0162 (decimal 354)
+   defining Unicode char U+0163 (decimal 355)
+   defining Unicode char U+0164 (decimal 356)
+   defining Unicode char U+0165 (decimal 357)
+   defining Unicode char U+016E (decimal 366)
+   defining Unicode char U+016F (decimal 367)
+   defining Unicode char U+0170 (decimal 368)
+   defining Unicode char U+0171 (decimal 369)
+   defining Unicode char U+0178 (decimal 376)
+   defining Unicode char U+0179 (decimal 377)
+   defining Unicode char U+017A (decimal 378)
+   defining Unicode char U+017B (decimal 379)
+   defining Unicode char U+017C (decimal 380)
+   defining Unicode char U+017D (decimal 381)
+   defining Unicode char U+017E (decimal 382)
+   defining Unicode char U+200C (decimal 8204)
+   defining Unicode char U+2013 (decimal 8211)
+   defining Unicode char U+2014 (decimal 8212)
+   defining Unicode char U+2018 (decimal 8216)
+   defining Unicode char U+2019 (decimal 8217)
+   defining Unicode char U+201A (decimal 8218)
+   defining Unicode char U+201C (decimal 8220)
+   defining Unicode char U+201D (decimal 8221)
+   defining Unicode char U+201E (decimal 8222)
+   defining Unicode char U+2030 (decimal 8240)
+   defining Unicode char U+2031 (decimal 8241)
+   defining Unicode char U+2039 (decimal 8249)
+   defining Unicode char U+203A (decimal 8250)
+   defining Unicode char U+2423 (decimal 9251)
+)
+Now handling font encoding OT1 ...
+... processing UTF-8 mapping file for font encoding OT1
+
+("C:\cuccok\MiKTeX 2.9\tex\latex\base\ot1enc.dfu"
+File: ot1enc.dfu 2015/06/27 v1.1n UTF-8 support for inputenc
+   defining Unicode char U+00A1 (decimal 161)
+   defining Unicode char U+00A3 (decimal 163)
+   defining Unicode char U+00B8 (decimal 184)
+   defining Unicode char U+00BF (decimal 191)
+   defining Unicode char U+00C5 (decimal 197)
+   defining Unicode char U+00C6 (decimal 198)
+   defining Unicode char U+00D8 (decimal 216)
+   defining Unicode char U+00DF (decimal 223)
+   defining Unicode char U+00E6 (decimal 230)
+   defining Unicode char U+00EC (decimal 236)
+   defining Unicode char U+00ED (decimal 237)
+   defining Unicode char U+00EE (decimal 238)
+   defining Unicode char U+00EF (decimal 239)
+   defining Unicode char U+00F8 (decimal 248)
+   defining Unicode char U+0131 (decimal 305)
+   defining Unicode char U+0141 (decimal 321)
+   defining Unicode char U+0142 (decimal 322)
+   defining Unicode char U+0152 (decimal 338)
+   defining Unicode char U+0153 (decimal 339)
+   defining Unicode char U+2013 (decimal 8211)
+   defining Unicode char U+2014 (decimal 8212)
+   defining Unicode char U+2018 (decimal 8216)
+   defining Unicode char U+2019 (decimal 8217)
+   defining Unicode char U+201C (decimal 8220)
+   defining Unicode char U+201D (decimal 8221)
+)
+Now handling font encoding OMS ...
+... processing UTF-8 mapping file for font encoding OMS
+
+("C:\cuccok\MiKTeX 2.9\tex\latex\base\omsenc.dfu"
+File: omsenc.dfu 2015/06/27 v1.1n UTF-8 support for inputenc
+   defining Unicode char U+00A7 (decimal 167)
+   defining Unicode char U+00B6 (decimal 182)
+   defining Unicode char U+00B7 (decimal 183)
+   defining Unicode char U+2020 (decimal 8224)
+   defining Unicode char U+2021 (decimal 8225)
+   defining Unicode char U+2022 (decimal 8226)
+)
+Now handling font encoding OMX ...
+... no UTF-8 mapping file for font encoding OMX
+Now handling font encoding U ...
+... no UTF-8 mapping file for font encoding U
+   defining Unicode char U+00A9 (decimal 169)
+   defining Unicode char U+00AA (decimal 170)
+   defining Unicode char U+00AE (decimal 174)
+   defining Unicode char U+00BA (decimal 186)
+   defining Unicode char U+02C6 (decimal 710)
+   defining Unicode char U+02DC (decimal 732)
+   defining Unicode char U+200C (decimal 8204)
+   defining Unicode char U+2026 (decimal 8230)
+   defining Unicode char U+2122 (decimal 8482)
+   defining Unicode char U+2423 (decimal 9251)
+))
+("C:\cuccok\MiKTeX 2.9\tex\generic\babel\babel.sty"
+Package: babel 2015/08/03 3.9m The Babel package
+
+*************************************
+* Local config file bblopts.cfg used
+*
+("C:\cuccok\MiKTeX 2.9\tex\latex\00miktex\bblopts.cfg"
+File: bblopts.cfg 2006/07/31 v1.0 MiKTeX 'babel' configuration
+) (magyar.ldf
+Language: magyar 2007/10/19 v1.5 Magyar support from the babel v3.7 system
+
+("C:\cuccok\MiKTeX 2.9\tex\generic\babel\babel.def"
+File: babel.def 2015/08/03 3.9m Babel common definitions
+\babel@savecnt=\count87
+\U@D=\dimen103
+)
+Package babel Info: Making ` an active character on input line 2732.
+\c@footnote@add=\count88
+\c@footnote@ch=\count89
+))
+(C:\Users\Valentin\AppData\Roaming\MiKTeX\2.9\tex\latex\listings\listings.sty
+("C:\cuccok\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks16
+)
+\lst@mode=\count90
+\lst@gtempboxa=\box26
+\lst@token=\toks17
+\lst@length=\count91
+\lst@currlwidth=\dimen104
+\lst@column=\count92
+\lst@pos=\count93
+\lst@lostspace=\dimen105
+\lst@width=\dimen106
+\lst@newlines=\count94
+\lst@lineno=\count95
+\lst@maxwidth=\dimen107
+
+(C:\Users\Valentin\AppData\Roaming\MiKTeX\2.9\tex\latex\listings\lstmisc.sty
+File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
+\c@lstnumber=\count96
+\lst@skipnumbers=\count97
+\lst@framebox=\box27
+)
+(C:\Users\Valentin\AppData\Roaming\MiKTeX\2.9\tex\latex\listings\listings.cfg
+File: listings.cfg 2015/06/04 1.6 listings configuration
+))
+Package: listings 2015/06/04 1.6 (Carsten Heinz)
+("C:\cuccok\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
+Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\cuccok\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
+Package: graphics 2014/10/28 v1.0p Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\cuccok\MiKTeX 2.9\tex\latex\graphics\trig.sty"
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+("C:\cuccok\MiKTeX 2.9\tex\latex\00miktex\graphics.cfg"
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: pdftex.def on input line 94.
+
+("C:\cuccok\MiKTeX 2.9\tex\latex\pdftex-def\pdftex.def"
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+("C:\cuccok\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+("C:\cuccok\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count98
+))
+\Gin@req@height=\dimen108
+\Gin@req@width=\dimen109
+)
+(C:\Users\Valentin\AppData\Roaming\MiKTeX\2.9\tex\latex\setspace\setspace.sty
+Package: setspace 2011/12/19 v6.7a set line spacing
+)
+("C:\cuccok\MiKTeX 2.9\tex\latex\url\url.sty"
+\Urlmuskip=\muskip10
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+(C:\Users\Valentin\AppData\Roaming\MiKTeX\2.9\tex\latex\tocbibind\tocbibind.sty
+Package: tocbibind 2010/10/13 v1.5k extra ToC listings
+Package tocbibind Info: The document has section divisions on input line 50.
+
+Package tocbibind Note: Using section or other style headings.
+
+) ("C:\cuccok\MiKTeX 2.9\tex\latex\geometry\geometry.sty"
+Package: geometry 2010/09/12 v5.6 Page Geometry
+
+("C:\cuccok\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+("C:\cuccok\MiKTeX 2.9\tex\generic\oberdiek\ifvtex.sty"
+Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+("C:\cuccok\MiKTeX 2.9\tex\generic\ifxetex\ifxetex.sty"
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count99
+\Gm@cntv=\count100
+\c@Gm@tempcnt=\count101
+\Gm@bindingoffset=\dimen110
+\Gm@wd@mp=\dimen111
+\Gm@odd@mp=\dimen112
+\Gm@even@mp=\dimen113
+\Gm@layoutwidth=\dimen114
+\Gm@layoutheight=\dimen115
+\Gm@layouthoffset=\dimen116
+\Gm@layoutvoffset=\dimen117
+\Gm@dimlist=\toks18
+
+("C:\cuccok\MiKTeX 2.9\tex\latex\geometry\geometry.cfg")))
+(C:\Users\Valentin\AppData\Roaming\MiKTeX\2.9\tex\latex\fancyvrb\fancyvrb.sty
+Package: fancyvrb 2008/02/07
+
+Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix 
+<2008/02/07> (tvz)
+\FV@CodeLineNo=\count102
+\FV@InFile=\read1
+\FV@TabBox=\box28
+\c@FancyVerbLine=\count103
+\FV@StepNumber=\count104
+\FV@OutFile=\write3
+) ("C:\cuccok\MiKTeX 2.9\tex\latex\tools\indentfirst.sty"
+Package: indentfirst 1995/11/23 v1.03 Indent first paragraph (DPC)
+)
+(C:\Users\Valentin\AppData\Roaming\MiKTeX\2.9\tex\latex\enumitem\enumitem.sty
+Package: enumitem 2011/09/28 v3.5.2 Customized lists
+\labelindent=\skip43
+\enit@outerparindent=\dimen118
+\enit@toks=\toks19
+\enit@inbox=\box29
+\enitdp@description=\count105
+)
+(C:\Users\Valentin\AppData\Roaming\MiKTeX\2.9\tex\latex\tabulary\tabulary.sty
+Package: tabulary 2014/06/11 v0.10 tabulary package (DPC)
+
+("C:\cuccok\MiKTeX 2.9\tex\latex\tools\array.sty"
+Package: array 2014/10/28 v2.4c Tabular extension package (FMi)
+\col@sep=\dimen119
+\extrarowheight=\dimen120
+\NC@list=\toks20
+\extratabsurround=\skip44
+\backup@length=\skip45
+)
+\TY@count=\count106
+\TY@linewidth=\dimen121
+\tymin=\dimen122
+\tymax=\dimen123
+\TY@tablewidth=\dimen124
+)
+(C:\Users\Valentin\AppData\Roaming\MiKTeX\2.9\tex\latex\varwidth\varwidth.sty
+Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
+\@vwid@box=\box30
+\sift@deathcycles=\count107
+\@vwid@loff=\dimen125
+\@vwid@roff=\dimen126
+)
+(information.tex) (thesis.aux (cover/index.aux) (introduction/index.aux)
+(user-documentation/index.aux) (developer-documentation/index.aux)
+(bibliography/index.aux))
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+
+
+LaTeX Warning: Please use \usepackage[latin2]{inputenc} with
+               \usepackage[magyar]{babel}.
+
+\c@lstlisting=\count108
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: twoside 
+* h-part:(L,W,R)=(99.58464pt, 426.79135pt, 71.13188pt)
+* v-part:(T,H,B)=(71.13188pt, 702.78308pt, 71.13188pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=426.79135pt
+* \textheight=702.78308pt
+* \oddsidemargin=27.31465pt
+* \evensidemargin=-1.1381pt
+* \topmargin=-38.1381pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=85.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+("C:\cuccok\MiKTeX 2.9\tex\latex\base\article.cls"
+LaTeX Info: Redefining \cal on input line 511.
+LaTeX Info: Redefining \mit on input line 512.
+) (cover/index.tex
+<cover/images/elte-cimer.png, id=1, 301.125pt x 301.125pt>
+File: cover/images/elte-cimer.png Graphic file (type png)
+
+<use cover/images/elte-cimer.png>
+Package pdftex.def Info: cover/images/elte-cimer.png used on input line 4.
+(pdftex.def)             Requested size: 90.33818pt x 90.33818pt.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 5.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 5.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 5.
+
+Overfull \hbox (20.2353pt too wide) in paragraph at lines 25--37
+[][] [] 
+ []
+
+[1
+
+
+
+{C:/Users/Valentin/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <./cover/
+images/elte-cimer.png>]) [2
+
+
+] (thesis.toc [3])
+\tf@toc=\write4
+ [4] (content.tex
+(introduction/index.tex [3
+
+
+] [4
+
+]) (user-documentation/index.tex
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 10.
+
+("C:\cuccok\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 10.
+ [5
+
+
+]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 27.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 27.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 27.
+
+("C:\cuccok\MiKTeX 2.9\tex\latex\base\t1cmtt.fd"
+File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+<user-documentation/images/path_env.jpg, id=34, 249.93375pt x 113.82526pt>
+File: user-documentation/images/path_env.jpg Graphic file (type jpg)
+
+<use user-documentation/images/path_env.jpg>
+Package pdftex.def Info: user-documentation/images/path_env.jpg used on input l
+ine 33.
+(pdftex.def)             Requested size: 249.93314pt x 113.82497pt.
+
+<user-documentation/images/java_version.jpg, id=35, 455.301pt x 45.16875pt>
+File: user-documentation/images/java_version.jpg Graphic file (type jpg)
+
+<use user-documentation/images/java_version.jpg>
+Package pdftex.def Info: user-documentation/images/java_version.jpg used on inp
+ut line 46.
+(pdftex.def)             Requested size: 398.33858pt x 39.51909pt.
+ [6 <./user-documentation/images/path_env.jpg> <./user-documentation/images/jav
+a_version.jpg>]
+<user-documentation/images/mysql_service.jpg, id=42, 513.117pt x 42.75975pt>
+File: user-documentation/images/mysql_service.jpg Graphic file (type jpg)
+
+<use user-documentation/images/mysql_service.jpg>
+Package pdftex.def Info: user-documentation/images/mysql_service.jpg used on in
+put line 64.
+(pdftex.def)             Requested size: 426.79135pt x 35.5669pt.
+
+<user-documentation/images/mysql_version.jpg, id=43, 185.493pt x 76.48575pt>
+File: user-documentation/images/mysql_version.jpg Graphic file (type jpg)
+
+<use user-documentation/images/mysql_version.jpg>
+Package pdftex.def Info: user-documentation/images/mysql_version.jpg used on in
+put line 79.
+(pdftex.def)             Requested size: 185.49254pt x 76.48553pt.
+ [7 <./user-documentation/images/mysql_service.jpg> <./user-documentation/image
+s/mysql_version.jpg>] [8]
+<user-documentation/images/omaha.jpg, id=50, 803.0pt x 580.1675pt>
+File: user-documentation/images/omaha.jpg Graphic file (type jpg)
+
+<use user-documentation/images/omaha.jpg>
+Package pdftex.def Info: user-documentation/images/omaha.jpg used on input line
+ 129.
+(pdftex.def)             Requested size: 426.79135pt x 308.36371pt.
+ [9]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[10] [11 <./user-documentation/images/omaha.jpg>]
+Underfull \vbox (badness 3668) has occurred while \output is active []
+
+ [12
+
+]
+<user-documentation/images/server_started.jpg, id=64, 569.12625pt x 53.60025pt>
+File: user-documentation/images/server_started.jpg Graphic file (type jpg)
+<use user-documentation/images/server_started.jpg>
+Package pdftex.def Info: user-documentation/images/server_started.jpg used on i
+nput line 164.
+(pdftex.def)             Requested size: 426.79135pt x 40.1968pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 168--169
+
+ []
+
+<user-documentation/images/server-search.jpg, id=65, 549.252pt x 308.352pt>
+File: user-documentation/images/server-search.jpg Graphic file (type jpg)
+
+<use user-documentation/images/server-search.jpg>
+Package pdftex.def Info: user-documentation/images/server-search.jpg used on in
+put line 174.
+(pdftex.def)             Requested size: 426.79135pt x 239.6008pt.
+
+<user-documentation/images/succ_reg.jpg, id=66, 549.85425pt x 305.943pt>
+File: user-documentation/images/succ_reg.jpg Graphic file (type jpg)
+
+<use user-documentation/images/succ_reg.jpg>
+Package pdftex.def Info: user-documentation/images/succ_reg.jpg used on input l
+ine 184.
+(pdftex.def)             Requested size: 426.79135pt x 237.47215pt.
+
+<user-documentation/images/tables.jpg, id=67, 549.252pt x 308.352pt>
+File: user-documentation/images/tables.jpg Graphic file (type jpg)
+
+<use user-documentation/images/tables.jpg>
+Package pdftex.def Info: user-documentation/images/tables.jpg used on input lin
+e 193.
+(pdftex.def)             Requested size: 426.79135pt x 239.6008pt.
+
+Underfull \hbox (badness 4378) in paragraph at lines 179--195
+[]\T1/cmr/m/n/12 Ha még nem re-giszt-rál-tuk ma-gun-kat a já-ték-ba, ak-kor kat
+-tint-sunk a
+ []
+
+[13 <./user-documentation/images/server_started.jpg> <./user-documentation/imag
+es/server-search.jpg>]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<user-documentation/images/parti/parti_1.jpg, id=71, 829.9005pt x 469.755pt>
+File: user-documentation/images/parti/parti_1.jpg Graphic file (type jpg)
+
+<use user-documentation/images/parti/parti_1.jpg>
+Package pdftex.def Info: user-documentation/images/parti/parti_1.jpg used on in
+put line 200.
+(pdftex.def)             Requested size: 426.79135pt x 241.58606pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<user-documentation/images/sv_log.jpg, id=72, 461.92575pt x 59.62276pt>
+File: user-documentation/images/sv_log.jpg Graphic file (type jpg)
+
+<use user-documentation/images/sv_log.jpg>
+Package pdftex.def Info: user-documentation/images/sv_log.jpg used on input lin
+e 207.
+(pdftex.def)             Requested size: 426.79135pt x 55.08922pt.
+ [14 <./user-documentation/images/succ_reg.jpg>]
+<user-documentation/images/parti/parti_2.jpg, id=76, 829.9005pt x 469.755pt>
+File: user-documentation/images/parti/parti_2.jpg Graphic file (type jpg)
+
+<use user-documentation/images/parti/parti_2.jpg>
+Package pdftex.def Info: user-documentation/images/parti/parti_2.jpg used on in
+put line 215.
+(pdftex.def)             Requested size: 426.79135pt x 241.58606pt.
+
+<user-documentation/images/parti/parti_3.jpg, id=77, 829.9005pt x 469.755pt>
+File: user-documentation/images/parti/parti_3.jpg Graphic file (type jpg)
+
+<use user-documentation/images/parti/parti_3.jpg>
+Package pdftex.def Info: user-documentation/images/parti/parti_3.jpg used on in
+put line 223.
+(pdftex.def)             Requested size: 426.79135pt x 241.58606pt.
+
+<user-documentation/images/parti/parti_4.jpg, id=78, 829.9005pt x 469.755pt>
+File: user-documentation/images/parti/parti_4.jpg Graphic file (type jpg)
+
+<use user-documentation/images/parti/parti_4.jpg>
+Package pdftex.def Info: user-documentation/images/parti/parti_4.jpg used on in
+put line 230.
+(pdftex.def)             Requested size: 426.79135pt x 241.58606pt.
+ [15 <./user-documentation/images/tables.jpg> <./user-documentation/images/part
+i/parti_1.jpg> <./user-documentation/images/sv_log.jpg>]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[16 <./user-documentation/images/parti/parti_2.jpg>] [17 <./user-documentation/
+images/parti/parti_3.jpg> <./user-documentation/images/parti/parti_4.jpg>]
+[18
+
+]) (developer-documentation/index.tex [19
+
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 24--25
+[]\T1/cmr/m/n/12 A fe-les-le-ges pa-rancs-is-mét-lé-sek el-ke-rü-lé-se vé-gett 
+le-töl-töt-tem az
+ []
+
+[20
+
+]
+<user-documentation/images/db_scheme2.png, id=98, 659.46375pt x 331.2375pt>
+File: user-documentation/images/db_scheme2.png Graphic file (type png)
+
+<use user-documentation/images/db_scheme2.png>
+Package pdftex.def Info: user-documentation/images/db_scheme2.png used on input
+ line 64.
+(pdftex.def)             Requested size: 426.79135pt x 214.37688pt.
+
+Overfull \hbox (29.61745pt too wide) in paragraph at lines 69--75
+[][] 
+ []
+
+
+Overfull \hbox (29.61745pt too wide) in paragraph at lines 77--87
+[][] 
+ []
+
+
+Underfull \vbox (badness 6741) has occurred while \output is active []
+
+ [21 <./user-documentation/images/db_scheme2.png>]
+Overfull \hbox (29.61745pt too wide) in paragraph at lines 89--99
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 100--101
+
+ []
+
+[22] [23]
+<developer-documentation/images/messaging.png, id=109, 846.7635pt x 320.99925pt
+>
+File: developer-documentation/images/messaging.png Graphic file (type png)
+ <use developer-documentation/images/messaging.png>
+Package pdftex.def Info: developer-documentation/images/messaging.png used on i
+nput line 132.
+(pdftex.def)             Requested size: 426.79135pt x 161.79231pt.
+
+<developer-documentation/images/dao.png, id=110, 525.76425pt x 129.48375pt>
+File: developer-documentation/images/dao.png Graphic file (type png)
+
+<use developer-documentation/images/dao.png>
+Package pdftex.def Info: developer-documentation/images/dao.png used on input l
+ine 141.
+(pdftex.def)             Requested size: 426.79135pt x 105.11043pt.
+
+<developer-documentation/images/session.png, id=111, 771.88374pt x 443.6575pt>
+File: developer-documentation/images/session.png Graphic file (type png)
+
+<use developer-documentation/images/session.png>
+Package pdftex.def Info: developer-documentation/images/session.png used on inp
+ut line 149.
+(pdftex.def)             Requested size: 227.62204pt x 130.83043pt.
+
+Underfull \hbox (badness 3219) in paragraph at lines 127--155
+ \T1/cmr/m/n/12 Az adat-bá-zis-sal va-ló kom-mu-ni-ká-ci-ó-ért fe-le-l®s mo-dul
+ nem csak en-ti-tá-so-
+ []
+
+
+Underfull \hbox (badness 1694) in paragraph at lines 127--155
+\T1/cmr/m/n/12 kat tar-tal-maz, ha-nem to-váb-bi ket-t® da-rab ob-jek-tum-ra is
+ szük-ség lesz. Az
+ []
+
+[24 <./developer-documentation/images/messaging.png>]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[25 <./developer-documentation/images/dao.png>] [26 <./developer-documentation/
+images/session.png>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [27]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [28]
+<developer-documentation/images/poker-client-deps.png, id=130, 442.65375pt x 27
+6.03125pt>
+File: developer-documentation/images/poker-client-deps.png Graphic file (type p
+ng)
+ <use developer-documentation/images/poker-client-deps.png>
+Package pdftex.def Info: developer-documentation/images/poker-client-deps.png u
+sed on input line 187.
+(pdftex.def)             Requested size: 426.79135pt x 266.15367pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+<developer-documentation/images/poker-server-deps.png, id=131, 442.65375pt x 34
+0.27126pt>
+File: developer-documentation/images/poker-server-deps.png Graphic file (type p
+ng)
+ <use developer-documentation/images/poker-server-deps.png>
+Package pdftex.def Info: developer-documentation/images/poker-server-deps.png u
+sed on input line 193.
+(pdftex.def)             Requested size: 426.79135pt x 328.0949pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[29] [30 <./developer-documentation/images/poker-client-deps.png (PNG copy)> <.
+/developer-documentation/images/poker-server-deps.png (PNG copy)>]
+<developer-documentation/images/model.png, id=139, 772.8875pt x 466.74374pt>
+File: developer-documentation/images/model.png Graphic file (type png)
+
+<use developer-documentation/images/model.png>
+Package pdftex.def Info: developer-documentation/images/model.png used on input
+ line 205.
+(pdftex.def)             Requested size: 341.43306pt x 206.18689pt.
+ [31
+
+ <./developer-documentation/images/model.png>] [32] [33]
+Underfull \hbox (badness 5726) in paragraph at lines 265--268
+\T1/cmr/m/n/12 A prog-ram-cso-mag ál-tal de-fi-ni-ált já-ték-stí-lu-sok igen ha
+-son-ló-ak, ezért egy
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 269--271
+\T1/cmr/m/n/12 A cont-rol-ler ál-ta-lá-nos sze-re-pét ugyan-csak egy abszt-rakt
+ osz-tály, az
+ []
+
+[34]
+<developer-documentation/images/server_remote2.png, id=153, 646.8165pt x 456.50
+55pt>
+File: developer-documentation/images/server_remote2.png Graphic file (type png)
+
+ <use developer-documentation/images/server_remote2.png>
+Package pdftex.def Info: developer-documentation/images/server_remote2.png used
+ on input line 286.
+(pdftex.def)             Requested size: 426.79135pt x 301.21793pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+Underfull \hbox (badness 2343) in paragraph at lines 288--291
+\T1/cmr/m/n/12 Az össze-cso-ma-go-lás-hoz igény-be ve-het-jük a ma-vent és an-n
+ak az \T1/cmtt/m/n/12 assembly
+ []
+
+[35] [36 <./developer-documentation/images/server_remote2.png>] [37]
+Underfull \hbox (badness 10000) in paragraph at lines 314--315
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 331--332
+
+ []
+
+[38
+
+] [39]
+Overfull \hbox (29.61702pt too wide) in paragraph at lines 362--370
+[][] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [40
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [41]
+Underfull \hbox (badness 10000) in paragraph at lines 377--378
+[]\T1/cmr/m/n/12 A kód-ban vi-szony-lag sok kód dup-li-ká-ció van je-len, ugyan
+-is az
+ []
+
+
+Underfull \hbox (badness 3291) in paragraph at lines 377--378
+\T1/cmtt/m/n/12 HouseCommandTyp\T1/cmr/m/n/12 e és a \T1/cmtt/m/n/12 PlayerComm
+andType enum \T1/cmr/m/n/12 tí-pu-sú ob-jek-tu-mok
+ []
+
+[42]) (bibliography/index.tex
+Underfull \hbox (badness 10000) in paragraph at lines 7--10
+$\T1/cmtt/m/n/12 http : / / www . oracle . com / technetwork / java / javase / 
+downloads /$
+ []
+
+[43
+
+
+
+]) [44]) (thesis.aux (cover/index.aux) (introduction/index.aux)
+(user-documentation/index.aux) (developer-documentation/index.aux)
+(bibliography/index.aux)) ) 
+Here is how much of TeX's memory you used:
+ 5717 strings out of 493673
+ 86751 string characters out of 3146785
+ 174651 words of memory out of 3000000
+ 8920 multiletter control sequences out of 15000+200000
+ 15158 words of font info for 35 fonts, out of 3000000 for 9000
+ 1025 hyphenation exceptions out of 8191
+ 34i,9n,34p,2173b,371s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\Valentin\AppData\Local\MiKTeX\2.9\fonts\p
+k\ljfour\jknappen\ec\dpi600\ecrm1000.pk> <C:\Users\Valentin\AppData\Local\MiKTe
+X\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0700.pk> <C:\Users\Valentin\AppDat
+a\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1200.pk> <C:\Users\Va
+lentin\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0800.pk>
+ <C:\Users\Valentin\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600
+\ecbx1440.pk> <C:\Users\Valentin\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknap
+pen\ec\dpi600\ecbx1728.pk> <C:\Users\Valentin\AppData\Local\MiKTeX\2.9\fonts\pk
+\ljfour\jknappen\ec\dpi600\ecbx1200.pk> <C:\Users\Valentin\AppData\Local\MiKTeX
+\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx2488.pk> <C:\Users\Valentin\AppData
+\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk><C:/cuccok/MiK
+TeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on thesis.pdf (46 pages, 4355995 bytes).
+PDF statistics:
+ 624 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 116 words of extra memory for PDF output out of 10000 (max. 10000000)
+

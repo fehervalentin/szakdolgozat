@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String ?>
+<?import hu.elte.bfw1p6.poker.model.entity.PokerType ?>
+
+<AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="hu.elte.bfw1p6.poker.client.controller.CreateTableController">
+	<children>
+		<GridPane alignment="center" hgap="10" vgap="10">
+			<Label fx:id="tableNameLabel" GridPane.columnIndex="7"
+				GridPane.rowIndex="8" styleClass="header-text2" text="Tábla neve:" />
+			<TextField fx:id="tableNameTextField" GridPane.columnIndex="8"
+				GridPane.rowIndex="8" GridPane.columnSpan="2" />
+
+			<Label fx:id="gameTypeLabel" GridPane.columnIndex="7"
+				GridPane.rowIndex="9" styleClass="header-text2" text="Típus:" />
+			<ComboBox fx:id="gameTypeComboBox" GridPane.columnIndex="8"
+				GridPane.rowIndex="9" GridPane.columnSpan="2" prefWidth="225.0">
+			</ComboBox>
+
+			<Label fx:id="maxTimeLabel" GridPane.columnIndex="7"
+				GridPane.rowIndex="10" styleClass="header-text2" text="Maximum gondolkodási idő:" />
+			<TextField fx:id="maxTimeField"
+				GridPane.columnIndex="8" GridPane.rowIndex="10" GridPane.columnSpan="2" />
+
+			<Label fx:id="maxPlayerLabel" GridPane.columnIndex="7"
+				GridPane.rowIndex="11" styleClass="header-text2" text="Maximum játékos:" />
+			<TextField fx:id="maxPlayerTextField"
+				GridPane.columnIndex="8" GridPane.rowIndex="11" GridPane.columnSpan="2" />
+
+			<Label fx:id="bigBlindLabel" GridPane.columnIndex="7"
+				GridPane.rowIndex="12" styleClass="header-text2" text="Nagy vak:" />
+			<TextField fx:id="bigBlindField"
+				GridPane.columnIndex="8" GridPane.rowIndex="12" GridPane.columnSpan="2" />
+
+			<Button fx:id="createTableButton" text="OK" onAction="#createTableHandler"
+				styleClass="rich-blue" GridPane.columnIndex="7" GridPane.rowIndex="13" />
+			<Button fx:id="backButton" text="Mégsem" onAction="#backHandler"
+				styleClass="rich-blue" GridPane.columnIndex="8" GridPane.rowIndex="13" />
+		</GridPane>
+	</children>
+</AnchorPane>
+

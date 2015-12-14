@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.cell.*?> 
+<?import javafx.collections.*?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Label?>
+<?import hu.elte.bfw1p6.poker.model.entity.PokerTable?>
+<?import javafx.scene.control.Button?>
+
+<AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="hu.elte.bfw1p6.poker.client.controller.UserListerController">
+	<children>
+		<GridPane alignment="CENTER" hgap="10.0" vgap="10.0">
+			<padding>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			</padding>
+			<Label style="-fx-font: NORMAL 20 Tahoma;" text="Regisztrált felhasználók"
+				GridPane.columnIndex="0" GridPane.rowIndex="0">
+			</Label>
+			<TableView fx:id="userView" GridPane.columnIndex="0"
+				GridPane.rowIndex="1">
+				<columns>
+					<TableColumn prefWidth="100.0" text="Username" fx:id="userNameColumn" />
+					<TableColumn prefWidth="100.0" text="Regisztráció dátuma"
+						fx:id="regDateColumn" />
+					<TableColumn prefWidth="100.0" text="Balance" fx:id="balanceColumn" />
+					<TableColumn prefWidth="100.0" text="Admin" fx:id="adminColumn" />
+				</columns>
+			</TableView>
+			<GridPane alignment="CENTER" hgap="10.0" vgap="10.0"
+				GridPane.columnIndex="1" GridPane.rowIndex="1">
+				<Button fx:id="deleteUserButton" text="Felhasználó törlése"
+					onAction="#handleDeleteUser" GridPane.columnIndex="1"
+					GridPane.rowIndex="0" styleClass="rich-blue" />
+				<Button fx:id="resetBalanceButton" text="Egyenleg visszaállítása"
+					onAction="#handleResetBalance" GridPane.columnIndex="1" GridPane.rowIndex="1"
+					styleClass="rich-blue" />
+				<Button fx:id="modifyAdminButton" text="Admin jog billentés"
+					onAction="#handleAdmin" GridPane.columnIndex="1" GridPane.rowIndex="2"
+					styleClass="rich-blue" />
+				<Button fx:id="backButton" text="Vissza" onAction="#handleBack"
+					GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="rich-blue" />
+			</GridPane>
+		</GridPane>
+	</children>
+</AnchorPane>

@@ -1,0 +1,98 @@
+\select@language {magyar} ~\hfill \textbf {Oldal}\par 
+\select@language {magyar} \contentsline {part}{I.\hspace {1em}Bevezet\IeC {\'e}s}{3}
+\select@language {magyar} \contentsline {part}{II.\hspace {1em}Felhaszn\IeC {\'a}l\IeC {\'o}i dokument\IeC {\'a}ci\IeC {\'o}}{5}
+\select@language {magyar} \contentsline {section}{\numberline {1}K\IeC {\"o}vetelm\IeC {\'e}nyek}{5}
+\select@language {magyar} \contentsline {subsection}{\numberline {1.1}Hardver}{5}
+\select@language {magyar} \contentsline {subsection}{\numberline {1.2}Szoftver}{5}
+\select@language {magyar} \contentsline {section}{\numberline {2}Telep\IeC {\'\i }t\IeC {\'e}s}{6}
+\select@language {magyar} \contentsline {subsection}{\numberline {2.1}Java SE Runtime Environment 8}{6}
+\select@language {magyar} \contentsline {subsection}{\numberline {2.2}MySQL Community Server 5.6}{7}
+\select@language {magyar} \contentsline {subsection}{\numberline {2.3}Az adatb\IeC {\'a}zis haszn\IeC {\'a}latbav\IeC {\'e}tele}{8}
+\select@language {magyar} \contentsline {section}{\numberline {3}Fogalomt\IeC {\'a}r}{8}
+\select@language {magyar} \contentsline {subsection}{\numberline {3.1}Parancsok}{8}
+\select@language {magyar} \contentsline {paragraph}{CALL}{8}
+\select@language {magyar} \contentsline {paragraph}{CHECK}{8}
+\select@language {magyar} \contentsline {paragraph}{BLIND}{8}
+\select@language {magyar} \contentsline {paragraph}{RAISE}{9}
+\select@language {magyar} \contentsline {paragraph}{QUIT}{9}
+\select@language {magyar} \contentsline {paragraph}{CHANGE}{9}
+\select@language {magyar} \contentsline {paragraph}{LOG}{9}
+\select@language {magyar} \contentsline {subsection}{\numberline {3.2}Fogalmak}{9}
+\select@language {magyar} \contentsline {paragraph}{FLOP}{9}
+\select@language {magyar} \contentsline {paragraph}{TURN}{9}
+\select@language {magyar} \contentsline {paragraph}{RIVER}{9}
+\select@language {magyar} \contentsline {paragraph}{Dealer}{9}
+\select@language {magyar} \contentsline {section}{\numberline {4}A p\IeC {\'o}ker j\IeC {\'a}t\IeC {\'e}kr\IeC {\'o}l}{10}
+\select@language {magyar} \contentsline {subsection}{\numberline {4.1}J\IeC {\'a}t\IeC {\'e}kmenet}{10}
+\select@language {magyar} \contentsline {subsection}{\numberline {4.2}J\IeC {\'a}t\IeC {\'e}kst\IeC {\'\i }lusok}{12}
+\select@language {magyar} \contentsline {paragraph}{Classic}{12}
+\select@language {magyar} \contentsline {paragraph}{Texas Hold'Em}{12}
+\select@language {magyar} \contentsline {section}{\numberline {5}Futtat\IeC {\'a}s}{13}
+\select@language {magyar} \contentsline {subsection}{\numberline {5.1}A p\IeC {\'o}ker szerver ind\IeC {\'\i }t\IeC {\'a}sa}{13}
+\select@language {magyar} \contentsline {subsection}{\numberline {5.2}A p\IeC {\'o}ker kliens ind\IeC {\'\i }t\IeC {\'a}sa}{13}
+\select@language {magyar} \contentsline {section}{\numberline {6}A p\IeC {\'o}ker j\IeC {\'a}t\IeC {\'e}k haszn\IeC {\'a}lata}{14}
+\select@language {magyar} \contentsline {part}{III.\hspace {1em}Fejleszt\IeC {\H o}i dokument\IeC {\'a}ci\IeC {\'o}}{19}
+\select@language {magyar} \contentsline {section}{\numberline {7}Felhaszn\IeC {\'a}lt technol\IeC {\'o}gi\IeC {\'a}k}{19}
+\select@language {magyar} \contentsline {subsection}{\numberline {7.1}Eclipse}{19}
+\select@language {magyar} \contentsline {subsection}{\numberline {7.2}Maven}{19}
+\select@language {magyar} \contentsline {paragraph}{Adatb\IeC {\'a}ziss\IeC {\'e}ma l\IeC {\'e}trehoz\IeC {\'a}sa \IeC {\'e}s dem\IeC {\'o}adatokkal val\IeC {\'o} felt\IeC {\"o}lt\IeC {\'e}se}{19}
+\select@language {magyar} \contentsline {paragraph}{Javadoc}{20}
+\select@language {magyar} \contentsline {subsection}{\numberline {7.3}MySQL}{20}
+\select@language {magyar} \contentsline {subsection}{\numberline {7.4}Git}{20}
+\select@language {magyar} \contentsline {subsection}{\numberline {7.5}Enterprise Architect}{21}
+\select@language {magyar} \contentsline {section}{\numberline {8}Adatb\IeC {\'a}ziss\IeC {\'e}ma}{21}
+\select@language {magyar} \contentsline {subsection}{\numberline {8.1}J\IeC {\'a}t\IeC {\'e}kst\IeC {\'\i }lus t\IeC {\'a}bl\IeC {\'a}zat}{21}
+\select@language {magyar} \contentsline {subsection}{\numberline {8.2}P\IeC {\'o}ker j\IeC {\'a}t\IeC {\'e}k asztal t\IeC {\'a}bl\IeC {\'a}zat}{22}
+\select@language {magyar} \contentsline {subsection}{\numberline {8.3}Felhaszn\IeC {\'a}l\IeC {\'o}k t\IeC {\'a}bl\IeC {\'a}zat}{22}
+\select@language {magyar} \contentsline {section}{\numberline {9}Megold\IeC {\'a}si terv}{23}
+\select@language {magyar} \contentsline {subsection}{\numberline {9.1}Probl\IeC {\'e}ma megfogalmaz\IeC {\'a}sa}{23}
+\select@language {magyar} \contentsline {subsection}{\numberline {9.2}Tervez\IeC {\'e}s}{23}
+\select@language {magyar} \contentsline {subsection}{\numberline {9.3}Implement\IeC {\'a}l\IeC {\'a}s}{26}
+\select@language {magyar} \contentsline {section}{\numberline {10}Modulok}{29}
+\select@language {magyar} \contentsline {subsection}{\numberline {10.1}poker-model modul}{31}
+\select@language {magyar} \contentsline {subsection}{\numberline {10.2}poker-shared modul}{32}
+\select@language {magyar} \contentsline {paragraph}{Kiv\IeC {\'e}telek}{32}
+\select@language {magyar} \contentsline {paragraph}{Kommunik\IeC {\'a}ci\IeC {\'o}s rendszer}{32}
+\select@language {magyar} \contentsline {paragraph}{Observer pattern \cite {observer_pattern}}{32}
+\select@language {magyar} \contentsline {paragraph}{Munkamenet}{32}
+\select@language {magyar} \contentsline {subsection}{\numberline {10.3}poker-persist modul}{33}
+\select@language {magyar} \contentsline {paragraph}{Generikus DAO}{33}
+\select@language {magyar} \contentsline {paragraph}{Adatb\IeC {\'a}zis menedzser}{33}
+\select@language {magyar} \contentsline {paragraph}{Kiv\IeC {\'e}telek \IeC {\'a}tford\IeC {\'\i }t\IeC {\'a}sa}{33}
+\select@language {magyar} \contentsline {subsection}{\numberline {10.4}poker-client modul}{33}
+\select@language {magyar} \contentsline {paragraph}{Model-View-Controller \cite {MVC}}{34}
+\select@language {magyar} \contentsline {paragraph}{Model}{34}
+\select@language {magyar} \contentsline {paragraph}{View}{34}
+\select@language {magyar} \contentsline {paragraph}{Controller}{34}
+\select@language {magyar} \contentsline {paragraph}{FrameController}{35}
+\select@language {magyar} \contentsline {paragraph}{CommunicatorController}{35}
+\select@language {magyar} \contentsline {paragraph}{PokerRemoteObserver}{35}
+\select@language {magyar} \contentsline {subsection}{\numberline {10.5}poker-server modul}{35}
+\select@language {magyar} \contentsline {subsection}{\numberline {10.6}javapokertexasholdem modul}{36}
+\select@language {magyar} \contentsline {section}{\numberline {11}Funkci\IeC {\'o}k}{37}
+\select@language {magyar} \contentsline {subsection}{\numberline {11.1}\IeC {\'A}ltal\IeC {\'a}nos funkci\IeC {\'o}k}{37}
+\select@language {magyar} \contentsline {paragraph}{Regisztr\IeC {\'a}ci\IeC {\'o}}{37}
+\select@language {magyar} \contentsline {paragraph}{Bejelentkez\IeC {\'e}s}{37}
+\select@language {magyar} \contentsline {paragraph}{Kijelentkez\IeC {\'e}s}{37}
+\select@language {magyar} \contentsline {paragraph}{Asztalok}{38}
+\select@language {magyar} \contentsline {paragraph}{L\IeC {\'e}trehoz\IeC {\'a}s}{38}
+\select@language {magyar} \contentsline {paragraph}{M\IeC {\'o}dos\IeC {\'\i }t\IeC {\'a}s}{38}
+\select@language {magyar} \contentsline {paragraph}{T\IeC {\"o}rl\IeC {\'e}s}{38}
+\select@language {magyar} \contentsline {paragraph}{Lek\IeC {\'e}r\IeC {\'e}s}{38}
+\select@language {magyar} \contentsline {paragraph}{Csatlakoz\IeC {\'a}s}{38}
+\select@language {magyar} \contentsline {paragraph}{Szabad helyek lek\IeC {\'e}rdez\IeC {\'e}se}{38}
+\select@language {magyar} \contentsline {paragraph}{Felhaszn\IeC {\'a}l\IeC {\'o}k}{39}
+\select@language {magyar} \contentsline {paragraph}{L\IeC {\'e}trehoz\IeC {\'a}s}{39}
+\select@language {magyar} \contentsline {paragraph}{Egyenleg vissza\IeC {\'a}ll\IeC {\'\i }t\IeC {\'a}s}{39}
+\select@language {magyar} \contentsline {paragraph}{T\IeC {\"o}rl\IeC {\'e}s}{39}
+\select@language {magyar} \contentsline {paragraph}{Lek\IeC {\'e}r\IeC {\'e}s}{39}
+\select@language {magyar} \contentsline {paragraph}{Jelsz\IeC {\'o}csere}{39}
+\select@language {magyar} \contentsline {paragraph}{Adminisztr\IeC {\'a}ci\IeC {\'o}s jog}{39}
+\select@language {magyar} \contentsline {subsection}{\numberline {11.2}Interakt\IeC {\'\i }v funkci\IeC {\'o}k}{40}
+\select@language {magyar} \contentsline {paragraph}{Utas\IeC {\'\i }t\IeC {\'a}s k\IeC {\"u}ld\IeC {\'e}s}{40}
+\select@language {magyar} \contentsline {paragraph}{Egyenleg lek\IeC {\'e}r\IeC {\'e}se}{40}
+\select@language {magyar} \contentsline {section}{\numberline {12}Tesztel\IeC {\'e}s}{40}
+\select@language {magyar} \contentsline {subsection}{\numberline {12.1}Funkcion\IeC {\'a}lis tesztel\IeC {\'e}s}{41}
+\select@language {magyar} \contentsline {section}{\numberline {13}Tov\IeC {\'a}bbfejleszt\IeC {\'e}si lehet\IeC {\H o}s\IeC {\'e}gek}{42}
+\select@language {magyar} \contentsline {part}{IV.\hspace {1em}Irodalomjegyz\IeC {\'e}k}{43}
+\select@language {magyar} \contentsline {section}{\numberline {14}Hivatkoz\'asok}{43}
