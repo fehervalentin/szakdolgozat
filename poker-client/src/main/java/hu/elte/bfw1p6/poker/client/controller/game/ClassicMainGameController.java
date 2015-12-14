@@ -169,6 +169,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	private void receivedChangeHouseCommand(ClassicHouseCommand classicHouseCommand) {
 		((ClassicMainGameView)mainView).receivedChangeHouseCommand(classicHouseCommand);
 		changeState(classicHouseCommand.getWhosOn());
+		modifyQuitButtonDisability(true);
 	}
 
 	/**
@@ -188,6 +189,7 @@ public class ClassicMainGameController extends AbstractMainGameController {
 	private void receivedChangePlayerCommand(ClassicPlayerCommand classicPlayerCommand) {
 		((ClassicMainGameView)mainView).receivedChangePlayerCommand(classicPlayerCommand);
 		changeState(classicPlayerCommand.getWhosOn());
+		modifyQuitButtonDisability(true);
 	}
 	
 	/**

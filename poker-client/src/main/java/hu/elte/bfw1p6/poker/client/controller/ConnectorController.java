@@ -68,6 +68,7 @@ public class ConnectorController extends AbstractPokerClientController {
 		try {
 			System.out.println("Csatlakozás...");
 			System.out.println("//" + serverIPField.getText() + ":" + serverPortField.getText() + "/" + serverNameField.getText());
+//			System.setProperty("java.rmi.server.hostname", serverIPField.getText());
 			Naming.lookup("//" + serverIPField.getText() + ":" + serverPortField.getText() + "/" + serverNameField.getText());
 			
 			frameController.setLoginFXML();

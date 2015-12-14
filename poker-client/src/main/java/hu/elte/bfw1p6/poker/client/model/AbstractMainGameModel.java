@@ -115,6 +115,7 @@ public abstract class AbstractMainGameModel {
 		} else if (areYouTheBigBlind(houseCommand)) {
 			tossBlind(true);
 		}
+		pokerSession.refreshBalance(pokerRemote.refreshBalance(pokerSession.getId()));
 	}
 
 	/**

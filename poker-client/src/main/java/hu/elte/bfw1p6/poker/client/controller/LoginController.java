@@ -34,8 +34,8 @@ public class LoginController extends AbstractPokerClientController {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		usernameField.setText("admin");
-		passwordField.setText("admin");
+		usernameField.setText("test");
+		passwordField.setText("test");
 	}
 
 	/**

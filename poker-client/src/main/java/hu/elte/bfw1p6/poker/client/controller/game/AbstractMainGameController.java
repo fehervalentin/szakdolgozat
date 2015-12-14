@@ -107,6 +107,7 @@ public abstract class AbstractMainGameController implements PokerClientControlle
 		try {
 			mainView.receivedBlindHouseCommand(houseCommand);
 			model.receivedBlindHouseCommand(houseCommand);
+			mainView.setBalance(model.getBalance());
 		} catch (PokerDataBaseException | PokerUserBalanceException e) {
 			showErrorAlert(e.getMessage());
 		} catch (RemoteException e) {
